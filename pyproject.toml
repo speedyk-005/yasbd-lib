@@ -1,0 +1,70 @@
+[project]
+name = "yasbd"
+version = "0.1.0"
+description = "A high-accuracy, from-scratch Sentence Boundary Detector (SBD) for production pipelines. Features a drop-in adapter for pysbd to fix edges cases without heavy refactoring."
+authors = [
+  { name = "speedyk_005", email = "speedy40115719@gmail.com" }
+]
+
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.11"
+
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Text Processing",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+keywords = [
+  "sentence-segmentation", "sentence-boundary-detection", "sbd", "sentence-splitting",
+  "sentence-splitter", "multilingual", "text processing", "text-splitting",
+  "natural language processing", "nlp"
+]
+
+dependencies = [
+  "loguru>=0.7.3,<1.0",
+  "regex>=2025.7.29",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3.5",
+  "pytest-cov>=6.2.1",
+  "pytest-timeout>=2.3.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/speedyk-005/yasbd"
+Repository = "https://github.com/speedyk-005/yasbd"
+Documentation = "https://speedyk-005.github.io/yasbd/"
+Issues = "https://github.com/speedyk-005/yasbd/issues"
+Changelog = "https://github.com/speedyk-005/yasbd/blob/main/CHANGELOG.md"
+
+[build-system]
+requires = [
+    "setuptools>=64",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+packages = [
+    "yasbd",
+    "yasbd.rules",
+]
+
+[tool.pytest.ini_options]
+minversion = "7.4"
+addopts = "--cov=yasbd --cov-report=term-missing:skip-covered --durations=10"
+testpaths = ["tests"]
+python_files = "test_*.py"
