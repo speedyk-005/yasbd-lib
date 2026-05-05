@@ -75,7 +75,25 @@ class Rule:
     }
 
     def __init__(self):
-        self.cached = False
+        _all_abbrvs = self.TITLE_ABBRVS | self.OTHER_ABBRVS | self.ALPHABET
+        all_abbrvs_pattern = r"\.|".join(_all_abbrvs) + r"\."
+        other_abbrvs_pattern = r"\.|".join(self.OTHER_ABBRVS) + r"\."
+
+        self.double_abbrvs_split_regex = re.compile(rf"({all_abbrvs_pattern})\s+(?={all_abbrvs_pattern})", re.I)
+        self.not_a_name_split_regex = re.compile(
+            rf"(?<=(?i:{other_abbrvs_pattern}))\s+(?=[\p{{Lu}}\p{{Lo}}\p{{Lt}}])",
+        )
+
+        self.abbr_safe_split_regex = re.compile(rf"""
+            (?<!\b(?:     # If not preceded by 
+                {all_abbrvs_pattern}|\d\.
+                # |[IVXLCDM]+\.   # Skip decimal numbers and standard Latin-Roman numerals
+            ))
+            (?<=[{"".join(self.PUNCTUATIONS)}])  # Split after punctuation
+            (?=\s+[\p{{Lu}}\p{{Lo}}\p{{Lt}}]|\s*\n|$)  # followed by letter (upper or catch-all) or end
+            """,
+            re.I | re.X,
+        )
 
     def apply(self, text: str) -> Iterator[str]:
         """Split text into sentences.
@@ -86,27 +104,6 @@ class Rule:
         Yields:
             Individual sentences.
         """
-        if not self.cached:
-            _all_abbrvs = self.TITLE_ABBRVS | self.OTHER_ABBRVS | self.ALPHABET
-            all_abbrvs_pattern = r"\.|".join(_all_abbrvs) + r"\."
-            other_abbrvs_pattern = r"\.|".join(self.OTHER_ABBRVS) + r"\."
-
-            self.double_abbrvs_split_regex = re.compile(rf"({all_abbrvs_pattern})\s+(?={all_abbrvs_pattern})", re.I)
-            self.not_a_name_split_regex = re.compile(
-                rf"(?<={other_abbrvs_pattern})\s+(?=[\p{{Lu}}\p{{Lo}}\p{{Lt}}])", re.I
-            )
-
-            self.abbr_safe_split_regex = re.compile(rf"""
-                (?<!\b(?:     # If not preceded by 
-                    {all_abbrvs_pattern}|\d\.
-                    # |[IVXLCDM]+\.   # Skip decimal numbers and standard Latin-Roman numerals
-                ))
-                (?<=[{"".join(self.PUNCTUATIONS)}])  # Split after punctuation
-                (?=\s+[\p{{Lu}}\p{{Lo}}\p{{Lt}}]|\s*\n|$)  # followed by letter (upper or catch-all) or end
-                """,
-                re.I | re.X
-            )
-
         # Pre-processing (edge cases):
         #  - double_abbrvs_split_pattern: Handles "A. B." where both are abbrvs
         #  - not_a_name_split_pattern: Handles "Inc. The" where next is uppercase
