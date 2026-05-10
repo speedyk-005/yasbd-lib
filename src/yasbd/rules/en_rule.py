@@ -1,5 +1,3 @@
-"""English language sentence boundary detection rule."""
-
 from yasbd.rules.base import Rule
 
 
@@ -10,8 +8,8 @@ class EnRule(Rule):
     - Months (jan, feb, mar, etc.)
     - Misc (btw, cal, hwy, etc.)
     """
-    
-    OTHER_ABBRVS = Rule.OTHER_ABBRVS | {
+    ISO_CODE = "en"
+    MID_SENTENCE_ABBRVS = Rule.MID_SENTENCE_ABBRVS | {
         # Months
         "apr", "aug", "dec", "feb", "jan", "jul", "jun", "mar", "nov", "oct", "sep", "sept",
 
@@ -19,13 +17,25 @@ class EnRule(Rule):
         "btw", "cal", "ext", "hway", "hwy", "id", "ing", "me", "mex", "miss", "nos", "plz", "v", "wy",
     }
 
+    COMMON_STARTERS = {
+        "A", "An", "Being", "Did", "For", "He", "How", "However", "I", "In", "It",
+        "Millions", "More", "She", "That", "The", "Their", "These", "They", "This",
+        "Those", "We", "What", "When", "Where", "Who", "Why", "You",
+    }
+    COMMON_ORG_NOUNS = {"Army", "Government", "Federation"}
+
 
 if __name__ == "__main__":
     rule = EnRule()
     text = """
-        Mr. Smith is a Dr. he told me that works at Inc. The meeting is at 5 p.m. Is he there?
-        Say hello to dr. smith. Yes, he is. The patient was seen by Sam Smith, M.D. Jr. at the clinic.
+        The system requirements for the project are simple: 1. Python 3.12 environment. 2. At least 8GB of RAM. 3. Access to the PUA character set for Sinta markers. Please ensure these are met before initialization.
+
+        To install Sinta, follow these steps:
+        1. They Clone the repository from the internal server.
+        2. Initialize the virtual environment using the provided script.
+        3. Run the $O(n)$ test suite to verify performance.
+        Deployment will follow successful testing.
     """
-    sentences = rule.apply(text)
+    sentences = rule.apply(text, False)
     for s in sentences:
-        print(s)
+        print(repr(s))

@@ -1,121 +1,113 @@
-"""Multilingual sentence boundary detection rule."""
-
+import io
 from collections.abc import Iterator
 
 import regex as re
 
 
 class Rule:
-    """Base rule for sentence boundary detection.
-    
-    Provides abbreviation sets and split patterns to handle common cases where
-    periods should NOT indicate sentence boundaries (e.g., "Mr.", "Dr.", "Inc.").
-    
-    Attributes:
-        ALPHABET: Single letter initials (A-Z).
-        PUNCTUATIONS: Sentence-ending punctuation marks.
-        TITLE_ABBRVS: Honorifics and titles (Dr., Mr., etc.).
-        OTHER_ABBRVS: Other abbreviations (Inc., Co., etc.).
-    """
-    
-    ALPHABET = {
-        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
-        "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
-    }
-
-    PUNCTUATIONS = {
+    ISO_CODE = "xx"
+    TERMINATORS = {
         "。", "．", ".", "！", "!", "?", "？"
     }
 
     TITLE_ABBRVS = {
-        "adj", "adm", "adv", "assn", "asst", "bart", "bldg", "brig", "bros", "capt", "cmdr",
-        "col", "comdr", "con", "cpl", "dr", "dr.phil", "dr.philos", "drs", "ens", "gen",
-        "gov", "hon", "hr", "hosp", "jr", "insp", "lt", "maj", "messrs", "mlle", "mme", "mr",
-        "mrs", "ms", "msgr", "op", "ord", "pfc", "ph", "prof", "pvt", "rep", "reps", "res",
-        "rev", "rt", "sen", "sens", "sfc", "sgt", "sr", "st", "supt", "surg",
+        # Standard Professional (Universal Latin roots)
+        "dr", "drs", "prof", "sr", "jr", "hon", "rev", "supt", "insp",
+
+        # Global Social (Overlap across English/Spanish/Portuguese/French)
+        "mr", "mrs", "ms", "sr", "st",
+
+        # Military (NATO/International Standardized Ranks)
+        "adm", "brig", "capt", "cmdr", "col", "cpl", "gen", "lt", "maj", "sgt", "pvt",
+    
+        # Political/Administrative (Common in Western bureaucracy)
+        "gov", "rep", "sen", "pres"
     }
 
-    OTHER_ABBRVS = {
-        # Roman numerals
-        "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ", "Ⅵ", "Ⅶ", "Ⅷ", "Ⅸ", "Ⅹ", "Ⅺ", "Ⅻ", "Ⅼ", "Ⅽ", "Ⅾ", "Ⅿ",
-        "ⅰ", "ⅱ", "ⅲ", "ⅳ", "ⅴ", "ⅵ", "ⅶ", "ⅷ", "ⅸ", "ⅹ", "ⅺ", "ⅻ", "ⅼ", "ⅽ", "ⅾ", "ⅿ",
-
-        # Org/Business
-        "approx", "asst", "assoc", "bros", "bldg", "co", "corp", "dept", "est", "inc",
-        "ltd", "mfsg", "misc", "univ",
-
-        # Units (measurement)
-        "cm", "ft", "in", "kg", "km", "lb", "mi", "mm", "mph", "oz", "qt", "sq", "vol", "wt",
-
-        # Time/date
-        "a.m", "ac", "ad", "bc", "dc", "fy", "hr", "min", "msec", "ms", "p.m",
-        "sec", "wk", "yr",
-
-        # Location
-        "apt", "bld", "blvd", "dept", "fl", "lat", "long", "mt", "mtn", "ne", "nw",
-        "rd", "rm", "se", "ste", "st", "sw",
-
-        # Academic/scientific
-        "cf", "ed", "eg", "e.g", "fig", "i.e", "ph.d", "phd", "pp", "ref",
-        "res", "sec", "viz", "vs", "etc", "approx", "avg",
-
-        # US states/regions
-        "ariz", "ark", "calif", "colo", "conn", "dak", "del", "fla", "ga", "ia", "ida",
-        "ill", "ind", "kan", "kans", "ken", "ky", "la", "mass", "md", "mich", "minn",
-        "mont", "n.c", "n.j", "n.y", "neb", "nebr", "nev", "nh", "okla", "ont", "ore",
-        "pa", "penn", "penna", "ri", "sask", "tenn", "tex", "ut", "va", "vt", "wash",
-        "wis", "wisc", "wyo", "yuk",
-
-        # Other
-        "acct", "admin", "al", "ala", "alta", "alt", "amt", "ans", "arc", "atty", "cert",
-        "cl", "cont", "cres", "ct", "curr", "det", "dist", "div", "esq", "exec", "exp",
-        "expy", "fed", "fwy", "info", "insp", "man", "may", "med", "mfg", "mlle",
-        "mme", "msgr", "mssrs", "nr", "ord", "pd", "pkg", "pde", "pl", "qty", "que", "rs",
-        "tce", "u.s", "usafa", "ver", "univ",
+    GEOPOLITICAL_ABBRVS = {
+        "us", "u.s", "uk", "u.k", "eu", "e.u", "usa", "u.s.a", "un", "u.n", "ussr",
     }
 
+    MID_SENTENCE_ABBRVS = {
+        # Business entity bridges
+        "assoc", "mfg",
+
+        # Bridge/connectors
+        "cf", "eg", "e.g", "ie", "i.e", "vs", "v", "viz", "ibid", "ca", "sc",
+
+        # Street & directional anchors
+        "mt", "dist",
+    }
+
+    COMMON_STARTERS = {}
+    COMMON_ORG_NOUNS = {}
+
+    # https://regex101.com/r/tI9Cmg/1
+    VERTICAL_LIST_START_FINDER = re.compile(r"(?<=^\s*(?:[\p{L}\p{N}]\.){1,3})(?=\s)")
+    
     def __init__(self):
-        _all_abbrvs = self.TITLE_ABBRVS | self.OTHER_ABBRVS | self.ALPHABET
-        all_abbrvs_pattern = r"\.|".join(_all_abbrvs) + r"\."
-        other_abbrvs_pattern = r"\.|".join(self.OTHER_ABBRVS) + r"\."
+        _title_abbrvs_pattern = "|".join(self.TITLE_ABBRVS)
+        _common_starters_pattern = "|".join(self.COMMON_STARTERS)
+        _terminators_pattern = "".join(self.TERMINATORS)
 
-        self.double_abbrvs_split_regex = re.compile(rf"({all_abbrvs_pattern})\s+(?={all_abbrvs_pattern})", re.I)
-        self.not_a_name_split_regex = re.compile(
-            rf"(?<=(?i:{other_abbrvs_pattern}))\s+(?=[\p{{Lu}}\p{{Lo}}\p{{Lt}}])",
+        # https://regex101.com/r/qBSyU5/3
+        # Handle inline lists/citations: NLTK favors grammar; PySBD favors list-structure
+        # Yasbd takes the middle ground: Considers "1." a list start unless followed by common starter
+        self.horizontal_list_finder = re.compile(rf"""
+            (?<=[^\w\n]\s+\d\.)     # A number between 0-9 followed by dot + whitespace
+            (?!\s+\b(?:{_common_starters_pattern})\b)  # But not followed by a common starters
+            """, re.X
         )
 
-        self.abbr_safe_split_regex = re.compile(rf"""
-            (?<!\b(?:     # If not preceded by 
-                {all_abbrvs_pattern}|\d\.
-                # |[IVXLCDM]+\.   # Skip decimal numbers and standard Latin-Roman numerals
-            ))
-            (?<=[{"".join(self.PUNCTUATIONS)}])  # Split after punctuation
-            (?=\s+[\p{{Lu}}\p{{Lo}}\p{{Lt}}]|\s*\n|$)  # followed by letter (upper or catch-all) or end
-            """,
-            re.I | re.X,
+        # https://regex101.com/r/VMzYsx/4
+        self.naive_boundary_detector = re.compile(rf"""
+            # Split if left token is a unicase letter (Always)
+            (?<=\p{{Lo}}[{_terminators_pattern}])|
+
+            # Split after any terminators followed by Space+Upper or unicase letter
+            (?<=[{_terminators_pattern}]+)(?=\s+[^\p{{Ll}}]|\s*\p{{Lo}})
+            """, re.X
         )
 
-    def apply(self, text: str) -> Iterator[str]:
-        """Split text into sentences.
-        
-        Args:
-            text: Input text to split into sentences.
-            
-        Yields:
-            Individual sentences.
-        """
-        # Pre-processing (edge cases):
-        #  - double_abbrvs_split_pattern: Handles "A. B." where both are abbrvs
-        #  - not_a_name_split_pattern: Handles "Inc. The" where next is uppercase
-        #    but the abbr isnt a title
-        text = self.double_abbrvs_split_regex.sub(
-            # Skip initials
-            lambda m: "\n" if len(m.group(0)) == 2  else m.group(0), text.strip()
+        # https://regex101.com/r/svyCoU/1
+        self.mid_sentence_finder = re.compile(rf"""
+            # A title abbrv or initialisms is NOT followed by a common starter (e.g., Dr. Paul)
+            (?<=\b(?i:{_title_abbrvs_pattern})\.)(?!\s+(?:{_common_starters_pattern}))|
+
+            # A geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
+            (?<=\b(?i:{"|".join(self.GEOPOLITICAL_ABBRVS)})\.)(?=\s+(:{"|".join(self.COMMON_ORG_NOUNS)}))|
+
+            # An abbrv that never ends a sentence
+            (?<=\b(?i:{"|".join(self.MID_SENTENCE_ABBRVS)})\.)
+            """, re.X
         )
-        text = self.not_a_name_split_regex.sub("\n", text)
- 
-        # Main split: split based on punctuation then on newlines
-        for sent in self.abbr_safe_split_regex.split(text):
-            stripped_sent = sent.strip() 
-            if stripped_sent:
-                yield from stripped_sent.splitlines()
+
+    def apply(
+        self,
+        input: str | io.IOBase,
+        preserve_quote_and_paren: bool,
+    ) -> Iterator[tuple]:
+        line_iter = io.StringIO(input) if isinstance(input, str) else input
+        for line in line_iter:
+            main_boundaries = {0, len(line)}
+            if line:
+                main_boundaries.update({m.start() for m in self.naive_boundary_detector.finditer(line)})
+
+                # Remove false alarms
+                main_boundaries.difference_update({m.start() for m in self.mid_sentence_finder.finditer(line)})
+
+                # Prevents list-marker fragmentation by removing markers from the 
+                # candidate set and shifting boundaries 2 chars back (1.| => |1.) to correctly 
+                # terminate the preceding sentence before 'In-line' horizontal list transitions.
+                horiz_list_boundaries = {m.start() for m in self.horizontal_list_finder.finditer(line)}
+                vert_list_boundaries = {m.start() for m in self.VERTICAL_LIST_START_FINDER.finditer(line)}
+                main_boundaries.difference_update(horiz_list_boundaries | vert_list_boundaries)
+                main_boundaries.update(
+                    {pos - 2 for pos in horiz_list_boundaries - vert_list_boundaries}
+                )
+
+                main_boundaries_lst = sorted(list(main_boundaries))
+                yield from [
+                    (line[start:end], (start, end))
+                    for start, end in zip(main_boundaries_lst, main_boundaries_lst[1:])
+                ]
