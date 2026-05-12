@@ -43,11 +43,20 @@ class Rule:
         "mt", "dist",
     }
 
-    COMMON_STARTERS = {}
-    COMMON_ORG_NOUNS = {}
+    COMMON_STARTERS = {"The"}
+    COMMON_ORG_NOUNS = {"Commission", "Federation"}
+    QUOTATIVE_PARTICLES = {"と", "って", "라고"}
+    REPORTING_WORDS = {"说", "道", "问", "他", "她"}
 
     # https://regex101.com/r/tI9Cmg/2
     VERTICAL_LIST_START_FINDER = re.compile(r"(?<=^\s*(?:[\p{L}\p{N}]\.){1,3})(?=\s)")
+
+    # https://regex101.com/r/JYdWZw/1
+    QUOTE_AND_PAREN_FINDER = re.compile(r"""
+        (?:\p{Pi}|»|(['"”])).+?(?:\p{Pf}|«|\1)|  # Quoted text
+        \p{Ps}.+?\p{Pe}  # Parenthesized text
+        """, re.X
+    )
     
     def __init__(self):
         _title_abbrvs_pattern = "|".join(self.TITLE_ABBRVS)
@@ -97,6 +106,17 @@ class Rule:
             (?<=\s\b(?:\p{{Lu}})\.)(?=\s)
             """, re.X
         )
+        
+        # https://regex101.com/r/EGkRU8/4
+        self.quote_and_paren_end_finder = re.compile(rf"""
+            (?<=[{_terminators_pattern}]\s*   # A terminator followed by additional space
+            ["”«\p{{Pf}}])     # Closing quotes
+            (?!  # NOT followed by any continuation markers or space+lowercase letter or end
+                {"|".join(self.QUOTATIVE_PARTICLES)}|{"|".join(self.REPORTING_WORDS)}|
+                \s+[\p{{Ll}}]|$
+            )
+            """, re.X
+        )
 
     def apply(
         self,
@@ -108,8 +128,17 @@ class Rule:
             main_boundaries = {0, len(line)}
             if line:
                 main_boundaries.update({m.end() for m in self.naive_boundary_detector.finditer(line)})
+                quote_and_paren_boundaries = {m.end() for m in self.quote_and_paren_end_finder.finditer(line)}
+                main_boundaries.update(quote_and_paren_boundaries)
 
-                # Remove false alarms
+                # -- Remove false alarms --
+
+                if preserve_quote_and_paren:
+                    protected_spans = set()
+                    for m in self.QUOTE_AND_PAREN_FINDER.finditer(line):
+                        inner_range = set(range(*m.span()))
+                        protected_spans.update(inner_range - quote_and_paren_boundaries)
+                    main_boundaries.difference_update(protected_spans)
                 main_boundaries.difference_update({m.end() for m in self.mid_sentence_finder.finditer(line)})
 
                 # Prevents list-marker fragmentation by removing markers
@@ -117,11 +146,13 @@ class Rule:
                 horiz_list_boundaries = (  # Reduce false alarm
                     horiz_list_boundaries if len(horiz_list_boundaries) >= 2 else set()
                 )
-                vert_list_boundaries = {m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(line)}
-                main_boundaries.difference_update(horiz_list_boundaries | vert_list_boundaries)
+                main_boundaries.difference_update(horiz_list_boundaries)
+                main_boundaries.difference_update(
+                    {m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(line)}
+                )
 
-                # Shift boundaries 3 chars back (1.\)| => |1.\), a. | => |a. ) to correctly terminate 
-                # the preceding sentence before 'In-line' horizontal list transitions.
+                # Shift boundaries the pointer back (1.\)| => |1.\), a. | => |a. ) to correctly terminate 
+                # the preceding sentence before flattened horizontal list.
                 main_boundaries.update(
                     {m.start() + 1 for m in self.horizontal_list_finder.finditer(line) if m.start()}
                 )

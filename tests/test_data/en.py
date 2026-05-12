@@ -6,7 +6,9 @@ TEST_DATA = [
     ("Hello world. How are you? I'm fine.", ["Hello world.", "How are you?", "I'm fine."]),
     ("What is your name? My name is Jonas.", ["What is your name?", "My name is Jonas."]),
     ("There it is! I found it.", ["There it is!", "I found it."]),
-    ("Did you remove num 2. Put it back.", ["Did you remove num 2.", "Put it back."]), 
+    ("Did you remove num 2. Put it back.", ["Did you remove num 2.", "Put it back."]),
+    ("Her email is Jane.Doe@example.com. I sent her an email.", ["Her email is Jane.Doe@example.com.", "I sent her an email."]),
+    ("The site is: https://www.example.50.com/new-site/awesome_content.html. Please check it out.", ["The site is: https://www.example.50.com/new-site/awesome_content.html.", "Please check it out."]),
 
     # Abbreviations
     ("My name is Jonas E. Smith.", ["My name is Jonas E. Smith."]),
@@ -26,12 +28,9 @@ TEST_DATA = [
     ("The meeting is at 2 p.m. Please be on time.", ["The meeting is at 2 p.m.", "Please be on time."]),
 
     # Parentheses and quotes
-    # ("He teaches science (He previously worked for 5 years as an engineer.) at the local University.", ["He teaches science (He previously worked for 5 years as an engineer.) at the local University."]),
-    # ("Her email is Jane.Doe@example.com. I sent her an email.", ["Her email is Jane.Doe@example.com.", "I sent her an email."]),
-    # ("The site is: https://www.example.50.com/new-site/awesome_content.html. Please check it out.", ["The site is: https://www.example.50.com/new-site/awesome_content.html.", "Please check it out."]),
-    # ("She turned to him, 'This is great.' she said.", ["She turned to him, 'This is great.' she said."]),
-    # ('She turned to him, "This is great." she said.', ["She turned to him, \"This is great.\" she said."]),
-    # ('She turned to him, "This is great." She held the book out to show him.', ["She turned to him, \"This is great.\"", "She held the book out to show him."]),
+    ("He teaches science (He previously worked for 5 years as an engineer.) at the local University.", ["He teaches science (He previously worked for 5 years as an engineer.) at the local University."]),
+    ('She turned to him, "This is great." she said.', ["She turned to him, \"This is great.\" she said."]),
+    ('She turned to him, "This is great." She held the book out to show him.', ["She turned to him, \"This is great.\"", "She held the book out to show him."]),
 
     # Double punctuation
     ("Hello!! Long time no see.", ["Hello!!", "Long time no see."]),

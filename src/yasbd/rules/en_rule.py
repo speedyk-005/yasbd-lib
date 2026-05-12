@@ -35,7 +35,9 @@ if __name__ == "__main__":
         2. Initialize the virtual environment using the provided script.
         3. Run the $O(n)$ test suite to verify performance.
         Deployment will follow successful testing.
+
+        The project (which had been delayed for months. ) was finally complete.
     """
-    sentences = rule.apply(text, False)
+    sentences = rule.apply(text, True)
     for s in sentences:
         print(repr(s))
