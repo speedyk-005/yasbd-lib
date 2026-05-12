@@ -22,7 +22,7 @@ class EnRule(Rule):
         "Millions", "More", "She", "That", "The", "Their", "These", "They", "This",
         "Those", "We", "What", "When", "Where", "Who", "Why", "You",
     }
-    COMMON_ORG_NOUNS = {"Army", "Government", "Federation"}
+    COMMON_ORG_NOUNS = {"Army", "Government", "Federation", "Senate", "Council", "Commission", "Parliament"}
 
 
 if __name__ == "__main__":

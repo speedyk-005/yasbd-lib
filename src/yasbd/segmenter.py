@@ -33,7 +33,7 @@ class Segmenter:
 		self,
 		lang: str = "en",
 		*,
-		should_clean: bool = True,
+		should_clean: bool = False,
 		include_char_span: bool = False,
 		preserve_quote_and_paren: bool = False,
 		verbose: bool = False,
