@@ -126,7 +126,7 @@ class Rule:
         line_iter = io.StringIO(input) if isinstance(input, str) else input
         for line in line_iter:
             main_boundaries = {0, len(line)}
-            if line:
+            if line.strip():
                 main_boundaries.update({m.end() for m in self.naive_boundary_detector.finditer(line)})
                 quote_and_paren_boundaries = {m.end() for m in self.quote_and_paren_end_finder.finditer(line)}
                 main_boundaries.update(quote_and_paren_boundaries)

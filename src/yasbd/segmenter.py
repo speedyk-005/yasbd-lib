@@ -56,11 +56,10 @@ class Segmenter:
 		for sent, span in self._rule.apply(input, self.preserve_quote_and_paren):
 			if self.should_clean:
 				stripped_sent = sent.strip()
-				if stripped_sent:
-					yield (
-						TextSpan(start=span[0], end=span[1], text=stripped_sent)
-						if self.include_char_span else stripped_sent
-					)
+				yield (
+					TextSpan(start=span[0], end=span[1], text=stripped_sent)
+					if self.include_char_span else stripped_sent
+				)
 			else:
 				yield (
 					TextSpan(start=span[0], end=span[1], text=sent)
@@ -77,6 +76,3 @@ class Segmenter:
 	    exists = bool(input.read(1))
 	    input.seek(curr)
 	    return not exists
-
-	def _wrap_as_span_obj(self, text: str, span: tuple) -> TextSpan:
-		return 
