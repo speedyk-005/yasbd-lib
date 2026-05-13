@@ -42,5 +42,10 @@ TEST_DATA = [
     ("1.) The first item. 2.) The second item.", ["1.) The first item.", "2.) The second item."]),
     ("a) The first item. b) The second item.", ["a) The first item.", "b) The second item."]),
     ("1. The first item. 2. The second item.", ["1. The first item.", "2. The second item."]),
-    ("• 9. The first item. • 10. The second item.", ["• 9. The first item.", "• 10. The second item."]),  
+    ("• 9. The first item. • 10. The second item.", ["• 9. The first item.", "• 10. The second item."]), 
+
+    # Elipsis
+    ("The project (Sinta) was nearing completion... or so we thought.", ["The project (Sinta) was nearing completion... or so we thought."]),
+    ("\"How could we miss this!...\" Mark shouted, slamming his hand on the desk.", ["\"How could we miss this!...\"", "Mark shouted, slamming his hand on the desk."]),
+    ("We found a memory leak in the C# wrapper.... It was subtle.", ["We found a memory leak in the C# wrapper....", "It was subtle."]),
 ]

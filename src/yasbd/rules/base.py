@@ -57,6 +57,9 @@ class Rule:
         \p{Ps}.+?\p{Pe}  # Parenthesized text
         """, re.X
     )
+
+    # https://regex101.com/r/wILgbJ/1
+    ELLIPSIS_FINDER = re.compile(r"[！!?？]?(?:\s*\.){3}")
     
     def __init__(self):
         _title_abbrvs_pattern = "|".join(self.TITLE_ABBRVS)
@@ -125,7 +128,7 @@ class Rule:
     ) -> Iterator[tuple]:
         line_iter = io.StringIO(input) if isinstance(input, str) else input
         for line in line_iter:
-            main_boundaries = {0, len(line)}
+            main_boundaries = set()
             if line.strip():
                 main_boundaries.update({m.end() for m in self.naive_boundary_detector.finditer(line)})
                 quote_and_paren_boundaries = {m.end() for m in self.quote_and_paren_end_finder.finditer(line)}
@@ -140,6 +143,10 @@ class Rule:
                         protected_spans.update(inner_range - quote_and_paren_boundaries)
                     main_boundaries.difference_update(protected_spans)
                 main_boundaries.difference_update({m.end() for m in self.mid_sentence_finder.finditer(line)})
+
+                # Shields ellipsis
+                for m in self.ELLIPSIS_FINDER.finditer(line):
+                    main_boundaries.difference_update(range(*m.span()))
 
                 # Prevents list-marker fragmentation by removing markers
                 horiz_list_boundaries = {m.end() for m in self.horizontal_list_finder.finditer(line)}
@@ -157,6 +164,8 @@ class Rule:
                     {m.start() + 1 for m in self.horizontal_list_finder.finditer(line) if m.start()}
                 )
 
+                # Add the start and end so we can handle empty boundaries
+                main_boundaries.update({0, len(line)})
                 main_boundaries_lst = sorted(list(main_boundaries))
                 yield from (
                     (line[start:end], (start, end))
