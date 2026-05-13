@@ -29,7 +29,8 @@ class Rule:
     }
 
     REFERENCE_ABBRVS = {
-        "ac", "chap", "cf", "ed", "fig", "p", "pp", "ref", "res", "sec", "ver", "viz", 
+        "ac", "chap", "cf", "ed", "fig", "p", "pp", "ref", "res", "sec", "v", "ver", "viz",
+        "ext",
     }
 
     MID_SENTENCE_ABBRVS = {

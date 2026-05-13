@@ -28,6 +28,7 @@ TEST_DATA = [
     ("The meeting is at 2 p.m. Please be on time.", ["The meeting is at 2 p.m.", "Please be on time."]),
     ("Q. What is his name? A. His name is Alfred E. Sloan.", ["Q. What is his name?", "A. His name is Alfred E. Sloan."]),
     ("I need you to find 3 items, e.g. a hat, a coat, and a bag.", ["I need you to find 3 items, e.g. a hat, a coat, and a bag."]),
+    ("The report was published in Dec. It was approved by Prof. Smith and Dr. Jones.", ["The report was published in Dec.", "It was approved by Prof. Smith and Dr. Jones."]),
 
     # Parentheses and quotes
     ("He teaches science (He previously worked for 5 years as an engineer.) at the local University.", ["He teaches science (He previously worked for 5 years as an engineer.) at the local University."]),

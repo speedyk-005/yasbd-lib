@@ -9,13 +9,8 @@ class EnRule(Rule):
     - Misc (btw, cal, hwy, etc.)
     """
     ISO_CODE = "en"
-    MID_SENTENCE_ABBRVS = Rule.MID_SENTENCE_ABBRVS | {
-        # Months
-        "apr", "aug", "dec", "feb", "jan", "jul", "jun", "mar", "nov", "oct", "sep", "sept",
-
-        # Misc
-        "btw", "cal", "ext", "hway", "hwy", "id", "ing", "me", "mex", "miss", "nos", "plz", "v", "wy",
-    }
+    MID_SENTENCE_ABBRVS = Rule.MID_SENTENCE_ABBRVS | {"ing", "wy"}
+    REFERENCE_ABBRVS = Rule.MID_SENTENCE_ABBRVS | {"nos", "hway", "hwy",}
 
     COMMON_STARTERS = {
         "A", "An", "Being", "Did", "For", "He", "How", "However", "I", "In", "It",
