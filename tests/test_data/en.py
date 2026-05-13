@@ -26,6 +26,8 @@ TEST_DATA = [
     ("She has $100.00 in her bag.", ["She has $100.00 in her bag."]),
     ("She has $100.00. It is in her bag.", ["She has $100.00.", "It is in her bag."]),
     ("The meeting is at 2 p.m. Please be on time.", ["The meeting is at 2 p.m.", "Please be on time."]),
+    ("Q. What is his name? A. His name is Alfred E. Sloan.", ["Q. What is his name?", "A. His name is Alfred E. Sloan."]),
+    ("I need you to find 3 items, e.g. a hat, a coat, and a bag.", ["I need you to find 3 items, e.g. a hat, a coat, and a bag."]),
 
     # Parentheses and quotes
     ("He teaches science (He previously worked for 5 years as an engineer.) at the local University.", ["He teaches science (He previously worked for 5 years as an engineer.) at the local University."]),
