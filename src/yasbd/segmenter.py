@@ -35,7 +35,7 @@ class Segmenter:
 		*,
 		should_clean: bool = False,
 		include_char_span: bool = False,
-		preserve_quote_and_paren: bool = False,
+		preserve_quote_and_paren: bool = True,
 		verbose: bool = False,
 	):
 		self.lang = lang
