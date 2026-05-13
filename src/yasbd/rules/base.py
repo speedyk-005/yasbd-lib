@@ -43,6 +43,16 @@ class Rule:
         "mt", "dist",
     }
 
+    EXCLAMATION_NAMES = {
+        "Ha", "Yahoo", "Yum", "Chips Ahoy", "Kahoot", "JOOP", "Joomla", "Starz",
+        "Jeopardy", "Airplane", "Oklahoma", "Mamma Mia", "Oliver", "Shindig",
+        "Westward Ho", "Saint-Louis-du-Ha! Ha", "Jeb", "Elliot S", "Air France Hop",
+        "Basta", "¡Éxito", "Pepitos", "OSN Yahala", "Shugo Chara", "Adopt Me", "Bingo",
+        "E", "Hailey's On It", "Hey Boo", "Hey Man! Let's Eat", "Microsoft Plus", "Off",
+        "Osu", "PBS Kids Go", "Pop", "Red Bip", "RedeTV", "This Can't Be Yogurt",
+        "Transfer It", "VSPO", "Walla", "WWE Smackdown",
+    }
+
     COMMON_STARTERS = {"The"}
     COMMON_ORG_NOUNS = {"Commission", "Federation"}
     QUOTATIVE_PARTICLES = {"と", "って", "라고"}
@@ -91,7 +101,7 @@ class Rule:
             """, re.X
         )
 
-        # https://regex101.com/r/svyCoU/1
+        # https://regex101.com/r/svyCoU/3
         self.mid_sentence_finder = re.compile(rf"""
             # Title abbrv or initialisms is NOT followed by a common ender (e.g., Dr. Paul)
             (?<=\b(?i:{_title_abbrvs_pattern})\.)(?!\s+(?:{"|".join(self.COMMON_STARTERS)}))|
@@ -104,6 +114,9 @@ class Rule:
 
             # References abbrv followed by a number (e.g., to p. 55)
             (?<=\b(?i:{"|".join(self.REFERENCE_ABBRVS)})\.)(?=\s+\p{{N}})|
+
+            # Exclamations words (e.g., Yahoo!)
+            (?<=\b(?:{"|".join(self.EXCLAMATION_NAMES)})!)|
 
             # Collapsed middle name (e.g, Jonas E. Smith)
             (?<=\s\b(?:\p{{Lu}})\.)(?=\s)

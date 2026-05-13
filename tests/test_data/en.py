@@ -48,4 +48,8 @@ TEST_DATA = [
     ("The project (Sinta) was nearing completion... or so we thought.", ["The project (Sinta) was nearing completion... or so we thought."]),
     ("\"How could we miss this!...\" Mark shouted, slamming his hand on the desk.", ["\"How could we miss this!...\"", "Mark shouted, slamming his hand on the desk."]),
     ("We found a memory leak in the C# wrapper.... It was subtle.", ["We found a memory leak in the C# wrapper....", "It was subtle."]),
+
+    # Exclamation words
+    ("We spent the afternoon playing Adopt Me! on the computer while eating Chips Ahoy! cookies.", ["We spent the afternoon playing Adopt Me! on the computer while eating Chips Ahoy! cookies."]),
+    ("My dad logged into Yahoo! finance to check on Yum! Brands stock performance before dinner.", ["My dad logged into Yahoo! finance to check on Yum! Brands stock performance before dinner."]),
 ]
