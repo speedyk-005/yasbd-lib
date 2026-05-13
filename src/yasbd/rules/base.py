@@ -107,7 +107,7 @@ class Rule:
             (?<=\b(?i:{_title_abbrvs_pattern})\.)(?!\s+(?:{"|".join(self.COMMON_STARTERS)}))|
 
             # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
-            (?<=\b(?i:{"|".join(self.GEOPOLITICAL_ABBRVS)})\.)(?=\s+(:{"|".join(self.COMMON_ORG_NOUNS)}))|
+            (?<=\b(?i:{"|".join(self.GEOPOLITICAL_ABBRVS)})\.)(?=\s+(?:{"|".join(self.COMMON_ORG_NOUNS)}))|
 
             # Abbrv that NEVER ends a sentence
             (?<=\b(?i:{"|".join(self.MID_SENTENCE_ABBRVS)})\.)|

@@ -66,13 +66,20 @@ class Segmenter:
 					if self.include_char_span else sent
 				)
 
-
 	def _is_empty(self, input):
 	    if isinstance(input, str):
 	        return not input.strip()
 	    
-	    # Stream object
-	    curr = input.tell()
-	    exists = bool(input.read(1))
-	    input.seek(curr)
-	    return not exists
+	    # Try peek first (non-destructive)
+	    if hasattr(input, 'peek'):
+	        return not input.peek(1)
+	    
+	    # Fall back to seekable approach
+	    if hasattr(input, 'seekable') and input.seekable():
+	        curr = input.tell()
+	        exists = bool(input.read(1))
+	        input.seek(curr)
+	        return not exists
+	    
+	    # Non-seekable, non-peekable streams (pipes, sockets) - can't check
+	    return False
