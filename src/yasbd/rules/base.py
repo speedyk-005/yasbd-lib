@@ -71,7 +71,7 @@ class Rule:
 
     # https://regex101.com/r/wILgbJ/1
     ELLIPSIS_FINDER = re.compile(r"[！!?？]?(?:\s*\.){3}")
-    
+  
     def __init__(self):
         _title_abbrvs_pattern = "|".join(self.TITLE_ABBRVS)
         _terminators_pattern = "".join(self.TERMINATORS)
@@ -137,10 +137,9 @@ class Rule:
 
     def apply(
         self,
-        input: str | io.IOBase,
+        line_iter: io.IOBase | Iterator,
         preserve_quote_and_paren: bool,
     ) -> Iterator[tuple]:
-        line_iter = io.StringIO(input) if isinstance(input, str) else input
         for line in line_iter:
             main_boundaries = set()
             if line.strip():

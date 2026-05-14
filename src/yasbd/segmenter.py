@@ -48,12 +48,19 @@ class Segmenter:
 		self._rule = getattr(rule_module, f"{lang.capitalize()}Rule")() 
 
 	def segment(self, input: str | io.IOBase) -> Generator[str | TextSpan, None, None]:
+		if self.should_clean and self.include_char_span:
+			raise ValueError(
+				"include_char_span must be False if should_clean is True "
+				"Since `should_clean=True` will modify original text."
+			)
+
 		if self._is_empty(input):
 			if self.verbose:
 				logger.info("Input is empty. Returns empty result")
 			return
-		
-		for sent, span in self._rule.apply(input, self.preserve_quote_and_paren):
+	
+		line_iter = io.StringIO(input) if isinstance(input, str) else input
+		for sent, span in self._rule.apply(line_iter, self.preserve_quote_and_paren):
 			if self.should_clean:
 				stripped_sent = sent.strip()
 				yield (
