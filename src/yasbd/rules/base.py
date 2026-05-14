@@ -1,7 +1,8 @@
 import io
+import re  # For simpler pattern
 from collections.abc import Iterator
 
-import regex as re
+import regex as re2
 
 
 class Rule:
@@ -60,17 +61,20 @@ class Rule:
     REPORTING_WORDS = {"说", "道", "问", "他", "她"}
 
     # https://regex101.com/r/tI9Cmg/2
-    VERTICAL_LIST_START_FINDER = re.compile(r"(?<=^\s*(?:[\p{L}\p{N}]\.){1,3})(?=\s)")
+    VERTICAL_LIST_START_FINDER = re2.compile(r"(?<=^\s*(?:[\p{L}\p{N}]\.){1,3})(?=\s)")
 
     # https://regex101.com/r/JYdWZw/1
-    QUOTE_AND_PAREN_FINDER = re.compile(r"""
+    QUOTE_AND_PAREN_FINDER = re2.compile(r"""
         (?:\p{Pi}|»|(['"”])).+?(?:\p{Pf}|«|\1)|  # Quoted text
         \p{Ps}.+?\p{Pe}  # Parenthesized text
-        """, re.X
+        """, re2.X
     )
 
     # https://regex101.com/r/wILgbJ/1
     ELLIPSIS_FINDER = re.compile(r"[！!?？]?(?:\s*\.){3,4}")
+
+    # https://regex101.com/r/0P9f2V/1
+    TOC_LEADER_FINDER = re.compile(r"[^\W_][\s\.]{4,}\d")
     
     def __init__(self):
         _title_abbrvs_pattern = "|".join(self.TITLE_ABBRVS)
@@ -78,7 +82,7 @@ class Rule:
 
         # https://regex101.com/r/qBSyU5/10
         # Handle flattened lists due to messy OCR.
-        self.horizontal_list_finder = re.compile(rf""" 
+        self.horizontal_list_finder = re2.compile(rf""" 
             (?:   #  Must preceded by
                 ^\s*|     # A string start
                 [:{_terminators_pattern}]\s+  # A terminator or double colon + space
@@ -89,21 +93,21 @@ class Rule:
                 (?:\d{{1,2}}|[^\W_\d])[.)]{{1,2}}  #  Numbered and alphabetical list (e.g, a\), 34.\), 1.)
             )
             (?=\s)  # Must followed by a space
-            """, re.X
+            """, re2.X
         )
 
         # https://regex101.com/r/VMzYsx/4
-        self.naive_boundary_detector = re.compile(rf"""
+        self.naive_boundary_detector = re2.compile(rf"""
             # Split if left token is a unicase letter (Always)
             (?<=\p{{Lo}}[{_terminators_pattern}])|
 
             # Split after any terminators followed by Space+Upper or unicase letter
             (?<=[{_terminators_pattern}])(?=\s+[^\p{{Ll}}]|\s*\p{{Lo}})
-            """, re.X
+            """, re2.X
         )
 
         # https://regex101.com/r/svyCoU/3
-        self.mid_sentence_finder = re.compile(rf"""
+        self.mid_sentence_finder = re2.compile(rf"""
             # Title abbrv or initialisms is NOT followed by a common ender (e.g., Dr. Paul)
             (?<=\b(?i:{_title_abbrvs_pattern})\.)(?!\s+(?:{"|".join(self.COMMON_STARTERS)}))|
 
@@ -121,18 +125,18 @@ class Rule:
 
             # Collapsed middle name (e.g, Jonas E. Smith)
             (?<=\s\b(?:\p{{Lu}})\.)(?=\s)
-            """, re.X
+            """, re2.X
         )
         
         # https://regex101.com/r/EGkRU8/4
-        self.quote_and_paren_end_finder = re.compile(rf"""
+        self.quote_and_paren_end_finder = re2.compile(rf"""
             (?<=[{_terminators_pattern}]\s*   # A terminator followed by additional space
             ["”«\p{{Pf}}])     # Closing quotes
             (?!  # NOT followed by any continuation markers or space+lowercase letter or end
                 {"|".join(self.QUOTATIVE_PARTICLES)}|{"|".join(self.REPORTING_WORDS)}|
                 \s+[\p{{Ll}}]|$
             )
-            """, re.X
+            """, re2.X
         )
 
     def apply(
@@ -158,8 +162,10 @@ class Rule:
                     main_boundaries.difference_update(protected_spans)
                 main_boundaries.difference_update(m.end() for m in self.mid_sentence_finder.finditer(line))
 
-                # Shields ellipsis
+                # Shields ellipsis and dot leaders
                 for m in self.ELLIPSIS_FINDER.finditer(line):
+                    main_boundaries.difference_update(range(*m.span()))
+                for m in self.TOC_LEADER_FINDER.finditer(line):
                     main_boundaries.difference_update(range(*m.span()))
 
                 # Prevents list-marker fragmentation by removing markers

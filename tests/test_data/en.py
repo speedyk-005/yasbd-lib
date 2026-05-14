@@ -47,10 +47,11 @@ TEST_DATA = [
     ("1. The first item. 2. The second item.", ["1. The first item.", "2. The second item."]),
     ("• 9. The first item. • 10. The second item.", ["• 9. The first item.", "• 10. The second item."]), 
 
-    # Elipsis
+    # Elipsis/TOC leaders
     ("The project (Sinta) was nearing completion... or so we thought.", ["The project (Sinta) was nearing completion... or so we thought."]),
     ("\"How could we miss this!...\" Mark shouted, slamming his hand on the desk.", ["\"How could we miss this!...\"", "Mark shouted, slamming his hand on the desk."]),
     ("We found a memory leak in the C# wrapper.... It was subtle.", ["We found a memory leak in the C# wrapper....", "It was subtle."]),
+    ("Why Complex Carbohydrates.................................................. 19", ["Why Complex Carbohydrates.................................................. 19"]),
 
     # Exclamation words
     ("We spent the afternoon playing Adopt Me! on the computer while eating Chips Ahoy! cookies.", ["We spent the afternoon playing Adopt Me! on the computer while eating Chips Ahoy! cookies."]),
