@@ -70,7 +70,7 @@ class Rule:
     )
 
     # https://regex101.com/r/wILgbJ/1
-    ELLIPSIS_FINDER = re.compile(r"[！!?？]?(?:\s*\.){3}")
+    ELLIPSIS_FINDER = re.compile(r"[！!?？]?(?:\s*\.){3,4}")
     
     def __init__(self):
         _title_abbrvs_pattern = "|".join(self.TITLE_ABBRVS)
@@ -98,7 +98,7 @@ class Rule:
             (?<=\p{{Lo}}[{_terminators_pattern}])|
 
             # Split after any terminators followed by Space+Upper or unicase letter
-            (?<=[{_terminators_pattern}]+)(?=\s+[^\p{{Ll}}]|\s*\p{{Lo}})
+            (?<=[{_terminators_pattern}])(?=\s+[^\p{{Ll}}]|\s*\p{{Lo}})
             """, re.X
         )
 
