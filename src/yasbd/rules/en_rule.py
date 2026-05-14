@@ -2,12 +2,6 @@ from yasbd.rules.base import Rule
 
 
 class EnRule(Rule):
-    """English-specific rule extending Rule.
-    
-    Adds English-specific abbreviations:
-    - Months (jan, feb, mar, etc.)
-    - Misc (btw, cal, hwy, etc.)
-    """
     ISO_CODE = "en"
     MID_SENTENCE_ABBRVS = Rule.MID_SENTENCE_ABBRVS | {"ing", "wy"}
     REFERENCE_ABBRVS = Rule.REFERENCE_ABBRVS | {"nos", "hway", "hwy",}
