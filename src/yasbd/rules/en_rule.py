@@ -10,7 +10,7 @@ class EnRule(Rule):
     """
     ISO_CODE = "en"
     MID_SENTENCE_ABBRVS = Rule.MID_SENTENCE_ABBRVS | {"ing", "wy"}
-    REFERENCE_ABBRVS = Rule.MID_SENTENCE_ABBRVS | {"nos", "hway", "hwy",}
+    REFERENCE_ABBRVS = Rule.REFERENCE_ABBRVS | {"nos", "hway", "hwy",}
 
     COMMON_STARTERS = {
         "A", "An", "Being", "Did", "For", "He", "How", "However", "I", "In", "It",
