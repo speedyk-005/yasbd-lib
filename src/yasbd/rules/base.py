@@ -144,7 +144,7 @@ class Rule:
         for line in line_iter:
             main_boundaries = set()
             if line.strip():
-                main_boundaries.update({m.end() for m in self.naive_boundary_detector.finditer(line)})
+                main_boundaries.update(m.end() for m in self.naive_boundary_detector.finditer(line))
                 quote_and_paren_boundaries = {m.end() for m in self.quote_and_paren_end_finder.finditer(line)}
                 main_boundaries.update(quote_and_paren_boundaries)
 
@@ -156,7 +156,7 @@ class Rule:
                         inner_range = set(range(*m.span()))
                         protected_spans.update(inner_range - quote_and_paren_boundaries)
                     main_boundaries.difference_update(protected_spans)
-                main_boundaries.difference_update({m.end() for m in self.mid_sentence_finder.finditer(line)})
+                main_boundaries.difference_update(m.end() for m in self.mid_sentence_finder.finditer(line))
 
                 # Shields ellipsis
                 for m in self.ELLIPSIS_FINDER.finditer(line):
@@ -169,18 +169,18 @@ class Rule:
                 )
                 main_boundaries.difference_update(horiz_list_boundaries)
                 main_boundaries.difference_update(
-                    {m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(line)}
+                    m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(line)
                 )
 
                 # Shift boundaries the pointer back (1.\)| => |1.\), a. | => |a. ) to correctly terminate 
                 # the preceding sentence before flattened horizontal list.
                 main_boundaries.update(
-                    {m.start() + 1 for m in self.horizontal_list_finder.finditer(line) if m.start()}
+                    m.start() + 1 for m in self.horizontal_list_finder.finditer(line) if m.start()
                 )
 
                 # Add the start and end so we can handle empty boundaries
                 main_boundaries.update({0, len(line)})
-                main_boundaries_lst = sorted(list(main_boundaries))
+                main_boundaries_lst = sorted(main_boundaries)
                 yield from (
                     (line[start:end], (start, end))
                     for start, end in zip(main_boundaries_lst, main_boundaries_lst[1:])
