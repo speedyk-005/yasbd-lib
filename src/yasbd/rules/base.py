@@ -16,11 +16,11 @@ class Rules:
         "dr", "drs", "prof", "sr", "jr", "hon", "rev", "supt", "insp",
 
         # Global Social (Overlap across English/Spanish/Portuguese/French)
-        "mr", "mrs", "ms", "sr", "st",
+        "mr", "mrs", "ms", "st",
 
         # Military (NATO/International Standardized Ranks)
         "adm", "brig", "capt", "cmdr", "col", "cpl", "gen", "lt", "maj", "sgt", "pvt",
-    
+
         # Political/Administrative (Common in Western bureaucracy)
         "gov", "rep", "sen", "pres"
     }
@@ -75,18 +75,18 @@ class Rules:
 
     # https://regex101.com/r/0P9f2V/1
     TOC_LEADER_FINDER = re.compile(r"[^\W_][\s\.]{4,}\d")
-    
+
     def __init__(self):
         title_abbrvs_pattern = "|".join(self.TITLE_ABBRVS)
         terminators_pattern = "".join(self.TERMINATORS)
 
         # https://regex101.com/r/qBSyU5/10
         # Handle flattened lists due to messy OCR.
-        self.horizontal_list_finder = re2.compile(rf""" 
+        self.horizontal_list_finder = re2.compile(rf"""
             (?:   #  Must preceded by
                 ^\s*|     # A string start
                 [:{terminators_pattern}]\s+  # A terminator or double colon + space
-            ) 
+            )
             (?:[•◦]\s+)?   # Optional bullet point (e.g., • 9.)
             (?:
                 [-*+]|      #  Markdown style list
@@ -127,7 +127,7 @@ class Rules:
             (?<=\s\b(?:\p{{Lu}})\.)(?=\s)
             """, re2.X
         )
-        
+
         # https://regex101.com/r/EGkRU8/4
         self.quote_and_paren_end_finder = re2.compile(rf"""
             (?<=[{terminators_pattern}]\s*   # A terminator followed by additional space
@@ -172,7 +172,7 @@ class Rules:
             m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(line)
         )
 
-        # Shift boundaries the pointer back (1.\)| => |1.\), a. | => |a. ) to correctly terminate 
+        # Shift boundaries the pointer back (1.\)| => |1.\), a. | => |a. ) to correctly terminate
         # the preceding sentence before flattened horizontal list.
         main_boundaries.update(
             m.start() + 1 for m in self.horizontal_list_finder.finditer(line) if m.start()
@@ -193,7 +193,7 @@ class Rules:
                     m.end() for m in self.quote_and_paren_end_finder.finditer(line)
                 }
                 main_boundaries.update(quote_and_paren_ends)
-                
+
                 # -- Remove false alarms --
                 main_boundaries.difference_update(
                     m.end() for m in self.mid_sentence_finder.finditer(line)
@@ -208,5 +208,5 @@ class Rules:
             main_boundaries_lst = sorted(main_boundaries)
             yield from (
                 (line[start:end], (start, end))
-                for start, end in zip(main_boundaries_lst, main_boundaries_lst[1:])
+                for start, end in zip(main_boundaries_lst, main_boundaries_lst[1:], strict=False)
             )

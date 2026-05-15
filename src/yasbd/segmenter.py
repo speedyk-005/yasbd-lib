@@ -59,7 +59,7 @@ class Segmenter:
         try:
             rule_module = import_module(f"yasbd.rules.{lang}_rules")
         except ModuleNotFoundError:
-            raise ValueError(f"Unsupported language: {lang!r}")
+            raise ValueError(f"Unsupported language: {lang!r}") from None
         self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")()
 
     def _is_empty(self, input):

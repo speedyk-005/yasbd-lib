@@ -1,9 +1,8 @@
-import re
 import io
+import re
 from collections.abc import Iterator
 
 import ftfy
-
 
 # https://regex101.com/r/SSQfUY/1
 # A number followed by a latin-1/Slovak uppercase letter
@@ -33,7 +32,7 @@ PAGE_FINDER = re.compile(r"""
 HTML_TAGS_FINDER = re.compile(r"""
     # Branch 1: Strip the tag AND its content
     <(script|iframe|object|embed|style)[^>]*?>.*?</?\1\s*>|
-    
+
     # Branch 2: Just strip the brackets
     </?(?:img|font|header|span|xml|del|ins|[ovbtwxp])[^>]*?>
     """, re.X | re.I

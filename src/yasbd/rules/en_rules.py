@@ -1,5 +1,6 @@
 from yasbd.rules.base import Rules
 
+
 class EnRules(Rules):
     ISO_CODE = "en"
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {"ing", "wy"}
