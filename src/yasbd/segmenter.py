@@ -44,8 +44,7 @@ class Segmenter:
         self.include_char_span = include_char_span
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
-        self._lang = lang
-        self._load_rule(lang)
+        self.lang = lang
 
     @property
     def lang(self) -> str:
@@ -63,6 +62,21 @@ class Segmenter:
             raise ValueError(f"Unsupported language: {lang!r}")
         self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")()
 
+    def _is_empty(self, input):
+        if isinstance(input, str):
+            return not input.strip()
+
+        if hasattr(input, 'peek'):
+            return not input.peek(1)
+
+        if hasattr(input, 'seekable') and input.seekable():
+            curr = input.tell()
+            exists = bool(input.read(1))
+            input.seek(curr)
+            return not exists
+
+        return False
+
     def segment(self, text_or_stream: str | io.IOBase) -> Generator[str | TextSpan, None, None]:
         if self.should_clean and self.include_char_span:
             raise ValueError(
@@ -74,7 +88,7 @@ class Segmenter:
             if self.verbose:
                 logger.info("Input is empty. Returns empty result")
             return
-    
+
         line_iter = io.StringIO(text_or_stream) if isinstance(text_or_stream, str) else text_or_stream
         if self.should_clean:
             line_iter = clean_input(line_iter)
@@ -91,21 +105,3 @@ class Segmenter:
                     TextSpan(start=span[0], end=span[1], text=sent)
                     if self.include_char_span else sent
                 )
-
-    def _is_empty(self, input):
-        if isinstance(input, str):
-            return not input.strip()
-        
-        # Try peek first (non-destructive)
-        if hasattr(input, 'peek'):
-            return not input.peek(1)
-        
-        # Fall back to seekable approach
-        if hasattr(input, 'seekable') and input.seekable():
-            curr = input.tell()
-            exists = bool(input.read(1))
-            input.seek(curr)
-            return not exists
-        
-        # Non-seekable, non-peekable streams (pipes, sockets) - can't check
-        return False
