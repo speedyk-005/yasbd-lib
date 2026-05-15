@@ -131,12 +131,51 @@ class Rule:
         # https://regex101.com/r/EGkRU8/4
         self.quote_and_paren_end_finder = re2.compile(rf"""
             (?<=[{_terminators_pattern}]\s*   # A terminator followed by additional space
-            ["”«\p{{Pf}}])     # Closing quotes
+            ["\u201d\u00ab\p{{Pf}}])     # Closing quotes
             (?!  # NOT followed by any continuation markers or space+lowercase letter or end
                 {"|".join(self.QUOTATIVE_PARTICLES)}|{"|".join(self.REPORTING_WORDS)}|
                 \s+[\p{{Ll}}]|$
             )
             """, re2.X
+        )
+
+    def _remove_quote_and_paren_spans(
+        self,
+        main_boundaries: set[int],
+        line: str,
+        qap_ends: set[int],
+        preserve_quote_and_paren: bool,
+    ) -> None:
+        if preserve_quote_and_paren:
+            protected_spans = set()
+            for m in self.QUOTE_AND_PAREN_FINDER.finditer(line):
+                inner_range = set(range(*m.span()))
+                protected_spans.update(inner_range - qap_ends)
+            main_boundaries.difference_update(protected_spans)
+
+    def _remove_ellipsis_and_toc_spans(
+        self, main_boundaries: set[int], line: str
+    ) -> None:
+        for m in self.ELLIPSIS_FINDER.finditer(line):
+            main_boundaries.difference_update(range(*m.span()))
+        for m in self.TOC_LEADER_FINDER.finditer(line):
+            main_boundaries.difference_update(range(*m.span()))
+
+    def _adjust_list_boundaries(self, main_boundaries: set[int], line: str) -> None:
+        # Prevents list-marker fragmentation by removing markers
+        horiz_list_boundaries = {m.end() for m in self.horizontal_list_finder.finditer(line)}
+        if len(horiz_list_boundaries) < 2:  # Reduce false alarm
+            horiz_list_boundaries = set()
+
+        main_boundaries.difference_update(horiz_list_boundaries)
+        main_boundaries.difference_update(
+            m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(line)
+        )
+
+        # Shift boundaries the pointer back (1.\)| => |1.\), a. | => |a. ) to correctly terminate 
+        # the preceding sentence before flattened horizontal list.
+        main_boundaries.update(
+            m.start() + 1 for m in self.horizontal_list_finder.finditer(line) if m.start()
         )
 
     def apply(
@@ -147,46 +186,27 @@ class Rule:
         for line in line_iter:
             main_boundaries = set()
             if line.strip():
-                main_boundaries.update(m.end() for m in self.naive_boundary_detector.finditer(line))
-                quote_and_paren_boundaries = {m.end() for m in self.quote_and_paren_end_finder.finditer(line)}
-                main_boundaries.update(quote_and_paren_boundaries)
-
-                # -- Remove false alarms --
-
-                if preserve_quote_and_paren:
-                    protected_spans = set()
-                    for m in self.QUOTE_AND_PAREN_FINDER.finditer(line):
-                        inner_range = set(range(*m.span()))
-                        protected_spans.update(inner_range - quote_and_paren_boundaries)
-                    main_boundaries.difference_update(protected_spans)
-                main_boundaries.difference_update(m.end() for m in self.mid_sentence_finder.finditer(line))
-
-                # Shields ellipsis and dot leaders
-                for m in self.ELLIPSIS_FINDER.finditer(line):
-                    main_boundaries.difference_update(range(*m.span()))
-                for m in self.TOC_LEADER_FINDER.finditer(line):
-                    main_boundaries.difference_update(range(*m.span()))
-
-                # Prevents list-marker fragmentation by removing markers
-                horiz_list_boundaries = {m.end() for m in self.horizontal_list_finder.finditer(line)}
-                horiz_list_boundaries = (  # Reduce false alarm
-                    horiz_list_boundaries if len(horiz_list_boundaries) >= 2 else set()
-                )
-                main_boundaries.difference_update(horiz_list_boundaries)
-                main_boundaries.difference_update(
-                    m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(line)
-                )
-
-                # Shift boundaries the pointer back (1.\)| => |1.\), a. | => |a. ) to correctly terminate 
-                # the preceding sentence before flattened horizontal list.
                 main_boundaries.update(
-                    m.start() + 1 for m in self.horizontal_list_finder.finditer(line) if m.start()
+                    m.end() for m in self.naive_boundary_detector.finditer(line)
                 )
+                qap_ends = {
+                    m.end() for m in self.quote_and_paren_end_finder.finditer(line)
+                }
+                main_boundaries.update(qap_ends)
+                
+                # -- Remove false alarms --
+                main_boundaries.difference_update(
+                    m.end() for m in self.mid_sentence_finder.finditer(line)
+                )
+                self._remove_quote_and_paren_spans(
+                    main_boundaries, line, qap_ends, preserve_quote_and_paren
+                )
+                self._remove_ellipsis_and_toc_spans(main_boundaries, line)
+                self._adjust_list_boundaries(main_boundaries, line)
 
-                # Add the start and end so we can handle empty boundaries
-                main_boundaries.update({0, len(line)})
-                main_boundaries_lst = sorted(main_boundaries)
-                yield from (
-                    (line[start:end], (start, end))
-                    for start, end in zip(main_boundaries_lst, main_boundaries_lst[1:])
-                )
+            main_boundaries.update({0, len(line)})
+            main_boundaries_lst = sorted(main_boundaries)
+            yield from (
+                (line[start:end], (start, end))
+                for start, end in zip(main_boundaries_lst, main_boundaries_lst[1:])
+            )
