@@ -71,10 +71,10 @@ class Rule:
     )
 
     # https://regex101.com/r/wILgbJ/1
-    ELLIPSIS_FINDER = re2.compile(r"[！!?？]?(?:\s*\.){3,4}")
+    ELLIPSIS_FINDER = re.compile(r"[！!?？]?(?:\s*\.){3,4}")
 
     # https://regex101.com/r/0P9f2V/1
-    TOC_LEADER_FINDER = re2.compile(r"[^\W_][\s\.]{4,}\d")
+    TOC_LEADER_FINDER = re.compile(r"[^\W_][\s\.]{4,}\d")
     
     def __init__(self):
         _title_abbrvs_pattern = "|".join(self.TITLE_ABBRVS)
