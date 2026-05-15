@@ -161,11 +161,13 @@ class Rule:
                     main_boundaries.difference_update(protected_spans)
                 main_boundaries.difference_update(m.end() for m in self.mid_sentence_finder.finditer(line))
 
-                # Shields ellipsis and dot leaders
-                for m in self.ELLIPSIS_FINDER.finditer(line):
-                    main_boundaries.difference_update(range(*m.span()))
-                for m in self.TOC_LEADER_FINDER.finditer(line):
-                    main_boundaries.difference_update(range(*m.span()))
+                # Shield ellipsis and dot leaders
+                # Skip regex when no run of 3+ dots exists (almost all lines lack them)
+                if "..." in line:
+                    for m in self.ELLIPSIS_FINDER.finditer(line):
+                        main_boundaries.difference_update(range(*m.span()))
+                    for m in self.TOC_LEADER_FINDER.finditer(line):
+                        main_boundaries.difference_update(range(*m.span()))
 
                 # Prevents list-marker fragmentation by removing markers
                 horiz_list_boundaries = {m.end() for m in self.horizontal_list_finder.finditer(line)}
