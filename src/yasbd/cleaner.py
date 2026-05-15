@@ -47,6 +47,11 @@ CONSECUTIVE_FORWARD_SLASH_FINDER = re.compile(r"\/{3}")
 # https://regex101.com/r/Zo8RlK/2
 INLINE_FORMATTING_FINDER = re.compile(r"{b\^>[^<]*<b\^}")
 
+# If a line ends with one of these, the next line belongs to the same sentence.
+# OCR often breaks lines mid-sentence, so this merges them back before
+# the SBD engine sees the text.
+CONTINUATION_CHARS = {"，", "：", "；", ",", "-", "*", ")", ":", ";"}
+
 
 def _clean_text(text: str) -> str:
     text = HTML_TAGS_FINDER.sub("", text)
@@ -90,7 +95,7 @@ def clean_input(data: io.IOBase | Iterator) -> Iterator[str]:
 
             if (
                 sent_buff and sent_buff[-1]
-                and not (sent_buff[-1][-1].isalpha() or sent_buff[-1][-1] in ".-*)")
+                and not (sent_buff[-1][-1].isalpha() or sent_buff[-1][-1] in CONTINUATION_CHARS)
             ):
                 yield from " ".join(sent_buff).splitlines()
                 sent_buff = []
