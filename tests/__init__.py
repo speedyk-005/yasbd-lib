@@ -10,7 +10,8 @@ def load_test_data():
 
     for module_info in pkgutil.iter_modules([str(test_data_dir)]):
         module = importlib.import_module(f"tests.test_data.{module_info.name}")
-        test_data[module_info.name] = module.TEST_DATA
+        key = getattr(module, "ISO_CODE", module_info.name)
+        test_data[key] = module.TEST_DATA
 
     return test_data
 

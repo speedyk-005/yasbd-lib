@@ -1,13 +1,12 @@
-import re
 import io
+import re
 from collections.abc import Iterator
 
 import ftfy
 
-
 # https://regex101.com/r/SSQfUY/1
 # A number followed by a latin-1/Slovak uppercase letter
-STICKY_NUMBER_SPLITTER = re.compile(r"""
+STICKY_NUMBER_FINDER = re.compile(r"""
     (?<=\s\d\.)(?=[A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u017F])
     """, re.X
 )
@@ -33,7 +32,7 @@ PAGE_FINDER = re.compile(r"""
 HTML_TAGS_FINDER = re.compile(r"""
     # Branch 1: Strip the tag AND its content
     <(script|iframe|object|embed|style)[^>]*?>.*?</?\1\s*>|
-    
+
     # Branch 2: Just strip the brackets
     </?(?:img|font|header|span|xml|del|ins|[ovbtwxp])[^>]*?>
     """, re.X | re.I
@@ -42,15 +41,16 @@ HTML_TAGS_FINDER = re.compile(r"""
 
 # -- Ported from pysbd --
 
-# Rubular: http://rubular.com/r/IQ4TPfsbd8
+# https://regex101.com/r/Nw2I67/1
 CONSECUTIVE_FORWARD_SLASH_FINDER = re.compile(r"\/{3}")
 
-# Rubular: http://rubular.com/r/FseyMiiYFT
-NEWLINE_FOLLOWED_BY_PERIOD_FINDER = re.compile(r"\n(?=\.(\s|\n))")
+# https://regex101.com/r/Zo8RlK/2
+INLINE_FORMATTING_FINDER = re.compile(r"{b\^>[^<]*<b\^}")
 
-# Rubular: http://rubular.com/r/bAJrhyLNeZ (original)
-# https://regex101.com/r/Zo8RlK/1 (modified)
-INLINE_FORMATTING_FINDER = re.compile(r"{b\^&gt;[^<]*&lt;b\^}|{b\^>[^<]*<b\^}")
+# If a line ends with one of these, the next line belongs to the same sentence.
+# OCR often breaks lines mid-sentence, so this merges them back before
+# the SBD engine sees the text.
+CONTINUATION_CHARS = {"，", "：", "；", ",", "-", "*", ")", ":", ";"}
 
 
 def _clean_text(text: str) -> str:
@@ -63,16 +63,25 @@ def _clean_text(text: str) -> str:
 
     text = STANDALONE_CHARS_FINDER.sub("", text)
     text = PAGE_FINDER.sub("", text)
-
-    if "\n" in text:
-        text = NEWLINE_FOLLOWED_BY_PERIOD_FINDER.sub("", text)
-    text = STICKY_NUMBER_SPLITTER.sub("\n", text)
+    text = STICKY_NUMBER_FINDER.sub("\n", text)
     if "  " in text:
         text = MULTIPLE_SPACES_FINDER.sub(" ", text)
     return text
 
 
 def clean_input(data: io.IOBase | Iterator) -> Iterator[str]:
+    """Pre-process text before sentence segmentation.
+
+    Applies ``ftfy`` for mojibake repair, strips HTML tags, removes
+    standalone characters, page-number artifacts, and re-joins list
+    markers split across lines.
+
+    Args:
+        data: Iterable of raw text lines.
+
+    Yields:
+        Cleaned text lines.
+    """
     sent_buff = []   # To catch fragmented sentence
     for line in data:
         stripped_line = line.strip()
@@ -85,13 +94,13 @@ def clean_input(data: io.IOBase | Iterator) -> Iterator[str]:
 
             # Rejoin separated lists (e.g, 2\) from its content)
             if len(sent_buff) and HEADING_OR_LIST_FINDER.match(sent_buff[-1]):
-                last_tok = sent_buff.pop()
+                last_token = sent_buff.pop()
                 yield from " ".join(sent_buff).splitlines()
-                sent_buff = [last_tok]
+                sent_buff = [last_token]
 
             if (
                 sent_buff and sent_buff[-1]
-                and not (sent_buff[-1][-1].isalpha() or sent_buff[-1][-1] in ".-*)")
+                and not (sent_buff[-1][-1].isalpha() or sent_buff[-1][-1] in CONTINUATION_CHARS)
             ):
                 yield from " ".join(sent_buff).splitlines()
                 sent_buff = []
