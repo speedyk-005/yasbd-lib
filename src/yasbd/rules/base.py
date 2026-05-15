@@ -82,7 +82,7 @@ class Rule:
 
         # https://regex101.com/r/qBSyU5/10
         # Handle flattened lists due to messy OCR.
-        self.horizontal_list_finder = re2.compile(rf""" 
+        self.horizontal_list_finder = re.compile(rf"""
             (?:   #  Must preceded by
                 ^\s*|     # A string start
                 [:{_terminators_pattern}]\s+  # A terminator or double colon + space
@@ -93,7 +93,7 @@ class Rule:
                 (?:\d{{1,2}}|[^\W_\d])[.)]{{1,2}}  #  Numbered and alphabetical list (e.g, a\), 34.\), 1.)
             )
             (?=\s)  # Must followed by a space
-            """, re2.X
+            """, re.X
         )
 
         # https://regex101.com/r/VMzYsx/4
