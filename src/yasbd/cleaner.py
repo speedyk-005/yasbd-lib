@@ -44,9 +44,6 @@ HTML_TAGS_FINDER = re.compile(r"""
 # https://regex101.com/r/Nw2I67/1
 CONSECUTIVE_FORWARD_SLASH_FINDER = re.compile(r"\/{3}")
 
-# https://regex101.com/r/89EUgT/1
-NEWLINE_FOLLOWED_BY_PERIOD_FINDER = re.compile(r"\n(?=\.(\s|\n))")
-
 # https://regex101.com/r/Zo8RlK/2
 INLINE_FORMATTING_FINDER = re.compile(r"{b\^>[^<]*<b\^}")
 
@@ -57,7 +54,6 @@ def _clean_text(text: str) -> str:
     text = CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", text)
     text = STANDALONE_CHARS_FINDER.sub("", text)
     text = PAGE_FINDER.sub("", text)
-    text = NEWLINE_FOLLOWED_BY_PERIOD_FINDER.sub("", text)
     text = STICKY_NUMBER_FINDER.sub("\n", text)
     text = MULTIPLE_SPACES_FINDER.sub(" ", text)
     return text
