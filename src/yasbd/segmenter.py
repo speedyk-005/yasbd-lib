@@ -15,7 +15,11 @@ class TextSpan(NamedTuple):
 
     @property
     def sent(self) -> str:
-        """Alias for pysbd compatibility"""
+        """Alias for pysbd compatibility.
+
+        Returns:
+            str: The sentence text, identical to ``.text``.
+        """
         return self.text
 
     def __str__(self) -> str:
@@ -40,6 +44,18 @@ class Segmenter:
         preserve_quote_and_paren: bool = True,
         verbose: bool = False,
     ):
+        """Initialize the segmenter.
+
+        Args:
+            lang: Two chars ISO language code (e.g. en, fr, ...).
+            should_clean: Apply pre-processing (HTML stripping, OCR fixes,
+                Unicode normalization) before segmentation.
+            include_char_span: Yield ``TextSpan`` objects with character
+                spans instead of plain strings.
+            preserve_quote_and_paren: Do not split on terminators inside
+                quoted or parenthesised text.
+            verbose: Enable verbose logging.
+        """
         self.should_clean = should_clean
         self.include_char_span = include_char_span
         self.preserve_quote_and_paren = preserve_quote_and_paren
@@ -48,6 +64,7 @@ class Segmenter:
 
     @property
     def lang(self) -> str:
+        """ISO language code of the active rule set."""
         return self._lang
 
     @lang.setter
@@ -56,6 +73,7 @@ class Segmenter:
         self._load_rule(lang)
 
     def _load_rule(self, lang: str) -> None:
+        """Dynamically import and instantiate the rule module for *lang*."""
         try:
             rule_module = import_module(f"yasbd.rules.{lang}_rules")
         except ModuleNotFoundError:
@@ -63,6 +81,7 @@ class Segmenter:
         self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")()
 
     def _is_empty(self, input):
+        """Check whether *input* contains any text without consuming it."""
         if isinstance(input, str):
             return not input.strip()
 
@@ -78,6 +97,20 @@ class Segmenter:
         return False
 
     def segment(self, text_or_stream: str | io.IOBase) -> Generator[str | TextSpan, None, None]:
+        """Split text into sentences.
+
+        Args:
+            text_or_stream: Plain text string or an iterable of lines
+                (e.g. ``io.StringIO``).
+
+        Yields:
+            Individual sentences as strings, or ``TextSpan`` objects when
+            ``include_char_span`` is ``True``.
+
+        Raises:
+            ValueError: If ``should_clean`` and ``include_char_span`` are
+                both ``True``.
+        """
         if self.should_clean and self.include_char_span:
             raise ValueError(
                 "include_char_span must be False if should_clean is True "

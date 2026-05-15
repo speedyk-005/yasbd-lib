@@ -77,6 +77,12 @@ class Rules:
     TOC_LEADER_FINDER = re.compile(r"[^\W_][\s\.]{4,}\d")
 
     def __init__(self):
+        """Compile language-specific regex patterns.
+
+        Patterns that depend on abbreviation sets or terminators are built
+        here rather than at class level so subclasses can override the data
+        constants.
+        """
         title_abbrvs_pattern = "|".join(self.TITLE_ABBRVS)
         terminators_pattern = "".join(self.TERMINATORS)
 
@@ -146,6 +152,7 @@ class Rules:
         quote_and_paren_ends: set[int],
         preserve_quote_and_paren: bool,
     ) -> None:
+        """Remove boundaries inside quoted/parenthesised spans."""
         if preserve_quote_and_paren:
             protected_spans = set()
             for m in self.QUOTE_AND_PAREN_FINDER.finditer(line):
@@ -156,13 +163,14 @@ class Rules:
     def _remove_ellipsis_and_toc_spans(
         self, main_boundaries: set[int], line: str
     ) -> None:
+        """Remove boundaries inside ellipsis and TOC leader runs."""
         for m in self.ELLIPSIS_FINDER.finditer(line):
             main_boundaries.difference_update(range(*m.span()))
         for m in self.TOC_LEADER_FINDER.finditer(line):
             main_boundaries.difference_update(range(*m.span()))
 
     def _adjust_list_boundaries(self, main_boundaries: set[int], line: str) -> None:
-        # Prevents list-marker fragmentation by removing markers
+        """Remove and re-align boundaries around list markers."""
         horiz_list_boundaries = {m.end() for m in self.horizontal_list_finder.finditer(line)}
         if len(horiz_list_boundaries) < 2:  # Reduce false alarm
             horiz_list_boundaries = set()
@@ -183,6 +191,21 @@ class Rules:
         line_iter: io.IOBase | Iterator,
         preserve_quote_and_paren: bool,
     ) -> Iterator[tuple]:
+        """Yields ``(sentence, (start, end))`` tuples for every line.
+
+        Two-pass algorithm:
+        1. Collect boundary candidates from punctuation positions.
+        2. Remove false alarms (mid-sentence abbreviations, ellipsis,
+           quote/paren spans, list markers).
+
+        Args:
+            line_iter: Source of text lines (string stream or iterator).
+            preserve_quote_and_paren: If ``True``, suppress boundaries
+                inside ``(...)`` and ``"..."`` spans.
+
+        Yields:
+            ``(sentence_text, (start_offset, end_offset))`` tuples.
+        """
         for line in line_iter:
             main_boundaries = set()
             if line.strip():

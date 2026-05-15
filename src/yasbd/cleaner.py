@@ -60,6 +60,18 @@ def _clean_text(text: str) -> str:
 
 
 def clean_input(data: io.IOBase | Iterator) -> Iterator[str]:
+    """Pre-process text before sentence segmentation.
+
+    Applies ``ftfy`` for mojibake repair, strips HTML tags, removes
+    standalone characters, page-number artifacts, and re-joins list
+    markers split across lines.
+
+    Args:
+        data: Iterable of raw text lines.
+
+    Yields:
+        Cleaned text lines.
+    """
     sent_buff = []   # To catch fragmented sentence
     for line in data:
         stripped_line = line.strip()
