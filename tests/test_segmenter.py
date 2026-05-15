@@ -18,6 +18,11 @@ def test_segment_empty_input(input_text):
     assert list(seg.segment(input_text)) == []
 
 
+def test_unsupported_language():
+    with pytest.raises(ValueError, match="Unsupported language"):
+        Segmenter(lang="ht")
+
+
 def test_segment_different_input():
     text = "Hello world. How are you? I'm fine."
     seg = Segmenter(lang="en", should_clean=True)

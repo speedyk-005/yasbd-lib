@@ -46,7 +46,10 @@ class Segmenter:
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
 
-        rule_module = import_module(f"yasbd.rules.{lang}_rule")
+        try:
+            rule_module = import_module(f"yasbd.rules.{lang}_rule")
+        except ModuleNotFoundError:
+            raise ValueError(f"Unsupported language: {lang!r}")
         self._rule = getattr(rule_module, f"{lang.capitalize()}Rule")() 
 
     def segment(self, input: str | io.IOBase) -> Generator[str | TextSpan, None, None]:
