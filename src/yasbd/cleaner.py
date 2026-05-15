@@ -54,14 +54,21 @@ INLINE_FORMATTING_FINDER = re.compile(r"{b\^&gt;[^<]*&lt;b\^}|{b\^>[^<]*<b\^}")
 
 
 def _clean_text(text: str) -> str:
-    text = HTML_TAGS_FINDER.sub("", text)
-    text = INLINE_FORMATTING_FINDER.sub("", text)
-    text = CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", text)
+    if "<" in text:
+        text = HTML_TAGS_FINDER.sub("", text)
+    if "{" in text:
+        text = INLINE_FORMATTING_FINDER.sub("", text)
+    if "///" in text:
+        text = CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", text)
+
     text = STANDALONE_CHARS_FINDER.sub("", text)
     text = PAGE_FINDER.sub("", text)
-    text = NEWLINE_FOLLOWED_BY_PERIOD_FINDER.sub("", text)
+
+    if "\n" in text:
+        text = NEWLINE_FOLLOWED_BY_PERIOD_FINDER.sub("", text)
     text = STICKY_NUMBER_SPLITTER.sub("\n", text)
-    text = MULTIPLE_SPACES_FINDER.sub(" ", text)
+    if "  " in text:
+        text = MULTIPLE_SPACES_FINDER.sub(" ", text)
     return text
 
 
