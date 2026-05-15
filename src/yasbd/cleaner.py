@@ -7,7 +7,7 @@ import ftfy
 
 # https://regex101.com/r/SSQfUY/1
 # A number followed by a latin-1/Slovak uppercase letter
-STICKY_NUMBER_SPLITTER = re.compile(r"""
+STICKY_NUMBER_FINDER = re.compile(r"""
     (?<=\s\d\.)(?=[A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u017F])
     """, re.X
 )
@@ -59,7 +59,7 @@ def _clean_text(text: str) -> str:
     text = STANDALONE_CHARS_FINDER.sub("", text)
     text = PAGE_FINDER.sub("", text)
     text = NEWLINE_FOLLOWED_BY_PERIOD_FINDER.sub("", text)
-    text = STICKY_NUMBER_SPLITTER.sub("\n", text)
+    text = STICKY_NUMBER_FINDER.sub("\n", text)
     text = MULTIPLE_SPACES_FINDER.sub(" ", text)
     return text
 
@@ -77,9 +77,9 @@ def clean_input(data: io.IOBase | Iterator) -> Iterator[str]:
 
             # Rejoin separated lists (e.g, 2\) from its content)
             if len(sent_buff) and HEADING_OR_LIST_FINDER.match(sent_buff[-1]):
-                last_tok = sent_buff.pop()
+                last_token = sent_buff.pop()
                 yield from " ".join(sent_buff).splitlines()
-                sent_buff = [last_tok]
+                sent_buff = [last_token]
 
             if (
                 sent_buff and sent_buff[-1]

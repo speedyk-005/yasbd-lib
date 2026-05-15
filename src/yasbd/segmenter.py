@@ -47,24 +47,24 @@ class Segmenter:
         self.verbose = verbose
 
         try:
-            rule_module = import_module(f"yasbd.rules.{lang}_rule")
+            rule_module = import_module(f"yasbd.rules.{lang}_rules")
         except ModuleNotFoundError:
             raise ValueError(f"Unsupported language: {lang!r}")
-        self._rule = getattr(rule_module, f"{lang.capitalize()}Rule")() 
+        self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")() 
 
-    def segment(self, input: str | io.IOBase) -> Generator[str | TextSpan, None, None]:
+    def segment(self, text_or_stream: str | io.IOBase) -> Generator[str | TextSpan, None, None]:
         if self.should_clean and self.include_char_span:
             raise ValueError(
                 "include_char_span must be False if should_clean is True "
                 "Since `should_clean=True` will modify original text."
             )
 
-        if self._is_empty(input):
+        if self._is_empty(text_or_stream):
             if self.verbose:
                 logger.info("Input is empty. Returns empty result")
             return
     
-        line_iter = io.StringIO(input) if isinstance(input, str) else input
+        line_iter = io.StringIO(text_or_stream) if isinstance(text_or_stream, str) else text_or_stream
         if self.should_clean:
             line_iter = clean_input(line_iter)
 

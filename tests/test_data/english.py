@@ -1,6 +1,7 @@
 # English test data for yasbd
 # Format: (input_text, expected_sentences)
 
+ISO_CODE = "en"
 TEST_DATA = [
     # Basic punctuation
     ("Hello world. How are you? I'm fine.", ["Hello world.", "How are you?", "I'm fine."]),

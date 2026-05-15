@@ -1,12 +1,11 @@
-from yasbd.rules.base import Rule
+from yasbd.rules.base import Rules
 
-
-class EnRule(Rule):
+class EnRules(Rules):
     ISO_CODE = "en"
-    MID_SENTENCE_ABBRVS = Rule.MID_SENTENCE_ABBRVS | {"ing", "wy"}
-    REFERENCE_ABBRVS = Rule.REFERENCE_ABBRVS | {"nos", "hway", "hwy",}
+    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {"ing", "wy"}
+    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {"nos", "hway", "hwy",}
 
-    COMMON_STARTERS = {
+    COMMON_SENT_STARTERS = {
         "A", "An", "Being", "Did", "For", "He", "How", "However", "I", "In", "It",
         "Millions", "More", "She", "That", "The", "Their", "These", "They", "This",
         "Those", "We", "What", "When", "Where", "Who", "Why", "You",
@@ -17,7 +16,7 @@ class EnRule(Rule):
 if __name__ == "__main__":
     from io import StringIO
 
-    rule = EnRule()
+    rule = EnRules()
     text = """
         The system requirements for the project are simple: 1. Python 3.12 environment. 2. At least 8GB of RAM. 3. Access to the PUA character set for Sinta markers. Please ensure these are met before initialization.
 

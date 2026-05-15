@@ -5,7 +5,7 @@ from collections.abc import Iterator
 import regex as re2
 
 
-class Rule:
+class Rules:
     ISO_CODE = "xx"
     TERMINATORS = {
         "。", "．", ".", "！", "!", "?", "？"
@@ -45,7 +45,7 @@ class Rule:
         "mt", "dist",
     }
 
-    EXCLAMATION_NAMES = {
+    NAMES_WITH_EXCLAMATION = {
         "Ha", "Yahoo", "Yum", "Chips Ahoy", "Kahoot", "JOOP", "Joomla", "Starz",
         "Jeopardy", "Airplane", "Oklahoma", "Mamma Mia", "Oliver", "Shindig",
         "Westward Ho", "Saint-Louis-du-Ha! Ha", "Jeb", "Elliot S", "Air France Hop",
@@ -55,7 +55,7 @@ class Rule:
         "Transfer It", "VSPO", "Walla", "WWE Smackdown",
     }
 
-    COMMON_STARTERS = {"The"}
+    COMMON_SENT_STARTERS = {"The"}
     COMMON_ORG_NOUNS = {"Commission", "Federation"}
     QUOTATIVE_PARTICLES = {"と", "って", "라고"}
     REPORTING_WORDS = {"说", "道", "问", "他", "她"}
@@ -77,15 +77,15 @@ class Rule:
     TOC_LEADER_FINDER = re.compile(r"[^\W_][\s\.]{4,}\d")
     
     def __init__(self):
-        _title_abbrvs_pattern = "|".join(self.TITLE_ABBRVS)
-        _terminators_pattern = "".join(self.TERMINATORS)
+        title_abbrvs_pattern = "|".join(self.TITLE_ABBRVS)
+        terminators_pattern = "".join(self.TERMINATORS)
 
         # https://regex101.com/r/qBSyU5/10
         # Handle flattened lists due to messy OCR.
         self.horizontal_list_finder = re2.compile(rf""" 
             (?:   #  Must preceded by
                 ^\s*|     # A string start
-                [:{_terminators_pattern}]\s+  # A terminator or double colon + space
+                [:{terminators_pattern}]\s+  # A terminator or double colon + space
             ) 
             (?:[•◦]\s+)?   # Optional bullet point (e.g., • 9.)
             (?:
@@ -97,19 +97,19 @@ class Rule:
         )
 
         # https://regex101.com/r/VMzYsx/4
-        self.naive_boundary_detector = re2.compile(rf"""
+        self.naive_boundary_finder = re2.compile(rf"""
             # Split if left token is a unicase letter (Always)
-            (?<=\p{{Lo}}[{_terminators_pattern}])|
+            (?<=\p{{Lo}}[{terminators_pattern}])|
 
             # Split after any terminators followed by Space+Upper or unicase letter
-            (?<=[{_terminators_pattern}])(?=\s+[^\p{{Ll}}]|\s*\p{{Lo}})
+            (?<=[{terminators_pattern}])(?=\s+[^\p{{Ll}}]|\s*\p{{Lo}})
             """, re2.X
         )
 
         # https://regex101.com/r/svyCoU/3
         self.mid_sentence_finder = re2.compile(rf"""
             # Title abbrv or initialisms is NOT followed by a common ender (e.g., Dr. Paul)
-            (?<=\b(?i:{_title_abbrvs_pattern})\.)(?!\s+(?:{"|".join(self.COMMON_STARTERS)}))|
+            (?<=\b(?i:{title_abbrvs_pattern})\.)(?!\s+(?:{"|".join(self.COMMON_SENT_STARTERS)}))|
 
             # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
             (?<=\b(?i:{"|".join(self.GEOPOLITICAL_ABBRVS)})\.)(?=\s+(?:{"|".join(self.COMMON_ORG_NOUNS)}))|
@@ -121,7 +121,7 @@ class Rule:
             (?<=\b(?i:{"|".join(self.REFERENCE_ABBRVS)})\.)(?=\s+\p{{N}})|
 
             # Exclamations words (e.g., Yahoo!)
-            (?<=\b(?:{"|".join(self.EXCLAMATION_NAMES)})!)|
+            (?<=\b(?:{"|".join(self.NAMES_WITH_EXCLAMATION)})!)|
 
             # Collapsed middle name (e.g, Jonas E. Smith)
             (?<=\s\b(?:\p{{Lu}})\.)(?=\s)
@@ -130,7 +130,7 @@ class Rule:
         
         # https://regex101.com/r/EGkRU8/4
         self.quote_and_paren_end_finder = re2.compile(rf"""
-            (?<=[{_terminators_pattern}]\s*   # A terminator followed by additional space
+            (?<=[{terminators_pattern}]\s*   # A terminator followed by additional space
             ["\u201d\u00ab\p{{Pf}}])     # Closing quotes
             (?!  # NOT followed by any continuation markers or space+lowercase letter or end
                 {"|".join(self.QUOTATIVE_PARTICLES)}|{"|".join(self.REPORTING_WORDS)}|
@@ -143,14 +143,14 @@ class Rule:
         self,
         main_boundaries: set[int],
         line: str,
-        qap_ends: set[int],
+        quote_and_paren_ends: set[int],
         preserve_quote_and_paren: bool,
     ) -> None:
         if preserve_quote_and_paren:
             protected_spans = set()
             for m in self.QUOTE_AND_PAREN_FINDER.finditer(line):
                 inner_range = set(range(*m.span()))
-                protected_spans.update(inner_range - qap_ends)
+                protected_spans.update(inner_range - quote_and_paren_ends)
             main_boundaries.difference_update(protected_spans)
 
     def _remove_ellipsis_and_toc_spans(
@@ -187,19 +187,19 @@ class Rule:
             main_boundaries = set()
             if line.strip():
                 main_boundaries.update(
-                    m.end() for m in self.naive_boundary_detector.finditer(line)
+                    m.end() for m in self.naive_boundary_finder.finditer(line)
                 )
-                qap_ends = {
+                quote_and_paren_ends = {
                     m.end() for m in self.quote_and_paren_end_finder.finditer(line)
                 }
-                main_boundaries.update(qap_ends)
+                main_boundaries.update(quote_and_paren_ends)
                 
                 # -- Remove false alarms --
                 main_boundaries.difference_update(
                     m.end() for m in self.mid_sentence_finder.finditer(line)
                 )
                 self._remove_quote_and_paren_spans(
-                    main_boundaries, line, qap_ends, preserve_quote_and_paren
+                    main_boundaries, line, quote_and_paren_ends, preserve_quote_and_paren
                 )
                 self._remove_ellipsis_and_toc_spans(main_boundaries, line)
                 self._adjust_list_boundaries(main_boundaries, line)
