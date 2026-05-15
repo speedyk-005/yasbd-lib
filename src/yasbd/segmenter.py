@@ -5,6 +5,8 @@ from typing import NamedTuple
 
 from loguru import logger
 
+from yasbd.cleaner import clean_input
+
 
 class TextSpan(NamedTuple):
 	start: int
@@ -60,6 +62,9 @@ class Segmenter:
 			return
 	
 		line_iter = io.StringIO(input) if isinstance(input, str) else input
+		if self.should_clean:
+			line_iter = clean_input(line_iter)
+
 		for sent, span in self._rule.apply(line_iter, self.preserve_quote_and_paren):
 			if self.should_clean:
 				stripped_sent = sent.strip()
