@@ -42,15 +42,14 @@ HTML_TAGS_FINDER = re.compile(r"""
 
 # -- Ported from pysbd --
 
-# Rubular: http://rubular.com/r/IQ4TPfsbd8
+# https://regex101.com/r/Nw2I67/1
 CONSECUTIVE_FORWARD_SLASH_FINDER = re.compile(r"\/{3}")
 
-# Rubular: http://rubular.com/r/FseyMiiYFT
+# https://regex101.com/r/89EUgT/1
 NEWLINE_FOLLOWED_BY_PERIOD_FINDER = re.compile(r"\n(?=\.(\s|\n))")
 
-# Rubular: http://rubular.com/r/bAJrhyLNeZ (original)
-# https://regex101.com/r/Zo8RlK/1 (modified)
-INLINE_FORMATTING_FINDER = re.compile(r"{b\^&gt;[^<]*&lt;b\^}|{b\^>[^<]*<b\^}")
+# https://regex101.com/r/Zo8RlK/2
+INLINE_FORMATTING_FINDER = re.compile(r"{b\^>[^<]*<b\^}")
 
 
 def _clean_text(text: str) -> str:
