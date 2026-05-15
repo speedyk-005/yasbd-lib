@@ -71,10 +71,10 @@ class Rule:
     )
 
     # https://regex101.com/r/wILgbJ/1
-    ELLIPSIS_FINDER = re.compile(r"[！!?？]?(?:\s*\.){3,4}")
+    ELLIPSIS_FINDER = re2.compile(r"[！!?？]?(?:\s*\.){3,4}")
 
     # https://regex101.com/r/0P9f2V/1
-    TOC_LEADER_FINDER = re.compile(r"[^\W_][\s\.]{4,}\d")
+    TOC_LEADER_FINDER = re2.compile(r"[^\W_][\s\.]{4,}\d")
     
     def __init__(self):
         _title_abbrvs_pattern = "|".join(self.TITLE_ABBRVS)
@@ -141,10 +141,9 @@ class Rule:
 
     def apply(
         self,
-        input: str | io.IOBase,
+        line_iter: io.IOBase | Iterator,
         preserve_quote_and_paren: bool,
     ) -> Iterator[tuple]:
-        line_iter = io.StringIO(input) if isinstance(input, str) else input
         for line in line_iter:
             main_boundaries = set()
             if line.strip():

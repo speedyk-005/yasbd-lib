@@ -2,12 +2,6 @@ from yasbd.rules.base import Rule
 
 
 class EnRule(Rule):
-    """English-specific rule extending Rule.
-    
-    Adds English-specific abbreviations:
-    - Months (jan, feb, mar, etc.)
-    - Misc (btw, cal, hwy, etc.)
-    """
     ISO_CODE = "en"
     MID_SENTENCE_ABBRVS = Rule.MID_SENTENCE_ABBRVS | {"ing", "wy"}
     REFERENCE_ABBRVS = Rule.REFERENCE_ABBRVS | {"nos", "hway", "hwy",}
@@ -21,6 +15,8 @@ class EnRule(Rule):
 
 
 if __name__ == "__main__":
+    from io import StringIO
+
     rule = EnRule()
     text = """
         The system requirements for the project are simple: 1. Python 3.12 environment. 2. At least 8GB of RAM. 3. Access to the PUA character set for Sinta markers. Please ensure these are met before initialization.
@@ -33,6 +29,6 @@ if __name__ == "__main__":
 
         The project (which had been delayed for months. ) was finally complete.
     """
-    sentences = rule.apply(text, True)
+    sentences = rule.apply(StringIO(text), True)
     for s in sentences:
         print(repr(s))
