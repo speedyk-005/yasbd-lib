@@ -40,17 +40,28 @@ class Segmenter:
         preserve_quote_and_paren: bool = True,
         verbose: bool = False,
     ):
-        self.lang = lang
         self.should_clean = should_clean
         self.include_char_span = include_char_span
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
+        self._lang = lang
+        self._load_rule(lang)
 
+    @property
+    def lang(self) -> str:
+        return self._lang
+
+    @lang.setter
+    def lang(self, lang: str) -> None:
+        self._lang = lang
+        self._load_rule(lang)
+
+    def _load_rule(self, lang: str) -> None:
         try:
             rule_module = import_module(f"yasbd.rules.{lang}_rules")
         except ModuleNotFoundError:
             raise ValueError(f"Unsupported language: {lang!r}")
-        self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")() 
+        self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")()
 
     def segment(self, text_or_stream: str | io.IOBase) -> Generator[str | TextSpan, None, None]:
         if self.should_clean and self.include_char_span:
