@@ -9,89 +9,89 @@ from yasbd.cleaner import clean_input
 
 
 class TextSpan(NamedTuple):
-	start: int
-	end: int
-	text: str
+    start: int
+    end: int
+    text: str
 
-	@property
-	def sent(self) -> str:
-		"""Alias for pysbd compatibility"""
-		return self.text
+    @property
+    def sent(self) -> str:
+        """Alias for pysbd compatibility"""
+        return self.text
 
-	def __str__(self) -> str:
-		return f"[{self.start}:{self.end}] {self.text}"
+    def __str__(self) -> str:
+        return f"[{self.start}:{self.end}] {self.text}"
 
-	def __eq__(self, other) -> bool:
-		if (
-			isinstance(other, TextSpan)
-			or hasattr(other, "sent") and hasattr(other, "start") and hasattr(other, "end")
-		):
-			return (self.start, self.end, self.sent) == (other.start, other.end, other.sent)
-		return NotImplemented
+    def __eq__(self, other) -> bool:
+        if (
+            isinstance(other, TextSpan)
+            or hasattr(other, "sent") and hasattr(other, "start") and hasattr(other, "end")
+        ):
+            return (self.start, self.end, self.sent) == (other.start, other.end, other.sent)
+        return NotImplemented
 
 
 class Segmenter:
-	def __init__(
-		self,
-		lang: str = "en",
-		*,
-		should_clean: bool = False,
-		include_char_span: bool = False,
-		preserve_quote_and_paren: bool = True,
-		verbose: bool = False,
-	):
-		self.lang = lang
-		self.should_clean = should_clean
-		self.include_char_span = include_char_span
-		self.preserve_quote_and_paren = preserve_quote_and_paren
-		self.verbose = verbose
+    def __init__(
+        self,
+        lang: str = "en",
+        *,
+        should_clean: bool = False,
+        include_char_span: bool = False,
+        preserve_quote_and_paren: bool = True,
+        verbose: bool = False,
+    ):
+        self.lang = lang
+        self.should_clean = should_clean
+        self.include_char_span = include_char_span
+        self.preserve_quote_and_paren = preserve_quote_and_paren
+        self.verbose = verbose
 
-		rule_module = import_module(f"yasbd.rules.{lang}_rule")
-		self._rule = getattr(rule_module, f"{lang.capitalize()}Rule")() 
+        rule_module = import_module(f"yasbd.rules.{lang}_rule")
+        self._rule = getattr(rule_module, f"{lang.capitalize()}Rule")() 
 
-	def segment(self, input: str | io.IOBase) -> Generator[str | TextSpan, None, None]:
-		if self.should_clean and self.include_char_span:
-			raise ValueError(
-				"include_char_span must be False if should_clean is True "
-				"Since `should_clean=True` will modify original text."
-			)
+    def segment(self, input: str | io.IOBase) -> Generator[str | TextSpan, None, None]:
+        if self.should_clean and self.include_char_span:
+            raise ValueError(
+                "include_char_span must be False if should_clean is True "
+                "Since `should_clean=True` will modify original text."
+            )
 
-		if self._is_empty(input):
-			if self.verbose:
-				logger.info("Input is empty. Returns empty result")
-			return
-	
-		line_iter = io.StringIO(input) if isinstance(input, str) else input
-		if self.should_clean:
-			line_iter = clean_input(line_iter)
+        if self._is_empty(input):
+            if self.verbose:
+                logger.info("Input is empty. Returns empty result")
+            return
+    
+        line_iter = io.StringIO(input) if isinstance(input, str) else input
+        if self.should_clean:
+            line_iter = clean_input(line_iter)
 
-		for sent, span in self._rule.apply(line_iter, self.preserve_quote_and_paren):
-			if self.should_clean:
-				stripped_sent = sent.strip()
-				yield (
-					TextSpan(start=span[0], end=span[1], text=stripped_sent)
-					if self.include_char_span else stripped_sent
-				)
-			else:
-				yield (
-					TextSpan(start=span[0], end=span[1], text=sent)
-					if self.include_char_span else sent
-				)
+        for sent, span in self._rule.apply(line_iter, self.preserve_quote_and_paren):
+            if self.should_clean:
+                stripped_sent = sent.strip()
+                yield (
+                    TextSpan(start=span[0], end=span[1], text=stripped_sent)
+                    if self.include_char_span else stripped_sent
+                )
+            else:
+                yield (
+                    TextSpan(start=span[0], end=span[1], text=sent)
+                    if self.include_char_span else sent
+                )
 
-	def _is_empty(self, input):
-	    if isinstance(input, str):
-	        return not input.strip()
-	    
-	    # Try peek first (non-destructive)
-	    if hasattr(input, 'peek'):
-	        return not input.peek(1)
-	    
-	    # Fall back to seekable approach
-	    if hasattr(input, 'seekable') and input.seekable():
-	        curr = input.tell()
-	        exists = bool(input.read(1))
-	        input.seek(curr)
-	        return not exists
-	    
-	    # Non-seekable, non-peekable streams (pipes, sockets) - can't check
-	    return False
+    def _is_empty(self, input):
+        if isinstance(input, str):
+            return not input.strip()
+        
+        # Try peek first (non-destructive)
+        if hasattr(input, 'peek'):
+            return not input.peek(1)
+        
+        # Fall back to seekable approach
+        if hasattr(input, 'seekable') and input.seekable():
+            curr = input.tell()
+            exists = bool(input.read(1))
+            input.seek(curr)
+            return not exists
+        
+        # Non-seekable, non-peekable streams (pipes, sockets) - can't check
+        return False
