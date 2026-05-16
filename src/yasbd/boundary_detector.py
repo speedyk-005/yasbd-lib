@@ -10,7 +10,6 @@ class BoundaryDetector:
         self,
         lang: str = "en",
         *,
-        include_char_span: bool = False,
         preserve_quote_and_paren: bool = True,
         verbose: bool = False,
     ):
@@ -18,16 +17,13 @@ class BoundaryDetector:
 
         Args:
             lang: Two chars ISO language code (e.g. en, fr, ...).
-            include_char_span: Yield ``TextSpan`` objects with character
-                spans instead of plain strings.
             preserve_quote_and_paren: Do not split on terminators inside
                 quoted or parenthesised text.
             verbose: Enable verbose logging.
         """
-        self.include_char_span = include_char_span
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
-        self.lang = lang
+        self.lang = lang.lower()
 
     @property
     def lang(self) -> str:
@@ -36,7 +32,7 @@ class BoundaryDetector:
 
     @lang.setter
     def lang(self, lang: str) -> None:
-        self._lang = lang
+        self._lang = lang.lower()
         self._load_rule(lang)
 
     def _load_rule(self, lang: str) -> None:
