@@ -96,12 +96,19 @@ class Segmenter:
 
         return False
 
-    def segment(self, text_or_stream: str | io.IOBase) -> Generator[str | TextSpan, None, None]:
+    def segment(
+        self,
+        text_or_stream: str | io.IOBase,
+        *,
+        preserve_whitespace: bool = False,
+    ) -> Generator[str | TextSpan, None, None]:
         """Split text into sentences.
 
         Args:
             text_or_stream: Plain text string or an iterable of lines
                 (e.g. ``io.StringIO``).
+            preserve_whitespace: If ``False`` (default), strip leading and
+                trailing whitespace from each sentence.
 
         Yields:
             Individual sentences as strings, or ``TextSpan`` objects when
@@ -127,14 +134,9 @@ class Segmenter:
             line_iter = clean_input(line_iter)
 
         for sent, span in self._rule.apply(line_iter, self.preserve_quote_and_paren):
-            if self.should_clean:
-                stripped_sent = sent.strip()
-                yield (
-                    TextSpan(start=span[0], end=span[1], text=stripped_sent)
-                    if self.include_char_span else stripped_sent
-                )
-            else:
-                yield (
-                    TextSpan(start=span[0], end=span[1], text=sent)
-                    if self.include_char_span else sent
-                )
+            if not preserve_whitespace:
+                sent = sent.strip()
+            yield (
+                TextSpan(start=span[0], end=span[1], text=sent)
+                if self.include_char_span else sent
+            )

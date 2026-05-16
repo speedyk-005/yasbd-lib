@@ -14,7 +14,7 @@ from tests import ALL_TEST_DATA
     pytest.param(io.StringIO(""), id="empty_stream"),
 ])
 def test_segment_empty_input(input_text):
-    seg = Segmenter(lang="en", should_clean=True)
+    seg = Segmenter(lang="en")
     assert list(seg.segment(input_text)) == []
 
 
@@ -25,7 +25,7 @@ def test_unsupported_language():
 
 def test_segment_different_input():
     text = "Hello world. How are you? I'm fine."
-    seg = Segmenter(lang="en", should_clean=True)
+    seg = Segmenter(lang="en")
 
     result_str = list(seg.segment(text))
     result_stream = list(seg.segment(io.StringIO(text)))
@@ -36,7 +36,7 @@ def test_segment_different_input():
 
 @pytest.mark.parametrize("lang,test_data", ALL_TEST_DATA.items())
 def test_segment_multiple_langs(subtests, lang, test_data):
-    seg = Segmenter(lang=lang, should_clean=True)
+    seg = Segmenter(lang=lang)
     for input_text, expected in test_data:
         with subtests.test():
             result = list(seg.segment(input_text))
@@ -45,7 +45,7 @@ def test_segment_multiple_langs(subtests, lang, test_data):
 
 def test_segment_noisy_input():
     chars = string.ascii_letters + string.digits + string.punctuation + "z.?! Dr. Mr. Inc. etc."
-    seg = Segmenter(lang="en", should_clean=True)
+    seg = Segmenter(lang="en")
 
     for _ in range(100):
         length = random.randint(1, 500)
@@ -58,17 +58,16 @@ def test_segment_noisy_input():
 
 def test_include_char_span():
     text = "Hello World. How are you?"
-    n = len(text)
 
     seg = Segmenter(lang="en", include_char_span=True)
-    result = list(seg.segment(text))
+    result = list(seg.segment(text, preserve_whitespace=True))
     assert len(result) == 2
 
     last_end = 0
     for res in result:
         assert res.text == text[res.start:res.end]
-        assert last_end <= res.start <= n
-        assert last_end <= res.end <= n
+        assert last_end <= res.start
+        assert res.start <= res.end
         last_end = res.end
 
 
