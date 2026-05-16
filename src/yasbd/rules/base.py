@@ -16,7 +16,7 @@ class Rules:
         "dr", "drs", "prof", "sr", "jr", "hon", "rev", "supt", "insp",
 
         # Global Social (Overlap across English/Spanish/Portuguese/French)
-        "mr", "mrs", "ms", "st",
+        "mr", "mrs", "ms",
 
         # Military (NATO/International Standardized Ranks)
         "adm", "brig", "capt", "cmdr", "col", "cpl", "gen", "lt", "maj", "sgt", "pvt",
@@ -42,7 +42,7 @@ class Rules:
         "cf", "eg", "e.g", "ie", "i.e", "vs", "v", "viz", "ibid", "ca", "sc",
 
         # Street & directional anchors
-        "mt", "dist",
+        "mt", "dist", "st",
     }
 
     NAMES_WITH_EXCLAMATION = {
