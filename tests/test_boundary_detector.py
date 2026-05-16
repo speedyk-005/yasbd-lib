@@ -1,10 +1,11 @@
-import pytest
 import io
 import random
 import string
 
-from yasbd import Segmenter
+import pytest
+
 from tests import ALL_TEST_DATA
+from yasbd import BoundaryDetector
 
 
 @pytest.mark.parametrize("input_text", [
@@ -14,18 +15,18 @@ from tests import ALL_TEST_DATA
     pytest.param(io.StringIO(""), id="empty_stream"),
 ])
 def test_segment_empty_input(input_text):
-    seg = Segmenter(lang="en")
+    seg = BoundaryDetector(lang="en")
     assert list(seg.segment(input_text)) == []
 
 
 def test_unsupported_language():
     with pytest.raises(ValueError, match="Unsupported language"):
-        Segmenter(lang="ht")
+        BoundaryDetector(lang="ht")
 
 
 def test_segment_different_input():
     text = "Hello world. How are you? I'm fine."
-    seg = Segmenter(lang="en")
+    seg = BoundaryDetector(lang="en")
 
     result_str = list(seg.segment(text))
     result_stream = list(seg.segment(io.StringIO(text)))
@@ -36,7 +37,7 @@ def test_segment_different_input():
 
 @pytest.mark.parametrize("lang,test_data", ALL_TEST_DATA.items())
 def test_segment_multiple_langs(subtests, lang, test_data):
-    seg = Segmenter(lang=lang)
+    seg = BoundaryDetector(lang=lang)
     for input_text, expected in test_data:
         with subtests.test():
             result = list(seg.segment(input_text))
@@ -45,7 +46,7 @@ def test_segment_multiple_langs(subtests, lang, test_data):
 
 def test_segment_noisy_input():
     chars = string.ascii_letters + string.digits + string.punctuation + "z.?! Dr. Mr. Inc. etc."
-    seg = Segmenter(lang="en")
+    seg = BoundaryDetector(lang="en")
 
     for _ in range(100):
         length = random.randint(1, 500)
@@ -53,26 +54,20 @@ def test_segment_noisy_input():
         try:
             list(seg.segment(text))
         except Exception as e:
-            raise AssertionError(f"Crash on random input (len={length}): {e}")
+            raise AssertionError(f"Crash on random input (len={length}): {e}") from e
 
 
 def test_include_char_span():
     text = "Hello World. How are you?"
 
-    seg = Segmenter(lang="en", include_char_span=True)
-    result = list(seg.segment(text, preserve_whitespace=True))
+    seg = BoundaryDetector(lang="en")
+    result = list(seg.detect(text))
     assert len(result) == 2
 
     last_end = 0
-    for res in result:
-        assert res.text == text[res.start:res.end]
-        assert last_end <= res.start
-        assert res.start <= res.end
-        last_end = res.end
+    for start, end in result:
+        assert text[start:end]
+        assert last_end <= start
+        assert start <= end
+        last_end = end
 
-
-def test_clean_with_char_span_raises():
-    seg = Segmenter(lang="en", should_clean=True, include_char_span=True)
-    with pytest.raises(ValueError, match="include_char_span must be False"):
-        list(seg.segment("Hello. World."))
-        last_end = res.end

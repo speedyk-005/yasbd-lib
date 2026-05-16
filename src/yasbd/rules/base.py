@@ -1,6 +1,5 @@
-import io
 import re  # For simpler pattern
-from collections.abc import Iterator
+from collections.abc import Generator, Iterator
 
 import regex as re2
 
@@ -79,9 +78,8 @@ class Rules:
     def __init__(self):
         """Compile language-specific regex patterns.
 
-        Patterns that depend on abbreviation sets or terminators are built
-        here rather than at class level so subclasses can override the data
-        constants.
+        Patterns that depend on abbreviation sets or terminators are built here
+        rather than at class level so subclasses can override the data constants.
         """
         title_abbrvs_pattern = "|".join(self.TITLE_ABBRVS)
         terminators_pattern = "".join(self.TERMINATORS)
@@ -187,10 +185,11 @@ class Rules:
 
     def apply(
         self,
-        line_iter: io.IOBase | Iterator,
+        line_iter: Iterator[str],
         preserve_quote_and_paren: bool,
-    ) -> Iterator[tuple]:
-        """Yields ``(sentence, (start, end))`` tuples for every line.
+        relative: bool = False,
+    ) -> Generator[tuple[int, int], None, None]:
+        """Detect sentence boundaries for each line.
 
         Two-pass algorithm:
         1. Collect boundary candidates from punctuation positions.
@@ -200,35 +199,45 @@ class Rules:
         Args:
             line_iter: Source of text lines (string stream or iterator).
             preserve_quote_and_paren: If ``True``, suppress boundaries
-                inside ``(...)`` and ``"..."`` spans.
+               inside quote and parenthesis spans.
+            relative: If ``False`` (default), yield offsets relative to
+                the full text. If ``True``, offsets are per-line.
 
         Yields:
-            ``(sentence_text, (start_offset, end_offset))`` tuples.
+            ``(start_offset, end_offset)`` per sentence.
         """
+        offset = 0
         for line in line_iter:
-            main_boundaries = set()
-            if line.strip():
-                main_boundaries.update(
-                    m.end() for m in self.naive_boundary_finder.finditer(line)
-                )
-                quote_and_paren_ends = {
-                    m.end() for m in self.quote_and_paren_end_finder.finditer(line)
-                }
-                main_boundaries.update(quote_and_paren_ends)
+            if not line.strip():
+                if not relative:
+                    offset += len(line)
+                continue
 
-                # -- Remove false alarms --
-                main_boundaries.difference_update(
-                    m.end() for m in self.mid_sentence_finder.finditer(line)
-                )
-                self._remove_quote_and_paren_spans(
-                    main_boundaries, line, quote_and_paren_ends, preserve_quote_and_paren
-                )
-                self._remove_ellipsis_and_toc_spans(main_boundaries, line)
-                self._adjust_list_boundaries(main_boundaries, line)
+            main_boundaries = set()
+            main_boundaries.update(
+                m.end() for m in self.naive_boundary_finder.finditer(line)
+            )
+            quote_and_paren_ends = {
+                m.end() for m in self.quote_and_paren_end_finder.finditer(line)
+            }
+            main_boundaries.update(quote_and_paren_ends)
+
+            # -- Remove false alarms --
+            main_boundaries.difference_update(
+                m.end() for m in self.mid_sentence_finder.finditer(line)
+            )
+            self._remove_quote_and_paren_spans(
+                main_boundaries, line, quote_and_paren_ends, preserve_quote_and_paren
+            )
+            self._remove_ellipsis_and_toc_spans(main_boundaries, line)
+            self._adjust_list_boundaries(main_boundaries, line)
 
             main_boundaries.update({0, len(line)})
             main_boundaries_lst = sorted(main_boundaries)
-            yield from (
-                (line[start:end], (start, end))
-                for start, end in zip(main_boundaries_lst, main_boundaries_lst[1:], strict=False)
-            )
+            for i in range(len(main_boundaries) - 1):
+                start = main_boundaries_lst[i]
+                end = main_boundaries_lst[i + 1]
+                yield (offset + start, offset + end) if not relative else (start, end)
+
+            if not relative:
+                offset += len(line)

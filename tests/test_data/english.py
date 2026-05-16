@@ -47,7 +47,7 @@ TEST_DATA = [
     ("1.) The first item. 2.) The second item.", ["1.) The first item.", "2.) The second item."]),
     ("a) The first item. b) The second item.", ["a) The first item.", "b) The second item."]),
     ("1. The first item. 2. The second item.", ["1. The first item.", "2. The second item."]),
-    ("• 9. The first item. • 10. The second item.", ["• 9. The first item.", "• 10. The second item."]), 
+    ("• 9. The first item. • 10. The second item.", ["• 9. The first item.", "• 10. The second item."]),
 
     # Elipsis/TOC leaders
     ("The project (Sinta) was nearing completion... or so we thought.", ["The project (Sinta) was nearing completion... or so we thought."]),
