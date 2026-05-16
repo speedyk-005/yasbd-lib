@@ -1,5 +1,5 @@
 import io
-from collections.abc import Generator, Iterator
+from collections.abc import Generator, Iterable
 from importlib import import_module
 from itertools import tee, islice, chain
 from loguru import logger
@@ -45,7 +45,7 @@ class BoundaryDetector:
 
     def detect(
         self,
-        text_data: str | Iterator[str],
+        text_data: str | Iterable[str],
         *,
         relative: bool = False,
     ) -> Generator[tuple[int, int], None, None]:
@@ -82,7 +82,7 @@ class BoundaryDetector:
 
     def segment(
         self,
-        text_data: str | Iterator[str],
+        text_data: str | Iterable[str],
         *,
         preserve_whitespace: bool = False,
     ) -> Generator[str, None, None]:
