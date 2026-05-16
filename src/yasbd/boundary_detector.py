@@ -2,35 +2,7 @@ import io
 from collections.abc import Generator, Iterator
 from importlib import import_module
 from itertools import tee, islice, chain
-from typing import NamedTuple
-
 from loguru import logger
-
-
-class TextSpan(NamedTuple):
-    start: int
-    end: int
-    text: str
-
-    @property
-    def sent(self) -> str:
-        """Alias for pysbd compatibility.
-
-        Returns:
-            str: The sentence text, identical to ``.text``.
-        """
-        return self.text
-
-    def __str__(self) -> str:
-        return f"[{self.start}:{self.end}] {self.text}"
-
-    def __eq__(self, other) -> bool:
-        if (
-            isinstance(other, TextSpan)
-            or hasattr(other, "sent") and hasattr(other, "start") and hasattr(other, "end")
-        ):
-            return (self.start, self.end, self.sent) == (other.start, other.end, other.sent)
-        return NotImplemented
 
 
 class BoundaryDetector:
