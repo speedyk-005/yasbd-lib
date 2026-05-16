@@ -1,6 +1,6 @@
 import pytest
 
-from yasbd.cleaner import clean_input
+from yasbd.utils.cleaner import clean_input
 
 
 @pytest.mark.parametrize("input_text,removed", [

@@ -5,7 +5,7 @@ from typing import NamedTuple
 
 from loguru import logger
 
-from yasbd.cleaner import clean_input
+from yasbd.utils.cleaner import clean_input
 
 
 class TextSpan(NamedTuple):
