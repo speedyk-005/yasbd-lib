@@ -1,3 +1,3 @@
-from yasbd.segmenter import Segmenter, TextSpan
+from yasbd.boundary_detector import BoundaryDetector, TextSpan
 
-__all__ = ["TextSpan", "Segmenter"]
+__all__ = ["TextSpan", "BoundaryDetector"]

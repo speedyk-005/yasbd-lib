@@ -1,9 +1,11 @@
 import io
-from collections.abc import Generator
+from collections.abc import Generator, Iterator
 from importlib import import_module
+from itertools import tee, islice, chain
 from typing import NamedTuple
 
 from loguru import logger
+
 
 class TextSpan(NamedTuple):
     start: int
@@ -31,7 +33,7 @@ class TextSpan(NamedTuple):
         return NotImplemented
 
 
-class Segmenter:
+class BoundaryDetector:
     def __init__(
         self,
         lang: str = "en",
@@ -73,51 +75,74 @@ class Segmenter:
             raise ValueError(f"Unsupported language: {lang!r}") from None
         self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")()
 
-    def _is_empty(self, input):
-        """Check whether *input* contains any text without consuming it."""
-        if isinstance(input, str):
-            return not input.strip()
+    def detect(
+        self,
+        text_data: str | Iterator[str],
+        *,
+        relative: bool = False,
+    ) -> Generator[tuple[int, int], None, None]:
+        """Detect sentence boundaries in text.
 
-        if hasattr(input, 'peek'):
-            return not input.peek(1)
+        Yields ``(start, end)`` character offset pairs for each
+        detected sentence.
 
-        if hasattr(input, 'seekable') and input.seekable():
-            curr = input.tell()
-            exists = bool(input.read(1))
-            input.seek(curr)
-            return not exists
+        Args:
+            text_data: Plain text string or an iterable of lines
+                (e.g. ``io.StringIO``).
+            relative: If ``False`` (default), yield offsets relative to
+                the full text. If ``True``, offsets are per-line.
 
-        return False
+        Yields:
+            ``(start_offset, end_offset)`` for each sentence.
+        """
+        if isinstance(text_data, str):
+            text_data = io.StringIO(text_data)
+
+        # Quick heuristic empty check
+        first_5_lines = list(islice(text_data, 5))
+        if len(first_5_lines) == 0:
+            if self.verbose:
+                logger.info("Input is empty. Returns empty result")
+            return
+
+        # Re-stich the stream
+        text_data = chain(first_5_lines, text_data)
+
+        yield from self._rule.apply(
+            text_data, self.preserve_quote_and_paren, relative=relative
+        )
 
     def segment(
         self,
-        text_or_stream: str | io.IOBase,
+        text_data: str | Iterator[str],
         *,
         preserve_whitespace: bool = False,
-    ) -> Generator[str | TextSpan, None, None]:
+    ) -> Generator[str, None, None]:
         """Split text into sentences.
 
         Args:
-            text_or_stream: Plain text string or an iterable of lines
+            text_data: Plain text string or an iterable of lines
                 (e.g. ``io.StringIO``).
             preserve_whitespace: If ``False`` (default), strip leading and
                 trailing whitespace from each sentence.
 
         Yields:
-            Individual sentences as strings, or ``TextSpan`` objects when
-            ``include_char_span`` is ``True``.
+            Individual sentences as strings.
         """
-        if self._is_empty(text_or_stream):
-            if self.verbose:
-                logger.info("Input is empty. Returns empty result")
-            return
+        if isinstance(text_data, str):
+            text_data = io.StringIO(text_data)
 
-        line_iter = io.StringIO(text_or_stream) if isinstance(text_or_stream, str) else text_or_stream
+        input_for_detection, input_for_slicing = tee(text_data)
+        line_gen = (line for line in input_for_slicing if line.strip())
+        curr_line = None
+        for start, end in self.detect(input_for_detection, relative=True):
+            if start == 0:
+                curr_line = next(line_gen, None)
 
-        for sent, span in self._rule.apply(line_iter, self.preserve_quote_and_paren):
+            if curr_line is None:
+                break
+
+            sent = curr_line[start:end]
             if not preserve_whitespace:
                 sent = sent.strip()
-            yield (
-                TextSpan(start=span[0], end=span[1], text=sent)
-                if self.include_char_span else sent
-            )
+            yield sent
