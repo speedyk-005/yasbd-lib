@@ -4,24 +4,24 @@ from yasbd.utils.pysbd_adapter import Segmenter, TextSpan
 
 
 def test_segment_basic():
-    seg = Segmenter(language="en")
+    seg = Segmenter()
     result = seg.segment("Hello world. How are you? I'm fine.")
-    assert result == ["Hello world.", "How are you?", "I'm fine."]
+    assert result == ["Hello world.", " How are you?", " I'm fine."]
 
 
 def test_segment_empty():
-    seg = Segmenter(language="en")
+    seg = Segmenter()
     assert seg.segment("") == []
 
 
 def test_segment_with_newlines():
-    seg = Segmenter(language="en")
+    seg = Segmenter()
     result = seg.segment("First.\n\nSecond.\nThird.")
-    assert result == ["First.", "Second.", "Third."]
+    assert result == ["First.\n", "Second.\n", "Third."]
 
 
 def test_char_span():
-    seg = Segmenter(language="en", char_span=True)
+    seg = Segmenter(char_span=True)
     text = "Hello world. How are you?"
     result = seg.segment(text)
     assert len(result) == 2
@@ -29,8 +29,7 @@ def test_char_span():
         assert isinstance(ts, TextSpan)
         assert text[ts.start:ts.end] == ts.sent
 
-
-def test_value_errors():
+def test_char_span_incompatible_with_clean():
     with pytest.raises(ValueError, match="char_span must be False"):
         Segmenter(language="en", clean=True, char_span=True)
     with pytest.raises(ValueError, match="doc_type='pdf'"):
@@ -41,3 +40,17 @@ def test_textspan():
     ts = TextSpan("hello", 0, 5)
     assert str(ts) == "[0:5] hello"
     assert ts == TextSpan("hello", 0, 5)
+
+
+def test_sentences_with_char_spans():
+    seg = Segmenter(language="en")
+    sents = ["Hello world.", " How are you?", " I'm fine."]
+    result = seg.sentences_with_char_spans(sents)
+    assert len(result) == 3
+    for i, ts in enumerate(result):
+        assert isinstance(ts, TextSpan)
+        assert ts.sent == sents[i]
+    assert result[0] == TextSpan("Hello world.", 0, 12)
+    assert result[1] == TextSpan(" How are you?", 12, 25)
+    assert result[2] == TextSpan(" I'm fine.", 25, 35)
+

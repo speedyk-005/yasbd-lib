@@ -66,7 +66,7 @@ class Segmenter:
         # Legacy pysbd API compatibility mappings
         self.cleaner = lambda t: SimpleNamespace(clean=lambda: "".join(clean_stream(t)))
         self.processor = lambda t: SimpleNamespace(process=lambda: self._process_text(t))
-        self.sentences_with_char_spans = self._process_text
+        self.language_module = SimpleNamespace(ISO_CODE=language)
 
     @property
     def language(self) -> str:
@@ -75,6 +75,7 @@ class Segmenter:
     @language.setter
     def language(self, value: str):
         self._detector.lang = value
+        self.language_module.ISO_CODE = value
 
     def _process_text(self, text: str) -> list[str | TextSpan]:
         """Internal worker to process raw text into strings or spans."""
@@ -83,7 +84,21 @@ class Segmenter:
                 TextSpan(text[start:end], start, end)
                 for start, end in self._detector.detect(text)
             ]
-        return list(self._detector.segment(text))
+        return list(self._detector.segment(text, preserve_whitespace=True))
+
+    def sentences_with_char_spans(
+        self, sentences: list[str]
+    ) -> list[tuple[int, int]]:
+        """Map sentences to their char offsets using cumulative lengths.
+
+        Pysbd compatibility method
+        """
+        pos = 0
+        result = []
+        for sent in sentences:
+            result.append(TextSpan(sent, pos, pos + len(sent)))
+            pos += len(sent)
+        return result
 
     def segment(self, text: str) -> list[str | TextSpan]:
         """Segments *text* into sentences.
@@ -95,6 +110,10 @@ class Segmenter:
             A list of sentences (strings) by default, or a list of TextSpan
             objects if ``char_span`` was set to ``True``.
         """
+        # Pysbd stored the original text in object
+        # Keep a preview for compatibility, 
+        self.original_text = f"{text[:500]}..." if len(text) > 125 else text
+
         if self.clean:
             text = "".join(clean_stream(text))
 
