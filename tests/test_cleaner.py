@@ -23,5 +23,6 @@ from yasbd.utils.cleaner import clean_stream
     (["line one\n. line two"], ["\n"]),
 ])
 def test_text_cleanup(input_text, removed):
+    """test that specified keywords are removed from cleaned output."""
     cleaned = " ".join(clean_stream(input_text))
     assert all(kw not in cleaned for kw in removed)

@@ -15,16 +15,19 @@ from yasbd import BoundaryDetector
     pytest.param(io.StringIO(""), id="empty_stream"),
 ])
 def test_segment_empty_input(input_text):
+    """test that empty or whitespace-only input produces no sentences."""
     seg = BoundaryDetector(lang="en")
     assert list(seg.segment(input_text)) == []
 
 
 def test_unsupported_language():
+    """test that unknown language codes raise ValueError."""
     with pytest.raises(ValueError, match="Unsupported language"):
         BoundaryDetector(lang="ht")
 
 
 def test_segment_different_input():
+    """test that string and stream input produce identical results."""
     text = "Hello world. How are you? I'm fine."
     seg = BoundaryDetector(lang="en")
 
@@ -37,6 +40,7 @@ def test_segment_different_input():
 
 @pytest.mark.parametrize("lang,test_data", ALL_TEST_DATA.items())
 def test_segment_multiple_langs(subtests, lang, test_data):
+    """test that each language's test data passes."""
     seg = BoundaryDetector(lang=lang)
     for input_text, expected in test_data:
         with subtests.test():
@@ -45,6 +49,7 @@ def test_segment_multiple_langs(subtests, lang, test_data):
 
 
 def test_segment_noisy_input():
+    """test that random noisy input does not crash the segmenter."""
     chars = string.ascii_letters + string.digits + string.punctuation + "z.?! Dr. Mr. Inc. etc."
     seg = BoundaryDetector(lang="en")
 
@@ -58,6 +63,7 @@ def test_segment_noisy_input():
 
 
 def test_include_char_span():
+    """test that detect yields valid (start, end) offset pairs."""
     text = "Hello World. How are you?"
 
     seg = BoundaryDetector(lang="en")
