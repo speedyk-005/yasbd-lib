@@ -115,6 +115,6 @@ class Segmenter:
         self.original_text = f"{text[:500]}..." if len(text) > 125 else text
 
         if self.clean:
-            text = "".join(clean_stream(text))
+            return list(self._detector.segment(clean_stream(text)))
 
         return self._process_text(text)
