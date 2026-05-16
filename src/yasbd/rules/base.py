@@ -172,19 +172,17 @@ class Rules:
 
     def _adjust_list_boundaries(self, main_boundaries: set[int], line: str) -> None:
         """Remove and re-align boundaries around list markers."""
-        horiz_list_boundaries = {m.end() for m in self.horizontal_list_finder.finditer(line)}
-        if len(horiz_list_boundaries) < 2:  # Reduce false alarm
-            horiz_list_boundaries = set()
+        horiz_matches = list(self.horizontal_list_finder.finditer(line))
+        if len(horiz_matches) >= 2:
+            main_boundaries.difference_update(m.end() for m in horiz_matches)
+            # Shift boundaries the pointer back (1.\)| => |1.\), a. | => |a. ) to correctly
+            # terminate the preceding sentence before flattened horizontal list.
+            main_boundaries.update(
+                m.start() + 1 for m in horiz_matches if m.start()
+            )
 
-        main_boundaries.difference_update(horiz_list_boundaries)
         main_boundaries.difference_update(
             m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(line)
-        )
-
-        # Shift boundaries the pointer back (1.\)| => |1.\), a. | => |a. ) to correctly terminate
-        # the preceding sentence before flattened horizontal list.
-        main_boundaries.update(
-            m.start() + 1 for m in self.horizontal_list_finder.finditer(line) if m.start()
         )
 
     def apply(
