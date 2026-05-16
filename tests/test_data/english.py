@@ -33,6 +33,7 @@ TEST_DATA = [
 
     # Parentheses and quotes
     ("He teaches science (He previously worked for 5 years as an engineer.) at the local University.", ["He teaches science (He previously worked for 5 years as an engineer.) at the local University."]),
+    ("(See Fig. 4. This outlines the memory layout.) The engine executes next.", ["(See Fig. 4. This outlines the memory layout.)", "The engine executes next."]),
     ('She turned to him, "This is great." she said.', ["She turned to him, \"This is great.\" she said."]),
     ('She turned to him, "This is great." She held the book out to show him.', ["She turned to him, \"This is great.\"", "She held the book out to show him."]),
 

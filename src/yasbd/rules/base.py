@@ -137,7 +137,7 @@ class Rules:
         # https://regex101.com/r/EGkRU8/4
         self.quote_and_paren_end_finder = re2.compile(rf"""
             (?<=[{terminators_pattern}]\s*   # A terminator followed by additional space
-            ["\u201d\u00ab\p{{Pf}}])     # Closing quotes
+            ["\u201d\u00ab\p{{Pf}}\p{{Pe}}])     # Closing quotes/parens
             (?!  # NOT followed by any continuation markers or space+lowercase letter or end
                 {"|".join(self.QUOTATIVE_PARTICLES)}|{"|".join(self.REPORTING_WORDS)}|
                 \s+[\p{{Ll}}]|$
