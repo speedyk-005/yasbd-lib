@@ -70,9 +70,3 @@ def test_include_char_span():
         assert res.start <= res.end
         last_end = res.end
 
-
-def test_clean_with_char_span_raises():
-    seg = Segmenter(lang="en", should_clean=True, include_char_span=True)
-    with pytest.raises(ValueError, match="include_char_span must be False"):
-        list(seg.segment("Hello. World."))
-        last_end = res.end

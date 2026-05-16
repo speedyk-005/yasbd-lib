@@ -5,9 +5,6 @@ from typing import NamedTuple
 
 from loguru import logger
 
-from yasbd.utils.cleaner import clean_input
-
-
 class TextSpan(NamedTuple):
     start: int
     end: int
@@ -39,7 +36,6 @@ class Segmenter:
         self,
         lang: str = "en",
         *,
-        should_clean: bool = False,
         include_char_span: bool = False,
         preserve_quote_and_paren: bool = True,
         verbose: bool = False,
@@ -48,15 +44,12 @@ class Segmenter:
 
         Args:
             lang: Two chars ISO language code (e.g. en, fr, ...).
-            should_clean: Apply pre-processing (HTML stripping, OCR fixes,
-                Unicode normalization) before segmentation.
             include_char_span: Yield ``TextSpan`` objects with character
                 spans instead of plain strings.
             preserve_quote_and_paren: Do not split on terminators inside
                 quoted or parenthesised text.
             verbose: Enable verbose logging.
         """
-        self.should_clean = should_clean
         self.include_char_span = include_char_span
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
@@ -113,25 +106,13 @@ class Segmenter:
         Yields:
             Individual sentences as strings, or ``TextSpan`` objects when
             ``include_char_span`` is ``True``.
-
-        Raises:
-            ValueError: If ``should_clean`` and ``include_char_span`` are
-                both ``True``.
         """
-        if self.should_clean and self.include_char_span:
-            raise ValueError(
-                "include_char_span must be False if should_clean is True "
-                "Since `should_clean=True` will modify original text."
-            )
-
         if self._is_empty(text_or_stream):
             if self.verbose:
                 logger.info("Input is empty. Returns empty result")
             return
 
         line_iter = io.StringIO(text_or_stream) if isinstance(text_or_stream, str) else text_or_stream
-        if self.should_clean:
-            line_iter = clean_input(line_iter)
 
         for sent, span in self._rule.apply(line_iter, self.preserve_quote_and_paren):
             if not preserve_whitespace:

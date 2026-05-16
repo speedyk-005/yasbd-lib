@@ -1,8 +1,9 @@
 import io
 import re
-from collections.abc import Iterator
+from collections.abc import Generator, Iterable
 
 import ftfy
+
 
 # https://regex101.com/r/SSQfUY/1
 # A number followed by a latin-1/Slovak uppercase letter
@@ -69,19 +70,23 @@ def _clean_text(text: str) -> str:
     return text
 
 
-def clean_input(data: io.IOBase | Iterator) -> Iterator[str]:
-    """Pre-process text before sentence segmentation.
+def clean_stream(data: Iterable[str]) -> Generator[str, None, None]:
+    """Normalize and clean noisy text.
 
-    Applies ``ftfy`` for mojibake repair, strips HTML tags, removes
-    standalone characters, page-number artifacts, and re-joins list
-    markers split across lines.
+    Applies ``ftfy`` for mojibake repair, strips HTML tags, removes standalone
+    characters, page-number artifacts, and re-joins list markers split across lines.
+
+    NOTE: Plain strings are automatically wrapped into ``StringIO`` for streaming.
 
     Args:
-        data: Iterable of raw text lines.
+        data: Iterable of raw text lines (or a plain string).
 
     Yields:
         Cleaned text lines.
     """
+    if isinstance(data, str):
+        data = io.StringIO(data)
+
     sent_buff = []   # To catch fragmented sentence
     for line in data:
         stripped_line = line.strip()
@@ -121,5 +126,5 @@ if __name__ == "__main__":
         "<script>alert('xss')</script>clean text",
     ]
 
-    for line in clean_input(texts):
+    for line in clean_stream(texts):
         print(repr(line))

@@ -1,6 +1,6 @@
 import pytest
 
-from yasbd.utils.cleaner import clean_input
+from yasbd.utils.cleaner import clean_stream
 
 
 @pytest.mark.parametrize("input_text,removed", [
@@ -23,5 +23,5 @@ from yasbd.utils.cleaner import clean_input
     (["line one\n. line two"], ["\n"]),
 ])
 def test_text_cleanup(input_text, removed):
-    cleaned = " ".join(clean_input(input_text))
+    cleaned = " ".join(clean_stream(input_text))
     assert all(kw not in cleaned for kw in removed)
