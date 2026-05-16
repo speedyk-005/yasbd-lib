@@ -1,4 +1,5 @@
 from types import SimpleNamespace
+from collections.abc import Iterable
 
 from yasbd import BoundaryDetector
 from yasbd.utils.cleaner import clean_stream
@@ -76,7 +77,7 @@ class Segmenter:
         self._detector.lang = value
         self.language_module.ISO_CODE = value
 
-    def _process_text(self, text: str) -> list[str | TextSpan]:
+    def _process_text(self, text: Iterable[str]) -> list[str | TextSpan]:
         """Internal worker to process raw text into strings or spans."""
         if self.char_span:
             return [
@@ -111,9 +112,9 @@ class Segmenter:
         """
         # Pysbd stored the original text in object
         # Keep a preview for compatibility,
-        self.original_text = f"{text[:500]}..." if len(text) > 125 else text
+        self.original_text = f"{text[:500]}..." if len(text) > 500 else text
 
         if self.clean:
-            return list(self._detector.segment(clean_stream(text)))
+            text = clean_stream(text)
 
         return self._process_text(text)
