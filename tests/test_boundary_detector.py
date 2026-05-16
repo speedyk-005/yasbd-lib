@@ -1,10 +1,11 @@
-import pytest
 import io
 import random
 import string
 
-from yasbd import BoundaryDetector
+import pytest
+
 from tests import ALL_TEST_DATA
+from yasbd import BoundaryDetector
 
 
 @pytest.mark.parametrize("input_text", [
@@ -53,7 +54,7 @@ def test_segment_noisy_input():
         try:
             list(seg.segment(text))
         except Exception as e:
-            raise AssertionError(f"Crash on random input (len={length}): {e}")
+            raise AssertionError(f"Crash on random input (len={length}): {e}") from e
 
 
 def test_include_char_span():

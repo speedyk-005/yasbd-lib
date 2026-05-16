@@ -1,4 +1,3 @@
-import io
 from types import SimpleNamespace
 
 from yasbd import BoundaryDetector
@@ -111,7 +110,7 @@ class Segmenter:
             objects if ``char_span`` was set to ``True``.
         """
         # Pysbd stored the original text in object
-        # Keep a preview for compatibility, 
+        # Keep a preview for compatibility,
         self.original_text = f"{text[:500]}..." if len(text) > 125 else text
 
         if self.clean:

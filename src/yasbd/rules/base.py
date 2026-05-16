@@ -1,4 +1,3 @@
-import io
 import re  # For simpler pattern
 from collections.abc import Generator, Iterator
 

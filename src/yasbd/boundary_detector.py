@@ -1,7 +1,8 @@
 import io
 from collections.abc import Generator, Iterable
 from importlib import import_module
-from itertools import tee, islice, chain
+from itertools import chain, islice, tee
+
 from loguru import logger
 
 
