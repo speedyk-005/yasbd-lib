@@ -1,0 +1,40 @@
+from yasbd.rules.base import Rules
+
+
+class LangRules(Rules):
+    """Template for adding new language rule modules.
+
+    Copy this file and rename it to ``<lang>_rules.py`` (e.g.
+    ``fr_rules.py``), rename the class to ``<Lang>Rules`` (e.g.
+    ``FrRules``), set ``ISO_CODE`` to the two-letter language code,
+    and override only the sets your language needs (please, not all of them).
+    """
+
+    ISO_CODE = "xx"
+
+    # Sentence-ending punctuation specific to your language
+    TERMINATORS = Rules.TERMINATORS | {}
+
+    # Honorifics & professional titles (Mr., Dr., Prof., etc.)
+    TITLE_ABBRVS = Rules.TITLE_ABBRVS | {}
+
+    # Country/region abbreviations (U.S., U.K., E.U., etc.)
+    GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {}
+
+    # Bibliographic / citation abbreviations (cf., fig., p., etc.)
+    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {}
+
+    # Abbreviations that safely appear mid-sentence (vs., e.g., i.e., etc.)
+    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {}
+
+    # Brands / titles containing "!" that should not trigger a split
+    NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {}
+
+    # Words that commonly start a sentence (heuristic for filtering)
+    COMMON_SENT_STARTERS = {}
+    # Nouns that appear inside organisational names
+    COMMON_ORG_NOUNS = {}
+    # Quotative particles (Japanese と, Korean 라고, etc.)
+    QUOTATIVE_PARTICLES = {}
+    # Reporting verbs for dialogue (Chinese 说/道/问, etc.)
+    REPORTING_WORDS = {}
