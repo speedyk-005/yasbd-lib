@@ -4,12 +4,13 @@ from collections.abc import Generator, Iterable
 
 import ftfy
 
-
 # https://regex101.com/r/SSQfUY/1
 # A number followed by a latin-1/Slovak uppercase letter
-STICKY_NUMBER_FINDER = re.compile(r"""
+STICKY_NUMBER_FINDER = re.compile(
+    r"""
     (?<=\s\d\.)(?=[A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u017F])
-    """, re.X
+    """,
+    re.X,
 )
 
 # https://regex101.com/r/POTL2H/3
@@ -22,21 +23,25 @@ STANDALONE_CHARS_FINDER = re.compile(r"^\s*(?:[^\s]|\d{1,2})\s*$")
 MULTIPLE_SPACES_FINDER = re.compile(r"\s{2,}")
 
 # https://regex101.com/r/DgnxSq/1
-PAGE_FINDER = re.compile(r"""
+PAGE_FINDER = re.compile(
+    r"""
     Page\ \d+\ of\ \d+.*|  # standalone page number
     -\s*\d+\s*-|  # Page numbers with dashes
     \s*\|\s*Page\ \d+\s*\|\s*  # Boxed page numbers
-    """, re.X | re.M,
+    """,
+    re.X | re.M,
 )
 
 # https://regex101.com/r/Gl4nLk/5
-HTML_TAGS_FINDER = re.compile(r"""
+HTML_TAGS_FINDER = re.compile(
+    r"""
     # Branch 1: Strip the tag AND its content
     <(script|iframe|object|embed|style)[^>]*?>.*?</?\1\s*>|
 
     # Branch 2: Just strip the brackets
     </?(?:img|font|header|span|xml|del|ins|[ovbtwxp])[^>]*?>
-    """, re.X | re.I
+    """,
+    re.X | re.I,
 )
 
 
@@ -87,13 +92,15 @@ def clean_stream(data: Iterable[str]) -> Generator[str, None, None]:
     if isinstance(data, str):
         data = io.StringIO(data)
 
-    sent_buff = []   # To catch fragmented sentence
+    sent_buff = []  # To catch fragmented sentence
     for line in data:
         stripped_line = line.strip()
         if stripped_line:
             stripped_line = ftfy.fix_text(stripped_line)
             stripped_line = _clean_text(stripped_line)
-            stripped_line = stripped_line.replace("''", '"')  # "Pseudo-Double" quote fix
+            stripped_line = stripped_line.replace(
+                "''", '"'
+            )  # "Pseudo-Double" quote fix
 
             sent_buff.append(stripped_line)
 
@@ -104,8 +111,12 @@ def clean_stream(data: Iterable[str]) -> Generator[str, None, None]:
                 sent_buff = [last_token]
 
             if (
-                sent_buff and sent_buff[-1]
-                and not (sent_buff[-1][-1].isalpha() or sent_buff[-1][-1] in CONTINUATION_CHARS)
+                sent_buff
+                and sent_buff[-1]
+                and not (
+                    sent_buff[-1][-1].isalpha()
+                    or sent_buff[-1][-1] in CONTINUATION_CHARS
+                )
             ):
                 yield from " ".join(sent_buff).splitlines()
                 sent_buff = []
@@ -123,7 +134,7 @@ if __name__ == "__main__":
         "three///slashes",
         "1. ",
         "Page 12 of 45",
-        "<font color=\"red\">Red text</font> and <span>span</span>",
+        '<font color="red">Red text</font> and <span>span</span>',
         "<script>alert('xss')</script>clean text",
     ]
 

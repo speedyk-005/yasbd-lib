@@ -3,8 +3,8 @@ from collections.abc import Generator, Iterable
 from importlib import import_module
 from itertools import chain, islice, tee
 
-from typeguard import typechecked
 from loguru import logger
+from typeguard import typechecked
 
 
 class BoundaryDetector:
@@ -32,7 +32,7 @@ class BoundaryDetector:
                 "Initialized with lang={!r}, preserve_quote_and_paren={}, verbose={}",
                 self._lang,
                 self.preserve_quote_and_paren,
-                self.verbose
+                self.verbose,
             )
 
     @property

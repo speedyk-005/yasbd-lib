@@ -7,52 +7,138 @@ from typeguard import typechecked
 
 class Rules:
     ISO_CODE = "xx"
-    TERMINATORS = {
-        "。", "．", ".", "！", "!", "?", "？"
-    }
+    TERMINATORS = {"。", "．", ".", "！", "!", "?", "？"}
 
     TITLE_ABBRVS = {
         # Standard Professional (Universal Latin roots)
-        "dr", "drs", "prof", "sr", "jr", "hon", "rev", "supt", "insp",
-
+        "dr",
+        "drs",
+        "prof",
+        "sr",
+        "jr",
+        "hon",
+        "rev",
+        "supt",
+        "insp",
         # Global Social (Overlap across English/Spanish/Portuguese/French)
-        "mr", "mrs", "ms",
-
+        "mr",
+        "mrs",
+        "ms",
         # Military (NATO/International Standardized Ranks)
-        "adm", "brig", "capt", "cmdr", "col", "cpl", "gen", "lt", "maj", "sgt", "pvt",
-
+        "adm",
+        "brig",
+        "capt",
+        "cmdr",
+        "col",
+        "cpl",
+        "gen",
+        "lt",
+        "maj",
+        "sgt",
+        "pvt",
         # Political/Administrative (Common in Western bureaucracy)
-        "gov", "rep", "sen", "pres"
+        "gov",
+        "rep",
+        "sen",
+        "pres",
     }
 
     GEOPOLITICAL_ABBRVS = {
-        "us", "u.s", "uk", "u.k", "eu", "e.u", "usa", "u.s.a", "un", "u.n", "ussr",
+        "us",
+        "u.s",
+        "uk",
+        "u.k",
+        "eu",
+        "e.u",
+        "usa",
+        "u.s.a",
+        "un",
+        "u.n",
+        "ussr",
     }
 
     REFERENCE_ABBRVS = {
-        "ac", "chap", "cf", "ed", "fig", "p", "pp", "ref", "res", "sec", "v", "ver", "viz",
+        "ac",
+        "chap",
+        "cf",
+        "ed",
+        "fig",
+        "p",
+        "pp",
+        "ref",
+        "res",
+        "sec",
+        "v",
+        "ver",
+        "viz",
         "ext",
     }
 
     MID_SENTENCE_ABBRVS = {
         # Business entity bridges
-        "assoc", "mfg",
-
+        "assoc",
+        "mfg",
         # Bridge/connectors
-        "cf", "eg", "e.g", "ie", "i.e", "vs", "v", "viz", "ibid", "ca", "sc",
-
+        "cf",
+        "eg",
+        "e.g",
+        "ie",
+        "i.e",
+        "vs",
+        "v",
+        "viz",
+        "ibid",
+        "ca",
+        "sc",
         # Street & directional anchors
-        "mt", "dist", "st",
+        "mt",
+        "dist",
+        "st",
     }
 
     NAMES_WITH_EXCLAMATION = {
-        "Ha", "Yahoo", "Yum", "Chips Ahoy", "Kahoot", "JOOP", "Joomla", "Starz",
-        "Jeopardy", "Airplane", "Oklahoma", "Mamma Mia", "Oliver", "Shindig",
-        "Westward Ho", "Saint-Louis-du-Ha! Ha", "Jeb", "Elliot S", "Air France Hop",
-        "Basta", "¡Éxito", "Pepitos", "OSN Yahala", "Shugo Chara", "Adopt Me", "Bingo",
-        "E", "Hailey's On It", "Hey Boo", "Hey Man! Let's Eat", "Microsoft Plus", "Off",
-        "Osu", "PBS Kids Go", "Pop", "Red Bip", "RedeTV", "This Can't Be Yogurt",
-        "Transfer It", "VSPO", "Walla", "WWE Smackdown",
+        "Ha",
+        "Yahoo",
+        "Yum",
+        "Chips Ahoy",
+        "Kahoot",
+        "JOOP",
+        "Joomla",
+        "Starz",
+        "Jeopardy",
+        "Airplane",
+        "Oklahoma",
+        "Mamma Mia",
+        "Oliver",
+        "Shindig",
+        "Westward Ho",
+        "Saint-Louis-du-Ha! Ha",
+        "Jeb",
+        "Elliot S",
+        "Air France Hop",
+        "Basta",
+        "¡Éxito",
+        "Pepitos",
+        "OSN Yahala",
+        "Shugo Chara",
+        "Adopt Me",
+        "Bingo",
+        "E",
+        "Hailey's On It",
+        "Hey Boo",
+        "Hey Man! Let's Eat",
+        "Microsoft Plus",
+        "Off",
+        "Osu",
+        "PBS Kids Go",
+        "Pop",
+        "Red Bip",
+        "RedeTV",
+        "This Can't Be Yogurt",
+        "Transfer It",
+        "VSPO",
+        "Walla",
+        "WWE Smackdown",
     }
 
     COMMON_SENT_STARTERS = {"The"}
@@ -64,10 +150,12 @@ class Rules:
     VERTICAL_LIST_START_FINDER = re2.compile(r"(?<=^\s*(?:[\p{L}\p{N}]\.){1,3})(?=\s)")
 
     # https://regex101.com/r/JYdWZw/1
-    QUOTE_AND_PAREN_FINDER = re2.compile(r"""
+    QUOTE_AND_PAREN_FINDER = re2.compile(
+        r"""
         (?:\p{Pi}|»|(['"”])).+?(?:\p{Pf}|«|\1)|  # Quoted text
         \p{Ps}.+?\p{Pe}  # Parenthesized text
-        """, re2.X
+        """,
+        re2.X,
     )
 
     # https://regex101.com/r/wILgbJ/1
@@ -87,7 +175,8 @@ class Rules:
 
         # https://regex101.com/r/qBSyU5/10
         # Handle flattened lists due to messy OCR.
-        self.horizontal_list_finder = re.compile(rf"""
+        self.horizontal_list_finder = re.compile(
+            rf"""
             (?:   #  Must preceded by
                 ^\s*|     # A string start
                 [:{terminators_pattern}]\s+  # A terminator or double colon + space
@@ -98,21 +187,25 @@ class Rules:
                 (?:\d{{1,2}}|[^\W_\d])[.)]{{1,2}}  #  Numbered and alphabetical list (e.g, a\), 34.\), 1.)
             )
             (?=\s)  # Must followed by a space
-            """, re.X
+            """,
+            re.X,
         )
 
         # https://regex101.com/r/VMzYsx/4
-        self.naive_boundary_finder = re2.compile(rf"""
+        self.naive_boundary_finder = re2.compile(
+            rf"""
             # Split if left token is a unicase letter (Always)
             (?<=\p{{Lo}}[{terminators_pattern}])|
 
             # Split after any terminators followed by Space+Upper or unicase letter
             (?<=[{terminators_pattern}])(?=\s+[^\p{{Ll}}]|\s*\p{{Lo}})
-            """, re2.X
+            """,
+            re2.X,
         )
 
         # https://regex101.com/r/svyCoU/3
-        self.mid_sentence_finder = re2.compile(rf"""
+        self.mid_sentence_finder = re2.compile(
+            rf"""
             # Title abbrv or initialisms is NOT followed by a common ender (e.g., Dr. Paul)
             (?<=\b(?i:{title_abbrvs_pattern})\.)(?!\s+(?:{"|".join(self.COMMON_SENT_STARTERS)}))|
 
@@ -130,18 +223,21 @@ class Rules:
 
             # Collapsed middle name (e.g, Jonas E. Smith)
             (?<=\s\b(?:\p{{Lu}})\.)(?=\s)
-            """, re2.X
+            """,
+            re2.X,
         )
 
         # https://regex101.com/r/EGkRU8/4
-        self.quote_and_paren_end_finder = re2.compile(rf"""
+        self.quote_and_paren_end_finder = re2.compile(
+            rf"""
             (?<=[{terminators_pattern}]\s*   # A terminator followed by additional space
             ["\u201d\u00ab\p{{Pf}}\p{{Pe}}])     # Closing quotes/parens
             (?!  # NOT followed by any continuation markers or space+lowercase letter or end
                 {"|".join(self.QUOTATIVE_PARTICLES)}|{"|".join(self.REPORTING_WORDS)}|
                 \s+[\p{{Ll}}]|$
             )
-            """, re2.X
+            """,
+            re2.X,
         )
 
     def _remove_quote_and_paren_spans(
@@ -176,9 +272,7 @@ class Rules:
             main_boundaries.difference_update(m.end() for m in horiz_matches)
             # Shift boundaries the pointer back (1.\)| => |1.\), a. | => |a. ) to correctly
             # terminate the preceding sentence before flattened horizontal list.
-            main_boundaries.update(
-                m.start() + 1 for m in horiz_matches if m.start()
-            )
+            main_boundaries.update(m.start() + 1 for m in horiz_matches if m.start())
 
         main_boundaries.difference_update(
             m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(line)

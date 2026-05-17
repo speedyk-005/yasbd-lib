@@ -1,5 +1,5 @@
-from types import SimpleNamespace
 from collections.abc import Iterable
+from types import SimpleNamespace
 
 from typeguard import typechecked
 
@@ -27,9 +27,15 @@ class TextSpan:
     def __eq__(self, other) -> bool:
         if (
             isinstance(other, TextSpan)
-            or hasattr(other, "sent") and hasattr(other, "start") and hasattr(other, "end")
+            or hasattr(other, "sent")
+            and hasattr(other, "start")
+            and hasattr(other, "end")
         ):
-            return (self.start, self.end, self.sent) == (other.start, other.end, other.sent)
+            return (self.start, self.end, self.sent) == (
+                other.start,
+                other.end,
+                other.sent,
+            )
         return NotImplemented
 
 
@@ -37,10 +43,10 @@ class Segmenter:
     @typechecked
     def __init__(
         self,
-        language: str ="en",
+        language: str = "en",
         clean: bool = False,
         doc_type: str | None = None,
-        char_span: bool = False
+        char_span: bool = False,
     ):
         """Initializes the Segmenter.
 
@@ -68,7 +74,9 @@ class Segmenter:
 
         # Legacy pysbd API compatibility mappings
         self.cleaner = lambda t: SimpleNamespace(clean=lambda: "".join(clean_stream(t)))
-        self.processor = lambda t: SimpleNamespace(process=lambda: self._process_text(t))
+        self.processor = lambda t: SimpleNamespace(
+            process=lambda: self._process_text(t)
+        )
         self.language_module = SimpleNamespace(ISO_CODE=language)
 
     @property
@@ -117,9 +125,7 @@ class Segmenter:
         return self._convert_leading_space_to_trails(sents)
 
     @typechecked
-    def sentences_with_char_spans(
-        self, sentences: list[str]
-    ) -> list[TextSpan]:
+    def sentences_with_char_spans(self, sentences: list[str]) -> list[TextSpan]:
         """Map sentences to their char offsets using cumulative lengths.
 
         Pysbd compatibility method
