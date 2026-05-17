@@ -27,6 +27,13 @@ class BoundaryDetector:
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
         self.lang = lang.lower()
+        if self.verbose:
+            logger.info(
+                "Initialized with lang={!r}, preserve_quote_and_paren={}, verbose={}",
+                self._lang,
+                self.preserve_quote_and_paren,
+                self.verbose
+            )
 
     @property
     def lang(self) -> str:
@@ -35,21 +42,32 @@ class BoundaryDetector:
 
     @lang.setter
     def lang(self, lang: str) -> None:
-        self._lang = lang.lower()
+        lang = lang.lower()
+        old_lang = getattr(self, "_lang", None)
+        if lang == old_lang:
+            return
+
         self._load_rule(lang)
+        self._lang = lang
+        if self.verbose:
+            logger.info("Language switched from {} to {}", old_lang, self._lang)
 
     def _load_rule(self, lang: str) -> None:
         """Dynamically import and instantiate the rule module for *lang*."""
+        if self.verbose:
+            logger.info("Trying to load rule module for {}", lang)
+
         try:
             rule_module = import_module(f"yasbd.rules.{lang}_rules")
         except ModuleNotFoundError:
             raise ValueError(f"Unsupported language: {lang!r}") from None
+
         self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")()
 
     @typechecked
     def detect(
         self,
-        text_data: str | Iterable[str],
+        text_data: Iterable[str],
         *,
         relative: bool = False,
     ) -> Generator[tuple[int, int], None, None]:
@@ -67,6 +85,11 @@ class BoundaryDetector:
         Yields:
             ``(start_offset, end_offset)`` for each sentence.
         """
+        if self.verbose:
+            logger.info(
+                "Called with type={}, relative={}", type(text_data).__name__, relative
+            )
+
         if isinstance(text_data, str):
             text_data = io.StringIO(text_data)
 
@@ -87,7 +110,7 @@ class BoundaryDetector:
     @typechecked
     def segment(
         self,
-        text_data: str | Iterable[str],
+        text_data: Iterable[str],
         *,
         preserve_whitespace: bool = False,
     ) -> Generator[str, None, None]:
@@ -102,6 +125,9 @@ class BoundaryDetector:
         Yields:
             Individual sentences as strings.
         """
+        if self.verbose:
+            logger.info("Called with preserve_whitespace={}", preserve_whitespace)
+
         if isinstance(text_data, str):
             text_data = io.StringIO(text_data)
 
