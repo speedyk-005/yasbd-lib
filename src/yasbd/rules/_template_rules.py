@@ -32,8 +32,6 @@ class LangRules(Rules):
     # Brands / titles containing "!" that should not trigger a split
     NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {}
 
-    # Words that commonly start a sentence (heuristic for filtering)
-    COMMON_SENT_STARTERS = {}
     # Nouns that appear inside organisational names
     COMMON_ORG_NOUNS = {}
     # Quotative particles (Japanese と, Korean 라고, etc.)

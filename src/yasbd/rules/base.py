@@ -12,10 +12,10 @@ class Rules:
 
     TITLE_ABBRVS = {
         # Standard Professional (Universal Latin roots)
-        "dr", "drs", "prof", "sr", "jr", "hon", "rev", "supt", "insp",
+        "dr", "drs", "prof", "hon", "rev", "supt", "insp",
 
         # Global Social (Overlap across English/Spanish/Portuguese/French)
-        "mr", "mrs", "ms",
+        "mr", "mrs", "ms", "st",
 
         # Military (NATO/International Standardized Ranks)
         "adm", "brig", "capt", "cmdr", "col", "cpl", "gen", "lt", "maj", "sgt", "pvt",
@@ -25,12 +25,32 @@ class Rules:
     }
 
     GEOPOLITICAL_ABBRVS = {
-        "us", "u.s", "uk", "u.k", "eu", "e.u", "usa", "u.s.a", "un", "u.n", "ussr",
+        # North Atlantic / Anglosphere
+        "us", "u.s", "usa", "u.s.a", "uk", "u.k", "can",
+
+        # Western Europe
+        "eu", "e.u", "fra", "ger",
+
+        # Multilateral / Intergovernmental
+        "un", "u.n", "ussr", "u.s.s.r", "nato",
+
+        # Asia / Middle East
+        "uae", "u.a.e", "dprk", "prc", "roc", "rok",
     }
 
     REFERENCE_ABBRVS = {
-        "ac", "chap", "cf", "ed", "fig", "p", "pp", "ref", "res", "sec", "v", "ver", "viz",
-        "ext",
+        # Publishing / Documents
+        "ac", "app", "cf", "chap", "ed", "ext", "fig", "p", "pp", "ref", "res",
+        "v", "ver", "viz", "vol", "vols",
+
+        # Section & Paragraph
+        "art", "sec",
+
+        # Legal / Numcro
+        "no", "suppl", "supl",
+
+        # Scientific / Math
+        "eq", "eqn",
     }
 
     MID_SENTENCE_ABBRVS = {
@@ -41,7 +61,10 @@ class Rules:
         "cf", "eg", "e.g", "ie", "i.e", "vs", "v", "viz", "ibid", "ca", "sc",
 
         # Street & directional anchors
-        "mt", "dist", "st",
+        "mt", "dist",
+
+        # General
+        "approx", "est", "intl", "misc",
     }
 
     NAMES_WITH_EXCLAMATION = {
@@ -54,7 +77,6 @@ class Rules:
         "Transfer It", "VSPO", "Walla", "WWE Smackdown",
     }
 
-    COMMON_SENT_STARTERS = {"The"}
     COMMON_ORG_NOUNS = {"Commission", "Federation"}
     QUOTATIVE_PARTICLES = {"と", "って", "라고"}
     REPORTING_WORDS = {"说", "道", "问", "他", "她"}
@@ -120,8 +142,8 @@ class Rules:
         # https://regex101.com/r/svyCoU/3
         self.mid_sentence_finder = re2.compile(
             rf"""
-            # Title abbrv or initialisms is NOT followed by a common ender (e.g., Dr. Paul)
-            (?<=\b(?i:{title_abbrvs_pattern})\.)(?!\s+(?:{"|".join(self.COMMON_SENT_STARTERS)}))|
+            # Title abbrv or initialisms (e.g., Dr. Paul)
+            (?<=\b(?i:{title_abbrvs_pattern})\.)|
 
             # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
             (?<=\b(?i:{"|".join(self.GEOPOLITICAL_ABBRVS)})\.)(?=\s+(?:{"|".join(self.COMMON_ORG_NOUNS)}))|

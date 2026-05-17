@@ -1,19 +1,38 @@
 from yasbd.rules.base import Rules
 
 
+# fmt: off
 class EnRules(Rules):
     ISO_CODE = "en"
-    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {"ing", "wy"}
-    # fmt: off
-    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {"nos", "hway", "hwy",}
+    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {"ing", "wy", "appt"}
+    TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
+        # Social / Honorific
+        "messrs", "mlle", "mme", "mmes", "mssrs",
 
-    COMMON_SENT_STARTERS = {
-        "A", "An", "Being", "Did", "For", "He", "How", "However", "I", "In", "It",
-        "Millions", "More", "She", "That", "The", "Their", "These", "They", "This",
-        "Those", "We", "What", "When", "Where", "Who", "Why", "You",
+        # Military (Additional)
+        "comdr", "cpls", "ens", "sgts",
+
+        # Academic / Professional / Medical
+        "asst", "det", "surg",
+
+        # Clerical / Religious
+        "fr", "msgr", "revs",
+
+        # Executive
+        "v.p",
     }
-    COMMON_ORG_NOUNS = {"Army", "Government", "Federation", "Senate", "Council", "Commission", "Parliament"}
-    # fmt: on
+
+    GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {"calif", "dc", "wash", "bc", "ont"}
+    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
+        "nos", "hway", "hwy", "ch", "para", "paras", "secs"
+    }
+
+    COMMON_ORG_NOUNS = {
+        "Army", "Government", "Federation", "Senate", "Council", "Commission",
+        "Parliament", "Department", "Ministry", "Bureau", "Agency", "Institute",
+        "Association", "Corporation", "Foundation", "University", "College", "Board",
+    }
+# fmt: on
 
 
 if __name__ == "__main__":
