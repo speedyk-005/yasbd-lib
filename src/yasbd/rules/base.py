@@ -5,140 +5,53 @@ import regex as re2
 from typeguard import typechecked
 
 
+# fmt: off
 class Rules:
     ISO_CODE = "xx"
     TERMINATORS = {"。", "．", ".", "！", "!", "?", "？"}
 
     TITLE_ABBRVS = {
         # Standard Professional (Universal Latin roots)
-        "dr",
-        "drs",
-        "prof",
-        "sr",
-        "jr",
-        "hon",
-        "rev",
-        "supt",
-        "insp",
+        "dr", "drs", "prof", "sr", "jr", "hon", "rev", "supt", "insp",
+
         # Global Social (Overlap across English/Spanish/Portuguese/French)
-        "mr",
-        "mrs",
-        "ms",
+        "mr", "mrs", "ms",
+
         # Military (NATO/International Standardized Ranks)
-        "adm",
-        "brig",
-        "capt",
-        "cmdr",
-        "col",
-        "cpl",
-        "gen",
-        "lt",
-        "maj",
-        "sgt",
-        "pvt",
+        "adm", "brig", "capt", "cmdr", "col", "cpl", "gen", "lt", "maj", "sgt", "pvt",
+
         # Political/Administrative (Common in Western bureaucracy)
-        "gov",
-        "rep",
-        "sen",
-        "pres",
+        "gov", "rep", "sen", "pres"
     }
 
     GEOPOLITICAL_ABBRVS = {
-        "us",
-        "u.s",
-        "uk",
-        "u.k",
-        "eu",
-        "e.u",
-        "usa",
-        "u.s.a",
-        "un",
-        "u.n",
-        "ussr",
+        "us", "u.s", "uk", "u.k", "eu", "e.u", "usa", "u.s.a", "un", "u.n", "ussr",
     }
 
     REFERENCE_ABBRVS = {
-        "ac",
-        "chap",
-        "cf",
-        "ed",
-        "fig",
-        "p",
-        "pp",
-        "ref",
-        "res",
-        "sec",
-        "v",
-        "ver",
-        "viz",
+        "ac", "chap", "cf", "ed", "fig", "p", "pp", "ref", "res", "sec", "v", "ver", "viz",
         "ext",
     }
 
     MID_SENTENCE_ABBRVS = {
         # Business entity bridges
-        "assoc",
-        "mfg",
+        "assoc", "mfg",
+
         # Bridge/connectors
-        "cf",
-        "eg",
-        "e.g",
-        "ie",
-        "i.e",
-        "vs",
-        "v",
-        "viz",
-        "ibid",
-        "ca",
-        "sc",
+        "cf", "eg", "e.g", "ie", "i.e", "vs", "v", "viz", "ibid", "ca", "sc",
+
         # Street & directional anchors
-        "mt",
-        "dist",
-        "st",
+        "mt", "dist", "st",
     }
 
     NAMES_WITH_EXCLAMATION = {
-        "Ha",
-        "Yahoo",
-        "Yum",
-        "Chips Ahoy",
-        "Kahoot",
-        "JOOP",
-        "Joomla",
-        "Starz",
-        "Jeopardy",
-        "Airplane",
-        "Oklahoma",
-        "Mamma Mia",
-        "Oliver",
-        "Shindig",
-        "Westward Ho",
-        "Saint-Louis-du-Ha! Ha",
-        "Jeb",
-        "Elliot S",
-        "Air France Hop",
-        "Basta",
-        "¡Éxito",
-        "Pepitos",
-        "OSN Yahala",
-        "Shugo Chara",
-        "Adopt Me",
-        "Bingo",
-        "E",
-        "Hailey's On It",
-        "Hey Boo",
-        "Hey Man! Let's Eat",
-        "Microsoft Plus",
-        "Off",
-        "Osu",
-        "PBS Kids Go",
-        "Pop",
-        "Red Bip",
-        "RedeTV",
-        "This Can't Be Yogurt",
-        "Transfer It",
-        "VSPO",
-        "Walla",
-        "WWE Smackdown",
+        "Ha", "Yahoo", "Yum", "Chips Ahoy", "Kahoot", "JOOP", "Joomla", "Starz",
+        "Jeopardy", "Airplane", "Oklahoma", "Mamma Mia", "Oliver", "Shindig",
+        "Westward Ho", "Saint-Louis-du-Ha! Ha", "Jeb", "Elliot S", "Air France Hop",
+        "Basta", "¡Éxito", "Pepitos", "OSN Yahala", "Shugo Chara", "Adopt Me", "Bingo",
+        "E", "Hailey's On It", "Hey Boo", "Hey Man! Let's Eat", "Microsoft Plus", "Off",
+        "Osu", "PBS Kids Go", "Pop", "Red Bip", "RedeTV", "This Can't Be Yogurt",
+        "Transfer It", "VSPO", "Walla", "WWE Smackdown",
     }
 
     COMMON_SENT_STARTERS = {"The"}
@@ -164,6 +77,7 @@ class Rules:
     # https://regex101.com/r/0P9f2V/1
     TOC_LEADER_FINDER = re.compile(r"[^\W_][\s\.]{4,}\d")
 
+    # fmt: on
     def __init__(self):
         """Compile language-specific regex patterns.
 

@@ -4,51 +4,16 @@ from yasbd.rules.base import Rules
 class EnRules(Rules):
     ISO_CODE = "en"
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {"ing", "wy"}
-    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
-        "nos",
-        "hway",
-        "hwy",
-    }
+    # fmt: off
+    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {"nos", "hway", "hwy",}
 
     COMMON_SENT_STARTERS = {
-        "A",
-        "An",
-        "Being",
-        "Did",
-        "For",
-        "He",
-        "How",
-        "However",
-        "I",
-        "In",
-        "It",
-        "Millions",
-        "More",
-        "She",
-        "That",
-        "The",
-        "Their",
-        "These",
-        "They",
-        "This",
-        "Those",
-        "We",
-        "What",
-        "When",
-        "Where",
-        "Who",
-        "Why",
-        "You",
+        "A", "An", "Being", "Did", "For", "He", "How", "However", "I", "In", "It",
+        "Millions", "More", "She", "That", "The", "Their", "These", "They", "This",
+        "Those", "We", "What", "When", "Where", "Who", "Why", "You",
     }
-    COMMON_ORG_NOUNS = {
-        "Army",
-        "Government",
-        "Federation",
-        "Senate",
-        "Council",
-        "Commission",
-        "Parliament",
-    }
+    COMMON_ORG_NOUNS = {"Army", "Government", "Federation", "Senate", "Council", "Commission", "Parliament"}
+    # fmt: on
 
 
 if __name__ == "__main__":

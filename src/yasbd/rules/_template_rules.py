@@ -1,6 +1,8 @@
 from yasbd.rules.base import Rules
 
 
+# Don't remove the fmt guards as they keep compact set formatting
+# fmt: off
 class LangRules(Rules):
     """Template for adding new language rule modules.
 
@@ -38,3 +40,5 @@ class LangRules(Rules):
     QUOTATIVE_PARTICLES = {}
     # Reporting verbs for dialogue (Chinese 说/道/问, etc.)
     REPORTING_WORDS = {}
+
+# fmt: on
