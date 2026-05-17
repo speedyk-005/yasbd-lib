@@ -3,10 +3,12 @@ from collections.abc import Generator, Iterable
 from importlib import import_module
 from itertools import chain, islice, tee
 
+from typeguard import typechecked
 from loguru import logger
 
 
 class BoundaryDetector:
+    @typechecked
     def __init__(
         self,
         lang: str = "en",
@@ -44,6 +46,7 @@ class BoundaryDetector:
             raise ValueError(f"Unsupported language: {lang!r}") from None
         self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")()
 
+    @typechecked
     def detect(
         self,
         text_data: str | Iterable[str],
@@ -81,6 +84,7 @@ class BoundaryDetector:
             text_data, self.preserve_quote_and_paren, relative=relative
         )
 
+    @typechecked
     def segment(
         self,
         text_data: str | Iterable[str],

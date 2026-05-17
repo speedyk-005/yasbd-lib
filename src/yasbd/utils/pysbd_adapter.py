@@ -1,6 +1,8 @@
 from types import SimpleNamespace
 from collections.abc import Iterable
 
+from typeguard import typechecked
+
 from yasbd import BoundaryDetector
 from yasbd.utils.cleaner import clean_stream
 
@@ -32,6 +34,7 @@ class TextSpan:
 
 
 class Segmenter:
+    @typechecked
     def __init__(
         self,
         language: str ="en",
@@ -113,9 +116,10 @@ class Segmenter:
         sents = list(self._detector.segment(text, preserve_whitespace=True))
         return self._convert_leading_space_to_trails(sents)
 
+    @typechecked
     def sentences_with_char_spans(
         self, sentences: list[str]
-    ) -> list[tuple[int, int]]:
+    ) -> list[TextSpan]:
         """Map sentences to their char offsets using cumulative lengths.
 
         Pysbd compatibility method
@@ -127,6 +131,7 @@ class Segmenter:
             pos += len(sent)
         return result
 
+    @typechecked
     def segment(self, text: str) -> list[str | TextSpan]:
         """Segments *text* into sentences.
 

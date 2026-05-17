@@ -1,7 +1,8 @@
-import re  # For simpler pattern
+import re  # For simpler patterns
 from collections.abc import Generator, Iterator
 
 import regex as re2
+from typeguard import typechecked
 
 
 class Rules:
@@ -183,6 +184,7 @@ class Rules:
             m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(line)
         )
 
+    @typechecked
     def apply(
         self,
         line_iter: Iterator[str],

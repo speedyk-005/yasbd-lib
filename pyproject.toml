@@ -34,6 +34,7 @@ dependencies = [
   "loguru>=0.7.3,<1.0",
   "regex>=2025.7.29",
   "ftfy>=6.2.0,<7.0",
+  "typeguard>=4.4.2,<5.0",
 ]
 
 [project.optional-dependencies]
