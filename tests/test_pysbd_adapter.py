@@ -7,7 +7,7 @@ def test_segment_basic():
     """test that basic text splits into sentences preserving whitespace."""
     seg = Segmenter()
     result = seg.segment("Hello world. How are you? I'm fine.")
-    assert result == ["Hello world.", " How are you?", " I'm fine."]
+    assert result == ["Hello world. ", "How are you? ", "I'm fine."]
 
 
 def test_segment_empty():
@@ -20,7 +20,7 @@ def test_segment_with_newlines():
     """test that newlines are preserved in output sentences."""
     seg = Segmenter()
     result = seg.segment("First.\n\nSecond.\nThird.")
-    assert result == ["First.\n", "Second.\n", "Third."]
+    assert result == ["First.\n\n", "Second.\n", "Third."]
 
 
 def test_char_span():

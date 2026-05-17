@@ -102,11 +102,10 @@ class BoundaryDetector:
             text_data = io.StringIO(text_data)
 
         input_for_detection, input_for_slicing = tee(text_data)
-        line_gen = (line for line in input_for_slicing if line.strip())
         curr_line = None
         for start, end in self.detect(input_for_detection, relative=True):
             if start == 0:
-                curr_line = next(line_gen, None)
+                curr_line = next(input_for_slicing, None)
 
             if curr_line is None:
                 break
@@ -114,4 +113,6 @@ class BoundaryDetector:
             sent = curr_line[start:end]
             if not preserve_whitespace:
                 sent = sent.strip()
+                if not sent:
+                    continue
             yield sent

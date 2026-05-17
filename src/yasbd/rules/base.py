@@ -209,8 +209,10 @@ class Rules:
         offset = 0
         for line in line_iter:
             if not line.strip():
+                n = len(line)
+                yield (offset, offset + n) if not relative else (0, n)
                 if not relative:
-                    offset += len(line)
+                    offset += n
                 continue
 
             main_boundaries = set()

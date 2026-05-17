@@ -77,6 +77,32 @@ class Segmenter:
         self._detector.lang = value
         self.language_module.ISO_CODE = value
 
+    @staticmethod
+    def _convert_leading_space_to_trails(sentences: list[str]) -> list[str]:
+        """Move leading whitespace from each sentence to the previous sentence's tail.
+
+        ``BoundaryDetector`` preserves inter-sentence whitespace (``\\n``,
+        spaces) as *leading* whitespace on the following sentence. Pysbd
+        compatibility expects it as *trailing* whitespace on the preceding
+        sentence instead.
+        """
+        result = []
+        for sent in sentences:
+            if not result:
+                stripped = sent.lstrip()
+                if stripped:
+                    result = [stripped]
+                continue
+
+            lead_ws = len(sent) - len(sent.lstrip())
+            if lead_ws:
+                result[-1] += sent[:lead_ws]
+                sent = sent[lead_ws:]
+
+            if sent:
+                result.append(sent)
+        return result
+
     def _process_text(self, text: Iterable[str]) -> list[str | TextSpan]:
         """Internal worker to process raw text into strings or spans."""
         if self.char_span:
@@ -84,7 +110,8 @@ class Segmenter:
                 TextSpan(text[start:end], start, end)
                 for start, end in self._detector.detect(text)
             ]
-        return list(self._detector.segment(text, preserve_whitespace=True))
+        sents = list(self._detector.segment(text, preserve_whitespace=True))
+        return self._convert_leading_space_to_trails(sents)
 
     def sentences_with_char_spans(
         self, sentences: list[str]
