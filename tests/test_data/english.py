@@ -44,6 +44,9 @@ TEST_DATA = [
     ("Hello!? Is that you?", ["Hello!?", "Is that you?"]),
     ("Hello?! Is that you?", ["Hello?!", "Is that you?"]),
 
+    # Contiguous terminators
+    ("Hello ! ! ! !", ["Hello ! ! ! !"]),
+
     # Lists
     ("1.) The first item. 2.) The second item.", ["1.) The first item.", "2.) The second item."]),
     ("a) The first item. b) The second item.", ["a) The first item.", "b) The second item."]),

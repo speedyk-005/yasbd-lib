@@ -177,6 +177,9 @@ class Rules:
             re2.X,
         )
 
+        # https://regex101.com/r/ffqwjh/1
+        self.contiguous_terminators_finder = re.compile(rf"(?:\s*+[{terminators_pattern}])+")
+
     def _remove_quote_and_paren_spans(
         self,
         main_boundaries: set[int],
@@ -265,6 +268,14 @@ class Rules:
             )
             self._remove_ellipsis_and_toc_spans(main_boundaries, line)
             self._adjust_list_boundaries(main_boundaries, line)
+            
+            # Remove contiguous term except last one
+            main_boundaries.difference_update(
+                *(
+                    range(m.start(), m.end() - 1)
+                    for m in self.contiguous_terminators_finder.finditer(line)
+                )
+            )
 
             main_boundaries.update({0, len(line)})
             main_boundaries_lst = sorted(main_boundaries)
