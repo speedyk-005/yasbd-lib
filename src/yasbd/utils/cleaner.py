@@ -4,6 +4,7 @@ from collections.abc import Generator, Iterable
 
 import ftfy
 
+
 # https://regex101.com/r/SSQfUY/1
 # A number followed by a latin-1/Slovak uppercase letter
 STICKY_NUMBER_FINDER = re.compile(r"""
@@ -22,9 +23,9 @@ MULTIPLE_SPACES_FINDER = re.compile(r"\s{2,}")
 
 # https://regex101.com/r/DgnxSq/1
 PAGE_FINDER = re.compile(r"""
-    Page\s+\d+\s+of\s+\d+.*|  # standalone page number
+    Page\ \d+\ of\ \d+.*|  # standalone page number
     -\s*\d+\s*-|  # Page numbers with dashes
-    \s*\|\s*Page\s+\d+\s*\|\s*  # Boxed page numbers
+    \s*\|\s*Page\ \d+\s*\|\s*  # Boxed page numbers
     """, re.X | re.M,
 )
 
@@ -121,6 +122,7 @@ if __name__ == "__main__":
         "has {b^>inline<b^} formatting",
         "three///slashes",
         "1. ",
+        "Page 12 of 45",
         "<font color=\"red\">Red text</font> and <span>span</span>",
         "<script>alert('xss')</script>clean text",
     ]
