@@ -84,10 +84,10 @@ class Rules:
     # https://regex101.com/r/tI9Cmg/2
     VERTICAL_LIST_START_FINDER = re2.compile(r"(?<=^\s*(?:[\p{L}\p{N}]\.){1,3})(?=\s)")
 
-    # https://regex101.com/r/JYdWZw/1
+    # https://regex101.com/r/JYdWZw/2
     QUOTE_AND_PAREN_FINDER = re2.compile(
         r"""
-        (?:\p{Pi}|»|(['"”])).+?(?:\p{Pf}|«|\1)|  # Quoted text
+        (?:\p{Pi}|»|\s(['""])).+?(?:\p{Pf}|«|\1)|  # Quoted text
         \p{Ps}.+?\p{Pe}  # Parenthesized text
         """,
         re2.X,
@@ -180,7 +180,6 @@ class Rules:
         self,
         main_boundaries: set[int],
         line: str,
-        quote_and_paren_ends: set[int],
         preserve_quote_and_paren: bool,
     ) -> None:
         """Remove boundaries inside quoted/parenthesised spans."""
@@ -188,8 +187,12 @@ class Rules:
             protected_spans = set()
             for m in self.QUOTE_AND_PAREN_FINDER.finditer(line):
                 inner_range = set(range(*m.span()))
-                protected_spans.update(inner_range - quote_and_paren_ends)
+                protected_spans.update(inner_range)
             main_boundaries.difference_update(protected_spans)
+
+        main_boundaries.update(
+            m.end() for m in self.quote_and_paren_end_finder.finditer(line)
+        )
 
     def _remove_ellipsis_and_toc_spans(
         self, main_boundaries: set[int], line: str
@@ -251,17 +254,13 @@ class Rules:
             main_boundaries.update(
                 m.end() for m in self.naive_boundary_finder.finditer(line)
             )
-            quote_and_paren_ends = {
-                m.end() for m in self.quote_and_paren_end_finder.finditer(line)
-            }
-            main_boundaries.update(quote_and_paren_ends)
 
             # -- Remove false alarms --
             main_boundaries.difference_update(
                 m.end() for m in self.mid_sentence_finder.finditer(line)
             )
             self._remove_quote_and_paren_spans(
-                main_boundaries, line, quote_and_paren_ends, preserve_quote_and_paren
+                main_boundaries, line, preserve_quote_and_paren
             )
             self._remove_ellipsis_and_toc_spans(main_boundaries, line)
             self._adjust_list_boundaries(main_boundaries, line)
