@@ -1,0 +1,51 @@
+name: Python CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      # Critical for letting the token talk to Coveralls/GitHub APIs
+      contents: write
+      pull-requests: write
+      checks: write
+
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v6
+
+     - name: Install the latest version of uv and set the python version
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+    - name: Install Dependencies
+      run: |
+        uv pip install -e .[dev]
+
+    - name: Test with Pytest
+      run: |
+        uv run pytest tests -v --tb=short
+
+    - name: Generate Coverage
+      if: matrix.python-version == '3.12'
+      run: |
+        pytest --cov=src/yasbd --cov-report=xml tests
+
+    - name: Upload coverage to Coveralls
+      if: matrix.python-version == '3.12'
+      uses: coverallsapp/github-action@v2.3.6
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        file: coverage.xml
+        fail-on-error: false
+        
