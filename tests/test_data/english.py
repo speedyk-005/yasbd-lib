@@ -36,6 +36,7 @@ TEST_DATA = [
     ("(See Fig. 4. This outlines the memory layout.) The engine executes next.", ["(See Fig. 4. This outlines the memory layout.)", "The engine executes next."]),
     ('She turned to him, "This is great." she said.', ["She turned to him, \"This is great.\" she said."]),
     ('She turned to him, "This is great." She held the book out to show him.', ["She turned to him, \"This is great.\"", "She held the book out to show him."]),
+    ("Can you believe how much money he has made from his Where's Wally? series of books (published in the US as Where's Waldo?)?", ["Can you believe how much money he has made from his Where's Wally? series of books (published in the US as Where's Waldo?)?"]),
 
     # Double punctuation
     ("Hello!! Long time no see.", ["Hello!!", "Long time no see."]),

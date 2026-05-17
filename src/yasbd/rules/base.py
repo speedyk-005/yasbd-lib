@@ -163,12 +163,13 @@ class Rules:
             re2.X,
         )
 
-        # https://regex101.com/r/EGkRU8/4
+        # https://regex101.com/r/EGkRU8/5
         self.quote_and_paren_end_finder = re2.compile(
             rf"""
             (?<=[{terminators_pattern}]\s*   # A terminator followed by additional space
             ["\u201d\u00ab\p{{Pf}}\p{{Pe}}])     # Closing quotes/parens
-            (?!  # NOT followed by any continuation markers or space+lowercase letter or end
+            (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
+                \s*[{terminators_pattern}]|
                 {"|".join(self.QUOTATIVE_PARTICLES)}|{"|".join(self.REPORTING_WORDS)}|
                 \s+[\p{{Ll}}]|$
             )
