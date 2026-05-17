@@ -27,7 +27,7 @@ class BoundaryDetector:
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
         self.lang = lang.lower()
-        if self.verbose:
+        if self.verbose:  # pragma: no cover
             logger.info(
                 "Initialized with lang={!r}, preserve_quote_and_paren={}, verbose={}",
                 self._lang,
@@ -49,12 +49,12 @@ class BoundaryDetector:
 
         self._load_rule(lang)
         self._lang = lang
-        if self.verbose:
+        if self.verbose:  # pragma: no cover
             logger.info("Language switched from {} to {}", old_lang, self._lang)
 
     def _load_rule(self, lang: str) -> None:
         """Dynamically import and instantiate the rule module for *lang*."""
-        if self.verbose:
+        if self.verbose:  # pragma: no cover
             logger.info("Trying to load rule module for {}", lang)
 
         try:
@@ -85,7 +85,7 @@ class BoundaryDetector:
         Yields:
             ``(start_offset, end_offset)`` for each sentence.
         """
-        if self.verbose:
+        if self.verbose:  # pragma: no cover
             logger.info(
                 "Called with type={}, relative={}", type(text_data).__name__, relative
             )
@@ -96,7 +96,7 @@ class BoundaryDetector:
         # Quick heuristic empty check
         first_5_lines = list(islice(text_data, 5))
         if len(first_5_lines) == 0:
-            if self.verbose:
+            if self.verbose:  # pragma: no cover
                 logger.info("Input is empty. Returns empty result")
             return
 
@@ -125,7 +125,7 @@ class BoundaryDetector:
         Yields:
             Individual sentences as strings.
         """
-        if self.verbose:
+        if self.verbose:  # pragma: no cover
             logger.info("Called with preserve_whitespace={}", preserve_whitespace)
 
         if isinstance(text_data, str):

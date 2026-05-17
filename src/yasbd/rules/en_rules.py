@@ -35,7 +35,7 @@ class EnRules(Rules):
 # fmt: on
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     from io import StringIO
 
     rule = EnRules()

@@ -125,7 +125,7 @@ def clean_stream(data: Iterable[str]) -> Generator[str, None, None]:
         yield from " ".join(sent_buff).splitlines()
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     texts = [
         "Hello <b>world</b>. How are you?",
         "Text with &lt;script&gt;evil&lt;/script&gt;",

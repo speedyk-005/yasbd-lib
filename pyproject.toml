@@ -73,6 +73,9 @@ addopts = "--cov=yasbd --cov-report=term-missing:skip-covered --durations=10"
 testpaths = ["tests"]
 python_files = "test_*.py"
 
+[tool.coverage.run]
+omit = ["*/_template_rules.py"]
+
 [tool.ruff]
 target-version = "py311"
 line-length = 88
