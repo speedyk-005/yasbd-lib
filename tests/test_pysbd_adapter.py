@@ -3,22 +3,24 @@ import pytest
 from yasbd.utils.pysbd_adapter import Segmenter, TextSpan
 
 
-def test_segment_basic():
+@pytest.fixture(scope="module")
+def seg():
+    return Segmenter()
+
+
+def test_segment_basic(seg):
     """test that basic text splits into sentences preserving whitespace."""
-    seg = Segmenter()
     result = seg.segment("Hello world. How are you? I'm fine.")
     assert result == ["Hello world. ", "How are you? ", "I'm fine."]
 
 
-def test_segment_empty():
+def test_segment_empty(seg):
     """test that empty input returns empty list."""
-    seg = Segmenter()
     assert seg.segment("") == []
 
 
-def test_segment_with_newlines():
+def test_segment_with_newlines(seg):
     """test that newlines are preserved in output sentences."""
-    seg = Segmenter()
     result = seg.segment("First.\n\nSecond.\nThird.")
     assert result == ["First.\n\n", "Second.\n", "Third."]
 
