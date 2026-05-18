@@ -181,7 +181,7 @@ class Rules:
             ["\u201d\u00ab\p{{Pf}}\p{{Pe}}])     # Closing quotes/parens
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
                 \s*[{terminators_pattern}]|
-                {"|".join(self.QUOTATIVE_PARTICLES)}|{"|".join(self.REPORTING_WORDS)}|
+                {"|".join(self.QUOTATIVE_PARTICLES | self.REPORTING_WORDS)}|
                 \s+[\p{{Ll}}]|$
             )
             """,
