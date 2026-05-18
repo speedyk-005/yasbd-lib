@@ -30,17 +30,14 @@ class Rules:
     }
 
     GEOPOLITICAL_ABBRVS = {
-        # North Atlantic / Anglosphere
-        "us", "u.s", "usa", "u.s.a", "uk", "u.k", "can",
-
-        # Western Europe
-        "eu", "e.u", "fra", "ger",
+        # North Atlantic / Western Europe
+         "u.s", "u.s.a", "u.k", "e.u",
 
         # Multilateral / Intergovernmental
-        "un", "u.n", "ussr", "u.s.s.r", "nato",
+        "u.n", "u.s.s.r",
 
         # Asia / Middle East
-        "uae", "u.a.e", "dprk", "prc", "roc", "rok",
+        "u.a.e", "p.r.c", "r.o.k",
     }
 
     REFERENCE_ABBRVS = {
