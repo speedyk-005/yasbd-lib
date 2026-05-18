@@ -80,7 +80,7 @@ class Rules:
         "I Can't Believe It's Not Butter", "Pop",
 
         # Gaming, Media, Animation, & Entertainment
-        "Mamma Mia", "Jeopardy", "Oklahoma", "Oliver", "Shindig", 
+        "Mamma Mia", "Jeopardy", "Oklahoma", "Oliver", "Shindig",
         "Hailey's On It", "Airplane", "Osu", "Ha", "VSPO",
 
         # Geopolitical Quirks / Municipalities
@@ -284,7 +284,7 @@ class Rules:
             )
             self._remove_ellipsis_and_toc_spans(main_boundaries, line)
             self._adjust_list_boundaries(main_boundaries, line)
-            
+
             # Remove contiguous term except last one
             main_boundaries.difference_update(
                 *(

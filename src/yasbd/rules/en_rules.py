@@ -35,7 +35,7 @@ class EnRules(Rules):
 
     COMMON_SENT_STARTERS = {
         # Articles
-        "The", "A", "An", 
+        "The", "A", "An",
 
         # Pronouns
         "I", "We", "You", "He", "She", "It", "They", "This", "That",
@@ -52,7 +52,7 @@ class EnRules(Rules):
         "Meanwhile", "Also", "Besides", "Furthermore", "Otherwise", "Anyway",
 
         # Other common starters
-        "Now", "Do", "Did", "In", "Millions", "More", 
+        "Now", "Do", "Did", "In", "Millions", "More",
     }
 # fmt: on
 
