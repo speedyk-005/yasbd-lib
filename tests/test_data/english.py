@@ -2,7 +2,7 @@
 # Format: (input_text, expected_sentences)
 
 ISO_CODE = "en"
-TEST_DATA = TEST_DATA_MARKED = [
+TEST_DATA = [
     # Basic punctuation
     "Hello world.| How are you?| I'm fine.",
     "What is your name?| My name is Jonas.",
