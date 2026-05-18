@@ -48,7 +48,13 @@ def test_segment_different_input(en_detector):
 def test_segment_multiple_langs(subtests, lang, test_data):
     """test that each language's test data passes."""
     seg = BoundaryDetector(lang=lang)
-    for input_text, expected in test_data:
+    for marked_text in test_data:
+        # Extract the expected sentences by splitting on the marker
+        expected = marked_text.split("| ")
+    
+        # Reconstruct the clean original input text by removing the marker
+        input_text = marked_text.replace("|", "")
+
         with subtests.test():
             result = list(seg.segment(input_text))
             assert result == expected, f"Input: {input_text}"
