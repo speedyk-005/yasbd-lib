@@ -13,12 +13,15 @@ def en_detector():
     return BoundaryDetector(lang="en")
 
 
-@pytest.mark.parametrize("input_text", [
-    "",
-    "   ",
-    "\n\n\n",
-    pytest.param(io.StringIO(""), id="empty_stream"),
-])
+@pytest.mark.parametrize(
+    "input_text",
+    [
+        "",
+        "   ",
+        "\n\n\n",
+        pytest.param(io.StringIO(""), id="empty_stream"),
+    ],
+)
 def test_segment_empty_input(input_text, en_detector):
     """test that empty or whitespace-only input produces no sentences."""
     assert list(en_detector.segment(input_text)) == []
@@ -53,7 +56,12 @@ def test_segment_multiple_langs(subtests, lang, test_data):
 
 def test_segment_noisy_input(en_detector):
     """test that random noisy input does not crash the segmenter."""
-    chars = string.ascii_letters + string.digits + string.punctuation + "z.?! Dr. Mr. Inc. etc."
+    chars = (
+        string.ascii_letters
+        + string.digits
+        + string.punctuation
+        + "z.?! Dr. Mr. Inc. etc."
+    )
 
     for _ in range(100):
         length = random.randint(1, 500)
@@ -77,4 +85,3 @@ def test_include_char_span(en_detector):
         assert last_end <= start
         assert start <= end
         last_end = end
-

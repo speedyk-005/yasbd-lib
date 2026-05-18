@@ -33,7 +33,8 @@ def test_char_span():
     assert len(result) == 2
     for ts in result:
         assert isinstance(ts, TextSpan)
-        assert text[ts.start:ts.end] == ts.sent
+        assert text[ts.start : ts.end] == ts.sent
+
 
 def test_char_span_incompatible_with_clean():
     """test that clean=True with char_span raises ValueError."""
@@ -62,4 +63,3 @@ def test_sentences_with_char_spans():
     assert result[0] == TextSpan("Hello world.", 0, 12)
     assert result[1] == TextSpan(" How are you?", 12, 25)
     assert result[2] == TextSpan(" I'm fine.", 25, 35)
-

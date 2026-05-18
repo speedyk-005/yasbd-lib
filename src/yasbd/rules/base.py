@@ -7,9 +7,7 @@ from typeguard import typechecked
 
 def _build_abbr_pattern(options: set[str]) -> str:
     """Build regex pattern from a set while escaping special chars."""
-    return "|".join(
-        re2.escape(opt) for opt in sorted(options, key=len)
-    )
+    return "|".join(re2.escape(opt) for opt in sorted(options, key=len))
 
 
 # fmt: off
