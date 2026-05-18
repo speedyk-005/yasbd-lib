@@ -75,16 +75,23 @@ class Rules:
     }
 
     NAMES_WITH_EXCLAMATION = {
-        "Ha", "Yahoo", "Yum", "Chips Ahoy", "Kahoot", "JOOP", "Joomla", "Starz",
-        "Jeopardy", "Airplane", "Oklahoma", "Mamma Mia", "Oliver", "Shindig",
-        "Westward Ho", "Saint-Louis-du-Ha! Ha", "Jeb", "Elliot S", "Air France Hop",
-        "Basta", "¡Éxito", "Pepitos", "OSN Yahala", "Shugo Chara", "Adopt Me", "Bingo",
-        "E", "Hailey's On It", "Hey Boo", "Hey Man! Let's Eat", "Microsoft Plus", "Off",
-        "Osu", "PBS Kids Go", "Pop", "Red Bip", "RedeTV", "This Can't Be Yogurt",
-        "Transfer It", "VSPO", "Walla", "WWE Smackdown",
+        # Tech, Corporate Entities, & Major Consumer Brands
+        "Yahoo", "Yum", "Chips Ahoy", "Kahoot", "JOOP", "Walla",
+        "I Can't Believe It's Not Butter", "Pop",
+
+        # Gaming, Media, Animation, & Entertainment
+        "Mamma Mia", "Jeopardy", "Oklahoma", "Oliver", "Shindig", 
+        "Hailey's On It", "Airplane", "Osu", "Ha", "VSPO",
+
+        # Geopolitical Quirks / Municipalities
+        "Westward Ho", "Saint-Louis-du-Ha", "Baie-des-Ha",
+
+        # Public Figures, Politics, & Manufacturing Brands
+        "Jeb", "Éxito", "Hey Man", "Basta", "Elliot S"
     }
 
     COMMON_ORG_NOUNS = {"Commission", "Federation"}
+    COMMON_SENT_STARTERS = {"The"}
     QUOTATIVE_PARTICLES = {"と", "って", "라고"}
     REPORTING_WORDS = {"说", "道", "问", "他", "她"}
 
@@ -146,7 +153,7 @@ class Rules:
             re2.X,
         )
 
-        # https://regex101.com/r/svyCoU/3
+        # https://regex101.com/r/svyCoU/5
         self.mid_sentence_finder = re2.compile(
             rf"""
             # Title abbrv or initialisms (e.g., Dr. Paul)
@@ -163,7 +170,8 @@ class Rules:
             (?<=\b(?i:{_build_abbr_pattern(self.REFERENCE_ABBRVS)})\.)(?=\s+\p{{N}})|
 
             # Exclamations words (e.g., Yahoo!)
-            (?<=\b(?:{_build_abbr_pattern(self.NAMES_WITH_EXCLAMATION)})!)|
+            (?<=\b(?:{_build_abbr_pattern(self.NAMES_WITH_EXCLAMATION)})!)
+            (?!\s+(?:{_build_abbr_pattern(self.COMMON_SENT_STARTERS)}))|
 
             # Collapsed middle name (e.g, Jonas E. Smith)
             (?<=\s\b(?:\p{{Lu}})\.)(?=\s)

@@ -62,4 +62,5 @@ TEST_DATA = [
     # Exclamation words
     ("We spent the afternoon playing Adopt Me! on the computer while eating Chips Ahoy! cookies.", ["We spent the afternoon playing Adopt Me! on the computer while eating Chips Ahoy! cookies."]),
     ("My dad logged into Yahoo! finance to check on Yum! Brands stock performance before dinner.", ["My dad logged into Yahoo! finance to check on Yum! Brands stock performance before dinner."]),
+    ("Yahoo! The server is down.", ["Yahoo!", "The server is down."]),
 ]

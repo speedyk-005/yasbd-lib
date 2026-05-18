@@ -32,6 +32,28 @@ class EnRules(Rules):
         "Parliament", "Department", "Ministry", "Bureau", "Agency", "Institute",
         "Association", "Corporation", "Foundation", "University", "College", "Board",
     }
+
+    COMMON_SENT_STARTERS = {
+        # Articles
+        "The", "A", "An", 
+
+        # Pronouns
+        "I", "We", "You", "He", "She", "It", "They", "This", "That",
+        "These", "Those", "There",
+
+        # Question words
+        "Who", "What", "Where", "When", "Why", "How", "Which", "Whose", "Whom",
+
+        # Conjunctions
+        "And", "But", "Or", "So", "Yet", "For", "Nor",
+
+        # Adverbs
+        "However", "Moreover", "Nevertheless", "Therefore", "Consequently",
+        "Meanwhile", "Also", "Besides", "Furthermore", "Otherwise", "Anyway",
+
+        # Other common starters
+        "Now", "Do", "Did", "In", "Millions", "More", 
+    }
 # fmt: on
 
 
