@@ -188,8 +188,8 @@ class Rules:
             re2.X,
         )
 
-        # https://regex101.com/r/ffqwjh/1
-        self.contiguous_terminators_finder = re.compile(rf"(?:\s*+[{terminators_pattern}])+")
+        # https://regex101.com/r/ffqwjh/2
+        self.contiguous_terminators_finder = re.compile(rf"(?:\s*+[{terminators_pattern}]){{2,}}")
 
     def _remove_quote_and_paren_spans(
         self,
