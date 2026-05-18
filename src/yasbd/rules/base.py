@@ -148,7 +148,7 @@ class Rules:
             re2.X,
         )
 
-        # https://regex101.com/r/svyCoU/5
+        # https://regex101.com/r/svyCoU/6
         self.mid_sentence_finder = re2.compile(
             rf"""
             # Title abbrv or initialisms (e.g., Dr. Paul)
@@ -164,8 +164,8 @@ class Rules:
             # References abbrv followed by a number (e.g., to p. 55)
             (?<=\b(?i:{_build_abbr_pattern(self.REFERENCE_ABBRVS)})\.)(?=\s+\p{{N}})|
 
-            # Exclamations words (e.g., Yahoo!)
-            (?<=\b(?:{_build_abbr_pattern(self.NAMES_WITH_EXCLAMATION)})!)
+            # Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding)
+            (?<=\.\p{{Lu}}\.|\b(?i:{_build_abbr_pattern(self.NAMES_WITH_EXCLAMATION)})!)
             (?!\s+(?:{_build_abbr_pattern(self.COMMON_SENT_STARTERS)}))|
 
             # Collapsed middle name (e.g, Jonas E. Smith)

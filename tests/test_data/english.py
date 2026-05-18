@@ -25,6 +25,7 @@ TEST_DATA = [
             "Please check it out.",
         ],
     ),
+
     # Abbreviations
     ("My name is Jonas E. Smith.", ["My name is Jonas E. Smith."]),
     ("Please turn to p. 55.", ["Please turn to p. 55."]),
@@ -74,6 +75,11 @@ TEST_DATA = [
             "It was approved by Prof. Smith and Dr. Jones.",
         ],
     ),
+    (
+        "The agreement was signed by A.B. Holdings Ltd. in 2024",
+        ["The agreement was signed by A.B. Holdings Ltd. in 2024",]
+    ),
+
     # Parentheses and quotes
     (
         "He teaches science (He previously worked for 5 years as an engineer.) at the local University.",
@@ -99,13 +105,16 @@ TEST_DATA = [
             "Can you believe how much money he has made from his Where's Wally? series of books (published in the US as Where's Waldo?)?"
         ],
     ),
+
     # Double punctuation
     ("Hello!! Long time no see.", ["Hello!!", "Long time no see."]),
     ("Hello?? Who is there?", ["Hello??", "Who is there?"]),
     ("Hello!? Is that you?", ["Hello!?", "Is that you?"]),
     ("Hello?! Is that you?", ["Hello?!", "Is that you?"]),
+
     # Contiguous terminators
     ("Hello ! ! ! !", ["Hello ! ! ! !"]),
+
     # Lists
     (
         "1.) The first item. 2.) The second item.",
@@ -123,6 +132,7 @@ TEST_DATA = [
         "• 9. The first item. • 10. The second item.",
         ["• 9. The first item.", "• 10. The second item."],
     ),
+
     # Elipsis/TOC leaders
     (
         "The project (Sinta) was nearing completion... or so we thought.",
@@ -143,6 +153,7 @@ TEST_DATA = [
         f"Why Complex Carbohydrates{'.' * 15} 19",
         [f"Why Complex Carbohydrates{'.' * 15} 19"],
     ),
+
     # Exclamation words
     (
         "We spent the afternoon playing Adopt Me! on the computer while eating Chips Ahoy! cookies.",
