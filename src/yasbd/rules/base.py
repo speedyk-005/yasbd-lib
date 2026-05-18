@@ -5,6 +5,13 @@ import regex as re2
 from typeguard import typechecked
 
 
+def _build_abbr_pattern(options: set[str]) -> str:
+    """Build regex pattern from a set while escaping special chars."""
+    return "|".join(
+        re2.escape(opt) for opt in sorted(options, key=len)
+    )
+
+
 # fmt: off
 class Rules:
     ISO_CODE = "xx"
@@ -106,7 +113,7 @@ class Rules:
         Patterns that depend on abbreviation sets or terminators are built here
         rather than at class level so subclasses can override the data constants.
         """
-        title_abbrvs_pattern = "|".join(self.TITLE_ABBRVS)
+        title_abbrvs_pattern = _build_abbr_pattern(self.TITLE_ABBRVS)
         terminators_pattern = "".join(self.TERMINATORS)
 
         # https://regex101.com/r/qBSyU5/10
@@ -146,16 +153,17 @@ class Rules:
             (?<=\b(?i:{title_abbrvs_pattern})\.)|
 
             # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
-            (?<=\b(?i:{"|".join(self.GEOPOLITICAL_ABBRVS)})\.)(?=\s+(?:{"|".join(self.COMMON_ORG_NOUNS)}))|
+            (?<=\b(?i:{_build_abbr_pattern(self.GEOPOLITICAL_ABBRVS)})\.)
+            (?=\s+(?:{_build_abbr_pattern(self.COMMON_ORG_NOUNS)}))|
 
             # Abbrv that NEVER ends a sentence
-            (?<=\b(?i:{"|".join(self.MID_SENTENCE_ABBRVS)})\.)|
+            (?<=\b(?i:{_build_abbr_pattern(self.MID_SENTENCE_ABBRVS)})\.)|
 
             # References abbrv followed by a number (e.g., to p. 55)
-            (?<=\b(?i:{"|".join(self.REFERENCE_ABBRVS)})\.)(?=\s+\p{{N}})|
+            (?<=\b(?i:{_build_abbr_pattern(self.REFERENCE_ABBRVS)})\.)(?=\s+\p{{N}})|
 
             # Exclamations words (e.g., Yahoo!)
-            (?<=\b(?:{"|".join(self.NAMES_WITH_EXCLAMATION)})!)|
+            (?<=\b(?:{_build_abbr_pattern(self.NAMES_WITH_EXCLAMATION)})!)|
 
             # Collapsed middle name (e.g, Jonas E. Smith)
             (?<=\s\b(?:\p{{Lu}})\.)(?=\s)
