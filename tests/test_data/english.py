@@ -31,6 +31,7 @@ TEST_DATA = [
     "I need you to find 3 items, e.g. a hat, a coat, and a bag.",
     "The report was published in Dec.| It was approved by Prof. Smith and Dr. Jones.",
     "The agreement was signed by A.B. Holdings Ltd. in 2024",
+    "The temperature reached 37.5°C at 6 a.m. on Tue., Feb. 4.",
 
     # Parentheses and quotes
     "He teaches science (He previously worked for 5 years as an engineer.) at the local University.",
@@ -43,14 +44,11 @@ TEST_DATA = [
     "The letter concluded with a simple warning: 'Do not follow me.'| Then she left.",
     'He said: "First sentence. Second sentence."| Then done.',
 
-    # Double punctuation
-    "Hello!!| Long time no see.",
-    "Hello??| Who is there?",
-    "Hello!?| Is that you?",
-    "Hello?!| Is that you?",
-
     # Contiguous terminators
     "Hello ! ! ! !",
+    "Hello!!| Long time no see.",
+    "Hello!?| Is that you?",
+    "Hello!? !! ?!| Is that you?",
 
     # Lists
     "1.) The first item.| 2.) The second item.",

@@ -32,12 +32,18 @@ class LangRules(Rules):
     # Brands / titles containing "!" that should not trigger a split
     NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {}
 
+    # Months abbreviations (Jan., Feb., etc.)
+    MONTH_ABBRVS = {}
+
     # Nouns that appear inside organisational names
     COMMON_ORG_NOUNS = {}
+
     # Words that commonly start sentences (The, A, This, etc.)
     COMMON_SENT_STARTERS = {}
+
     # Quotative particles (Japanese と, Korean 라고, etc.)
     QUOTATIVE_PARTICLES = {}
+
     # Reporting verbs for dialogue (Chinese 说/道/问, etc.)
     REPORTING_WORDS = {}
 

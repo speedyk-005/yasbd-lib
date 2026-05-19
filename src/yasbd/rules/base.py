@@ -56,6 +56,11 @@ class Rules:
         "eq", "eqn",
     }
 
+    MONTH_ABBRVS = {
+        "jan", "feb", "mar", "apr", "jun", "jul", "sep",
+        "sept", "oct", "nov", "dec"
+    }
+
     MID_SENTENCE_ABBRVS = {
         # Business entity bridges
         "assoc", "mfg",
@@ -155,7 +160,7 @@ class Rules:
             re2.X,
         )
 
-        # https://regex101.com/r/svyCoU/6
+        # https://regex101.com/r/svyCoU/7
         self.mid_sentence_finder = re2.compile(
             rf"""
             # Title abbrv or initialisms (e.g., Dr. Paul)
@@ -169,7 +174,8 @@ class Rules:
             (?<=\b(?i:{_build_abbr_pattern(self.MID_SENTENCE_ABBRVS)})\.)|
 
             # References abbrv followed by a number (e.g., to p. 55)
-            (?<=\b(?i:{_build_abbr_pattern(self.REFERENCE_ABBRVS)})\.)(?=\s+\p{{N}})|
+            (?<=\b(?i:{_build_abbr_pattern(self.REFERENCE_ABBRVS | self.MONTH_ABBRVS)})\.)
+            (?=\s+\p{{N}})|
 
             # Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding)
             (?<=\.\p{{Lu}}\.|\b(?i:{_build_abbr_pattern(self.NAMES_WITH_EXCLAMATION)})!)
