@@ -124,6 +124,7 @@ class Segmenter:
 
         if self.clean:
             sents = list(self._detector.segment(text))
+            return sents
         else:
             sents = list(self._detector.segment(text, preserve_whitespace=True))
             return self._convert_leading_space_to_trails(sents)
@@ -157,6 +158,6 @@ class Segmenter:
         self.original_text = f"{text[:500]}..." if len(text) > 500 else text
 
         if self.clean:
-            text = clean_stream(text)
+            text = "".join(clean_stream(text))
 
         return self._process_text(text)

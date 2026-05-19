@@ -51,6 +51,13 @@ def test_textspan():
     assert ts == TextSpan("hello", 0, 5)
 
 
+def test_segment_clean():
+    """Test that clean=True returns cleaned sentences."""
+    seg = Segmenter(clean=True)
+    result = seg.segment("Hello world. How are you? I'm fine.")
+    assert result == ["Hello world.", "How are you?", "I'm fine."]
+
+
 def test_sentences_with_char_spans():
     """test that sentences_with_char_spans computes cumulative offsets."""
     seg = Segmenter(language="en")
