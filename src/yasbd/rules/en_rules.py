@@ -28,9 +28,22 @@ class EnRules(Rules):
     }
 
     COMMON_ORG_NOUNS = {
-        "Army", "Government", "Federation", "Senate", "Council", "Commission",
-        "Parliament", "Department", "Ministry", "Bureau", "Agency", "Institute",
-        "Association", "Corporation", "Foundation", "University", "College", "Board",
+        # Government / Political
+        "Government", "Parliament", "Senate", "Congress", "Assembly",
+        "Ministry", "Department", "Bureau", "Agency", "Commission", "Board",
+        "Council", "Committee", "Authority", "Administration",
+
+        # Education / Research
+        "University", "College", "Institute", "School", "Academy",
+
+        # Corporate / Business
+        "Corporation", "Company", "Association", "Foundation", "Trust",
+
+        # Military / Legal
+        "Army", "Navy", "Airforce", "Police", "Force", "Court",
+
+        # Media / Cultural
+        "Museum", "Gallery", "Theater", "Theatre", "Network",
     }
 
     COMMON_SENT_STARTERS = {

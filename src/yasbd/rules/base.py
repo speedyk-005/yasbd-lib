@@ -85,7 +85,7 @@ class Rules:
         "Jeb", "Éxito", "Hey Man", "Basta", "Elliot S"
     }
 
-    COMMON_ORG_NOUNS = {"Commission", "Federation"}
+    COMMON_ORG_NOUNS = {"Army", "Authority", "Commission", "Trust"}
     COMMON_SENT_STARTERS = {"The"}
     QUOTATIVE_PARTICLES = {"と", "って", "라고"}
     REPORTING_WORDS = {"说", "道", "问", "他", "她"}
