@@ -41,6 +41,7 @@ TEST_DATA = [
     "According to his publisher, Smith bought the company in 1985 [or 1984?], but he wasn't active in its management until 1990.",
     'Then he stop.| "wait" he said',
     "The letter concluded with a simple warning: 'Do not follow me.'| Then she left.",
+    'He said: "First sentence. Second sentence."| Then done.',
 
     # Double punctuation
     "Hello!!| Long time no see.",
