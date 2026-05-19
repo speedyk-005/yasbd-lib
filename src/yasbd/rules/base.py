@@ -102,9 +102,6 @@ class Rules:
         re2.X,
     )
 
-    # https://regex101.com/r/wILgbJ/1
-    ELLIPSIS_FINDER = re.compile(r"[！!?？]?(?:\s*\.){3,4}")
-
     # https://regex101.com/r/0P9f2V/1
     TOC_LEADER_FINDER = re.compile(r"[^\W_][\s\.]{4,}\d")
 
@@ -149,7 +146,10 @@ class Rules:
             (?=
                 \s+(?:[^\p{{Ll}}]|(?i:{common_starters_pattern})\b)|
                 \s*\p{{Lo}}
-            )
+            )|
+            
+            # Cluster of terminators (e.g hello!!! r u ok?)
+            (?<=[{terminators_pattern.replace('.', '')}]{{2,}})(?=\s)
             """,
             re2.X,
         )
@@ -215,13 +215,11 @@ class Rules:
             m.end() for m in self.quote_and_paren_end_finder.finditer(line)
         )
 
-    def _remove_ellipsis_and_toc_spans(
+    def _remove_toc_spans(
         self, main_boundaries: set[int], line: str
     ) -> None:
-        """Remove boundaries inside ellipsis and TOC leader runs."""
+        """Remove boundaries inside TOC leader runs."""
         if "..." in line:
-            for m in self.ELLIPSIS_FINDER.finditer(line):
-                main_boundaries.difference_update(range(*m.span()))
             for m in self.TOC_LEADER_FINDER.finditer(line):
                 main_boundaries.difference_update(range(*m.span()))
 
@@ -283,10 +281,10 @@ class Rules:
             self._remove_quote_and_paren_spans(
                 main_boundaries, line, preserve_quote_and_paren
             )
-            self._remove_ellipsis_and_toc_spans(main_boundaries, line)
+            self._remove_toc_spans(main_boundaries, line)
             self._adjust_list_boundaries(main_boundaries, line)
 
-            # Remove contiguous term except last one
+            # Remove contiguous term except last one (e.g., Hello! !!   !! )
             main_boundaries.difference_update(
                 *(
                     range(m.start(), m.end() - 1)
