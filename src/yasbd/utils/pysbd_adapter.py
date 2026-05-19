@@ -115,14 +115,18 @@ class Segmenter:
         return result
 
     def _process_text(self, text: Iterable[str]) -> list[str | TextSpan]:
-        """Internal worker to process raw text into strings or spans."""
+        """Detect sentence boundaries in text."""
         if self.char_span:
             return [
                 TextSpan(text[start:end], start, end)
                 for start, end in self._detector.detect(text)
             ]
-        sents = list(self._detector.segment(text, preserve_whitespace=True))
-        return self._convert_leading_space_to_trails(sents)
+
+        if self.clean:
+            sents = list(self._detector.segment(text))
+        else:
+            sents = list(self._detector.segment(text, preserve_whitespace=True))
+            return self._convert_leading_space_to_trails(sents)
 
     @typechecked
     def sentences_with_char_spans(self, sentences: list[str]) -> list[TextSpan]:
@@ -149,7 +153,7 @@ class Segmenter:
             objects if ``char_span`` was set to ``True``.
         """
         # Pysbd stored the original text in object
-        # Keep a preview for compatibility,
+        # Keep a preview for compatibility for libs depending on it
         self.original_text = f"{text[:500]}..." if len(text) > 500 else text
 
         if self.clean:

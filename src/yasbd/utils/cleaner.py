@@ -4,6 +4,7 @@ from collections.abc import Generator, Iterable
 
 import ftfy
 
+
 # https://regex101.com/r/SSQfUY/1
 # A number followed by a latin-1/Slovak uppercase letter
 STICKY_NUMBER_FINDER = re.compile(
@@ -45,7 +46,7 @@ HTML_TAGS_FINDER = re.compile(
 )
 
 
-# -- Ported from pysbd --
+# -- Regex ported from pysbd --
 
 # https://regex101.com/r/Nw2I67/1
 CONSECUTIVE_FORWARD_SLASH_FINDER = re.compile(r"\/{3}")
