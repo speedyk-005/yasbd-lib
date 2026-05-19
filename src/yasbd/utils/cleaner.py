@@ -4,6 +4,8 @@ from collections.abc import Generator, Iterable
 
 import ftfy
 
+from yasbd.utils.input_validator import validate_input
+
 # https://regex101.com/r/SSQfUY/1
 # A number followed by a latin-1/Slovak uppercase letter
 STICKY_NUMBER_FINDER = re.compile(
@@ -75,7 +77,8 @@ def _clean_text(text: str) -> str:
     return text
 
 
-def clean_stream(data: Iterable[str]) -> Generator[str, None, None]:
+@validate_input
+def clean_stream(data: str | Iterable[str]) -> Generator[str, None, None]:
     """Normalize and clean noisy text.
 
     Applies ``ftfy`` for mojibake repair, strips HTML tags, removes standalone

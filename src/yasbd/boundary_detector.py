@@ -2,13 +2,13 @@ import io
 from collections.abc import Generator, Iterable
 from importlib import import_module
 from itertools import chain, islice, tee
-
 from loguru import logger
-from typeguard import typechecked
+
+from yasbd.utils.input_validator import validate_input
 
 
 class BoundaryDetector:
-    @typechecked
+    @validate_input
     def __init__(
         self,
         lang: str = "en",
@@ -64,10 +64,10 @@ class BoundaryDetector:
 
         self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")()
 
-    @typechecked
+    @validate_input
     def detect(
         self,
-        text_data: Iterable[str],
+        text_data: str | Iterable[str],
         *,
         relative: bool = False,
     ) -> Generator[tuple[int, int], None, None]:
@@ -107,10 +107,10 @@ class BoundaryDetector:
             text_data, self.preserve_quote_and_paren, relative=relative
         )
 
-    @typechecked
+    @validate_input
     def segment(
         self,
-        text_data: Iterable[str],
+        text_data: str | Iterable[str],
         *,
         preserve_whitespace: bool = False,
     ) -> Generator[str, None, None]:

@@ -2,7 +2,8 @@ import re  # For simpler patterns
 from collections.abc import Generator, Iterator
 
 import regex as re2
-from typeguard import typechecked
+
+from yasbd.utils.input_validator import validate_input
 
 
 def _build_abbr_pattern(options: set[str]) -> str:
@@ -147,7 +148,7 @@ class Rules:
                 \s+(?:[^\p{{Ll}}]|(?i:{common_starters_pattern})\b)|
                 \s*\p{{Lo}}
             )|
-            
+
             # Cluster of terminators (e.g hello!!! r u ok?)
             (?<=[{terminators_pattern.replace('.', '')}]{{2,}})(?=\s)
             """,
@@ -238,7 +239,7 @@ class Rules:
             m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(line)
         )
 
-    @typechecked
+    @validate_input
     def apply(
         self,
         line_iter: Iterator[str],

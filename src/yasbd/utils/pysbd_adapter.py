@@ -1,10 +1,9 @@
 from collections.abc import Iterable
 from types import SimpleNamespace
 
-from typeguard import typechecked
-
 from yasbd import BoundaryDetector
 from yasbd.utils.cleaner import clean_stream
+from yasbd.utils.input_validator import validate_input
 
 
 class TextSpan:
@@ -40,7 +39,7 @@ class TextSpan:
 
 
 class Segmenter:
-    @typechecked
+    @validate_input
     def __init__(
         self,
         language: str = "en",
@@ -114,7 +113,7 @@ class Segmenter:
                 result.append(sent)
         return result
 
-    def _process_text(self, text: Iterable[str]) -> list[str | TextSpan]:
+    def _process_text(self, text: str | Iterable[str]) -> list[str | TextSpan]:
         """Detect sentence boundaries in text."""
         if self.char_span:
             return [
@@ -129,7 +128,7 @@ class Segmenter:
             sents = list(self._detector.segment(text, preserve_whitespace=True))
             return self._convert_leading_space_to_trails(sents)
 
-    @typechecked
+    @validate_input
     def sentences_with_char_spans(self, sentences: list[str]) -> list[TextSpan]:
         """Map sentences to their char offsets using cumulative lengths.
 
@@ -142,7 +141,7 @@ class Segmenter:
             pos += len(sent)
         return result
 
-    @typechecked
+    @validate_input
     def segment(self, text: str) -> list[str | TextSpan]:
         """Segments *text* into sentences.
 
@@ -158,6 +157,6 @@ class Segmenter:
         self.original_text = f"{text[:500]}..." if len(text) > 500 else text
 
         if self.clean:
-            text = "".join(clean_stream(text))
+            text = clean_stream(text)
 
         return self._process_text(text)
