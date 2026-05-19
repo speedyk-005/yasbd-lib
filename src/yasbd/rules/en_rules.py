@@ -44,15 +44,12 @@ class EnRules(Rules):
         # Question words
         "Who", "What", "Where", "When", "Why", "How", "Which", "Whose", "Whom",
 
-        # Conjunctions
-        "And", "But", "Or", "So", "Yet", "For", "Nor",
-
         # Adverbs
         "However", "Moreover", "Nevertheless", "Therefore", "Consequently",
-        "Meanwhile", "Also", "Besides", "Furthermore", "Otherwise", "Anyway",
+        "Meanwhile", "Besides", "Furthermore", "Otherwise",
 
         # Other common starters
-        "Now", "Do", "Did", "In", "Millions", "More",
+        "Do", "Did", "Millions",
     }
 # fmt: on
 

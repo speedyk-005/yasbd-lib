@@ -115,8 +115,9 @@ class Rules:
         Patterns that depend on abbreviation sets or terminators are built here
         rather than at class level so subclasses can override the data constants.
         """
-        title_abbrvs_pattern = _build_abbr_pattern(self.TITLE_ABBRVS)
         terminators_pattern = "".join(self.TERMINATORS)
+        title_abbrvs_pattern = _build_abbr_pattern(self.TITLE_ABBRVS)
+        common_starters_pattern = _build_abbr_pattern(self.COMMON_SENT_STARTERS)
 
         # https://regex101.com/r/qBSyU5/10
         # Handle flattened lists due to messy OCR.
@@ -136,14 +137,19 @@ class Rules:
             re.X,
         )
 
-        # https://regex101.com/r/VMzYsx/4
+        # https://regex101.com/r/VMzYsx/5
         self.naive_boundary_finder = re2.compile(
             rf"""
             # Split if left token is a unicase letter (Always)
             (?<=\p{{Lo}}[{terminators_pattern}])|
 
-            # Split after any terminators followed by Space+Upper or unicase letter
-            (?<=[{terminators_pattern}])(?=\s+[^\p{{Ll}}]|\s*\p{{Lo}})
+            # Split after any terminators followed by a common sentence starter,
+            # Space+Upper or unicase letter
+            (?<=[{terminators_pattern}])
+            (?=
+                \s+(?:[^\p{{Ll}}]|(?i:{common_starters_pattern})\b)|
+                \s*\p{{Lo}}
+            )
             """,
             re2.X,
         )
@@ -166,7 +172,7 @@ class Rules:
 
             # Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding)
             (?<=\.\p{{Lu}}\.|\b(?i:{_build_abbr_pattern(self.NAMES_WITH_EXCLAMATION)})!)
-            (?!\s+(?:{_build_abbr_pattern(self.COMMON_SENT_STARTERS)}))|
+            (?!\s+(?:{common_starters_pattern})\b)|
 
             # Collapsed middle name (e.g, Jonas E. Smith)
             (?<=\s\b(?:\p{{Lu}})\.)(?=\s)
