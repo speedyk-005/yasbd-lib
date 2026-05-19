@@ -39,6 +39,8 @@ TEST_DATA = [
     'She turned to him, "This is great."| She held the book out to show him.',
     "Can you believe how much money he has made from his Where's Wally? series of books (published in the US as Where's Waldo?)?",
     "According to his publisher, Smith bought the company in 1985 [or 1984?], but he wasn't active in its management until 1990.",
+    'Then he stop.| "wait" he said',
+    "The letter concluded with a simple warning: 'Do not follow me.'| Then she left.",
 
     # Double punctuation
     "Hello!!| Long time no see.",

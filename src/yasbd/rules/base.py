@@ -93,10 +93,10 @@ class Rules:
     # https://regex101.com/r/tI9Cmg/2
     VERTICAL_LIST_START_FINDER = re2.compile(r"(?<=^\s*(?:[\p{L}\p{N}]\.){1,3})(?=\s)")
 
-    # https://regex101.com/r/JYdWZw/2
+    # https://regex101.com/r/JYdWZw/3
     QUOTE_AND_PAREN_FINDER = re2.compile(
         r"""
-        (?:\p{Pi}|»|\s(['""])).+?(?:\p{Pf}|«|\1)|  # Quoted text
+        (?:\p{Pi}|»|(?=\s)(['"”])).+?(?:\p{Pf}|«|\1)|  # Quoted text
         \p{Ps}.+?\p{Pe}  # Parenthesized text
         """,
         re2.X,
@@ -180,11 +180,13 @@ class Rules:
             re2.X,
         )
 
-        # https://regex101.com/r/EGkRU8/5
+        # https://regex101.com/r/EGkRU8/7
         self.quote_and_paren_end_finder = re2.compile(
             rf"""
-            (?<=[{terminators_pattern}]\s*   # A terminator followed by additional space
-            ["\u201d\u00ab\p{{Pf}}\p{{Pe}}])     # Closing quotes/parens
+            (?<=
+                [{terminators_pattern}]   # A terminator
+                (?:'\s|["”]|\s*[»\p{{Pf}}\p{{Pe}}])     # Closing quotes/parens
+            )
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
                 \s*\p{{po}}|
                 {"|".join(self.QUOTATIVE_PARTICLES | self.REPORTING_WORDS)}|
