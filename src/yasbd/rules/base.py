@@ -186,7 +186,7 @@ class Rules:
             (?<=[{terminators_pattern}]\s*   # A terminator followed by additional space
             ["\u201d\u00ab\p{{Pf}}\p{{Pe}}])     # Closing quotes/parens
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
-                \s*[{terminators_pattern}]|
+                \s*\p{{po}}|
                 {"|".join(self.QUOTATIVE_PARTICLES | self.REPORTING_WORDS)}|
                 \s+[\p{{Ll}}]|$
             )

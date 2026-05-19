@@ -4,7 +4,6 @@ from collections.abc import Generator, Iterable
 
 import ftfy
 
-
 # https://regex101.com/r/SSQfUY/1
 # A number followed by a latin-1/Slovak uppercase letter
 STICKY_NUMBER_FINDER = re.compile(
