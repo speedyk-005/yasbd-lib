@@ -24,7 +24,19 @@ class EnRules(Rules):
 
     GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {"calif", "dc", "wash", "bc", "ont"}
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
-        "nos", "hway", "hwy", "ch", "para", "paras", "secs"
+        # Publishing / Documents
+        "ch", "chs", "col", "cols", "ed", "eds",
+        "fn", "fns", "l", "ll", "n", "nn",
+        "pt", "pts", "v",
+
+        # Section / Structure
+        "para", "paras",
+
+        # Legal / Numbering
+        "r", "rr", "suppl", "supl",
+
+        # Roads / Addresses
+        "hway", "hwy",
     }
 
     COMMON_ORG_NOUNS = Rules.COMMON_ORG_NOUNS | {

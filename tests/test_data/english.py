@@ -32,6 +32,8 @@ TEST_DATA = [
     "The report was published in Dec.| It was approved by Prof. Smith and Dr. Jones.",
     "The agreement was signed by A.B. Holdings Ltd. in 2024",
     "The temperature reached 37.5°C at 6 a.m. on Tue., Feb. 4.",
+    "See fig. 2 in vol. 3, ch. 4, pp. 18-22.",
+    "The proof is shown in eq. (7) and ex. IV",
 
     # Parentheses and quotes
     "He teaches science (He previously worked for 5 years as an engineer.) at the local University.",

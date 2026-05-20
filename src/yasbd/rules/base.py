@@ -43,17 +43,19 @@ class Rules:
 
     REFERENCE_ABBRVS = {
         # Publishing / Documents
-        "ac", "app", "cf", "chap", "ed", "ext", "fig", "p", "pp", "ref", "res",
-        "v", "ver", "viz", "vol", "vols",
+        "app", "apps", "cf", "ext", "fig", "figs", "p", "pp",
+        "pag", "ref", "refs", "tab", "tbl", "tbls",
+        "vol", "vols",
 
-        # Section & Paragraph
-        "art", "sec",
+        # Section / Structure
+        "ann", "art", "arts", "cap", "cl", "cls",
+        "sec", "sect", "secs", "subsec",
 
-        # Legal / Numcro
-        "no", "suppl", "supl",
+        # Legal / Numbering
+        "no", "nos", "reg", "regs",
 
-        # Scientific / Math
-        "eq", "eqn",
+        # Scientific / Math / Technical
+        "approx", "eq", "eqn", "eqs", "est", "ex", "exs",
     }
 
     MONTH_ABBRVS = {
@@ -164,7 +166,7 @@ class Rules:
             re2.X,
         )
 
-        # https://regex101.com/r/svyCoU/10
+        # https://regex101.com/r/svyCoU/14
         self.mid_sentence_finder = re2.compile(
             rf"""
             # Title abbrv or initialisms (e.g., Dr. Paul)
@@ -177,8 +179,12 @@ class Rules:
             # Abbrv that NEVER ends a sentence
             (?<=\b(?i:{_build_abbr_pattern(self.MID_SENTENCE_ABBRVS)})\.)|
 
-            # References abbrv followed by a number (e.g., to p. 55)
-            (?<=\b(?i:{_build_abbr_pattern(self.REFERENCE_ABBRVS | self.MONTH_ABBRVS)})\.)
+            # References abbrv followed by a number, a letter or opened paren (e.g., to p. 55, app. A)
+            (?<=\b(?i:{_build_abbr_pattern(self.REFERENCE_ABBRVS)})\.)
+            (?=\s+(?:\(|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))|
+
+            # Month followed by a number
+            (?<=\b(?i:{_build_abbr_pattern(self.MONTH_ABBRVS)})\.)
             (?=\s+\p{{N}})|
 
             # Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding)
