@@ -145,7 +145,7 @@ class Rules:
         self.naive_boundary_finder = re2.compile(
             rf"""
             # Split if left token is a unicase letter (Always)
-            (?<=\p{{Lo}}[{terminators_pattern}])|
+            (?<=\p{{Lo}}\s*[{terminators_pattern}])|
 
             # Split after any terminators followed by a common sentence starter,
             # Space+Upper or unicase letter
