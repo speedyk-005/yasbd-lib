@@ -91,7 +91,7 @@ class Rules:
         "Jeb", "Éxito", "Hey Man", "Basta", "Elliot S"
     }
 
-    COMMON_ORG_NOUNS = {"Army", "Authority", "Commission", "Trust"}
+    COMMON_ORG_NOUNS = {"Army", "Authority", "Trust", "Holding"}
     COMMON_SENT_STARTERS = {"The"}
     QUOTATIVE_PARTICLES = {"と", "って", "라고"}
     REPORTING_WORDS = {"说", "道", "问", "他", "她"}
@@ -120,6 +120,7 @@ class Rules:
         """
         terminators_pattern = "".join(self.TERMINATORS)
         title_abbrvs_pattern = _build_abbr_pattern(self.TITLE_ABBRVS)
+        geopolitical_abbrvs_pattern = _build_abbr_pattern(self.GEOPOLITICAL_ABBRVS)
         common_starters_pattern = _build_abbr_pattern(self.COMMON_SENT_STARTERS)
 
         # https://regex101.com/r/qBSyU5/10
@@ -160,14 +161,14 @@ class Rules:
             re2.X,
         )
 
-        # https://regex101.com/r/svyCoU/7
+        # https://regex101.com/r/svyCoU/10
         self.mid_sentence_finder = re2.compile(
             rf"""
             # Title abbrv or initialisms (e.g., Dr. Paul)
             (?<=\b(?i:{title_abbrvs_pattern})\.)|
 
             # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
-            (?<=\b(?i:{_build_abbr_pattern(self.GEOPOLITICAL_ABBRVS)})\.)
+            (?<=\b(?i:{geopolitical_abbrvs_pattern})\.)
             (?=\s+(?:{_build_abbr_pattern(self.COMMON_ORG_NOUNS)}))|
 
             # Abbrv that NEVER ends a sentence
@@ -178,7 +179,11 @@ class Rules:
             (?=\s+\p{{N}})|
 
             # Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding)
-            (?<=\.\p{{Lu}}\.|\b(?i:{_build_abbr_pattern(self.NAMES_WITH_EXCLAMATION)})!)
+            # excluding geopolitical ones
+            (?<=
+                (?:\p{{Lu}}\.){{2,}}(?<!(?i:{geopolitical_abbrvs_pattern}))|
+                \b(?i:{_build_abbr_pattern(self.NAMES_WITH_EXCLAMATION)})!
+            )
             (?!\s+(?:{common_starters_pattern})\b)|
 
             # Collapsed middle name (e.g, Jonas E. Smith)

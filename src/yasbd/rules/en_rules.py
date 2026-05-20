@@ -27,7 +27,7 @@ class EnRules(Rules):
         "nos", "hway", "hwy", "ch", "para", "paras", "secs"
     }
 
-    COMMON_ORG_NOUNS = {
+    COMMON_ORG_NOUNS = Rules.COMMON_ORG_NOUNS | {
         # Government / Political
         "Government", "Parliament", "Senate", "Congress", "Assembly",
         "Ministry", "Department", "Bureau", "Agency", "Commission", "Board",
