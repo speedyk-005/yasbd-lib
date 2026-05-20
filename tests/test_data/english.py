@@ -66,4 +66,9 @@ TEST_DATA = [
     "We spent the afternoon playing Adopt Me! on the computer while eating Chips Ahoy! cookies.",
     "My dad logged into Yahoo! finance to check on Yum! Brands stock performance before dinner.",
     "Yahoo!| The server is down.",
+
+    # Mixed language
+    "我喜欢AI。|It is useful",
+    "The meeting is at 2 p.m.| 请别迟到。",
+    "那个会议在下午两点。|Please don't be late!",
 ]

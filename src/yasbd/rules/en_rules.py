@@ -63,6 +63,9 @@ class EnRules(Rules):
 
         # Other common starters
         "Do", "Did", "Millions",
+
+        # Slangs
+        # "Wanna", "Gonna", "Trynna",
     }
 # fmt: on
 

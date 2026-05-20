@@ -155,6 +155,9 @@ class Rules:
                 \s*\p{{Lo}}
             )|
 
+            # Split at transition between Latin letters separate by alien 
+            (?<=[\p{{LU}}\p{{Ll}}][​。！？।])(?=[\p{{Lu}}])|
+
             # Cluster of terminators (e.g hello!!! r u ok?)
             (?<=[{terminators_pattern.replace('.', '')}]{{2,}})(?=\s)
             """,
