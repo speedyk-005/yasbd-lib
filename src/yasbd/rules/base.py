@@ -43,7 +43,7 @@ class Rules:
 
     REFERENCE_ABBRVS = {
         # Publishing / Documents
-        "app", "apps", "cf", "ext", "fig", "figs", "p", "pp",
+        "et al", "app", "apps", "cf", "ext", "fig", "figs", "p", "pp",
         "pag", "ref", "refs", "tab", "tbl", "tbls",
         "vol", "vols",
 
