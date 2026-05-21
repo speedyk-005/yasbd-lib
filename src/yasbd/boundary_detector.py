@@ -2,6 +2,7 @@ import io
 from collections.abc import Generator, Iterable
 from importlib import import_module
 from itertools import chain, islice, tee
+
 from loguru import logger
 
 from yasbd.utils.input_validator import validate_input

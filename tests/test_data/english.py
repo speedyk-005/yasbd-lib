@@ -34,6 +34,8 @@ TEST_DATA = [
     "The temperature reached 37.5°C at 6 a.m. on Tue., Feb. 4.",
     "See fig. 2 in vol. 3, ch. 4, pp. 18-22.",
     "The proof is shown in eq. (7) and ex. IV",
+    "Mr. Smith lives on Hwy. 7 near Ave. Central.",
+    "The delivery van broke down right in front of Sunset Blvd.| The driver called a tow truck.",
 
     # Parentheses and quotes
     "He teaches science (He previously worked for 5 years as an engineer.) at the local University.",

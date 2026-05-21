@@ -1,5 +1,6 @@
 from yasbd.rules.base import Rules
 
+
 # Don't remove the fmt guards as they keep compact set formatting
 # fmt: off
 class LangRules(Rules):
@@ -24,6 +25,9 @@ class LangRules(Rules):
 
     # Bibliographic / citation abbreviations (cf., fig., p., etc.)
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {}
+
+    # Street/road suffixes (Ave., Blvd., Rd., etc.)
+    STREET_ABBRVS = Rules.STREET_ABBRVS | {}
 
     # Abbreviations that safely appear mid-sentence (vs., e.g., i.e., etc.)
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {}

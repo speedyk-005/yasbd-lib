@@ -77,6 +77,10 @@ class Rules:
         "approx", "est", "intl", "misc",
     }
 
+    STREET_ABBRVS = {
+        "ave", "blvd", "blv", "ct", "ln", "pl", "rd", "sq", "st", "wy", "way"
+    }
+
     NAMES_WITH_EXCLAMATION = {
         # Tech, Corporate Entities, & Major Consumer Brands
         "Yahoo", "Yum", "Chips Ahoy", "Kahoot", "JOOP", "Walla",
@@ -166,7 +170,7 @@ class Rules:
             re2.X,
         )
 
-        # https://regex101.com/r/svyCoU/14
+        # https://regex101.com/r/svyCoU/15
         self.mid_sentence_finder = re2.compile(
             rf"""
             # Title abbrv or initialisms (e.g., Dr. Paul)
@@ -187,10 +191,11 @@ class Rules:
             (?<=\b(?i:{_build_abbr_pattern(self.MONTH_ABBRVS)})\.)
             (?=\s+\p{{N}})|
 
-            # Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding)
-            # excluding geopolitical ones
+            # Streets/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
+            # excluding geopolitical ones not followed by a common starters
             (?<=
                 (?:\p{{Lu}}\.){{2,}}(?<!(?i:{geopolitical_abbrvs_pattern}))|
+                \b(?i:{_build_abbr_pattern(self.STREET_ABBRVS)})\.|
                 \b(?i:{_build_abbr_pattern(self.NAMES_WITH_EXCLAMATION)})!
             )
             (?!\s+(?:{common_starters_pattern})\b)|

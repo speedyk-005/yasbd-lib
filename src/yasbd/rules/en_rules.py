@@ -1,9 +1,9 @@
 from yasbd.rules.base import Rules
 
+
 # fmt: off
 class EnRules(Rules):
     ISO_CODE = "en"
-    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {"ing", "wy", "appt"}
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Social / Honorific
         "messrs", "mlle", "mme", "mmes", "mssrs",
@@ -22,6 +22,7 @@ class EnRules(Rules):
     }
 
     GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {"calif", "dc", "wash", "bc", "ont"}
+    STREET_ABBRVS = Rules.STREET_ABBRVS | {"expy", "hway", "hwy", "pkwy", "rt"}
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         # Publishing / Documents
         "ch", "chs", "col", "cols", "ed", "eds",
@@ -34,8 +35,8 @@ class EnRules(Rules):
         # Legal / Numbering
         "r", "rr", "suppl", "supl",
 
-        # Roads / Addresses
-        "hway", "hwy",
+        # Addresses
+        "appt",
     }
 
     COMMON_ORG_NOUNS = Rules.COMMON_ORG_NOUNS | {
