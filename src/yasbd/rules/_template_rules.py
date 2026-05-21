@@ -15,39 +15,39 @@ class LangRules(Rules):
     ISO_CODE = "xx"
 
     # Sentence-ending punctuation specific to your language
-    TERMINATORS = Rules.TERMINATORS | {}
+    TERMINATORS = Rules.TERMINATORS | {...}
 
     # Honorifics & professional titles (Mr., Dr., Prof., etc.)
-    TITLE_ABBRVS = Rules.TITLE_ABBRVS | {}
+    TITLE_ABBRVS = Rules.TITLE_ABBRVS | {...}
 
     # Country/region abbreviations (U.S., U.K., E.U., etc.)
-    GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {}
+    GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {...}
 
     # Bibliographic / citation abbreviations (cf., fig., p., etc.)
-    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {}
+    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {...}
 
     # Street/road suffixes (Ave., Blvd., Rd., etc.)
-    STREET_ABBRVS = Rules.STREET_ABBRVS | {}
+    STREET_ABBRVS = Rules.STREET_ABBRVS | {...}
 
     # Abbreviations that safely appear mid-sentence (vs., e.g., i.e., etc.)
-    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {}
+    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {...}
 
     # Brands / titles containing "!" that should not trigger a split
-    NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {}
+    NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {...}
 
     # Months abbreviations (Jan., Feb., etc.)
-    MONTH_ABBRVS = {}
+    MONTH_ABBRVS = {...}
 
     # Nouns that appear inside organisational names
-    COMMON_ORG_NOUNS = {}
+    COMMON_ORG_NOUNS = {...}
 
     # Words that commonly start sentences (The, A, This, etc.)
-    COMMON_SENT_STARTERS = {}
+    COMMON_SENT_STARTERS = {...}
 
     # Quotative particles (Japanese と, Korean 라고, etc.)
-    QUOTATIVE_PARTICLES = {}
+    QUOTATIVE_PARTICLES = {...}
 
     # Reporting verbs for dialogue (Chinese 说/道/问, etc.)
-    REPORTING_WORDS = {}
+    REPORTING_WORDS = {...}
 
 # fmt: on
