@@ -1,11 +1,13 @@
 import io
 import random
 import string
+import time
 
 import pytest
 
 from tests import ALL_TEST_DATA
 from yasbd import BoundaryDetector
+from yasbd.rules.en_rules import EnRules
 
 
 @pytest.fixture(scope="module")
@@ -51,7 +53,7 @@ def test_segment_multiple_langs(subtests, lang, test_data):
     for marked_text in test_data:
         # Extract the expected sentences by splitting on the marker
         expected = [sent.strip() for sent in marked_text.split("|")]
-    
+
         # Reconstruct the clean original input text by removing the marker
         input_text = marked_text.replace("|", "")
 
@@ -91,3 +93,21 @@ def test_include_char_span(en_detector):
         assert last_end <= start
         assert start <= end
         last_end = end
+
+
+def test_regex_caching():
+    """test that compiled regex patterns are cached per class."""
+    # Wipe cache to start fresh
+    EnRules._REGEX_CACHED = False
+
+    t0 = time.perf_counter()
+    _ = EnRules()
+    cold = time.perf_counter() - t0
+
+    t0 = time.perf_counter()
+    for _ in range(100):
+        _ = EnRules()
+    cached = time.perf_counter() - t0
+
+    assert cached / 100 <= 0.10 * cold, \
+        f"cached instantiation too slow: {cached/100:.6f}s vs {cold:.6f}s (cold)"
