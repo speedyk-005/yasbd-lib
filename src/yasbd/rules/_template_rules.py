@@ -1,6 +1,5 @@
 from yasbd.rules.base import Rules
 
-
 # Don't remove the fmt guards as they keep compact set formatting
 # fmt: off
 class LangRules(Rules):

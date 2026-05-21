@@ -1,6 +1,5 @@
 from yasbd.rules.base import Rules
 
-
 # fmt: off
 class EnRules(Rules):
     ISO_CODE = "en"

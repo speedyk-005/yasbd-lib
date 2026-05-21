@@ -4,11 +4,12 @@ from functools import wraps
 
 from pydantic import ConfigDict, ValidationError, validate_call
 
-IterableOfStr = str | Iterable[str],
+IterableOfStr = (str | Iterable[str],)
 
 
 class InvalidInputError(Exception):
     """Raised when invalid input(s) are encountered."""
+
     pass
 
 
@@ -47,7 +48,9 @@ def _pretty_errors(error: ValidationError) -> str:
         if not isinstance(input_value, str):
             input_value = reprlib.repr(input_value)
         else:
-            input_value = input_value if len(input_value) < 500 else input_value[:500] + "..."
+            input_value = (
+                input_value if len(input_value) < 500 else input_value[:500] + "..."
+            )
 
         lines.append(
             (
