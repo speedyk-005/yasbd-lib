@@ -43,6 +43,13 @@ class ParagraphStreamer:
     def __iter__(self) -> Iterator[str]:
         return self
 
+    def _flush_eof(self) -> str:
+        if self._buffer:
+            paragraph = "".join(self._buffer)
+            self._buffer = []
+            return paragraph
+        raise StopIteration
+
     def __next__(self) -> str:
         """Advance the stream and return the next paragraph.
 
@@ -58,12 +65,7 @@ class ParagraphStreamer:
             line = next(self._line_iterator, None)
 
             if line is None:
-                # The input stream has ended; flush any outstanding buffer contents
-                if self._buffer:
-                    paragraph = "".join(self._buffer)
-                    self._buffer = []
-                    return paragraph
-                raise StopIteration
+                return self._flush_eof()
 
             stripped_line = line.strip()
 
@@ -76,11 +78,11 @@ class ParagraphStreamer:
             if stripped_line and self._is_flush_pending:
                 if not self._buffer and self.skip_empty_lines:
                     self._is_flush_pending = False
-                else:
-                    paragraph = "".join(self._buffer)
-                    self._buffer = [line]
-                    self._is_flush_pending = False
-                    return paragraph
+                    continue
+                paragraph = "".join(self._buffer)
+                self._buffer = [line]
+                self._is_flush_pending = False
+                return paragraph
 
             # When skip_empty_lines is active, skip blank separator lines
             # entirely instead of including them in the buffer.
