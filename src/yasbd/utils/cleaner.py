@@ -115,5 +115,3 @@ def clean_stream(source: str | Iterable[str]) -> Generator[str, None, None]:
                 stripped_para = MULTIPLE_SPACES_FINDER.sub(" ", stripped_para)
 
             yield stripped_para
-
-

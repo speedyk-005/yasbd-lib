@@ -135,7 +135,8 @@ class BoundaryDetector:
 
         para_iter = (
             ParagraphStreamer(source, skip_empty_lines=not preserve_whitespace)
-            if isinstance(source, str) else source
+            if isinstance(source, str)
+            else source
         )
 
         input_for_detection, input_for_slicing = tee(para_iter)
