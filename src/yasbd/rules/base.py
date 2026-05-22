@@ -117,6 +117,9 @@ class Rules:
     # https://regex101.com/r/0P9f2V/1
     TOC_LEADER_FINDER = re.compile(r"[^\W_][\s\.]{4,}\d")
 
+    # https://regex101.com/r/ZOZlLb/2/substitution
+    NEWLINE_INSIDE_SENTENCE_FINDER = re2.compile(r"(?<=[,:;)\w\s])\n(?=([a-z(]))")
+
     _REGEX_CACHED = False
     # fmt: on
     def __init__(self):
@@ -306,6 +309,7 @@ class Rules:
                     offset += n
                 continue
 
+            para = self.NEWLINE_INSIDE_SENTENCE_FINDER.sub(" ", para)
             main_boundaries = {
                 m.end() for m in self.NAIVE_BOUNDARY_FINDER.finditer(para)
             }
