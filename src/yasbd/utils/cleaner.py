@@ -1,145 +1,119 @@
-import io
 import re
 from collections.abc import Generator, Iterable
 
 import ftfy
+import regex as re2  # For complex patterns
+from selectolax.lexbor import LexborHTMLParser
 
 from yasbd.utils.input_validator import validate_input
+from yasbd.utils.paragraph_streamer import ParagraphStreamer
 
-# https://regex101.com/r/SSQfUY/1
-# A number followed by a latin-1/Slovak uppercase letter
-STICKY_NUMBER_FINDER = re.compile(
-    r"""
-    (?<=\s\d\.)(?=[A-Z\u00C0-\u00D6\u00D8-\u00DE\u0100-\u017F])
-    """,
-    re.X,
-)
+# https://regex101.com/r/PEPPA7/1/substitution
+# HYPHENATED_WORD_FINDER = re.compile(r"([a-z])\u00AD\n([a-z])")
 
-# https://regex101.com/r/POTL2H/3
-HEADING_OR_LIST_FINDER = re.compile(r"^\s*[^\W_][.\-)*]\s*$")
+# https://regex101.com/r/POTL2H/5/substitution
+HEADING_OR_LIST_FINDER = re2.compile(r"(?<=^\s?(?:[-•*+]|[\w\d][.)]))\s*\n", re2.M)
 
-# https://regex101.com/r/J5Cpyk/5
-STANDALONE_CHARS_FINDER = re.compile(r"^\s*(?:[^\s]|\d{1,2})\s*$")
+# https://regex101.com/r/J5Cpyk/8
+ARTIFACT_FINDER = re.compile(r"^\s*[-•*+=#\/\\_⯀∎]\s*$", re.M)
 
 # https://regex101.com/r/pKi6y3/1
 MULTIPLE_SPACES_FINDER = re.compile(r"\s{2,}")
 
-# https://regex101.com/r/DgnxSq/1
+# https://regex101.com/r/DgnxSq/2
 PAGE_FINDER = re.compile(
     r"""
-    Page\ \d+\ of\ \d+.*|  # standalone page number
-    -\s*\d+\s*-|  # Page numbers with dashes
-    \s*\|\s*Page\ \d+\s*\|\s*  # Boxed page numbers
+    ^\s*(?:
+        Page\ \d+\ of\ \d+|  # Match "Page X of Y"
+        -\s*\d+\s*-|          # Match "- X -"
+        \|\s*Page\ \d+\s*\|   # Match "| Page X |"
+    )\s*$
     """,
     re.X | re.M,
-)
-
-# https://regex101.com/r/Gl4nLk/5
-HTML_TAGS_FINDER = re.compile(
-    r"""
-    # Branch 1: Strip the tag AND its content
-    <(script|iframe|object|embed|style)[^>]*?>.*?</?\1\s*>|
-
-    # Branch 2: Just strip the brackets
-    </?(?:img|font|header|span|xml|del|ins|[ovbtwxp])[^>]*?>
-    """,
-    re.X | re.I,
 )
 
 
 # -- Regex ported from pysbd --
 
+# https://regex101.com/r/0dTHBO/1/substitution
+NEWLINE_IN_MIDDLE_OF_WORD_FINDER = re2.compile(r"(?<=[a-zA-Z]{1,2})\n")
+
+# https://regex101.com/r/VMfP98/2/substitution
+NEWLINE_FOLLOWED_BY_PERIOD_FINDER = re.compile(r"\n(?=\.(\s|\n))")
+
+# https://regex101.com/r/xN77B6/2/substitution
+NO_SPACE_BETWEEN_SENTENCES_FINDER = re.compile(r"(?<=\w\.)(?=[A-Z][a-z])")
+
 # https://regex101.com/r/Nw2I67/1
 CONSECUTIVE_FORWARD_SLASH_FINDER = re.compile(r"\/{3}")
 
-# https://regex101.com/r/Zo8RlK/2
-INLINE_FORMATTING_FINDER = re.compile(r"{b\^>[^<]*<b\^}")
 
-# If a line ends with one of these, the next line belongs to the same sentence.
-# OCR often breaks lines mid-sentence, so this merges them back before
-# the SBD engine sees the text.
-CONTINUATION_CHARS = {"，", "：", "；", ",", "-", "*", ")", ":", ";"}
-
-
-def _clean_text(text: str) -> str:
+def _sanitize_html(text: str) -> str:
+    """Sanitizes dangerous HTML markup and layout tags from a text."""
     if "<" in text:
-        text = HTML_TAGS_FINDER.sub("", text)
-    if "{" in text:
-        text = INLINE_FORMATTING_FINDER.sub("", text)
-    if "///" in text:
-        text = CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", text)
-
-    text = STANDALONE_CHARS_FINDER.sub("", text)
-    text = PAGE_FINDER.sub("", text)
-    text = STICKY_NUMBER_FINDER.sub("\n", text)
-    if "  " in text:
-        text = MULTIPLE_SPACES_FINDER.sub(" ", text)
+        tree = LexborHTMLParser(text)
+        tree.strip_tags(["script", "style", "iframe", "object", "embed"])
+        return tree.text(separator=" ")
     return text
 
 
 @validate_input
-def clean_stream(data: str | Iterable[str]) -> Generator[str, None, None]:
+def clean_stream(source: str | Iterable[str]) -> Generator[str, None, None]:
     """Normalize and clean noisy text.
 
     Applies ``ftfy`` for mojibake repair, strips HTML tags, removes standalone
-    characters, page-number artifacts, and re-joins list markers split across lines.
-
-    NOTE: Plain strings are automatically wrapped into ``StringIO`` for streaming.
+    characters, page-number artifacts, and re-joins list markers split across
+    lines. Non-string iterables are treated as pre-paragraphed input.
 
     Args:
-        data: Iterable of raw text lines (or a plain string).
+        source: Plain string or iterable of paragraphs. Strings are split into
+            paragraphs via ``ParagraphStreamer``.
 
     Yields:
-        Cleaned text lines.
-    """
-    if isinstance(data, str):
-        data = io.StringIO(data)
+        Cleaned text paragraphs.
 
-    sent_buff = []  # To catch fragmented sentence
-    for line in data:
-        stripped_line = line.strip()
-        if stripped_line:
-            stripped_line = ftfy.fix_text(stripped_line)
-            stripped_line = _clean_text(stripped_line)
-            stripped_line = stripped_line.replace(
+    Examples:
+        >>> from yasbd.utils.cleaner import clean_stream
+        >>> list(clean_stream("Hello <b>world</b>. How are you?"))
+        ['Hello world . How are you?']
+        >>> list(clean_stream(["Page 12 of 45", "line one\\n. text two"]))
+        ['', 'line one. text two']
+        >>> list(clean_stream("<script>alert('xss')</script>clean text"))
+        ['clean text']
+        >>> list(clean_stream("Text with ///slashes"))
+        ['Text with slashes']
+        >>> list(clean_stream("Plain text with no HTML"))
+        ['Plain text with no HTML']
+        >>> list(clean_stream(""))
+        []
+    """
+    if isinstance(source, str):
+        source = ParagraphStreamer(source, skip_empty_lines=True)
+
+    for para in source:
+        stripped_para = para.strip()
+        if stripped_para:
+            stripped_para = ftfy.fix_text(stripped_para)
+            stripped_para = stripped_para.replace(
                 "''", '"'
             )  # "Pseudo-Double" quote fix
+            stripped_para = _sanitize_html(stripped_para)
 
-            sent_buff.append(stripped_line)
+            if "///" in stripped_para:
+                stripped_para = CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", stripped_para)
 
-            # Rejoin separated lists (e.g, 2\) from its content)
-            if len(sent_buff) and HEADING_OR_LIST_FINDER.match(sent_buff[-1]):
-                last_token = sent_buff.pop()
-                yield from " ".join(sent_buff).splitlines()
-                sent_buff = [last_token]
+            if "\n" in stripped_para:
+                stripped_para = NEWLINE_IN_MIDDLE_OF_WORD_FINDER.sub("", stripped_para)
+                stripped_para = NEWLINE_FOLLOWED_BY_PERIOD_FINDER.sub("", stripped_para)
 
-            if (
-                sent_buff
-                and sent_buff[-1]
-                and not (
-                    sent_buff[-1][-1].isalpha()
-                    or sent_buff[-1][-1] in CONTINUATION_CHARS
-                )
-            ):
-                yield from " ".join(sent_buff).splitlines()
-                sent_buff = []
+            stripped_para = HEADING_OR_LIST_FINDER.sub(" ", stripped_para)
+            stripped_para = NO_SPACE_BETWEEN_SENTENCES_FINDER.sub(" ", stripped_para)
+            stripped_para = ARTIFACT_FINDER.sub("", stripped_para)
+            stripped_para = PAGE_FINDER.sub("", stripped_para)
 
-    if sent_buff:
-        yield from " ".join(sent_buff).splitlines()
+            if "  " in stripped_para:
+                stripped_para = MULTIPLE_SPACES_FINDER.sub(" ", stripped_para)
+
+            yield stripped_para
 
 
-if __name__ == "__main__":  # pragma: no cover
-    texts = [
-        "Hello <b>world</b>. How are you?",
-        "Text with &lt;script&gt;evil&lt;/script&gt;",
-        "line one\n. text two",
-        "has {b^>inline<b^} formatting",
-        "three///slashes",
-        "1. ",
-        "Page 12 of 45",
-        '<font color="red">Red text</font> and <span>span</span>',
-        "<script>alert('xss')</script>clean text",
-    ]
-
-    for line in clean_stream(texts):
-        print(repr(line))
