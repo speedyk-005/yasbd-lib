@@ -237,32 +237,32 @@ class Rules:
     def _remove_quote_and_paren_spans(
         self,
         main_boundaries: set[int],
-        line: str,
+        paragraph: str,
         preserve_quote_and_paren: bool,
     ) -> None:
         """Remove boundaries inside quoted/parenthesised spans."""
         if preserve_quote_and_paren:
             protected_spans = set()
-            for m in self.QUOTE_AND_PAREN_FINDER.finditer(line):
+            for m in self.QUOTE_AND_PAREN_FINDER.finditer(paragraph):
                 inner_range = set(range(*m.span()))
                 protected_spans.update(inner_range)
             main_boundaries.difference_update(protected_spans)
 
         main_boundaries.update(
-            m.end() for m in self.QUOTE_AND_PAREN_END_FINDER.finditer(line)
+            m.end() for m in self.QUOTE_AND_PAREN_END_FINDER.finditer(paragraph)
         )
 
     def _remove_toc_spans(
-        self, main_boundaries: set[int], line: str
+        self, main_boundaries: set[int], paragraph: str
     ) -> None:
         """Remove boundaries inside TOC leader runs."""
-        if "..." in line:
-            for m in self.TOC_LEADER_FINDER.finditer(line):
+        if "..." in paragraph:
+            for m in self.TOC_LEADER_FINDER.finditer(paragraph):
                 main_boundaries.difference_update(range(*m.span()))
 
-    def _adjust_list_boundaries(self, main_boundaries: set[int], line: str) -> None:
+    def _adjust_list_boundaries(self, main_boundaries: set[int], paragraph: str) -> None:
         """Remove and re-align boundaries around list markers."""
-        horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(line))
+        horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(paragraph))
         if len(horiz_matches) >= 2:
             main_boundaries.difference_update(m.end() for m in horiz_matches)
             # Shift boundaries the pointer back (1.\)| => |1.\), a. | => |a. ) to correctly
@@ -270,17 +270,17 @@ class Rules:
             main_boundaries.update(m.start() + 1 for m in horiz_matches if m.start())
 
         main_boundaries.difference_update(
-            m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(line)
+            m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(paragraph)
         )
 
     @validate_input
     def apply(
         self,
-        line_iter: Iterator[str],
+        paragraph: Iterator[str],
         preserve_quote_and_paren: bool,
         relative: bool = False,
     ) -> Generator[tuple[int, int], None, None]:
-        """Detect sentence boundaries for each line.
+        """Detect sentence boundaries for each paragraph.
 
         Two-pass algorithm:
         1. Collect boundary candidates from punctuation positions.
@@ -288,48 +288,47 @@ class Rules:
            quote/paren spans, list markers).
 
         Args:
-            line_iter: Source of text lines (string stream or iterator).
+            paragraph: An iterator of paragraphs.
             preserve_quote_and_paren: If ``True``, suppress boundaries
                inside quote and parenthesis spans.
             relative: If ``False`` (default), yield offsets relative to
-                the full text. If ``True``, offsets are per-line.
+                the full text. If ``True``, offsets are per-paragraph.
 
         Yields:
             ``(start_offset, end_offset)`` per sentence.
         """
         offset = 0
-        for line in line_iter:
-            if not line.strip():
-                n = len(line)
+        for para in paragraph:
+            if not para.strip():
+                n = len(para)
                 yield (offset, offset + n) if not relative else (0, n)
                 if not relative:
                     offset += n
                 continue
 
-            main_boundaries = set()
-            main_boundaries.update(
-                m.end() for m in self.NAIVE_BOUNDARY_FINDER.finditer(line)
-            )
+            main_boundaries = {
+                m.end() for m in self.NAIVE_BOUNDARY_FINDER.finditer(para)
+            }
 
             # -- Remove false alarms --
             main_boundaries.difference_update(
-                m.end() for m in self.MID_SENTENCE_FINDER.finditer(line)
+                m.end() for m in self.MID_SENTENCE_FINDER.finditer(para)
             )
             self._remove_quote_and_paren_spans(
-                main_boundaries, line, preserve_quote_and_paren
+                main_boundaries, para, preserve_quote_and_paren
             )
-            self._remove_toc_spans(main_boundaries, line)
-            self._adjust_list_boundaries(main_boundaries, line)
+            self._remove_toc_spans(main_boundaries, para)
+            self._adjust_list_boundaries(main_boundaries, para)
 
             # Remove contiguous term except last one (e.g., Hello! !!   !! )
             main_boundaries.difference_update(
                 *(
                     range(m.start(), m.end() - 1)
-                    for m in self.CONTIGUOUS_TERMINATORS_FINDER.finditer(line)
+                    for m in self.CONTIGUOUS_TERMINATORS_FINDER.finditer(para)
                 )
             )
 
-            main_boundaries.update({0, len(line)})
+            main_boundaries.update({0, len(para)})
             main_boundaries_lst = sorted(main_boundaries)
             for i in range(len(main_boundaries) - 1):
                 start = main_boundaries_lst[i]
@@ -337,4 +336,4 @@ class Rules:
                 yield (offset + start, offset + end) if not relative else (start, end)
 
             if not relative:
-                offset += len(line)
+                offset += len(para)
