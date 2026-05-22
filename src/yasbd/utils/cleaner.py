@@ -38,8 +38,8 @@ PAGE_FINDER = re.compile(
 # https://regex101.com/r/0dTHBO/1/substitution
 NEWLINE_IN_MIDDLE_OF_WORD_FINDER = re2.compile(r"(?<=[a-zA-Z]{1,2})\n")
 
-# https://regex101.com/r/VMfP98/2/substitution
-NEWLINE_FOLLOWED_BY_PERIOD_FINDER = re.compile(r"\n(?=\.(\s|\n))")
+# https://regex101.com/r/VMfP98/3/substitution
+NEWLINE_FOLLOWED_BY_PERIOD_FINDER = re.compile(r"\n(?=\.(?=\s))")
 
 # https://regex101.com/r/xN77B6/2/substitution
 NO_SPACE_BETWEEN_SENTENCES_FINDER = re.compile(r"(?<=\w\.)(?=[A-Z][a-z])")
