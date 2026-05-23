@@ -4,7 +4,6 @@ from io import TextIOBase
 
 import ftfy
 import regex as re2  # For complex patterns
-from selectolax.lexbor import LexborHTMLParser
 
 from yasbd.utils.input_validator import validate_input
 from yasbd.utils.paragraph_streamer import ParagraphStreamer
@@ -33,6 +32,17 @@ PAGE_FINDER = re.compile(
     re.X | re.M,
 )
 
+# https://regexr.com/8n5a8
+HTML_TAGS_FINDER = re.compile(
+    r"""
+    # Branch 1: Strip the tag AND its content
+    <(script|img|iframe|object|embed|style|code)[^>]*?>.*?</\1>|
+
+    # Branch 2: Just strip the brackets except quick formatting
+    </?\b[^libu][^>]*?>
+    """,
+    re.X | re.I | re.S,
+)
 
 # -- Regex ported from pysbd --
 
@@ -49,15 +59,6 @@ NO_SPACE_BETWEEN_SENTENCES_FINDER = re.compile(r"(?<=\w\.)(?=[A-Z][a-z])")
 CONSECUTIVE_FORWARD_SLASH_FINDER = re.compile(r"\/{3}")
 
 
-def _sanitize_html(text: str) -> str:
-    """Sanitizes dangerous HTML markup and layout tags from a text."""
-    if "<" in text:
-        tree = LexborHTMLParser(text)
-        tree.strip_tags(["script", "style", "iframe", "object", "embed"])
-        return tree.text(separator=" ")
-    return text
-
-
 class StreamCleaner:
     """Normalize and clean noisy text by applying ``ftfy``, HTML sanitization,
     and various regex cleanup rules across paragraphs.
@@ -70,13 +71,16 @@ class StreamCleaner:
     Examples:
         >>> cleaner = StreamCleaner("Hello <b>world</b>. How are you?")
         >>> list(cleaner)
-        ['Hello world . How are you?']
+        ['Hello <b>world</b>. How are you?']
         >>> cleaner = StreamCleaner("<script>alert('xss')</script>clean text")
         >>> list(cleaner)
         ['clean text']
         >>> cleaner = StreamCleaner("Text with ///slashes")
         >>> list(cleaner)
         ['Text with slashes']
+        >>> cleaner = StreamCleaner("W\\nO\\nR\\nD")
+        >>> list(cleaner)
+        ['WORD']
         >>> cleaner = StreamCleaner("Plain text with no HTML")
         >>> list(cleaner)
         ['Plain text with no HTML']
@@ -102,14 +106,14 @@ class StreamCleaner:
             stripped = ftfy.fix_text(stripped)
             stripped = stripped.replace("''", '"')
 
-            stripped = _sanitize_html(stripped)
+            if "<" in stripped:
+                stripped = HTML_TAGS_FINDER.sub("", stripped)
 
             if "///" in stripped:
                 stripped = CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", stripped)
 
-            if "\n" in stripped:
-                stripped = NEWLINE_IN_MIDDLE_OF_WORD_FINDER.sub("", stripped)
-                stripped = NEWLINE_FOLLOWED_BY_PERIOD_FINDER.sub("", stripped)
+            stripped = NEWLINE_IN_MIDDLE_OF_WORD_FINDER.sub("", stripped)
+            stripped = NEWLINE_FOLLOWED_BY_PERIOD_FINDER.sub("", stripped)
 
             stripped = HEADING_OR_LIST_FINDER.sub(" ", stripped)
             stripped = NO_SPACE_BETWEEN_SENTENCES_FINDER.sub(" ", stripped)
