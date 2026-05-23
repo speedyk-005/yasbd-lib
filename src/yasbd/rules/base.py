@@ -159,16 +159,17 @@ class Rules:
             re.X,
         )
 
-        # https://regex101.com/r/VMzYsx/5
+        # https://regex101.com/r/VMzYsx/8
         cls.NAIVE_BOUNDARY_FINDER = re2.compile(
             rf"""
             # Split if left token is a unicase letter (Always)
             (?<=\p{{Lo}}\s*[{terminators_pattern}])|
 
-            # Split after any terminators followed by a common sentence starter,
-            # Space+Upper or unicase letter
+            # Split after any terminators followed by a a newline,
+            # common sentence starter, Space+Upper or unicase letter
             (?<=[{terminators_pattern}])
             (?=
+                \s*\n|
                 \s+(?:[^\p{{Ll}}]|(?i:{common_starters_pattern})\b)|
                 \s*\p{{Lo}}
             )|
