@@ -40,7 +40,7 @@ jobs:
     - name: Generate Coverage
       if: matrix.python-version == '3.12'
       run: |
-        uv run pytest --cov=src/yasbd --cov-report=xml tests
+        uv run pytest --cov-report=xml tests
 
     - name: Upload coverage to Coveralls
       if: matrix.python-version == '3.12'
