@@ -41,7 +41,7 @@ dependencies = [
 dev = [
   "pytest>=8.3.5",
   "pytest-cov>=6.2.1",
-  "pytest-timeout>=2.3.1",
+  "pre-commit>=4.4.0",
   "ruff>=0.14.14",
 ]
 
@@ -88,4 +88,4 @@ ignore = ["E501", "E203"]
 "__init__.py" = ["F401", "F403"]
 
 [tool.ruff.format]
-exclude = [".git", ".venv", "build", "dist"]
+exclude = [".git", ".venv", "build", "dist", "tests/test_data"]
