@@ -92,7 +92,11 @@ class BoundaryDetector:
                 "Called with type={}, relative={}", type(source).__name__, relative
             )
 
-        para_iter = ParagraphStreamer(source) if isinstance(source, (str, TextIOBase)) else source
+        para_iter = (
+            ParagraphStreamer(source)
+            if isinstance(source, (str, TextIOBase))
+            else source
+        )
         yield from self._detect(para_iter, relative=relative)
 
     def _detect(
