@@ -1,5 +1,5 @@
 import re
-from collections.abc import Generator, Iterable
+from collections.abc import Iterable, Iterator
 
 import ftfy
 import regex as re2  # For complex patterns
@@ -57,61 +57,67 @@ def _sanitize_html(text: str) -> str:
     return text
 
 
-@validate_input
-def clean_stream(source: str | Iterable[str]) -> Generator[str, None, None]:
-    """Normalize and clean noisy text.
+class StreamCleaner:
+    """Normalize and clean noisy text by applying ``ftfy``, HTML sanitization,
+    and various regex cleanup rules across paragraphs.
 
-    Applies ``ftfy`` for mojibake repair, strips HTML tags, removes standalone
-    characters, page-number artifacts, and re-joins list markers split across
-    lines. Non-string iterables are treated as pre-paragraphed input.
+    Implements the iterator protocol. Yields cleaned paragraph strings.
 
     Args:
-        source: Plain string or iterable of paragraphs. Strings are split into
-            paragraphs via ``ParagraphStreamer``.
-
-    Yields:
-        Cleaned text paragraphs.
+        source: Plain string or iterable of pre-paragraphed strings.
 
     Examples:
-        >>> from yasbd.utils.cleaner import clean_stream
-        >>> list(clean_stream("Hello <b>world</b>. How are you?"))
+        >>> cleaner = StreamCleaner("Hello <b>world</b>. How are you?")
+        >>> list(cleaner)
         ['Hello world . How are you?']
-        >>> list(clean_stream(["Page 12 of 45", "line one\\n. text two"]))
-        ['', 'line one. text two']
-        >>> list(clean_stream("<script>alert('xss')</script>clean text"))
+        >>> cleaner = StreamCleaner("<script>alert('xss')</script>clean text")
+        >>> list(cleaner)
         ['clean text']
-        >>> list(clean_stream("Text with ///slashes"))
+        >>> cleaner = StreamCleaner("Text with ///slashes")
+        >>> list(cleaner)
         ['Text with slashes']
-        >>> list(clean_stream("Plain text with no HTML"))
+        >>> cleaner = StreamCleaner("Plain text with no HTML")
+        >>> list(cleaner)
         ['Plain text with no HTML']
-        >>> list(clean_stream(""))
+        >>> list(StreamCleaner(""))
         []
     """
-    if isinstance(source, str):
-        source = ParagraphStreamer(source, skip_empty_lines=True)
 
-    for para in source:
-        stripped_para = para.strip()
-        if stripped_para:
-            stripped_para = ftfy.fix_text(stripped_para)
-            stripped_para = stripped_para.replace(
-                "''", '"'
-            )  # "Pseudo-Double" quote fix
-            stripped_para = _sanitize_html(stripped_para)
+    @validate_input
+    def __init__(self, source: str | Iterable[str]) -> None:
+        if isinstance(source, str):
+            source = ParagraphStreamer(source, skip_empty_lines=True)
+        self._source = iter(source)
 
-            if "///" in stripped_para:
-                stripped_para = CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", stripped_para)
+    def __iter__(self) -> Iterator[str]:
+        return self
 
-            if "\n" in stripped_para:
-                stripped_para = NEWLINE_IN_MIDDLE_OF_WORD_FINDER.sub("", stripped_para)
-                stripped_para = NEWLINE_FOLLOWED_BY_PERIOD_FINDER.sub("", stripped_para)
+    def __next__(self) -> str:
+        for para in self._source:
+            stripped = para.strip()
+            if not stripped:
+                continue
 
-            stripped_para = HEADING_OR_LIST_FINDER.sub(" ", stripped_para)
-            stripped_para = NO_SPACE_BETWEEN_SENTENCES_FINDER.sub(" ", stripped_para)
-            stripped_para = ARTIFACT_FINDER.sub("", stripped_para)
-            stripped_para = PAGE_FINDER.sub("", stripped_para)
+            stripped = ftfy.fix_text(stripped)
+            stripped = stripped.replace("''", '"')
 
-            if "  " in stripped_para:
-                stripped_para = MULTIPLE_SPACES_FINDER.sub(" ", stripped_para)
+            stripped = _sanitize_html(stripped)
 
-            yield stripped_para
+            if "///" in stripped:
+                stripped = CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", stripped)
+
+            if "\n" in stripped:
+                stripped = NEWLINE_IN_MIDDLE_OF_WORD_FINDER.sub("", stripped)
+                stripped = NEWLINE_FOLLOWED_BY_PERIOD_FINDER.sub("", stripped)
+
+            stripped = HEADING_OR_LIST_FINDER.sub(" ", stripped)
+            stripped = NO_SPACE_BETWEEN_SENTENCES_FINDER.sub(" ", stripped)
+            stripped = ARTIFACT_FINDER.sub("", stripped)
+            stripped = PAGE_FINDER.sub("", stripped)
+
+            if "  " in stripped:
+                stripped = MULTIPLE_SPACES_FINDER.sub(" ", stripped)
+
+            return stripped
+
+        raise StopIteration
