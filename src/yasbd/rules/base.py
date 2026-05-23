@@ -159,7 +159,7 @@ class Rules:
             re.X,
         )
 
-        # https://regex101.com/r/VMzYsx/8
+        # https://regex101.com/r/VMzYsx/9
         cls.NAIVE_BOUNDARY_FINDER = re2.compile(
             rf"""
             # Split if left token is a unicase letter (Always)
@@ -170,7 +170,8 @@ class Rules:
             (?<=[{terminators_pattern}])
             (?=
                 \s*\n|
-                \s+(?:[^\p{{Ll}}]|(?i:{common_starters_pattern})\b)|
+                \s+(?:[^\p{{Ll}}]|
+                \s+(?<!\.\.)(?i:{common_starters_pattern})\b)|
                 \s*\p{{Lo}}
             )|
 
