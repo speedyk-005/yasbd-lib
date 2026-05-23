@@ -129,7 +129,7 @@ class Rules:
         Subclasses can override data constants (abbreviation sets, terminators, etc.)
         and the classmethod ``_compile_regex_dynamically`` will pick them up.
         """
-        if not self._REGEX_CACHED:
+        if not type(self).__dict__.get("_REGEX_CACHED", False):
             self._compile_regex_dynamically()
             type(self)._REGEX_CACHED = True
 
