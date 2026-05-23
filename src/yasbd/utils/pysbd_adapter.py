@@ -2,7 +2,7 @@ from collections.abc import Iterable
 from types import SimpleNamespace
 
 from yasbd import BoundaryDetector
-from yasbd.utils.cleaner import clean_stream
+from yasbd.utils.cleaner import StreamCleaner
 from yasbd.utils.input_validator import validate_input
 
 
@@ -72,7 +72,9 @@ class Segmenter:
         self._detector = BoundaryDetector(lang=language)
 
         # Legacy pysbd API compatibility mappings
-        self.cleaner = lambda t: SimpleNamespace(clean=lambda: "".join(clean_stream(t)))
+        self.cleaner = lambda t: SimpleNamespace(
+            clean=lambda: "".join(StreamCleaner(t))
+        )
         self.processor = lambda t: SimpleNamespace(
             process=lambda: self._process_text(t)
         )
@@ -157,6 +159,6 @@ class Segmenter:
         self.original_text = f"{text[:500]}..." if len(text) > 500 else text
 
         if self.clean:
-            text = clean_stream(text)
+            text = StreamCleaner(text)
 
         return self._process_text(text)

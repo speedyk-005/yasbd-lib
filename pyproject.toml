@@ -34,6 +34,7 @@ dependencies = [
   "loguru>=0.7.3,<1.0",
   "regex>=2025.7.29",
   "ftfy>=6.2.0,<7.0",
+  "selectolax>=0.3.30,<1.0",
   "pydantic>=2.12.2,<3.0",
 ]
 

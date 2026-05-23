@@ -1,11 +1,13 @@
-import io
 from collections.abc import Generator, Iterable
 from importlib import import_module
-from itertools import chain, islice, tee
+from io import TextIOBase
+from itertools import tee
 
 from loguru import logger
 
+from yasbd.utils.cleaner import StreamCleaner
 from yasbd.utils.input_validator import validate_input
+from yasbd.utils.paragraph_streamer import ParagraphStreamer
 
 
 class BoundaryDetector:
@@ -68,7 +70,7 @@ class BoundaryDetector:
     @validate_input
     def detect(
         self,
-        text_data: str | Iterable[str],
+        source: str | TextIOBase | StreamCleaner,
         *,
         relative: bool = False,
     ) -> Generator[tuple[int, int], None, None]:
@@ -78,48 +80,56 @@ class BoundaryDetector:
         detected sentence.
 
         Args:
-            text_data: Plain text string or an iterable of lines
-                (e.g. ``io.StringIO``).
+            source: Plain text string or ``TextIOBase`` stream (e.g., ``StringIO``, opened file).
             relative: If ``False`` (default), yield offsets relative to
-                the full text. If ``True``, offsets are per-line.
+                the full text. If ``True``, offsets are per-paragraph.
 
         Yields:
             ``(start_offset, end_offset)`` for each sentence.
         """
         if self.verbose:  # pragma: no cover
             logger.info(
-                "Called with type={}, relative={}", type(text_data).__name__, relative
+                "Called with type={}, relative={}", type(source).__name__, relative
             )
 
-        if isinstance(text_data, str):
-            text_data = io.StringIO(text_data)
+        para_iter = (
+            ParagraphStreamer(source)
+            if isinstance(source, (str, TextIOBase))
+            else source
+        )
+        yield from self._detect(para_iter, relative=relative)
 
-        # Quick heuristic empty check
-        first_5_lines = list(islice(text_data, 5))
-        if len(first_5_lines) == 0:
-            if self.verbose:  # pragma: no cover
-                logger.info("Input is empty. Returns empty result")
-            return
+    def _detect(
+        self,
+        para_iter: Iterable[str],
+        *,
+        relative: bool = False,
+    ) -> Generator[tuple[int, int], None, None]:
+        """Internal boundary detection.
 
-        # Re-stich the stream
-        text_data = chain(first_5_lines, text_data)
+        Args:
+            para_iter: An iterable of paragraph strings.
+            relative: If ``False``, yield offsets relative to
+                the full text. If ``True``, offsets are per-paragraph.
 
+        Yields:
+            ``(start_offset, end_offset)`` for each sentence.
+        """
         yield from self._rule.apply(
-            text_data, self.preserve_quote_and_paren, relative=relative
+            para_iter, self.preserve_quote_and_paren, relative=relative
         )
 
     @validate_input
     def segment(
         self,
-        text_data: str | Iterable[str],
+        source: str | TextIOBase | StreamCleaner,
         *,
         preserve_whitespace: bool = False,
     ) -> Generator[str, None, None]:
         """Split text into sentences.
 
         Args:
-            text_data: Plain text string or an iterable of lines
-                (e.g. ``io.StringIO``).
+            source: Plain text string or ``TextIOBase`` stream (e.g., ``StringIO``, opened file).
             preserve_whitespace: If ``False`` (default), strip leading and
                 trailing whitespace from each sentence.
 
@@ -129,19 +139,22 @@ class BoundaryDetector:
         if self.verbose:  # pragma: no cover
             logger.info("Called with preserve_whitespace={}", preserve_whitespace)
 
-        if isinstance(text_data, str):
-            text_data = io.StringIO(text_data)
+        para_iter = (
+            ParagraphStreamer(source, skip_empty_lines=not preserve_whitespace)
+            if isinstance(source, (str, TextIOBase))
+            else source
+        )
 
-        input_for_detection, input_for_slicing = tee(text_data)
-        curr_line = None
-        for start, end in self.detect(input_for_detection, relative=True):
+        input_for_detection, input_for_slicing = tee(para_iter)
+        curr_para = None
+        for start, end in self._detect(input_for_detection, relative=True):
             if start == 0:
-                curr_line = next(input_for_slicing, None)
+                curr_para = next(input_for_slicing, None)
 
-            if curr_line is None:
+            if curr_para is None:
                 break
 
-            sent = curr_line[start:end]
+            sent = curr_para[start:end]
             if not preserve_whitespace:
                 sent = sent.strip()
                 if not sent:

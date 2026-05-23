@@ -117,21 +117,33 @@ class Rules:
     # https://regex101.com/r/0P9f2V/1
     TOC_LEADER_FINDER = re.compile(r"[^\W_][\s\.]{4,}\d")
 
+    # https://regex101.com/r/ZOZlLb/2/substitution
+    NEWLINE_INSIDE_SENTENCE_FINDER = re2.compile(r"(?<=[,:;)\w\s])\n(?=([a-z(]))")
+
+    _REGEX_CACHED = False
     # fmt: on
     def __init__(self):
-        """Compile language-specific regex patterns.
+        """Initialize rule instance with lazy-compiled regex patterns.
 
-        Patterns that depend on abbreviation sets or terminators are built here
-        rather than at class level so subclasses can override the data constants.
+        Patterns are compiled once per class and cached via ``_REGEX_CACHED``.
+        Subclasses can override data constants (abbreviation sets, terminators, etc.)
+        and the classmethod ``_compile_regex_dynamically`` will pick them up.
         """
-        terminators_pattern = "".join(self.TERMINATORS)
-        title_abbrvs_pattern = _build_abbr_pattern(self.TITLE_ABBRVS)
-        geopolitical_abbrvs_pattern = _build_abbr_pattern(self.GEOPOLITICAL_ABBRVS)
-        common_starters_pattern = _build_abbr_pattern(self.COMMON_SENT_STARTERS)
+        if not type(self).__dict__.get("_REGEX_CACHED", False):
+            self._compile_regex_dynamically()
+            type(self)._REGEX_CACHED = True
+
+    @classmethod
+    def _compile_regex_dynamically(cls):
+        """Compile language-specific regex patterns."""
+        terminators_pattern = "".join(cls.TERMINATORS)
+        title_abbrvs_pattern = _build_abbr_pattern(cls.TITLE_ABBRVS)
+        geopolitical_abbrvs_pattern = _build_abbr_pattern(cls.GEOPOLITICAL_ABBRVS)
+        common_starters_pattern = _build_abbr_pattern(cls.COMMON_SENT_STARTERS)
 
         # https://regex101.com/r/qBSyU5/10
         # Handle flattened lists due to messy OCR.
-        self.horizontal_list_finder = re.compile(
+        cls.HORIZONTAL_LIST_FINDER = re.compile(
             rf"""
             (?:   #  Must preceded by
                 ^\s*|     # A string start
@@ -148,7 +160,7 @@ class Rules:
         )
 
         # https://regex101.com/r/VMzYsx/5
-        self.naive_boundary_finder = re2.compile(
+        cls.NAIVE_BOUNDARY_FINDER = re2.compile(
             rf"""
             # Split if left token is a unicase letter (Always)
             (?<=\p{{Lo}}\s*[{terminators_pattern}])|
@@ -171,32 +183,32 @@ class Rules:
         )
 
         # https://regex101.com/r/svyCoU/15
-        self.mid_sentence_finder = re2.compile(
+        cls.MID_SENTENCE_FINDER = re2.compile(
             rf"""
             # Title abbrv or initialisms (e.g., Dr. Paul)
             (?<=\b(?i:{title_abbrvs_pattern})\.)|
 
             # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
             (?<=\b(?i:{geopolitical_abbrvs_pattern})\.)
-            (?=\s+(?:{_build_abbr_pattern(self.COMMON_ORG_NOUNS)}))|
+            (?=\s+(?:{_build_abbr_pattern(cls.COMMON_ORG_NOUNS)}))|
 
             # Abbrv that NEVER ends a sentence
-            (?<=\b(?i:{_build_abbr_pattern(self.MID_SENTENCE_ABBRVS)})\.)|
+            (?<=\b(?i:{_build_abbr_pattern(cls.MID_SENTENCE_ABBRVS)})\.)|
 
             # References abbrv followed by a number, a letter or opened paren (e.g., to p. 55, app. A)
-            (?<=\b(?i:{_build_abbr_pattern(self.REFERENCE_ABBRVS)})\.)
+            (?<=\b(?i:{_build_abbr_pattern(cls.REFERENCE_ABBRVS)})\.)
             (?=\s+(?:\(|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))|
 
             # Month followed by a number
-            (?<=\b(?i:{_build_abbr_pattern(self.MONTH_ABBRVS)})\.)
+            (?<=\b(?i:{_build_abbr_pattern(cls.MONTH_ABBRVS)})\.)
             (?=\s+\p{{N}})|
 
             # Streets/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
             # excluding geopolitical ones not followed by a common starters
             (?<=
                 (?:\p{{Lu}}\.){{2,}}(?<!(?i:{geopolitical_abbrvs_pattern}))|
-                \b(?i:{_build_abbr_pattern(self.STREET_ABBRVS)})\.|
-                \b(?i:{_build_abbr_pattern(self.NAMES_WITH_EXCLAMATION)})!
+                \b(?i:{_build_abbr_pattern(cls.STREET_ABBRVS)})\.|
+                \b(?i:{_build_abbr_pattern(cls.NAMES_WITH_EXCLAMATION)})!
             )
             (?!\s+(?:{common_starters_pattern})\b)|
 
@@ -207,7 +219,7 @@ class Rules:
         )
 
         # https://regex101.com/r/EGkRU8/7
-        self.quote_and_paren_end_finder = re2.compile(
+        cls.QUOTE_AND_PAREN_END_FINDER = re2.compile(
             rf"""
             (?<=
                 [{terminators_pattern}]   # A terminator
@@ -215,7 +227,7 @@ class Rules:
             )
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
                 \s*\p{{po}}|
-                {"|".join(self.QUOTATIVE_PARTICLES | self.REPORTING_WORDS)}|
+                {"|".join(cls.QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}|
                 \s+[\p{{Ll}}]|$
             )
             """,
@@ -223,37 +235,37 @@ class Rules:
         )
 
         # https://regex101.com/r/ffqwjh/2
-        self.contiguous_terminators_finder = re.compile(rf"(?:\s*+[{terminators_pattern}]){{2,}}")
+        cls.CONTIGUOUS_TERMINATORS_FINDER = re.compile(rf"(?:\s*+[{terminators_pattern}]){{2,}}")
 
     def _remove_quote_and_paren_spans(
         self,
         main_boundaries: set[int],
-        line: str,
+        paragraph: str,
         preserve_quote_and_paren: bool,
     ) -> None:
         """Remove boundaries inside quoted/parenthesised spans."""
         if preserve_quote_and_paren:
             protected_spans = set()
-            for m in self.QUOTE_AND_PAREN_FINDER.finditer(line):
+            for m in self.QUOTE_AND_PAREN_FINDER.finditer(paragraph):
                 inner_range = set(range(*m.span()))
                 protected_spans.update(inner_range)
             main_boundaries.difference_update(protected_spans)
 
         main_boundaries.update(
-            m.end() for m in self.quote_and_paren_end_finder.finditer(line)
+            m.end() for m in self.QUOTE_AND_PAREN_END_FINDER.finditer(paragraph)
         )
 
     def _remove_toc_spans(
-        self, main_boundaries: set[int], line: str
+        self, main_boundaries: set[int], paragraph: str
     ) -> None:
         """Remove boundaries inside TOC leader runs."""
-        if "..." in line:
-            for m in self.TOC_LEADER_FINDER.finditer(line):
+        if "..." in paragraph:
+            for m in self.TOC_LEADER_FINDER.finditer(paragraph):
                 main_boundaries.difference_update(range(*m.span()))
 
-    def _adjust_list_boundaries(self, main_boundaries: set[int], line: str) -> None:
+    def _adjust_list_boundaries(self, main_boundaries: set[int], paragraph: str) -> None:
         """Remove and re-align boundaries around list markers."""
-        horiz_matches = list(self.horizontal_list_finder.finditer(line))
+        horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(paragraph))
         if len(horiz_matches) >= 2:
             main_boundaries.difference_update(m.end() for m in horiz_matches)
             # Shift boundaries the pointer back (1.\)| => |1.\), a. | => |a. ) to correctly
@@ -261,17 +273,17 @@ class Rules:
             main_boundaries.update(m.start() + 1 for m in horiz_matches if m.start())
 
         main_boundaries.difference_update(
-            m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(line)
+            m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(paragraph)
         )
 
     @validate_input
     def apply(
         self,
-        line_iter: Iterator[str],
+        paragraph: Iterator[str],
         preserve_quote_and_paren: bool,
         relative: bool = False,
     ) -> Generator[tuple[int, int], None, None]:
-        """Detect sentence boundaries for each line.
+        """Detect sentence boundaries for each paragraph.
 
         Two-pass algorithm:
         1. Collect boundary candidates from punctuation positions.
@@ -279,48 +291,48 @@ class Rules:
            quote/paren spans, list markers).
 
         Args:
-            line_iter: Source of text lines (string stream or iterator).
+            paragraph: An iterator of paragraphs.
             preserve_quote_and_paren: If ``True``, suppress boundaries
                inside quote and parenthesis spans.
             relative: If ``False`` (default), yield offsets relative to
-                the full text. If ``True``, offsets are per-line.
+                the full text. If ``True``, offsets are per-paragraph.
 
         Yields:
             ``(start_offset, end_offset)`` per sentence.
         """
         offset = 0
-        for line in line_iter:
-            if not line.strip():
-                n = len(line)
+        for para in paragraph:
+            if not para.strip():
+                n = len(para)
                 yield (offset, offset + n) if not relative else (0, n)
                 if not relative:
                     offset += n
                 continue
 
-            main_boundaries = set()
-            main_boundaries.update(
-                m.end() for m in self.naive_boundary_finder.finditer(line)
-            )
+            para = self.NEWLINE_INSIDE_SENTENCE_FINDER.sub(" ", para)
+            main_boundaries = {
+                m.end() for m in self.NAIVE_BOUNDARY_FINDER.finditer(para)
+            }
 
             # -- Remove false alarms --
             main_boundaries.difference_update(
-                m.end() for m in self.mid_sentence_finder.finditer(line)
+                m.end() for m in self.MID_SENTENCE_FINDER.finditer(para)
             )
             self._remove_quote_and_paren_spans(
-                main_boundaries, line, preserve_quote_and_paren
+                main_boundaries, para, preserve_quote_and_paren
             )
-            self._remove_toc_spans(main_boundaries, line)
-            self._adjust_list_boundaries(main_boundaries, line)
+            self._remove_toc_spans(main_boundaries, para)
+            self._adjust_list_boundaries(main_boundaries, para)
 
             # Remove contiguous term except last one (e.g., Hello! !!   !! )
             main_boundaries.difference_update(
                 *(
                     range(m.start(), m.end() - 1)
-                    for m in self.contiguous_terminators_finder.finditer(line)
+                    for m in self.CONTIGUOUS_TERMINATORS_FINDER.finditer(para)
                 )
             )
 
-            main_boundaries.update({0, len(line)})
+            main_boundaries.update({0, len(para)})
             main_boundaries_lst = sorted(main_boundaries)
             for i in range(len(main_boundaries) - 1):
                 start = main_boundaries_lst[i]
@@ -328,4 +340,4 @@ class Rules:
                 yield (offset + start, offset + end) if not relative else (start, end)
 
             if not relative:
-                offset += len(line)
+                offset += len(para)
