@@ -1,5 +1,9 @@
-from collections.abc import Iterable, Iterator
-from io import StringIO
+from collections.abc import Iterator
+from io import StringIO, TextIOBase
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from yasbd.utils.cleaner import StreamCleaner
 
 
 class ParagraphStreamer:
@@ -20,13 +24,13 @@ class ParagraphStreamer:
 
     def __init__(
         self,
-        source: str | Iterable[str],
+        source: "str | TextIOBase | StreamCleaner",
         skip_empty_lines: bool = False,
     ) -> None:
         """Initialize the ParagraphStreamer iterator.
 
         Args:
-            source: Input text as a string or an iterable of strings.
+            source: Input text as a string, ``TextIOBase`` stream, or ``StreamCleaner``.
             skip_empty_lines: If True, blank separator lines are omitted from paragraph blocks.
         """
         self.skip_empty_lines = skip_empty_lines

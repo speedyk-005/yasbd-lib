@@ -1,5 +1,6 @@
 import re
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterator
+from io import TextIOBase
 
 import ftfy
 import regex as re2  # For complex patterns
@@ -84,8 +85,8 @@ class StreamCleaner:
     """
 
     @validate_input
-    def __init__(self, source: str | Iterable[str]) -> None:
-        if isinstance(source, str):
+    def __init__(self, source: str | TextIOBase) -> None:
+        if isinstance(source, (str, TextIOBase)):
             source = ParagraphStreamer(source, skip_empty_lines=True)
         self._source = iter(source)
 

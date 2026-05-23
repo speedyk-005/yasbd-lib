@@ -1,9 +1,11 @@
 from collections.abc import Generator, Iterable
 from importlib import import_module
+from io import TextIOBase
 from itertools import tee
 
 from loguru import logger
 
+from yasbd.utils.cleaner import StreamCleaner
 from yasbd.utils.input_validator import validate_input
 from yasbd.utils.paragraph_streamer import ParagraphStreamer
 
@@ -68,7 +70,7 @@ class BoundaryDetector:
     @validate_input
     def detect(
         self,
-        source: str | Iterable[str],
+        source: str | TextIOBase | StreamCleaner,
         *,
         relative: bool = False,
     ) -> Generator[tuple[int, int], None, None]:
@@ -78,7 +80,7 @@ class BoundaryDetector:
         detected sentence.
 
         Args:
-            source: Plain text string or an iterable of paragraphs.
+            source: Plain text string or ``TextIOBase`` stream (e.g., ``StringIO``, opened file).
             relative: If ``False`` (default), yield offsets relative to
                 the full text. If ``True``, offsets are per-paragraph.
 
@@ -90,7 +92,7 @@ class BoundaryDetector:
                 "Called with type={}, relative={}", type(source).__name__, relative
             )
 
-        para_iter = ParagraphStreamer(source) if isinstance(source, str) else source
+        para_iter = ParagraphStreamer(source) if isinstance(source, (str, TextIOBase)) else source
         yield from self._detect(para_iter, relative=relative)
 
     def _detect(
@@ -116,14 +118,14 @@ class BoundaryDetector:
     @validate_input
     def segment(
         self,
-        source: str | Iterable[str],
+        source: str | TextIOBase | StreamCleaner,
         *,
         preserve_whitespace: bool = False,
     ) -> Generator[str, None, None]:
         """Split text into sentences.
 
         Args:
-            source: Plain text string or an iterable of paragraphs.
+            source: Plain text string or ``TextIOBase`` stream (e.g., ``StringIO``, opened file).
             preserve_whitespace: If ``False`` (default), strip leading and
                 trailing whitespace from each sentence.
 
@@ -135,7 +137,7 @@ class BoundaryDetector:
 
         para_iter = (
             ParagraphStreamer(source, skip_empty_lines=not preserve_whitespace)
-            if isinstance(source, str)
+            if isinstance(source, (str, TextIOBase))
             else source
         )
 
