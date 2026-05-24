@@ -81,6 +81,7 @@ class ParagraphStreamer:
             # boundary. Emit the buffered paragraph (or drop it if empty + skip_empty_lines)
             if stripped_line and self._is_flush_pending:
                 if not self._buffer and self.skip_empty_lines:
+                    self._buffer = [line]
                     self._is_flush_pending = False
                     continue
                 paragraph = "".join(self._buffer)
