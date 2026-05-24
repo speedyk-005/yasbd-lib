@@ -58,9 +58,14 @@ class Rules:
         "approx", "eq", "eqn", "eqs", "est", "ex", "exs",
     }
 
-    MONTH_ABBRVS = {
+    DATE_ABBRVS = {
+        # Months
         "jan", "feb", "mar", "apr", "jun", "jul", "sep",
-        "sept", "oct", "nov", "dec"
+        "sept", "oct", "nov", "dec", "déc",
+
+        # Day
+        "mon", "tue", "wed", "thu", "fri", "sat", "sun",
+        "lun", "mar", "dom",
     }
 
     MID_SENTENCE_ABBRVS = {
@@ -184,7 +189,7 @@ class Rules:
             re2.X,
         )
 
-        # https://regex101.com/r/svyCoU/15
+        # https://regex101.com/r/svyCoU/17
         cls.MID_SENTENCE_FINDER = re2.compile(
             rf"""
             # Title abbrv or initialisms (e.g., Dr. Paul)
@@ -201,9 +206,8 @@ class Rules:
             (?<=\b(?i:{_build_abbr_pattern(cls.REFERENCE_ABBRVS)})\.)
             (?=\s+(?:\(|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))|
 
-            # Month followed by a number
-            (?<=\b(?i:{_build_abbr_pattern(cls.MONTH_ABBRVS)})\.)
-            (?=\s+\p{{N}})|
+            # Date abbrv followed by a number
+            (?<=\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)})\.)(?=\s+\p{{N}})|
 
             # Streets/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
             # excluding geopolitical ones not followed by a common starters

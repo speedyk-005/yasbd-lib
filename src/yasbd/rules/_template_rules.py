@@ -1,6 +1,5 @@
 from yasbd.rules.base import Rules
 
-
 # Don't remove the fmt guards as they keep compact set formatting
 # fmt: off
 class LangRules(Rules):
@@ -35,8 +34,8 @@ class LangRules(Rules):
     # Brands / titles containing "!" that should not trigger a split
     NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {...}
 
-    # Months abbreviations (Jan., Feb., etc.)
-    MONTH_ABBRVS = {...}
+    # Days abbreviations (Jan. Mon., etc..)
+    DATE_ABBRVS = {...}
 
     # Nouns that appear inside organisational names
     COMMON_ORG_NOUNS = {...}

@@ -36,6 +36,7 @@ TEST_DATA = [
     "The proof is shown in eq. (7) and ex. IV",
     "Mr. Smith lives on Hwy. 7 near Ave. Central.",
     "The delivery van broke down right in front of Sunset Blvd.| The driver called a tow truck.",
+    "I'll see you on Fri., Feb. 14th. ",
 
     # Parentheses and quotes
     "He teaches science (He previously worked for 5 years as an engineer.) at the local University.",
