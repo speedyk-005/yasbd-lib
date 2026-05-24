@@ -65,7 +65,7 @@ class Rules:
 
         # Day
         "mon", "tue", "wed", "thu", "fri", "sat", "sun",
-        "lun", "mar", "dom",
+        "lun", "dom",
     }
 
     MID_SENTENCE_ABBRVS = {
