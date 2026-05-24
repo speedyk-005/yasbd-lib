@@ -8,8 +8,26 @@ import regex as re2  # For complex patterns
 from yasbd.utils.input_validator import validate_input
 from yasbd.utils.paragraph_streamer import ParagraphStreamer
 
-# https://regex101.com/r/PEPPA7/1/substitution
-# HYPHENATED_WORD_FINDER = re.compile(r"([a-z])\u00AD\n([a-z])")
+# fmt: off
+PREFIXES = {
+    "hyper", "ultra", "super", "extra", "semi", "multi", "pre", "post",
+    "ex", "cross", "inter", "trans", "anti", "counter", "non", "quasi",
+    "self", "auto", "cyber", "techno", "electro", "high", "low", "open",
+    "closed", "up", "down", "off", "mid", "vice",
+}
+# fmt: on
+
+# https://regex101.com/r/csjyrs/2/substitution
+_vowels_pattern = "aeiouyæœ"
+_suffix_pattern = "|".join(PREFIXES)
+HYPHENATED_WORD_FINDER = re2.compile(
+    rf"""
+    (?<=[{_vowels_pattern}]\p{{M}}?-)\s+(?=[{_vowels_pattern}])|
+    (?<=(?:{_suffix_pattern})-)\s|
+    (?<!(?:{_suffix_pattern}))-\s|
+""",
+    re2.X,
+)
 
 # https://regex101.com/r/POTL2H/5/substitution
 HEADING_OR_LIST_FINDER = re2.compile(r"(?<=^\s?(?:[-•*+]|[\w\d][.)]))\s*\n", re2.M)
@@ -69,21 +87,18 @@ class StreamCleaner:
         source: Plain string or iterable of pre-paragraphed strings.
 
     Examples:
-        >>> cleaner = StreamCleaner("Hello <b>world</b>. How are you?")
-        >>> list(cleaner)
+        >>> list(StreamCleaner("Hello <b>world</b>. How are you?"))
         ['Hello <b>world</b>. How are you?']
-        >>> cleaner = StreamCleaner("<script>alert('xss')</script>clean text")
-        >>> list(cleaner)
+        >>> list(StreamCleaner("<script>alert('xss')</script>clean text"))
         ['clean text']
-        >>> cleaner = StreamCleaner("Text with ///slashes")
-        >>> list(cleaner)
+        >>> list(StreamCleaner("Text with ///slashes"))
         ['Text with slashes']
-        >>> cleaner = StreamCleaner("W\\nO\\nR\\nD")
-        >>> list(cleaner)
+        >>> list(StreamCleaner("W\\nO\\nR\\nD"))
         ['WORD']
-        >>> cleaner = StreamCleaner("Plain text with no HTML")
-        >>> list(cleaner)
-        ['Plain text with no HTML']
+        >>> list(StreamCleaner("An hyphe-\\nnated sentence"))
+        ['An hyphenated sentence']
+        >>> list(StreamCleaner("Don't be naï-\\nve"))
+        ["Don't be naïve"]
         >>> list(StreamCleaner(""))
         []
     """
@@ -119,6 +134,9 @@ class StreamCleaner:
             stripped = NO_SPACE_BETWEEN_SENTENCES_FINDER.sub(" ", stripped)
             stripped = ARTIFACT_FINDER.sub("", stripped)
             stripped = PAGE_FINDER.sub("", stripped)
+
+            if "-" in stripped:
+                stripped = HYPHENATED_WORD_FINDER.sub("", stripped)
 
             if "  " in stripped:
                 stripped = MULTIPLE_SPACES_FINDER.sub(" ", stripped)
