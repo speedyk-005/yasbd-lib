@@ -5,6 +5,7 @@ from io import TextIOBase
 import ftfy
 import regex as re2  # For complex patterns
 
+from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
 from yasbd.utils.paragraph_streamer import ParagraphStreamer
 
@@ -77,7 +78,7 @@ NO_SPACE_BETWEEN_SENTENCES_FINDER = re.compile(r"(?<=\w\.)(?=[A-Z][a-z])")
 CONSECUTIVE_FORWARD_SLASH_FINDER = re.compile(r"\/{3}")
 
 
-class StreamCleaner:
+class StreamCleaner(StreamCleanerStub):
     """Normalize and clean noisy text by applying ``ftfy``, HTML sanitization,
     and various regex cleanup rules across paragraphs.
 

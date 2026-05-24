@@ -5,7 +5,7 @@ from itertools import tee
 
 from loguru import logger
 
-from yasbd.utils.cleaner import StreamCleaner
+from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
 from yasbd.utils.paragraph_streamer import ParagraphStreamer
 
@@ -70,7 +70,7 @@ class BoundaryDetector:
     @validate_input
     def detect(
         self,
-        source: str | TextIOBase | StreamCleaner,
+        source: str | TextIOBase | StreamCleanerStub,
         *,
         relative: bool = False,
     ) -> Generator[tuple[int, int], None, None]:
@@ -122,7 +122,7 @@ class BoundaryDetector:
     @validate_input
     def segment(
         self,
-        source: str | TextIOBase | StreamCleaner,
+        source: str | TextIOBase | StreamCleanerStub,
         *,
         preserve_whitespace: bool = False,
     ) -> Generator[str, None, None]:
