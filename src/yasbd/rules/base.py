@@ -7,8 +7,18 @@ from yasbd.utils.input_validator import validate_input
 
 
 def _build_abbr_pattern(options: set[str]) -> str:
-    """Build regex pattern from a set while escaping special chars."""
-    return "|".join(re2.escape(opt) for opt in sorted(options, key=len))
+    """Build a safe escaped regex alternation pattern.
+
+    Returns a never-match pattern if no valid options exist.
+    Ref: https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything?
+    """
+    cleaned = [
+        re2.escape(opt.strip())
+        for opt in sorted(options, key=len, reverse=True)
+        if opt.strip()
+    ]
+
+    return "|".join(cleaned) if cleaned else r"(?!)"
 
 
 # fmt: off
@@ -65,7 +75,7 @@ class Rules:
 
         # Day
         "mon", "tue", "wed", "thu", "fri", "sat", "sun",
-        "lun", "dom",
+        "lun", "mar", "dom",
     }
 
     MID_SENTENCE_ABBRVS = {
@@ -103,9 +113,9 @@ class Rules:
     }
 
     COMMON_ORG_NOUNS = {"Army", "Authority", "Trust", "Holding"}
-    COMMON_SENT_STARTERS = {"The"}
-    QUOTATIVE_PARTICLES = {"と", "って", "라고"}
-    REPORTING_WORDS = {"说", "道", "问", "他", "她"}
+    COMMON_SENT_STARTERS = set()
+    QUOTATIVE_PARTICLES = set()
+    REPORTING_WORDS = set()
 
     # https://regex101.com/r/tI9Cmg/2
     VERTICAL_LIST_START_FINDER = re2.compile(r"(?<=^\s*(?:[\p{L}\p{N}]\.){1,3})(?=\s)")
@@ -233,7 +243,7 @@ class Rules:
             )
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
                 \s*\p{{po}}|
-                {"|".join(cls.QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}|
+                {_build_abbr_pattern(cls.QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}|
                 \s+[\p{{Ll}}]|$
             )
             """,
