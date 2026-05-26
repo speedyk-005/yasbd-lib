@@ -44,8 +44,13 @@ class LangRules(Rules):
     # Words that commonly start sentences (The, A, This, etc.)
     COMMON_SENT_STARTERS = {...}
 
+    # -- Mostly for unicase languages --
+
     # Quotative particles (Japanese と, Korean 라고, etc.)
     QUOTATIVE_PARTICLES = {...}
+
+    # Possessive markers that link nouns together (Japanese の, etc.)
+    POSSESSIVE_PARTICLES = {...}
 
     # Reporting verbs for dialogue (Chinese 说/道/问, etc.)
     REPORTING_WORDS = {...}

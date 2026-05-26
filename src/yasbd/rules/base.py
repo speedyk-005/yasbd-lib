@@ -24,7 +24,7 @@ def _build_abbr_pattern(options: set[str]) -> str:
 # fmt: off
 class Rules:
     ISO_CODE = "xx"
-    TERMINATORS = {"。", "．", ".", "！", "!", "?", "？"}
+    TERMINATORS =  {"。", "．", ".", "！", "!", "？", "?", "‼", "⁉", "⁈"}
 
     TITLE_ABBRVS = {
         # Standard Professional (Universal Latin roots)
@@ -42,13 +42,16 @@ class Rules:
 
     GEOPOLITICAL_ABBRVS = {
         # North Atlantic / Western Europe
-         "u.s", "u.s.a", "u.k", "e.u",
+        "u.s", "u.s.a", "u.k", "e.u",
+        "ｕ．ｓ", "ｕ．ｓ．ａ", "ｕ．ｋ", "ｅ．ｕ",
 
         # Multilateral / Intergovernmental
         "u.n", "u.s.s.r",
+        "ｕ．ｎ", "ｕ．ｓ．ｓ．ｒ",
 
         # Asia / Middle East
         "u.a.e", "p.r.c", "r.o.k",
+        "ｕ．ａ．ｅ", "ｐ．ｒ．ｃ", "ｒ．ｏ．ｋ",
     }
 
     REFERENCE_ABBRVS = {
@@ -118,6 +121,7 @@ class Rules:
     COMMON_ORG_NOUNS = set()
     COMMON_SENT_STARTERS = set()
     QUOTATIVE_PARTICLES = set()
+    POSSESSIVE_PARTICLES = set()
     REPORTING_WORDS = set()
 
     # https://regex101.com/r/tI9Cmg/2
@@ -155,6 +159,7 @@ class Rules:
     def _compile_regex_dynamically(cls):
         """Compile language-specific regex patterns."""
         terminators_pattern = "".join(cls.TERMINATORS)
+        dots_pattern = r"[.．]"
         title_abbrvs_pattern = _build_abbr_pattern(cls.TITLE_ABBRVS)
         geopolitical_abbrvs_pattern = _build_abbr_pattern(cls.GEOPOLITICAL_ABBRVS)
         common_starters_pattern = _build_abbr_pattern(cls.COMMON_SENT_STARTERS)
@@ -202,37 +207,40 @@ class Rules:
             re2.X,
         )
 
-        # https://regex101.com/r/svyCoU/17
+        # https://regex101.com/r/svyCoU/18
         cls.MID_SENTENCE_FINDER = re2.compile(
             rf"""
             # Title abbrv or initialisms (e.g., Dr. Paul)
-            (?<=\b(?i:{title_abbrvs_pattern})\.)|
+            (?<=\b(?i:{title_abbrvs_pattern}){dots_pattern})|
 
             # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
-            (?<=\b(?i:{geopolitical_abbrvs_pattern})\.)
-            (?=\s+(?:{_build_abbr_pattern(cls.COMMON_ORG_NOUNS)}))|
+            (?<=\b(?i:{geopolitical_abbrvs_pattern}){dots_pattern})
+            (?=
+                \s*(?:{_build_abbr_pattern(cls.POSSESSIVE_PARTICLES)})|
+                \s+(?:{_build_abbr_pattern(cls.COMMON_ORG_NOUNS)})
+            )|
 
             # Abbrv that NEVER ends a sentence
-            (?<=\b(?i:{_build_abbr_pattern(cls.MID_SENTENCE_ABBRVS)})\.)|
+            (?<=\b(?i:{_build_abbr_pattern(cls.MID_SENTENCE_ABBRVS)}){dots_pattern})|
 
             # References abbrv followed by a number, a letter or opened paren (e.g., to p. 55, app. A)
-            (?<=\b(?i:{_build_abbr_pattern(cls.REFERENCE_ABBRVS)})\.)
+            (?<=\b(?i:{_build_abbr_pattern(cls.REFERENCE_ABBRVS)}){dots_pattern})
             (?=\s+(?:\(|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))|
 
             # Date abbrv followed by a number
-            (?<=\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)})\.)(?=\s+\p{{N}})|
+            (?<=\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}){dots_pattern})(?=\s+\p{{N}})|
 
             # Streets/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
             # excluding geopolitical ones not followed by a common starters
             (?<=
                 (?:\p{{Lu}}\.){{2,}}(?<!(?i:{geopolitical_abbrvs_pattern}))|
-                \b(?i:{_build_abbr_pattern(cls.STREET_ABBRVS)})\.|
-                \b(?i:{_build_abbr_pattern(cls.NAMES_WITH_EXCLAMATION)})!
+                \b(?i:{_build_abbr_pattern(cls.STREET_ABBRVS)}){dots_pattern}|
+                (?i:{_build_abbr_pattern(cls.NAMES_WITH_EXCLAMATION)})[! ！‼]
             )
             (?!\s+(?:{common_starters_pattern})\b)|
 
             # Collapsed middle name (e.g, Jonas E. Smith)
-            (?<=\s\b(?:\p{{Lu}})\.)(?=\s)
+            (?<=\s\b(?:\p{{Lu}}){dots_pattern})(?=\s)
             """,
             re2.X,
         )
