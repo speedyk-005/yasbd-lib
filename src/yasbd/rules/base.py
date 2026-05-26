@@ -237,7 +237,7 @@ class Rules:
             re2.X,
         )
 
-        # https://regex101.com/r/EGkRU8/7
+        # https://regex101.com/r/EGkRU8/6
         cls.QUOTE_AND_PAREN_END_FINDER = re2.compile(
             rf"""
             (?<=
@@ -245,9 +245,9 @@ class Rules:
                 (?:'\s|["”]|\s*[»\p{{Pf}}\p{{Pe}}])     # Closing quotes/parens
             )
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
-                \s*\p{{po}}|
+                \s*\p{{Po}}|
                 {_build_abbr_pattern(cls.QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}|
-                \s+[\p{{Ll}}]|$
+                \s+[\p{{Ll}}]
             )
             """,
             re2.X,
