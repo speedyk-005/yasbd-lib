@@ -53,13 +53,13 @@ class Rules:
 
     REFERENCE_ABBRVS = {
         # Publishing / Documents
-        "et al", "app", "apps", "cf", "ext", "fig", "figs", "p", "pp",
-        "pag", "ref", "refs", "tab", "tbl", "tbls",
-        "vol", "vols",
+        "et al", "app", "apps", "cf", "ext", "fig", "figs", "l", "ll",
+        "n", "nn", "p", "pp", "pag", "pt", "pts", "ref", "refs", "tab",
+        "tbl", "tbls", "v", "vol", "vols",
 
         # Section / Structure
-        "ann", "art", "arts", "cap", "cl", "cls",
-        "sec", "sect", "secs", "subsec",
+        "ann", "art", "arts", "cap", "cl", "cls", "col", "cols", "para",
+        "paras", "sec", "sect", "secs", "subsec",
 
         # Legal / Numbering
         "no", "nos", "reg", "regs",

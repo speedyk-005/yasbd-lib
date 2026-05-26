@@ -25,12 +25,7 @@ class EnRules(Rules):
     STREET_ABBRVS = Rules.STREET_ABBRVS | {"expy", "hway", "hwy", "pkwy", "rt"}
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         # Publishing / Documents
-        "ch", "chs", "col", "cols", "ed", "eds",
-        "fn", "fns", "l", "ll", "n", "nn",
-        "pt", "pts", "v",
-
-        # Section / Structure
-        "para", "paras",
+        "ch", "chs", "ed", "eds", "fn", "fns",
 
         # Legal / Numbering
         "r", "rr", "suppl", "supl",
