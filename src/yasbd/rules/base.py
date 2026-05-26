@@ -66,6 +66,9 @@ class Rules:
 
         # Scientific / Math / Technical
         "approx", "eq", "eqn", "eqs", "est", "ex", "exs",
+
+        # Academic
+        "univ",
     }
 
     DATE_ABBRVS = {

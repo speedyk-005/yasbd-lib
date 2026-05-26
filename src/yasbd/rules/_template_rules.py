@@ -36,7 +36,7 @@ class LangRules(Rules):
     NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {...}
 
     # Days abbreviations (Jan. Mon., etc..)
-    DATE_ABBRVS = {...}
+    DATE_ABBRVS = Rules.DATE_ABBRVS | {...}
 
     # Nouns that appear inside organisational names
     COMMON_ORG_NOUNS = {...}
