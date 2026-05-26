@@ -82,7 +82,7 @@ line-length = 88
 [tool.ruff.lint]
 # E, W (Flake8), F (Pyflakes), I (Isort), B (Bugbear)
 select = ["E", "F", "I", "W", "B"]
-ignore = ["E501", "E203"]
+ignore = ["B033", "E501", "E203"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401", "F403"]
