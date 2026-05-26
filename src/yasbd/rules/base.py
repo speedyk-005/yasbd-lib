@@ -115,7 +115,7 @@ class Rules:
         "Jeb", "Éxito", "Hey Man", "Basta", "Elliot S"
     }
 
-    COMMON_ORG_NOUNS = {"Army", "Authority", "Trust", "Holding"}
+    COMMON_ORG_NOUNS = set()
     COMMON_SENT_STARTERS = set()
     QUOTATIVE_PARTICLES = set()
     REPORTING_WORDS = set()

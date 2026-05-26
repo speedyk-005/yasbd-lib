@@ -5,13 +5,8 @@ from yasbd.rules.base import Rules
 class HtRules(Rules):
     ISO_CODE = "ht"
 
-
-    # HT always uses full words (e.g., lame ameriken), never dot-abbreviated forms
-    GEOPOLITICAL_ABBRVS = set()
-    COMMON_ORG_NOUNS = set()
-
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {"sek"} - {"ex", "exs", "tab"}
-    DATE_ABBRVS = Rules.DATE_ABBRVS | {"okt",}
+    DATE_ABBRVS = Rules.DATE_ABBRVS | {"okt"}
 
     COMMON_SENT_STARTERS = {
         # Pronouns
