@@ -78,8 +78,6 @@ class EnRules(Rules):
 
 
 if __name__ == "__main__":  # pragma: no cover
-    from io import StringIO
-
     rule = EnRules()
     text = """
         The system requirements for the project are simple: 1. Python 3.12 environment. 2. At least 8GB of RAM. 3. Access to the PUA character set for Sinta markers. Please ensure these are met before initialization.
@@ -92,6 +90,6 @@ if __name__ == "__main__":  # pragma: no cover
 
         The project (which had been delayed for months. ) was finally complete.
     """
-    sentences = rule.apply(StringIO(text), True)
+    sentences = rule.apply(text, True)
     for s in sentences:
         print(repr(s))

@@ -5,7 +5,7 @@ import string
 import pytest
 
 from tests import ALL_TEST_DATA
-from yasbd import BoundaryDetector
+from yasbd import BoundaryDetector, ParagraphEOF
 
 
 @pytest.fixture(scope="module")
@@ -78,16 +78,26 @@ def test_segment_noisy_input(en_detector):
             raise AssertionError(f"Crash on random input (len={length}): {e}") from e
 
 
-def test_include_char_span(en_detector):
-    """test that detect yields valid (start, end) offset pairs."""
+def test_detect_boundary_offsets(en_detector):
+    """test that detect yields valid boundary offsets."""
     text = "Hello World. How are you?"
 
     result = list(en_detector.detect(text))
-    assert len(result) == 2
+    assert result == [12, 25]
+    assert all(isinstance(b, int) for b in result)
+    assert result == sorted(result)
 
-    last_end = 0
-    for start, end in result:
-        assert text[start:end]
-        assert last_end <= start
-        assert start <= end
-        last_end = end
+
+def test_detect_paragraph_eof_sentinel(en_detector):
+    """test that detect yields ParagraphEOF between paragraphs in relative mode."""
+    # Single paragraph = no sentinel
+    result = list(en_detector.detect("Hello. World.", relative=True))
+    assert result == [6, 13]
+
+    # Three paragraphs = two sentinels
+    result = list(en_detector.detect("Hi.\n\nBye.\n\nOh.", relative=True))
+    assert result == [3, ParagraphEOF, 4, ParagraphEOF, 3]
+
+    # Non-relative = no sentinels,
+    result = list(en_detector.detect("First.\n\nSecond.", relative=False))
+    assert result == [6, 15]

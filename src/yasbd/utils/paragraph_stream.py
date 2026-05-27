@@ -6,18 +6,18 @@ if TYPE_CHECKING:
     from yasbd.utils.cleaner import StreamCleaner
 
 
-class ParagraphStreamer:
+class ParagraphStream:
     """An iterator that groups lines of text into paragraph blocks.
 
     This class implements Python's Iterator Protocol (__iter__ and __next__),
     retaining state across calls and yielding reconstructed paragraph blocks.
 
     Examples:
-        >>> streamer = ParagraphStreamer('Hello\\n\\nWorld', skip_empty_lines=False)
+        >>> streamer = ParagraphStream('Hello\\n\\nWorld', skip_empty_lines=False)
         >>> list(streamer)
         ['Hello\\n\\n', 'World']
 
-        >>> streamer = ParagraphStreamer('Hello\\n\\nWorld', skip_empty_lines=True)
+        >>> streamer = ParagraphStream('Hello\\n\\nWorld', skip_empty_lines=True)
         >>> list(streamer)
         ['Hello\\n', 'World']
     """
@@ -27,7 +27,7 @@ class ParagraphStreamer:
         source: "str | TextIOBase | StreamCleaner",
         skip_empty_lines: bool = False,
     ) -> None:
-        """Initialize the ParagraphStreamer iterator.
+        """Initialize ParagraphStream.
 
         Args:
             source: Input text as a string, ``TextIOBase`` stream, or ``StreamCleaner``.
@@ -104,6 +104,6 @@ if __name__ == "__main__":  # pragma: no cover
     world"""
 
     # Correctly instantiate the iterable class and consume its stream
-    para = ParagraphStreamer(text, False)
+    para = ParagraphStream(text, False)
     for p in para:
         print(repr(p))
