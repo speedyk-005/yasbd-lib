@@ -24,7 +24,7 @@ def _build_abbr_pattern(options: set[str]) -> str:
 # fmt: off
 class Rules:
     ISO_CODE = "xx"
-    TERMINATORS =  {"。", "．", ".", "！", "!", "？", "?", "‼", "⁉", "⁈"}
+    TERMINATORS = {"。", "．", ".", "！", "!", "？", "?", "‼", "⁉", "⁈"}
 
     TITLE_ABBRVS = {
         # Standard Professional (Universal Latin roots)
@@ -121,7 +121,7 @@ class Rules:
     COMMON_ORG_NOUNS = set()
     COMMON_SENT_STARTERS = set()
     QUOTATIVE_PARTICLES = set()
-    POSSESSIVE_PARTICLES = set()
+    CASE_MARKERS = set()
     REPORTING_WORDS = set()
 
     # https://regex101.com/r/tI9Cmg/2
@@ -216,7 +216,7 @@ class Rules:
             # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
             (?<=\b(?i:{geopolitical_abbrvs_pattern}){dots_pattern})
             (?=
-                \s*(?:{_build_abbr_pattern(cls.POSSESSIVE_PARTICLES)})|
+                \s*(?:{_build_abbr_pattern(cls.CASE_MARKERS)})|
                 \s+(?:{_build_abbr_pattern(cls.COMMON_ORG_NOUNS)})
             )|
 

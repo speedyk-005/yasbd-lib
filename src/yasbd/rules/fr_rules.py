@@ -31,7 +31,7 @@ class FrRules(Rules):
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
         # Months
         "janv", "fevr", "févr", "fév", "avr", "juill", "juil", "sept",
-        "oct","nov", "déc",
+        "oct", "nov", "déc",
 
         # Days
         "lun", "mar", "mer", "jeu", "ven", "sam", "dim",
