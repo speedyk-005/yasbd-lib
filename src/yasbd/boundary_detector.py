@@ -75,7 +75,6 @@ class BoundaryDetector:
         para_iter: Iterable[str],
     ) -> Generator[tuple[int, int], None, None]:
         """Yield per-paragraph sentence spans."""
-        offset = 0
         for para in para_iter:
             if not para.strip():
                 boundaries = [0, len(para)]
@@ -86,7 +85,6 @@ class BoundaryDetector:
                 start = boundaries[i]
                 end = boundaries[i + 1]
                 yield (start, end)
-            offset += len(para)
 
     @validate_input
     def detect(
