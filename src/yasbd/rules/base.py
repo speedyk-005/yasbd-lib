@@ -1,5 +1,4 @@
 import re  # For simpler patterns
-from collections.abc import Generator, Iterator
 
 import regex as re2
 
@@ -266,34 +265,34 @@ class Rules:
     def _remove_quote_and_paren_spans(
         self,
         main_boundaries: set[int],
-        paragraph: str,
+        text: str,
         preserve_quote_and_paren: bool,
     ) -> None:
         """Remove boundaries inside quoted/parenthesised spans."""
         if preserve_quote_and_paren:
             protected_spans = set()
-            for m in self.QUOTE_AND_PAREN_FINDER.finditer(paragraph):
+            for m in self.QUOTE_AND_PAREN_FINDER.finditer(text):
                 # Ignore first pos to preserve splits before opening quote/paren,
-                # especially for non-whitespace languages 
+                # especially for non-whitespace languages
                 protected_range = set(range(m.start() + 1 , m.end()))
                 protected_spans.update(protected_range)
             main_boundaries.difference_update(protected_spans)
 
         main_boundaries.update(
-            m.end() for m in self.QUOTE_AND_PAREN_END_FINDER.finditer(paragraph)
+            m.end() for m in self.QUOTE_AND_PAREN_END_FINDER.finditer(text)
         )
 
     def _remove_toc_spans(
-        self, main_boundaries: set[int], paragraph: str
+        self, main_boundaries: set[int], text: str
     ) -> None:
         """Remove boundaries inside TOC leader runs."""
-        if "..." in paragraph:
-            for m in self.TOC_LEADER_FINDER.finditer(paragraph):
+        if "..." in text:
+            for m in self.TOC_LEADER_FINDER.finditer(text):
                 main_boundaries.difference_update(range(*m.span()))
 
-    def _adjust_list_boundaries(self, main_boundaries: set[int], paragraph: str) -> None:
+    def _adjust_list_boundaries(self, main_boundaries: set[int], text: str) -> None:
         """Remove and re-align boundaries around list markers."""
-        horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(paragraph))
+        horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(text))
         if len(horiz_matches) >= 2:
             main_boundaries.difference_update(m.end() for m in horiz_matches)
             # Shift boundaries the pointer back (1.\)| => |1.\), a. | => |a. ) to correctly
@@ -301,17 +300,16 @@ class Rules:
             main_boundaries.update(m.start() + 1 for m in horiz_matches if m.start())
 
         main_boundaries.difference_update(
-            m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(paragraph)
+            m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(text)
         )
 
     @validate_input
     def apply(
         self,
-        paragraph: Iterator[str],
+        text: str,
         preserve_quote_and_paren: bool,
-        relative: bool = False,
-    ) -> Generator[tuple[int, int], None, None]:
-        """Detect sentence boundaries for each paragraph.
+    ) -> list[int]:
+        """Detect sentence boundaries in *text*.
 
         Two-pass algorithm:
         1. Collect boundary candidates from punctuation positions.
@@ -319,53 +317,35 @@ class Rules:
            quote/paren spans, list markers).
 
         Args:
-            paragraph: An iterator of paragraphs.
+            text: A string to find sentence boundaries in.
             preserve_quote_and_paren: If ``True``, suppress boundaries
                inside quote and parenthesis spans.
-            relative: If ``False`` (default), yield offsets relative to
-                the full text. If ``True``, offsets are per-paragraph.
 
-        Yields:
-            ``(start_offset, end_offset)`` per sentence.
+        Returns:
+            Sorted list of character offsets at which sentences end.
         """
-        offset = 0
-        for para in paragraph:
-            if not para.strip():
-                n = len(para)
-                yield (offset, offset + n) if not relative else (0, n)
-                if not relative:
-                    offset += n
-                continue
+        text = self.NEWLINE_INSIDE_SENTENCE_FINDER.sub(" ", text)
+        main_boundaries = {
+            m.end() for m in self.NAIVE_BOUNDARY_FINDER.finditer(text)
+        }
 
-            para = self.NEWLINE_INSIDE_SENTENCE_FINDER.sub(" ", para)
-            main_boundaries = {
-                m.end() for m in self.NAIVE_BOUNDARY_FINDER.finditer(para)
-            }
+        # -- Remove false alarms --
+        main_boundaries.difference_update(
+            m.end() for m in self.MID_SENTENCE_FINDER.finditer(text)
+        )
+        self._remove_quote_and_paren_spans(
+            main_boundaries, text, preserve_quote_and_paren
+        )
+        self._remove_toc_spans(main_boundaries, text)
+        self._adjust_list_boundaries(main_boundaries, text)
 
-            # -- Remove false alarms --
-            main_boundaries.difference_update(
-                m.end() for m in self.MID_SENTENCE_FINDER.finditer(para)
+        # Remove contiguous term except last one (e.g., Hello! !!   !! )
+        main_boundaries.difference_update(
+            *(
+                range(m.start(), m.end() - 1)
+                for m in self.CONTIGUOUS_TERMINATORS_FINDER.finditer(text)
             )
-            self._remove_quote_and_paren_spans(
-                main_boundaries, para, preserve_quote_and_paren
-            )
-            self._remove_toc_spans(main_boundaries, para)
-            self._adjust_list_boundaries(main_boundaries, para)
+        )
 
-            # Remove contiguous term except last one (e.g., Hello! !!   !! )
-            main_boundaries.difference_update(
-                *(
-                    range(m.start(), m.end() - 1)
-                    for m in self.CONTIGUOUS_TERMINATORS_FINDER.finditer(para)
-                )
-            )
-
-            main_boundaries.update({0, len(para)})
-            main_boundaries_lst = sorted(main_boundaries)
-            for i in range(len(main_boundaries) - 1):
-                start = main_boundaries_lst[i]
-                end = main_boundaries_lst[i + 1]
-                yield (offset + start, offset + end) if not relative else (start, end)
-
-            if not relative:
-                offset += len(para)
+        main_boundaries.update({0, len(text)})
+        return sorted(main_boundaries)

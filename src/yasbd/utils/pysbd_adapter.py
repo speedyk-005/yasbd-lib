@@ -118,10 +118,14 @@ class Segmenter:
     def _process_text(self, text: str | Iterable[str]) -> list[str | TextSpan]:
         """Detect sentence boundaries in text."""
         if self.char_span:
-            return [
-                TextSpan(text[start:end], start, end)
-                for start, end in self._detector.detect(text)
-            ]
+            boundaries = list(self._detector.detect(text))
+
+            res = []
+            start = 0
+            for end in boundaries:
+                res.append(TextSpan(text[start:end], start, end))
+                start = end
+            return res
 
         if self.clean:
             sents = list(self._detector.segment(text))

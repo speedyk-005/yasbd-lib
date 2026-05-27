@@ -7,7 +7,7 @@ import regex as re2  # For complex patterns
 
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
-from yasbd.utils.paragraph_streamer import ParagraphStreamer
+from yasbd.utils.paragraph_stream import ParagraphStream
 
 # fmt: off
 PREFIXES = {
@@ -107,7 +107,7 @@ class StreamCleaner(StreamCleanerStub):
     @validate_input
     def __init__(self, source: str | TextIOBase) -> None:
         if isinstance(source, (str, TextIOBase)):
-            source = ParagraphStreamer(source, skip_empty_lines=True)
+            source = ParagraphStream(source, skip_empty_lines=True)
         self._source = iter(source)
 
     def __iter__(self) -> Iterator[str]:

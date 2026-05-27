@@ -7,7 +7,11 @@ from loguru import logger
 
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
-from yasbd.utils.paragraph_streamer import ParagraphStreamer
+from yasbd.utils.paragraph_stream import ParagraphStream
+
+# Signals transition between paragraphs in relative mode
+# during boundary detection
+ParagraphEOF = type("_ParagraphEOF", (), {"__repr__": lambda self: "ParagraphEOF"})()
 
 
 class BoundaryDetector:
@@ -67,57 +71,76 @@ class BoundaryDetector:
 
         self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")()
 
+    def _detect_relative_spans(
+        self,
+        para_iter: Iterable[str],
+    ) -> Generator[tuple[int, int], None, None]:
+        """Yield per-paragraph sentence spans."""
+        for para in para_iter:
+            if not para.strip():
+                boundaries = [0, len(para)]
+            else:
+                boundaries = self._rule.apply(para, self.preserve_quote_and_paren)
+
+            for i in range(len(boundaries) - 1):
+                start = boundaries[i]
+                end = boundaries[i + 1]
+                yield (start, end)
+
     @validate_input
     def detect(
         self,
         source: str | TextIOBase | StreamCleanerStub,
         *,
         relative: bool = False,
-    ) -> Generator[tuple[int, int], None, None]:
-        """Detect sentence boundaries in text.
-
-        Yields ``(start, end)`` character offset pairs for each
-        detected sentence.
+    ) -> Generator[int, None, None]:
+        """Detect sentence boundaries in the source text.
 
         Args:
-            source: Plain text string or ``TextIOBase`` stream (e.g., ``StringIO``, opened file).
-            relative: If ``False`` (default), yield offsets relative to
-                the full text. If ``True``, offsets are per-paragraph.
+            source: Plain text string, an open text stream (e.g., ``StringIO``),
+               or a ``StreamCleaner`` instance.
+            relative: If ``False`` (default), yields absolute character
+                offsets from the beginning of the entire stream. If ``True``,
+                offsets reset at each paragraph break, yielding indices relative
+                to the start of the current paragraph.
+
+        Note:
+            When ``relative=True``, a ``ParagraphEOF`` sentinel is yielded
+            between distinct paragraphs to signal the boundary of the local
+            coordinate system. Import via: ``from yasbd import ParagraphEOF``.
 
         Yields:
-            ``(start_offset, end_offset)`` for each sentence.
+            Integer boundary offsets or ``ParagraphEOF`` sentinels.
         """
+
         if self.verbose:  # pragma: no cover
             logger.info(
                 "Called with type={}, relative={}", type(source).__name__, relative
             )
 
         para_iter = (
-            ParagraphStreamer(source)
-            if isinstance(source, (str, TextIOBase))
-            else source
+            ParagraphStream(source) if isinstance(source, (str, TextIOBase)) else source
         )
-        yield from self._detect(para_iter, relative=relative)
 
-    def _detect(
-        self,
-        para_iter: Iterable[str],
-        *,
-        relative: bool = False,
-    ) -> Generator[tuple[int, int], None, None]:
-        """Internal boundary detection.
+        offset = 0
+        is_first_pos = True
+        for para in para_iter:
+            if relative and not is_first_pos:
+                yield ParagraphEOF
+            is_first_pos = False
 
-        Args:
-            para_iter: An iterable of paragraph strings.
-            relative: If ``False``, yield offsets relative to
-                the full text. If ``True``, offsets are per-paragraph.
+            n = len(para)
+            if not para.strip() and relative:
+                yield n
+                continue
 
-        Yields:
-            ``(start_offset, end_offset)`` for each sentence.
-        """
-        yield from self._rule.apply(
-            para_iter, self.preserve_quote_and_paren, relative=relative
-        )
+            boundaries = self._rule.apply(para.rstrip(), self.preserve_quote_and_paren)
+
+            for pos in boundaries[1:]:
+                yield offset + pos if not relative else pos
+
+            if not relative:
+                offset += n
 
     @validate_input
     def segment(
@@ -140,14 +163,14 @@ class BoundaryDetector:
             logger.info("Called with preserve_whitespace={}", preserve_whitespace)
 
         para_iter = (
-            ParagraphStreamer(source, skip_empty_lines=not preserve_whitespace)
+            ParagraphStream(source, skip_empty_lines=not preserve_whitespace)
             if isinstance(source, (str, TextIOBase))
             else source
         )
 
         input_for_detection, input_for_slicing = tee(para_iter)
         curr_para = None
-        for start, end in self._detect(input_for_detection, relative=True):
+        for start, end in self._detect_relative_spans(input_for_detection):
             if start == 0:
                 curr_para = next(input_for_slicing, None)
 
