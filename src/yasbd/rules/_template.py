@@ -6,12 +6,11 @@ from yasbd.rules.base import Rules
 class LangRules(Rules):
     """Template for adding new language rule modules.
 
-    Copy this file and rename it to ``<lang>_rules.py`` (e.g.
-    ``fr_rules.py``), rename the class to ``<Lang>Rules`` (e.g.
-    ``FrRules``), set ``ISO_CODE`` to the two-letter language code,
-    and override only the sets your language needs (please, not all of them).
+    Copy this file and rename it to ``<lang>.py`` (e.g.
+    ``fr.py``), rename the class to ``<Lang>Rules`` (e.g.
+    ``FrRules``) and override only the sets your language needs
+    (please, not all of them).
     """
-    ISO_CODE = "xx"
 
     # Extra sentence terminators used by the language.
     TERMINATORS = Rules.TERMINATORS | {...}

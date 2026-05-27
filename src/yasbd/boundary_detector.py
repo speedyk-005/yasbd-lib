@@ -61,7 +61,7 @@ class BoundaryDetector:
             logger.info("Trying to load rule module for {}", lang)
 
         try:
-            rule_module = import_module(f"yasbd.rules.{lang}_rules")
+            rule_module = import_module(f"yasbd.rules.{lang}")
         except ModuleNotFoundError:
             raise ValueError(f"Unsupported language: {lang!r}") from None
 

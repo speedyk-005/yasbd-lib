@@ -23,7 +23,6 @@ def _build_abbr_pattern(options: set[str]) -> str:
 
 # fmt: off
 class Rules:
-    ISO_CODE = "xx"
     TERMINATORS = {"。", "．", ".", "！", "!", "？", "?", "‼", "⁉", "⁈"}
 
     TITLE_ABBRVS = {

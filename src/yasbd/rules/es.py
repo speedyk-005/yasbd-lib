@@ -3,7 +3,7 @@ from yasbd.rules.base import Rules
 
 # fmt: off
 class EsRules(Rules):
-    ISO_CODE = "es"
+
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Social / Professional

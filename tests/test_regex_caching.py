@@ -1,7 +1,7 @@
 import time
 
 from yasbd.rules.base import Rules
-from yasbd.rules.en_rules import EnRules
+from yasbd.rules.en import EnRules
 
 
 def test_regex_caching_performance():

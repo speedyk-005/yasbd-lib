@@ -3,7 +3,6 @@ from yasbd.rules.base import Rules
 
 # fmt: off
 class EnRules(Rules):
-    ISO_CODE = "en"
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Social / Honorific
         "messrs", "mlle", "mme", "mmes", "mssrs",

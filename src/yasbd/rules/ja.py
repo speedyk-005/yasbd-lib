@@ -3,7 +3,7 @@ from yasbd.rules.base import Rules
 
 # fmt: off
 class JaRules(Rules):
-    ISO_CODE = "ja"
+
 
     NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {
         "トニカクカワイイ", "アイカツ", "マギ", "けいおん", "ラブライブ",
