@@ -140,7 +140,7 @@ class Rules:
     TOC_LEADER_FINDER = re.compile(r"[^\W_][\s\.]{4,}\d")
 
     # https://regex101.com/r/ZOZlLb/2/substitution
-    NEWLINE_INSIDE_SENTENCE_FINDER = re.compile(r"(?<=[,:;)\w\s])\n(?=([a-z(]))")
+    NEWLINE_INSIDE_SENTENCE_FINDER = re2.compile(r"(?<=[,:;)\w\s])\n(?=([a-z(]))")
 
     _REGEX_CACHED = False
     # fmt: on
