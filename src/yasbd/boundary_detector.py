@@ -2,15 +2,17 @@ from collections.abc import Generator, Iterable
 from importlib import import_module
 from io import TextIOBase
 from itertools import tee
+from types import SimpleNamespace
 
-import sentinel
 from loguru import logger
 
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
 from yasbd.utils.paragraph_stream import ParagraphStream
 
-ParagraphEOF = sentinel.create("ParagraphEOF")
+# Signals transition between paragraphs in relative mode
+# during boundary detection
+ParagraphEOF = SimpleNamespace(__repr__=lambda: "ParagraphEOF")
 
 
 class BoundaryDetector:
