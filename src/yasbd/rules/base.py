@@ -59,8 +59,8 @@ class Rules:
         "tbl", "tbls", "v", "vol", "vols",
 
         # Section / Structure
-        "ann", "art", "arts", "cap", "cl", "cls", "col", "cols", "text",
-        "texts", "sec", "sect", "secs", "subsec",
+        "ann", "art", "arts", "cap", "cl", "cls", "col", "cols", "para",
+        "paras", "sec", "sect", "secs", "subsec",
 
         # Legal / Numbering
         "no", "nos", "reg", "regs",
@@ -196,7 +196,7 @@ class Rules:
                 \s*\p{{Lo}}
             )|
 
-            # Split at transition between Latin letters setextte by alien
+            # Split at transition between Latin letters separate by alien
             (?<=[\p{{LU}}\p{{Ll}}][​。！？।])(?=[\p{{Lu}}])|
 
             # Cluster of terminators (e.g hello!!! r u ok?)
