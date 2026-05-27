@@ -8,7 +8,7 @@ from loguru import logger
 
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
-from yasbd.utils.paragraph_streamer import ParagraphStreamer
+from yasbd.utils.paragraph_stream import ParagraphStream
 
 ParagraphEOF = sentinel.create("ParagraphEOF")
 
@@ -120,9 +120,7 @@ class BoundaryDetector:
             )
 
         para_iter = (
-            ParagraphStreamer(source)
-            if isinstance(source, (str, TextIOBase))
-            else source
+            ParagraphStream(source) if isinstance(source, (str, TextIOBase)) else source
         )
 
         offset = 0
@@ -166,7 +164,7 @@ class BoundaryDetector:
             logger.info("Called with preserve_whitespace={}", preserve_whitespace)
 
         para_iter = (
-            ParagraphStreamer(source, skip_empty_lines=not preserve_whitespace)
+            ParagraphStream(source, skip_empty_lines=not preserve_whitespace)
             if isinstance(source, (str, TextIOBase))
             else source
         )
