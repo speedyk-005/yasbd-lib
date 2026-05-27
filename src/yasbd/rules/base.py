@@ -273,8 +273,10 @@ class Rules:
         if preserve_quote_and_paren:
             protected_spans = set()
             for m in self.QUOTE_AND_PAREN_FINDER.finditer(paragraph):
-                inner_range = set(range(*m.span()))
-                protected_spans.update(inner_range)
+                # Ignore first pos to preserve splits before opening quote/paren,
+                # especially for non-whitespace languages 
+                protected_range = set(range(m.start() + 1 , m.end()))
+                protected_spans.update(protected_range)
             main_boundaries.difference_update(protected_spans)
 
         main_boundaries.update(
