@@ -6,8 +6,8 @@ class JaRules(Rules):
     ISO_CODE = "ja"
 
     NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {
-        "トニカクカワイイ",  "アイカツ",  "マギ",  "けいおん",  "ラブライブ",
-        "ハイキュー！",  "這いよれ"
+        "トニカクカワイイ", "アイカツ", "マギ", "けいおん", "ラブライブ",
+        "ハイキュー！", "這いよれ"
     }
 
     COMMON_SENT_STARTERS = {
@@ -19,7 +19,7 @@ class JaRules(Rules):
         "と", "って", "などと",
 
         # embedded quotation structures
-        "ように", "らしいと", "そうだと",  # "そう言って"
+        "ように", "らしいと", "そうだと",
     }
 
     CASE_MARKERS = {
