@@ -6,7 +6,7 @@ class HtRules(Rules):
     ISO_CODE = "ht"
 
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {"sek"} - {"ex", "exs", "tab"}
-    DATE_ABBRVS = Rules.DATE_ABBRVS | {"okt"}
+    DATE_ABBRVS = Rules.DATE_ABBRVS | {"okt", "fev", "des"}
 
     COMMON_SENT_STARTERS = {
         # Pronouns
