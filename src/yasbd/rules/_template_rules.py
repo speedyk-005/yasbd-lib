@@ -11,43 +11,48 @@ class LangRules(Rules):
     ``FrRules``), set ``ISO_CODE`` to the two-letter language code,
     and override only the sets your language needs (please, not all of them).
     """
-
     ISO_CODE = "xx"
 
-    # Sentence-ending punctuation specific to your language
+    # Extra sentence terminators used by the language.
     TERMINATORS = Rules.TERMINATORS | {...}
 
-    # Honorifics & professional titles (Mr., Dr., Prof., etc.)
+    # Honorifics and professional abbreviations that should not split sentences.
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {...}
 
-    # Country/region abbreviations (U.S., U.K., E.U., etc.)
+    # Country and regional abbreviations written with periods (U.S., E.U., etc.).
     GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {...}
 
-    # Bibliographic / citation abbreviations (cf., fig., p., etc.)
+    # Citation and reference abbreviations commonly used mid-text.
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {...}
 
-    # Street/road suffixes (Ave., Blvd., Rd., etc.)
+    # Street and address abbreviations (Ave., Blvd., Rd., etc.).
     STREET_ABBRVS = Rules.STREET_ABBRVS | {...}
 
-    # Abbreviations that safely appear mid-sentence (vs., e.g., i.e., etc.)
+    # Common inline abbreviations that should not end a sentence.
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {...}
 
-    # Brands / titles containing "!" that should not trigger a split
+    # Names or titles containing "!" that should not trigger sentence breaks.
     NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {...}
 
-    # Days abbreviations (Jan. Mon., etc..)
-    DATE_ABBRVS = {...}
+    # Month, weekday, and calendar abbreviations.
+    DATE_ABBRVS = Rules.DATE_ABBRVS | {...}
 
-    # Nouns that appear inside organisational names
+    # Common nouns appearing inside organization or institution names.
     COMMON_ORG_NOUNS = {...}
 
-    # Words that commonly start sentences (The, A, This, etc.)
+    # Frequently occurring sentence starters used as weak boundary hints.
     COMMON_SENT_STARTERS = {...}
 
-    # Quotative particles (Japanese と, Korean 라고, etc.)
+    # -- Mostly useful for unicase or weakly-cased languages --
+
+    # Quotative particles used after speech, thoughts, or labels.
     QUOTATIVE_PARTICLES = {...}
 
-    # Reporting verbs for dialogue (Chinese 说/道/问, etc.)
+    # Postpositional case markers that tightly bind an abbreviation to the clause
+    # (Japanese の, Chinese 的, etc.).
+    CASE_MARKERS = {...}
+
+    # Verbs commonly used for dialogue attribution or reported speech.
     REPORTING_WORDS = {...}
 
 # fmt: on

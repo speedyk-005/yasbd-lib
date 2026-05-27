@@ -30,7 +30,7 @@ def test_segment_empty_input(input_text, en_detector):
 def test_unsupported_language():
     """test that unknown language codes raise ValueError."""
     with pytest.raises(ValueError, match="Unsupported language"):
-        BoundaryDetector(lang="ht")
+        BoundaryDetector(lang="xx")
 
 
 def test_segment_different_input(en_detector):
@@ -91,6 +91,3 @@ def test_include_char_span(en_detector):
         assert last_end <= start
         assert start <= end
         last_end = end
-
-
-
