@@ -4,7 +4,7 @@ Yasbd: A high-accuracy, from-scratch Sentence Boundary Detector (SBD) for produc
 
 [![Python Version](https://img.shields.io/badge/Python-3.11%20--%203.14-blue)](https://www.python.org/downloads/)
 [![PyPI](https://img.shields.io/pypi/v/yasbd)](https://pypi.org/project/yasbd)
-[![Coverage Status](https://coveralls.io/repos/github/speedyk-005/yasbd/badge.svg?branch=main)](https://coveralls.io/github/speedyk-005/yasbd?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/speedyk-005/yasbd/badge.svg?branch=main&kill_cache=1)](https://coveralls.io/github/speedyk-005/yasbd?branch=main)
 [![Stability](https://img.shields.io/badge/stability-alpha-red)](https://github.com/speedyk-005/yasbd)
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](https://github.com/speedyk-005/yasbd/actions)
