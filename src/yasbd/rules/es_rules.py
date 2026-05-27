@@ -16,7 +16,8 @@ class EsRules(Rules):
     }
 
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
-        "cra", "pág", "núm", "t", "tel", "trad",
+        "cra", "pág", "núm", "t", "tel", "trad", "asoc", "aprox",
+        "cf", "incl", "cía", "s",
     }
 
     STREET_ABBRVS = Rules.STREET_ABBRVS | {
@@ -26,7 +27,7 @@ class EsRules(Rules):
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {"ej", "p.ej", "vid"}
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
-        "ene", "abr", "ago", "dic", "mié", "jue", "vie", "sáb",
+        "ene", "abr", "ago", "dic", "mié", "miér", "jue", "vie", "sáb",
     }
 
     COMMON_SENT_STARTERS = {
