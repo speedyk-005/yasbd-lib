@@ -115,9 +115,24 @@ class BoundaryDetector:
         Yields:
             ``(start_offset, end_offset)`` for each sentence.
         """
-        yield from self._rule.apply(
-            para_iter, self.preserve_quote_and_paren, relative=relative
-        )
+        offset = 0
+        for para in para_iter:
+            if not para.strip():
+                n = len(para)
+                yield (offset, offset + n) if not relative else (0, n)
+                if not relative:
+                    offset += n
+                continue
+
+            boundaries = self._rule.apply(para, self.preserve_quote_and_paren)
+
+            for i in range(len(boundaries) - 1):
+                start = boundaries[i]
+                end = boundaries[i + 1]
+                yield (offset + start, offset + end) if not relative else (start, end)
+
+            if not relative:
+                offset += len(para)
 
     @validate_input
     def segment(
