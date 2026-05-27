@@ -2,7 +2,6 @@ from collections.abc import Generator, Iterable
 from importlib import import_module
 from io import TextIOBase
 from itertools import tee
-from types import SimpleNamespace
 
 from loguru import logger
 
@@ -12,7 +11,7 @@ from yasbd.utils.paragraph_stream import ParagraphStream
 
 # Signals transition between paragraphs in relative mode
 # during boundary detection
-ParagraphEOF = SimpleNamespace(__repr__=lambda: "ParagraphEOF")
+ParagraphEOF = type("_ParagraphEOF", (), {"__repr__": lambda self: "ParagraphEOF"})()
 
 
 class BoundaryDetector:
