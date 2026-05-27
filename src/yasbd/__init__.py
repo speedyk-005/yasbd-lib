@@ -1,4 +1,3 @@
-from yasbd.boundary_detector import BoundaryDetector
-from yasbd.utils.pysbd_adapter import TextSpan
+from yasbd.boundary_detector import BoundaryDetector, ParagraphEOF
 
-__all__ = ["TextSpan", "BoundaryDetector"]
+__all__ = ["BoundaryDetector", "ParagraphEOF"]

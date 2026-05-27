@@ -600,6 +600,15 @@ wheels = [
 ]
 
 [[package]]
+name = "sentinel"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4a/d8/49115169583d02b38e7d93909a474c7ed0863f7d4df27095588344f2e66a/sentinel-1.0.0.tar.gz", hash = "sha256:190928f9951af6e94a1f84eefcaed791c28097dd152b88e988906be300451fd2", size = 6981, upload-time = "2022-07-23T10:22:19.606Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f3/c4/37cd564e7c5ee72afc864e43b872c716ed43604e50ea0adbb510d720f92d/sentinel-1.0.0-py3-none-any.whl", hash = "sha256:24f02a34cc9f0fcba5a666a23b6c7f56aff332fc624632ee442e7237751a9f60", size = 6485, upload-time = "2022-07-23T10:22:16.826Z" },
+]
+
+[[package]]
 name = "tomli"
 version = "2.4.1"
 source = { registry = "https://pypi.org/simple" }
@@ -716,6 +725,7 @@ dependencies = [
     { name = "loguru" },
     { name = "pydantic" },
     { name = "regex" },
+    { name = "sentinel" },
 ]
 
 [package.optional-dependencies]
@@ -736,5 +746,6 @@ requires-dist = [
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=6.2.1" },
     { name = "regex", specifier = ">=2025.7.29" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.14.14" },
+    { name = "sentinel", specifier = ">=1.0,<2.0" },
 ]
 provides-extras = ["dev"]
