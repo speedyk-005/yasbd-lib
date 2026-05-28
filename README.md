@@ -198,6 +198,16 @@ print(res)
 > [!TIP]
 > **Inputs & streaming** — `detect()` and `segment()` accept plain strings, open file streams (`TextIOBase`), or a `StreamCleaner`. Both are generators: they yield results lazily without loading the entire source into memory. Internally, the text is split on blank lines into paragraphs, and each paragraph is processed independently with offset tracking between them.
 
+> [!TIP]
+> **ParagraphStream** — yasbd uses [`ParagraphStream`](API_REFERENCES.md#yasbd-utils-paragraph_stream-ParagraphStream) internally to split text into paragraph blocks. You can import it directly if you need paragraph-level processing in your own code:
+> ```python
+> from yasbd.utils.paragraph_stream import ParagraphStream
+>
+> for para in ParagraphStream(text):
+>     print(para)  # each paragraph block
+> ```
+> You can also skip empty lines with `skip_empty_lines=True`
+
 ### Cleaner
 
 OCRd a PDF or scraping noisy text? [`StreamCleaner`](API_REFERENCES.md#yasbd-utils-cleaner-StreamCleaner) normalizes paragraphs before they hit the detector:
