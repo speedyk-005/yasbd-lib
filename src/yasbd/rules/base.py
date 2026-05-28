@@ -69,7 +69,7 @@ class Rules:
         "approx", "eq", "eqn", "eqs", "est", "ex", "exs",
 
         # Academic
-        "univ",
+        "univ", "s",
     }
 
     DATE_ABBRVS = {
