@@ -77,7 +77,7 @@ class BoundaryDetector:
     ) -> Generator[tuple[int, int], None, None]:
         """Yield per-paragraph sentence spans."""
         for para in para_iter:
-            if not para.strip():
+            if not para or para.isspace():
                 boundaries = [0, len(para)]
             else:
                 boundaries = self._rule.apply(para, self.preserve_quote_and_paren)
@@ -125,7 +125,7 @@ class BoundaryDetector:
         offset = 0
         is_first_pos = True
         for para in para_iter:
-            if not para.strip():
+            if not para or para.isspace():
                 if not relative:
                     offset += len(para)
                 continue
