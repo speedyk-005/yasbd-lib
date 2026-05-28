@@ -12,7 +12,7 @@
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/speedyk-005/yasbd)
 
 > [!WARNING]
-> This project is currently in pre-alpha.
+> This project is currently in alpha.
 
 ---
 
@@ -34,6 +34,7 @@
   - [Cleaner](#cleaner)
   - [Adapter](#adapter)
 - [🗺 Features & Roadmap](#-features--roadmap)
+- [🏁 Benchmarks](#-benchmarks)
 - [📜 Last note](#-last-note)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -240,6 +241,14 @@ Same API surface. Same [`Segmenter`](API_REFERENCES.md#yasbd-utils-pysbd_adapter
 
 ---
 
+## 🏁 Benchmarks
+
+Tested against 6 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, sentence-splitter) across 5 languages and 7 edge cases: compound abbreviations, CJK quotes, newline wrapping, chat logs, URLs, and more.
+
+**TL;DR:** yasbd ranked #1 in accuracy across almost every test, while staying competitive on speed as pure Python. blingfire is faster but brittle. pysbd and sentencex shred French abbreviations. nupunkt has an 11-second cold start.
+Full results, terminal output, and a performance graph can be found in **[benchmarks/](benchmarks/)**
+
+---
 
 ## 📜 Last note
 
