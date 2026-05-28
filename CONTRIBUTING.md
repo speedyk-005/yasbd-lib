@@ -4,11 +4,11 @@ The maintenance bench is open. Grab your protective eyewear, pick up your calipe
 
 We don't do sloppy hacks or blunt tears here. yasbd is a zero-copy, low-memory, pointer-scanning boundary shearing unit. If you are here to modify the cutting edge, you must adhere to the strict mechanical tolerances outlined in this manual.
 
-## 1. Bench Setup & Tooling Installation
+## Bench Setup
 
 Before you touch the live micro-blades, you need to set up an isolated diagnostic environment.
 
-### Step 1: Clone the Unit Blueprint
+### Clone the Blueprint
 
 Pull the official schematics from the main repository:
 
@@ -17,7 +17,7 @@ git clone https://github.com/speedyk-005/yasbd.git
 cd yasbd
 ```
 
-### Step 2: Establish an Isolated Calibration Field
+### Calibrate the Environment
 
 Create and activate your virtual environment using uv. Do not install dependencies globally unless you enjoy contaminating your workshop.
 
@@ -26,7 +26,7 @@ uv venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
-### Step 3: Install Calibration-Grade Tooling
+### Install the Tooling
 
 Install the development package with the necessary testing rigs using uv pip.
 
@@ -48,11 +48,11 @@ uv pip install -e ".[dev-all]"  # Full stress-test configuration
 > uv pip install -e ".[dev-all]"
 > ```
 
-## 2. Making Modifications (Adjusting the Blade)
+## Making Modifications
 
 Do not make adjustments directly to the main production line. Work on an isolated branch.
 
-### Step 1: File an Engineering Sub-Branch
+### Create a Branch
 
 Use a standardized prefix so the telemetry system knows what you are touching:
 
@@ -64,7 +64,11 @@ git checkout -b feature/my-feature-branch
 git checkout -b bugfix/issue-number-description
 ```
 
-### Step 2: Run the Diagnostic Rig
+### Add a New Language Module
+
+Copy [`src/yasbd/rules/_template.py`](src/yasbd/rules/_template.py) to `src/yasbd/rules/{lang}.py`, rename the class to `{Lang}Rules`, fill in the sets your language needs, and add test data to `tests/test_data/{lang}.py`. Auto-discovered at runtime, no registration needed.
+
+### Run Diagnostics
 
 If you change the teeth of a blade, you must verify it still cuts straight. Run the test suite using uv run:
 
@@ -72,15 +76,15 @@ If you change the teeth of a blade, you must verify it still cuts straight. Run 
 uv run pytest
 ```
 
-### Step 3: Machine the Surfaces (Formatting & Linting)
+### Machine the Surfaces
 
-Our code surfaces must be perfectly smooth. Any micro-roughness will block compile-time caching. Before pushing, sand down the rough edges:
+Our code surfaces must be perfectly smooth. Before pushing, sand down the rough edges:
 
 ```bash
 uv run ruff format && uv run ruff check --fix
 ```
 
-### Step 4: Build Documentation
+### Build Documentation
 
 If you changed any docstrings or public interfaces, regenerate the docs:
 
@@ -94,11 +98,11 @@ uv run python -m python_docstring_markdown ./src/yasbd API_REFERENCES.md
 npx doctoc --github README.md
 ```
 
-## 3. Engineering Quality Guidelines
+## Quality Guidelines
 
-### Mechanical Component Ordering (Method Ordering)
+### Component Ordering
 
-To keep the machinery readable for other technicians, arrange class components strictly from top to bottom. Do not throw private helpers wherever you feel like it. Keep the internal components ordered like this:
+To keep the machinery readable for other technicians, arrange class components bottom-up, fundamentals first, public interface last:
 
 1. Class docstring (describes what the machine does)
 2. Constants and static configuration attributes
@@ -135,30 +139,30 @@ class ExampleClass:
 
 All public interface controls must be documented using Google-style docstrings. Explain your arguments, return types, and exceptions clearly. If your code is too complex for a standard docstring, simplify your logic or document the mathematical assumptions clearly.
 
-## 4. Maintenance Report Template (Pull Request)
+## Pull Request Template
 
 When submitting your modifications to the main system, use the following engineering template.
 
-### Mechanical Objective
+### Objective
 
 Brief, precise summary of why the machinery needed modification.
 
-### Applied Modifications
+### Changes
 
 - Component 'X' was swapped out for 'Y'.
 - Caching layer was optimized to prevent O(N²) lockups.
 - Fixed boundary-slippage bug near abbreviation patterns.
 
-### Diagnostic Verification
+### Verification
 
 - Confirm that `pytest` executed successfully.
 - Mention any new test cases added to the validation suite.
 
-### Referenced Blueprints
+### Related Issues
 
 - Fixes #issue-number
 
-## 5. Operator Conduct & Behavior Protocols
+## Conduct
 
 We are adults here trying to build high-performance software. Be civil, respect different architectural opinions, and remember that behind every GitHub profile is a human being who probably has better things to do than argue over irrelevant formatting details.
 

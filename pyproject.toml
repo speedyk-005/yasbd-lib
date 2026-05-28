@@ -38,10 +38,21 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+bench = [
+  "pysbd",
+  "sentencex",
+  "sentsplit",  # depends on deprecated pkg_resources — needs setuptools<81
+  "nupunkt",
+  "blingfire",
+  "sentence-splitter",
+  "setuptools<81",
+  "matplotlib",
+]
 dev = [
   "pytest>=8.3.5",
   "pytest-cov>=6.2.1",
   "pre-commit>=4.4.0",
+  "python-docstring-markdown>=0.2.2",
   "ruff>=0.14.14",
 ]
 
