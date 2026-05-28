@@ -2,8 +2,6 @@ import re  # For simpler patterns
 
 import regex as re2
 
-from yasbd.utils.input_validator import validate_input
-
 
 def _build_abbr_pattern(options: set[str]) -> str:
     """Build a safe escaped regex alternation pattern.
@@ -300,7 +298,6 @@ class Rules:
             m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(text)
         )
 
-    @validate_input
     def apply(
         self,
         text: str,
