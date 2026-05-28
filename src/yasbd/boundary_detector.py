@@ -125,14 +125,14 @@ class BoundaryDetector:
         offset = 0
         is_first_pos = True
         for para in para_iter:
+            if not para.strip():
+                if not relative:
+                    offset += len(para)
+                continue
+
             if relative and not is_first_pos:
                 yield ParagraphEOF
             is_first_pos = False
-
-            n = len(para)
-            if not para.strip() and relative:
-                yield n
-                continue
 
             boundaries = self._rule.apply(para.rstrip(), self.preserve_quote_and_paren)
 
@@ -140,7 +140,7 @@ class BoundaryDetector:
                 yield offset + pos if not relative else pos
 
             if not relative:
-                offset += n
+                offset += len(para)
 
     @validate_input
     def segment(
