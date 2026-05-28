@@ -1,5 +1,4 @@
 import re  # For simpler patterns
-from itertools import chain
 
 import regex as re2
 
@@ -289,10 +288,9 @@ class Rules:
             # Ignore first pos to preserve splits before opening quote/paren,
             # especially for non-whitespace languages
             main_boundaries.difference_update(
-                chain.from_iterable(
-                    range(m.start() + 1, m.end())
-                    for m in self.QUOTE_AND_PAREN_FINDER.finditer(text)
-                )
+                pos
+                for m in self.QUOTE_AND_PAREN_FINDER.finditer(text)
+                for pos in range(m.start() + 1, m.end())
             )
 
             main_boundaries.update(
@@ -356,7 +354,7 @@ class Rules:
         self._remove_toc_spans(main_boundaries, text)
         self._adjust_list_boundaries(main_boundaries, text)
 
-        # Remove contiguous term except last one (e.g., Hello! !!   !! )
+        # Remove contiguous term pos except last one (e.g., Hello! !!   !! )
         main_boundaries.difference_update(
             *(
                 range(m.start(), m.end() - 1)
