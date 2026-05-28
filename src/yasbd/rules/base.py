@@ -2,8 +2,6 @@ import re  # For simpler patterns
 
 import regex as re2
 
-from yasbd.utils.input_validator import validate_input
-
 
 def _build_abbr_pattern(options: set[str]) -> str:
     """Build a safe escaped regex alternation pattern.
@@ -205,43 +203,60 @@ class Rules:
             re2.X,
         )
 
+        # fmt: off
+        # Faster than one big regex
         # https://regex101.com/r/svyCoU/18
-        cls.MID_SENTENCE_FINDER = re2.compile(
-            rf"""
+        cls.MID_SENTENCE_FINDER_LST = [
             # Title abbrv or initialisms (e.g., Dr. Paul)
-            (?<=\b(?i:{title_abbrvs_pattern}){dots_pattern})|
+            re.compile(rf"\b(?i:{title_abbrvs_pattern}){dots_pattern}"),
 
             # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
-            (?<=\b(?i:{geopolitical_abbrvs_pattern}){dots_pattern})
-            (?=
-                \s*(?:{_build_abbr_pattern(cls.CASE_MARKERS)})|
-                \s+(?:{_build_abbr_pattern(cls.COMMON_ORG_NOUNS)})
-            )|
+            re.compile(rf"""
+                \b(?i:{geopolitical_abbrvs_pattern}){dots_pattern}
+                (?=
+                    \s*(?:{_build_abbr_pattern(cls.CASE_MARKERS)})|
+                    \s+(?:{_build_abbr_pattern(cls.COMMON_ORG_NOUNS)})
+                )
+                """, re.X
+            ),
 
             # Abbrv that NEVER ends a sentence
-            (?<=\b(?i:{_build_abbr_pattern(cls.MID_SENTENCE_ABBRVS)}){dots_pattern})|
+            re.compile(
+               rf"\b(?i:{_build_abbr_pattern(cls.MID_SENTENCE_ABBRVS)}){dots_pattern}"
+            ),
 
             # References abbrv followed by a number, a letter or opened paren (e.g., to p. 55, app. A)
-            (?<=\b(?i:{_build_abbr_pattern(cls.REFERENCE_ABBRVS)}){dots_pattern})
-            (?=\s+(?:\(|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))|
+            re2.compile(rf"""
+                \b(?i:{_build_abbr_pattern(cls.REFERENCE_ABBRVS)}){dots_pattern}
+                (?=\s+(?:\(|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))
+                """, re2.X
+            ),
 
             # Date abbrv followed by a number
-            (?<=\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}){dots_pattern})(?=\s+\p{{N}})|
+            re2.compile(
+                rf"\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}){dots_pattern}(?=\s+\p{{N}})"
+            ),
 
             # Streets/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
             # excluding geopolitical ones not followed by a common starters
-            (?<=
-                (?:\p{{Lu}}\.){{2,}}(?<!(?i:{geopolitical_abbrvs_pattern}))|
-                \b(?i:{_build_abbr_pattern(cls.STREET_ABBRVS)}){dots_pattern}|
-                (?i:{_build_abbr_pattern(cls.NAMES_WITH_EXCLAMATION)})[! ！‼]
-            )
-            (?!\s+(?:{common_starters_pattern})\b)|
+            re2.compile(rf"""
+                (?:\p{{Lu}}\.){{2,}}(?<!(?i:{geopolitical_abbrvs_pattern}))
+                (?!\s+(?:{common_starters_pattern})\b)
+                """, re2.X
+            ),
+            re.compile(rf"""
+                (?:
+                    \b(?i:{_build_abbr_pattern(cls.STREET_ABBRVS)}){dots_pattern}|
+                    (?i:{_build_abbr_pattern(cls.NAMES_WITH_EXCLAMATION)})[! ！‼]
+                )
+                (?!\s+(?:{common_starters_pattern})\b)
+               """, re.X
+            ),
 
             # Collapsed middle name (e.g, Jonas E. Smith)
-            (?<=\s\b(?:\p{{Lu}}){dots_pattern})(?=\s)
-            """,
-            re2.X,
-        )
+            re2.compile(rf"\s\b(?:\p{{Lu}}){dots_pattern}(?=\s)"),
+        ]
+        # fmt: on
 
         # https://regex101.com/r/EGkRU8/6
         cls.QUOTE_AND_PAREN_END_FINDER = re2.compile(
@@ -270,17 +285,17 @@ class Rules:
     ) -> None:
         """Remove boundaries inside quoted/parenthesised spans."""
         if preserve_quote_and_paren:
-            protected_spans = set()
-            for m in self.QUOTE_AND_PAREN_FINDER.finditer(text):
-                # Ignore first pos to preserve splits before opening quote/paren,
-                # especially for non-whitespace languages
-                protected_range = set(range(m.start() + 1 , m.end()))
-                protected_spans.update(protected_range)
-            main_boundaries.difference_update(protected_spans)
+            # Ignore first pos to preserve splits before opening quote/paren,
+            # especially for non-whitespace languages
+            main_boundaries.difference_update(
+                pos
+                for m in self.QUOTE_AND_PAREN_FINDER.finditer(text)
+                for pos in range(m.start() + 1, m.end())
+            )
 
-        main_boundaries.update(
-            m.end() for m in self.QUOTE_AND_PAREN_END_FINDER.finditer(text)
-        )
+            main_boundaries.update(
+                m.end() for m in self.QUOTE_AND_PAREN_END_FINDER.finditer(text)
+            )
 
     def _remove_toc_spans(
         self, main_boundaries: set[int], text: str
@@ -303,7 +318,6 @@ class Rules:
             m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(text)
         )
 
-    @validate_input
     def apply(
         self,
         text: str,
@@ -331,7 +345,8 @@ class Rules:
 
         # -- Remove false alarms --
         main_boundaries.difference_update(
-            m.end() for m in self.MID_SENTENCE_FINDER.finditer(text)
+            m.end() for pat in self.MID_SENTENCE_FINDER_LST
+            for m in pat.finditer(text)
         )
         self._remove_quote_and_paren_spans(
             main_boundaries, text, preserve_quote_and_paren
@@ -339,7 +354,7 @@ class Rules:
         self._remove_toc_spans(main_boundaries, text)
         self._adjust_list_boundaries(main_boundaries, text)
 
-        # Remove contiguous term except last one (e.g., Hello! !!   !! )
+        # Remove contiguous term pos except last one (e.g., Hello! !!   !! )
         main_boundaries.difference_update(
             *(
                 range(m.start(), m.end() - 1)
