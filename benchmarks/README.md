@@ -236,7 +236,7 @@ incl. the events of the s. XIX, was retransmitted.
 
 | Library | Sents | Warm Time (ms) | Verdict |
 |---|---|---|---|
-| **yasbd** | **7** | 14.22 | **Top pick.** Joins all newlines, preserves `s. XIX` intact. |
+| **yasbd** | **7** | 1.57 | **Top pick.** Joins all newlines, preserves `s. XIX` intact. |
 | **nupunkt** | **7** | 3.02 | Same output as yasbd. But 11s cold start makes it impractical. |
 | **blingfire** | 7 | 2.82 | Merges first two sentences into one. Also splits `s.` + `XIX`. |
 | **sentencex** | 8 | 0.34 | Splits `incl.` from `the events of the s. XIX`. |
@@ -376,7 +376,7 @@ Copyright © 2024 Example Corp. All rights reserved.
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 10 | 4.78 | **Top pick.** Flawlessly parsed complex URLs, scientific abbreviations (`Dr. A. B. Patel`), and inline citations without breaking. It also handled the nested quotation blocks cleaner than the rest. |
+| **1** | **yasbd** | 10 | 3.02 | **Top pick.** Flawlessly parsed complex URLs, scientific abbreviations (`Dr. A. B. Patel`), and inline citations without breaking. It also handled the nested quotation blocks cleaner than the rest. |
 | **2** | **blingfire** | 11 | 0.82 | **Exceptional balance of speed and accuracy.** Matched the perfect parsing of `yasbd` for URLs and abbreviations. The only difference is that it chose to split the final multi-sentence testimonial quote into 3 clean sentences instead of 2. |
 | **3** | **sentencex** | 13 | 0.77 | **Blazing fast, but messy.** It handles the actual text (URLs, citations) perfectly, but it fails to strip out whitespace, counting empty newlines (`\n\n`) as standalone sentences. |
 | **4** | **sentence-splitter** | 14 | 8.25 | **Mediocre.** Correctly preserved URLs, but like `sentencex`, it polluted the count by turning empty lines into sentences. It also compressed the final copyright notice. |
@@ -573,7 +573,7 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 21 | 9.87 | **Top pick.** Cleanly segments the rapid-fire casual messages (e.g., separating `how matched up ey!!!` from `how r u doing???`). Crucially, it doesn't get tricked by lowercase abbreviations (`dr.`, `a.m.`, `ref.`) or decimal versions (`v2.1`). |
+| **1** | **yasbd** | 21 | 2.97 | **Top pick.** Cleanly segments the rapid-fire casual messages (e.g., separating `how matched up ey!!!` from `how r u doing???`). Crucially, it doesn't get tricked by lowercase abbreviations (`dr.`, `a.m.`, `ref.`) or decimal versions (`v2.1`). |
 | **2** | **nupunkt** | 38 | 2.21 | **Highly Accurate, but Speed Liability.** Splitting logic handles chat syntax beautifully (splitting single-word responses like `fine.`, `nah.`, `idk.`). It gets slightly over-aggressive on double exclamation marks (`broh !`, `!`), and its **11+ second warm run time** makes it completely unusable for production. |
 | **3** | **pysbd** | 33 | 11.84 | **Best Speed/Accuracy Balance.** Robust handling of lowercase single-word sentences. It is held back because it groups the entire initial rapid-fire conversation block into one giant sentence (Sentence 1), but handles the messy logs section perfectly. |
 | **4** | **sentence-splitter** | 12 | 9.68 | **Blazing fast, but blind to chat.** It completely misses conversational sentence boundaries, smashing whole paragraphs of distinct ideas together. It also breaks right in the middle of `sec. 4` (Sentences 9 and 10). |
@@ -684,7 +684,7 @@ et s.-l., ce qui compliquait l'identification de son origine exacte.
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **4** | 5.15 | **Top pick.** All compound abbreviations preserved intact. Clean output, no trailing whitespace. |
+| **1** | **yasbd** | **4** | 1.34 | **Top pick.** All compound abbreviations preserved intact. Clean output, no trailing whitespace. |
 | **2** | **blingfire** | **4** | 0.44 | **Perfect output, fastest.** Identical sentence splits to yasbd. 12x faster warm time. |
 | **3** | **sentence-splitter** | **4** | 88.42 | **Perfect but slow.** Identical to yasbd. 17x slower than yasbd. |
 | **4** | **sentsplit** | **4** | 68.23 | **Correct count, sloppy output.** Leading whitespace on sentences 2 and 4. |
@@ -851,7 +851,7 @@ Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting a
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 24 | 4.68 | **Flawless Output.** The absolute gold standard for Japanese. It perfectly respects quotation boundaries, keeps trailing particles intact with their quotes (Sentences 4, 5, 6), cleans up stray whitespace/newlines, and separates back-to-back dialog quotes neatly (Sentences 19 and 20). |
+| **1** | **yasbd** | 24 | 0.40 | **Flawless Output.** The absolute gold standard for Japanese. It perfectly respects quotation boundaries, keeps trailing particles intact with their quotes (Sentences 4, 5, 6), cleans up stray whitespace/newlines, and separates back-to-back dialog quotes neatly (Sentences 19 and 20). |
 | **2** | **sentencex** | 25 | **0.24** | **Blazing Fast, Sub-minor Flaw.** Unbelievably efficient. It gets almost everything right, including tricky back-to-back quotes. The only error is a tiny over-segmentation on Sentence 4/5, where it aggressively cuts a sentence right at the closing quote bracket, severing `と観光客が聞いた`. |
 | **3** | **pysbd** | 22 | 6.06 | **Disappointing blind spots.** Historically great for Japanese, but it completely choked on Sentence 19. It smashed two distinct dialogue quotes AND an entirely separate third narrative sentence into one massive, unreadable chunk. It also fails to strip trailing newlines (`\n`). |
 | **4** | **sentsplit** | 23 | 47.67 | **Inconsistent & Slow.** It suffers from the exact same severe sentence-mashing bug on Sentence 20 as `pysbd`. On top of that, it over-splits sentence 6/7 mid-quote at a standard period (`。`), leaving a orphaned closing bracket. |
@@ -945,7 +945,7 @@ realizarse manualmente» antes de cerrar el reporte.
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **6** | 3.11 | **Top pick.** All abbreviations and guillemets preserved intact. |
+| **1** | **yasbd** | **6** | 3.85 | **Top pick.** All abbreviations and guillemets preserved intact. |
 | **2** | **nupunkt** | 7 | 1.99 | **Almost perfect.** Handles all abbreviations correctly but splits inside the guillemet quote: `«La act.` + `del sistema...»`. One extra sentence. |
 | **3** | **sentencex** | 9 | 0.80 | **Splits `Cía.` and `Asoc.`** Trailing `\n` and whitespace. |
 | **4** | **blingfire** | 9 | 0.78 | **Splits `Srta.`, `Lic.`, `Asoc.`, `s.`** before the next word. |
@@ -1082,7 +1082,7 @@ The meeting is at 2 p.m. Mwen pral vini.
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **24** | 5.51 | **Top pick.** All abbreviations preserved. Parenthesized sentence kept intact. Ellipsis preserved. |
+| **1** | **yasbd** | **24** | 2.06 | **Top pick.** All abbreviations preserved. Parenthesized sentence kept intact. Ellipsis preserved. |
 | **2** | **nupunkt** | 23 | 2.16 | **Merged two sentences.** `Li nan p. 55 nan liv la. Li empòtan.` merged into one. Split `"Sa a se bèl."` from `li di.`, breaking the quote attribution. |
 | **3** | **blingfire** | 25 | 0.33 | **Splits `St.`** into `St.` + `Michel se...`. Also splits `"Sa a se bèl."` from `li di.` |
 | **4** | **sentencex** | 26 | 1.45 | **Splits `p.`** into `Li nan p.` + `55 nan liv la.`. Splits `St.` too. Trailing `\n` fragments everywhere. |
