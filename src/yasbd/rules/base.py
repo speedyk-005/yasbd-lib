@@ -1,4 +1,5 @@
 import re  # For simpler patterns
+from itertools import chain
 
 import regex as re2
 
@@ -268,10 +269,14 @@ class Rules:
     ) -> None:
         """Remove boundaries inside quoted/parenthesised spans."""
         if preserve_quote_and_paren:
-            for m in self.QUOTE_AND_PAREN_FINDER.finditer(text):
-                # Ignore first pos to preserve splits before opening quote/paren,
-                # especially for non-whitespace languages
-                main_boundaries.difference_update(range(m.start() + 1, m.end()))
+            # Ignore first pos to preserve splits before opening quote/paren,
+            # especially for non-whitespace languages
+            main_boundaries.difference_update(
+                chain.from_iterable(
+                    range(m.start() + 1, m.end())
+                    for m in self.QUOTE_AND_PAREN_FINDER.finditer(text)
+                )
+            )
 
             main_boundaries.update(
                 m.end() for m in self.QUOTE_AND_PAREN_END_FINDER.finditer(text)
