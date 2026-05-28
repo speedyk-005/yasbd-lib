@@ -234,7 +234,7 @@ class Rules:
 
             # Date abbrv followed by a number
             re2.compile(
-                rf"(?<=\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}){dots_pattern})(?=\s+\p{{N}})"
+                rf"\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}){dots_pattern}(?=\s+\p{{N}})"
             ),
 
             # Streets/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
