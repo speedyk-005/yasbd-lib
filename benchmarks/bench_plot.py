@@ -74,31 +74,10 @@ COLORS: dict[str, str] = {
 
 fig, ax1 = plt.subplots(figsize=(8, 5))
 
-# --- Calculate Global Min/Max Envelopes for Shading ---
-min_times = [min(results[name][i] for name in results) for i in range(len(sizes))]
-max_times = [max(results[name][i] for name in results) for i in range(len(sizes))]
-
-
-# --- Absolute Processing Speed ---
-ax1.fill_between(
-    sizes,
-    min_times,
-    max_times,
-    color="#64748b",
-    alpha=0.1,
-    label="Ecosystem Variance",
-)
-
 for name, times in results.items():
-    ax1.plot(
-        sizes,
-        times,
-        "o-",
-        label=name,
-        color=COLORS.get(name, "black"),
-        linewidth=2,
-        markersize=5,
-    )
+    color = COLORS.get(name, "black")
+    ax1.fill_between(sizes, 0, times, color=color, alpha=0.08)
+    ax1.plot(sizes, times, "o-", label=name, color=color, linewidth=2, markersize=5)
 
 ax1.set_xlabel("Characters", fontsize=12)
 ax1.set_ylabel("ms / iter", fontsize=12)
@@ -110,4 +89,4 @@ ax1.xaxis.set_major_formatter(lambda x, _: f"{x:,.0f}")
 plt.tight_layout()
 output_path = Path("bench.png")
 plt.savefig(output_path, dpi=150, bbox_inches="tight")
-print(f"\nSaved {output_path.name} with complete ecosystem variance shading.")
+print(f"\nSaved {output_path.name}")
