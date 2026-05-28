@@ -64,6 +64,10 @@ git checkout -b feature/my-feature-branch
 git checkout -b bugfix/issue-number-description
 ```
 
+### Add a New Language Module
+
+Copy [`src/yasbd/rules/_template.py`](src/yasbd/rules/_template.py) to `src/yasbd/rules/{lang}.py`, rename the class to `{Lang}Rules`, fill in the sets your language needs, and add test data to `tests/test_data/{lang}.py`. Auto-discovered at runtime, no registration needed.
+
 ### Run Diagnostics
 
 If you change the teeth of a blade, you must verify it still cuts straight. Run the test suite using uv run:
