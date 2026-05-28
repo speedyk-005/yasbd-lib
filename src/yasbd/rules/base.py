@@ -270,17 +270,14 @@ class Rules:
     ) -> None:
         """Remove boundaries inside quoted/parenthesised spans."""
         if preserve_quote_and_paren:
-            protected_spans = set()
             for m in self.QUOTE_AND_PAREN_FINDER.finditer(text):
                 # Ignore first pos to preserve splits before opening quote/paren,
                 # especially for non-whitespace languages
-                protected_range = set(range(m.start() + 1 , m.end()))
-                protected_spans.update(protected_range)
-            main_boundaries.difference_update(protected_spans)
+                main_boundaries.difference_update(range(m.start() + 1, m.end()))
 
-        main_boundaries.update(
-            m.end() for m in self.QUOTE_AND_PAREN_END_FINDER.finditer(text)
-        )
+            main_boundaries.update(
+                m.end() for m in self.QUOTE_AND_PAREN_END_FINDER.finditer(text)
+            )
 
     def _remove_toc_spans(
         self, main_boundaries: set[int], text: str
