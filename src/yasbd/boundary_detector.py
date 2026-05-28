@@ -128,6 +128,8 @@ class BoundaryDetector:
             if not para or para.isspace():
                 if not relative:
                     offset += len(para)
+                else:
+                    yield ParagraphEOF
                 continue
 
             if relative and not is_first_pos:
