@@ -43,7 +43,7 @@
 
 ## Manifesto
 
-Yasbd is a pair of smart scissors for text. Pointer-based, from-scratch [SBD](https://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) for production pipelines. Features a drop-in adapter for pysbd to fix edges cases without heavy refactoring. Six languages supported today (en, fr, es, ht, ja). Target is 22+.
+Yasbd is a pair of smart scissors for text. Pointer-based, from-scratch [SBD](https://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) for production pipelines. Features a drop-in adapter for pysbd to fix edges cases without heavy refactoring. Five languages supported today (en, fr, es, ht, ja). Target is 22+.
 
 ###  ✂ Why do I need a pair of "smart scissors" for text?
 
