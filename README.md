@@ -245,6 +245,7 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd/blob/m
 - [x] Regex caching (compile once per language class)
 - [x] Drop-in pysbd adapter (same API, no pipeline changes)
 - [x] StreamCleaner for OCR'd and noisy text
+- [ ] spaCy integration
 - [ ] 22+ language targets
 - [ ] CLI tool
 - [ ] REST API for remote boundary detection
