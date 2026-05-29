@@ -1,8 +1,5 @@
 <div align="center">
-  <p><b>Y</b>et <b>A</b>nother <b>S</b>entence <b>B</b>oundary <b>D</b>etector.</p>
-
-  <img src="https://github.com/speedyk-005/yasbd-lib/blob/main/yasbd_logo.png?raw=true" alt="Yasbd-lib Logo" width="300"/>
-
+  <img src="https://github.com/speedyk-005/yasbd-lib/blob/main/yasbd_logo.png?raw=true" alt="Yasbd-lib Logo" width="500"/>
   <p><i>“Even a pair of scissors deserves to be smart. Welcome to cybernetic boundary shearing.”</i></p>
 </div>
 
@@ -47,7 +44,7 @@
 
 ## Manifesto
 
-Yasbd is a pair of smart scissors for text. Pointer-based, from-scratch [SBD](https://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) for production pipelines. Features a drop-in adapter for pysbd to fix edges cases without heavy refactoring. Five languages supported today (en, fr, es, ht, ja). Target is 22+.
+**Y**et **A**nother **S**entence **B**oundary **D**etector is a pair of smart scissors for text. Pointer-based, from-scratch [SBD](https://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) for production pipelines. Features a drop-in adapter for pysbd to fix edges cases without heavy refactoring. Five languages supported today (en, fr, es, ht, ja). Target is 22+.
 
 ###  ✂ Why do I need a pair of "smart scissors" for text?
 
