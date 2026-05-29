@@ -107,7 +107,7 @@ pip install .
 
 ### Want to Help Make yasbd Even Better?
 
-That's awesome. See [**Contributing Guide**](CONTRIBUTING.md).
+That's awesome. See [**Contributing Guide**](https://github.com/speedyk-005/yasbd/blob/main/CONTRIBUTING.md).
 
 
 ---
@@ -151,7 +151,7 @@ The rule module loads lazily on first access. Switching mid-stream reimports the
 
 ### Boundary detection
 
-[`detect()`](API_REFERENCES.md#yasbd-boundary_detector-BoundaryDetector-detect) tells you where each sentence stops. Integer offsets into the original string. No copies, no slicing, no bookkeeping. Feed them to whatever downstream logic you already have.
+[`detect()`](https://github.com/speedyk-005/yasbd/blob/main/API_REFERENCES.md#yasbd-boundary_detector-BoundaryDetector-detect) tells you where each sentence stops. Integer offsets into the original string. No copies, no slicing, no bookkeeping. Feed them to whatever downstream logic you already have.
 
 Two detection modes:
 
@@ -176,7 +176,7 @@ print(res)
 
 ### Segmentation
 
-If you do not want to manage boundary offsets yourself (and who would?), [`segment()`](API_REFERENCES.md#yasbd-boundary_detector-BoundaryDetector-segment) wraps `detect()` with string slicing. It yields sentences as strings, one at a time. By default it strips leading and trailing whitespace and drops empty results. Set `preserve_whitespace=True` to keep original spacing around boundaries.
+If you do not want to manage boundary offsets yourself (and who would?), [`segment()`](https://github.com/speedyk-005/yasbd/blob/main/API_REFERENCES.md#yasbd-boundary_detector-BoundaryDetector-segment) wraps `detect()` with string slicing. It yields sentences as strings, one at a time. By default it strips leading and trailing whitespace and drops empty results. Set `preserve_whitespace=True` to keep original spacing around boundaries.
 
 ```python
 detector.lang = "en"
@@ -199,7 +199,7 @@ print(res)
 > **Inputs & streaming** — `detect()` and `segment()` accept plain strings, open file streams (`TextIOBase`), or a `StreamCleaner`. Both are generators: they yield results lazily without loading the entire source into memory. Internally, the text is split on blank lines into paragraphs, and each paragraph is processed independently with offset tracking between them.
 
 > [!TIP]
-> **ParagraphStream** — yasbd uses [`ParagraphStream`](API_REFERENCES.md#yasbd-utils-paragraph_stream-ParagraphStream) internally to split text into paragraph blocks. You can import it directly if you need paragraph-level processing in your own code:
+> **ParagraphStream** — yasbd uses [`ParagraphStream`](https://github.com/speedyk-005/yasbd/blob/main/API_REFERENCES.md#yasbd-utils-paragraph_stream-ParagraphStream) internally to split text into paragraph blocks. You can import it directly if you need paragraph-level processing in your own code:
 > ```python
 > from yasbd.utils.paragraph_stream import ParagraphStream
 >
@@ -210,7 +210,7 @@ print(res)
 
 ### Cleaner
 
-OCRd a PDF or scraping noisy text? [`StreamCleaner`](API_REFERENCES.md#yasbd-utils-cleaner-StreamCleaner) normalizes paragraphs before they hit the detector:
+OCRd a PDF or scraping noisy text? [`StreamCleaner`](https://github.com/speedyk-005/yasbd/blob/main/API_REFERENCES.md#yasbd-utils-cleaner-StreamCleaner) normalizes paragraphs before they hit the detector:
 
 ```python
 from yasbd.utils.cleaner import StreamCleaner
@@ -236,7 +236,7 @@ print(res)
 # ['田中さんは「準備は完了しました」そう言って部屋を出た。', 'Ｕ．Ｓ．Ａ．の経済政策は非常に複雑です。']
 ```
 
-Same API surface. Same [`Segmenter`](API_REFERENCES.md#yasbd-utils-pysbd_adapter-Segmenter) class. Same [`segment()`](API_REFERENCES.md#yasbd-utils-pysbd_adapter-Segmenter-segment) method. Even the [`TextSpan`](API_REFERENCES.md#yasbd-utils-pysbd_adapter-TextSpan) class is there with `sent`, `start`, and `end` fields, hurray. It also handles leading whitespace the way pysbd expects it (trailing on the previous sentence instead of leading on the next).
+Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd/blob/main/API_REFERENCES.md#yasbd-utils-pysbd_adapter-Segmenter) class. Same [`segment()`](https://github.com/speedyk-005/yasbd/blob/main/API_REFERENCES.md#yasbd-utils-pysbd_adapter-Segmenter-segment) method. Even the [`TextSpan`](https://github.com/speedyk-005/yasbd/blob/main/API_REFERENCES.md#yasbd-utils-pysbd_adapter-TextSpan) class is there with `sent`, `start`, and `end` fields, hurray. It also handles leading whitespace the way pysbd expects it (trailing on the previous sentence instead of leading on the next).
 
 ---
 
@@ -256,10 +256,10 @@ Same API surface. Same [`Segmenter`](API_REFERENCES.md#yasbd-utils-pysbd_adapter
 Tested against 6 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, sentence-splitter) across 5 languages and 7 edge cases: compound abbreviations, CJK quotes, newline wrapping, chat logs, URLs, and more.
 
 **TL;DR:** yasbd ranked #1 in accuracy across almost every test, while staying competitive on speed as pure Python. blingfire is faster but brittle. pysbd and sentencex shred French abbreviations. nupunkt has an 11-second cold start.
-Full results, terminal output, and a performance graph can be found in **[benchmarks/](benchmarks/)**
+Full results, terminal output, and a performance graph can be found in **[benchmarks/](https://github.com/speedyk-005/yasbd/tree/main/benchmarks)**
 
 ---
 
 ## 📜 Last note
 
-**yasbd** is maintained by [speedyk-005](https://github.com/speedyk-005). Licensed under [Mozilla Public License 2.0](LICENSE) — you can use it in proprietary software, but modifications to the source files must stay open under MPL 2.0. Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
+**yasbd** is maintained by [speedyk-005](https://github.com/speedyk-005). Licensed under [Mozilla Public License 2.0](https://github.com/speedyk-005/yasbd/blob/main/LICENSE) — you can use it in proprietary software, but modifications to the source files must stay open under MPL 2.0. Contributions are welcome; see [CONTRIBUTING.md](https://github.com/speedyk-005/yasbd/blob/main/CONTRIBUTING.md).
