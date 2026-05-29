@@ -1,6 +1,10 @@
-# **Y**et **A**nother **S**entence **B**oundary **D**etector.
+<div align="center">
+  <p><b>Y</b>et <b>A</b>nother <b>S</b>entence <b>B</b>oundary <b>D</b>etector.</p>
 
-"Even a pair of scissors deserves to be smart. Welcome to cybernetic boundary shearing."
+  <img src="https://github.com/speedyk-005/yasbd-lib/blob/main/yasbd_logo.png?raw=true" alt="Yasbd-lib Logo" width="300"/>
+
+  <p><i>“Even a pair of scissors deserves to be smart. Welcome to cybernetic boundary shearing.”</i></p>
+</div>
 
 [![Python Version](https://img.shields.io/badge/Python-3.11%20--%203.14-blue)](https://www.python.org/downloads/)
 [![PyPI](https://img.shields.io/pypi/v/yasbd-lib)](https://pypi.org/project/yasbd-lib)
@@ -68,9 +72,6 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline. Pass one fin
 ## 📦 Installation
 
 Ready to do some cybernetic boundary shearing? Let's get you set up quickly and painlessly.
-
-> [!NOTE]
-> **yasbd (aka yasbd-lib)** — The old `yasbd` package is no longer maintained. Use `yasbd-lib` to get the latest version.
 
 ### The Quick & Easy Way
 
