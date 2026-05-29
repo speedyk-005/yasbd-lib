@@ -13,7 +13,7 @@ Before you touch the live micro-blades, you need to set up an isolated diagnosti
 Pull the official schematics from the main repository:
 
 ```bash
-git clone https://github.com/speedyk-005/yasbd.git
+git clone https://github.com/speedyk-005/yasbd-lib.git
 cd yasbd
 ```
 

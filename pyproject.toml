@@ -1,5 +1,5 @@
 [project]
-name = "yasbd"
+name = "yasbd-lib"
 version = "0.1.0"
 description = "A high-accuracy, from-scratch Sentence Boundary Detector (SBD) for production pipelines. Features a drop-in adapter for pysbd to fix edges cases without heavy refactoring."
 authors = [
@@ -57,11 +57,11 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/speedyk-005/yasbd"
-Repository = "https://github.com/speedyk-005/yasbd"
+Homepage = "https://github.com/speedyk-005/yasbd-lib"
+Repository = "https://github.com/speedyk-005/yasbd-lib"
 Documentation = "https://speedyk-005.github.io/yasbd/"
-Issues = "https://github.com/speedyk-005/yasbd/issues"
-Changelog = "https://github.com/speedyk-005/yasbd/blob/main/CHANGELOG.md"
+Issues = "https://github.com/speedyk-005/yasbd-lib/issues"
+Changelog = "https://github.com/speedyk-005/yasbd-lib/blob/main/CHANGELOG.md"
 
 [build-system]
 requires = [
