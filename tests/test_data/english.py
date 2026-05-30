@@ -45,6 +45,7 @@ TEST_DATA = [
     "(See Fig. 4. This outlines the memory layout.)| The engine executes next.",
     'She turned to him, "This is great." she said.',
     'She turned to him, "This is great."| She held the book out to show him.',
+    "'Is this okay?' she said.",
     "Can you believe how much money he has made from his Where's Wally? series of books (published in the US as Where's Waldo?)?",
     "According to his publisher, Smith bought the company in 1985 [or 1984?], but he wasn't active in its management until 1990.",
     'Then he stop.| "wait" he said',

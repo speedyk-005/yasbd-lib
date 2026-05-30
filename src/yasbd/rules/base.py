@@ -126,7 +126,7 @@ class Rules:
     # https://regex101.com/r/JYdWZw/4
     QUOTE_AND_PAREN_FINDER = re2.compile(
         r"""
-        (?:\p{Pi}|»|(?<=[\s:])(['""])).+?(?:\p{Pf}|«|\1)|  # Quoted text
+        (?:\p{Pi}|»|(?:^|(?<=[\s:]))(['""])).+?(?:\p{Pf}|«|\1)|  # Quoted text
         \p{Ps}.+?\p{Pe}  # Parenthesized text
         """,
         re2.X,
@@ -267,7 +267,7 @@ class Rules:
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
                 \s*\p{{Po}}|
                 {_build_abbr_pattern(cls.QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}|
-                \s+[\p{{Ll}}]
+                \s*[\p{{Ll}}]
             )
             """,
             re2.X,
