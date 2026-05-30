@@ -71,6 +71,8 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline. Pass one fin
 Tested against 6 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, sentence-splitter) across 5 languages and 7 edge cases: compound abbreviations, CJK quotes, newline wrapping, chat logs, URLs, and more.
 
 **TL;DR:** yasbd ranked #1 in accuracy across almost every test, while staying competitive on speed as pure Python. blingfire is faster but brittle. pysbd and sentencex shred French abbreviations. nupunkt has an 11-second cold start.
+
+On our [golden benchmark](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks#golden-benchmark) (60 English edge cases adapted from pysbd's test suite with fixes and additions): yasbd scores **59/60 (98.3%)**, pysbd is second at **54/60 (90.0%)**.
 Full results, terminal output, and a performance graph can be found in **[benchmarks/](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks)**
 
 <img src="https://raw.githubusercontent.com/speedyk-005/yasbd-lib/main/benchmarks/bench.png" alt="SBD Benchmark Performance" width="800"/>

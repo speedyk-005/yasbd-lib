@@ -16,6 +16,24 @@ Not every library supports every language. We picked 5 languages that stress dif
 
 The format is simple: throw edge cases at each library. Does it split where it should not? Does it preserve abbreviations, quotes, URLs, and mixed-language text? Pass or fail, no stopwatch needed. Warm timings are recorded for reference but accuracy is the point.
 
+## EN Golden benchmark
+
+Aggregate score across all 60 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOLDEN_DATA.py) via [`run_golden.py`](run_golden.py). A modified and expanded version of [pysbd's test suite](https://github.com/nipunsadvilkar/pySBD/blob/master/tests/lang/test_english.py): we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, and more.
+
+```
+Library                 Score
+------------------------------
+yasbd                59/60 ( 98.3%)
+pysbd                54/60 ( 90.0%)
+sentencex            50/60 ( 83.3%)
+blingfire            49/60 ( 81.7%)
+sentence-splitter    39/60 ( 65.0%)
+nupunkt              39/60 ( 65.0%)
+sentsplit            38/60 ( 63.3%)
+```
+
+yasbd's only failure is `"At 5 a.m., Mr. Smith went to the bank. He left the bank at 6"` — the period after `a.m.` (abbreviation list) triggers the split protection, which then merges across the real sentence boundary. Every other library fails at least 6 cases.
+
 ## Cold vs Warm speed
 
 First call includes import + init + first segment. Subsequent calls are warm.
