@@ -205,9 +205,8 @@ class Rules:
 
         # fmt: off
         # Faster than one big regex
-        # https://regex101.com/r/svyCoU/18
+        # https://regex101.com/r/svyCoU/19
         cls.MID_SENTENCE_FINDER_LST = [
-            # https://regex101.com/r/cPh8sD/2
             # Three-dot ellipsis mid-thought (e.g., "... she didn't")
             # Only four dots (.... or . . . .) should be a sentence boundary.
             re.compile(r"(?<!\.)(?:\s?\.){3}"),
@@ -215,7 +214,7 @@ class Rules:
             # Title abbrv or initialisms (e.g., Dr. Paul)
             re.compile(rf"\b(?i:{title_abbrvs_pattern}){dots_pattern}"),
 
-            # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
+            # Geopolitical abbrv is followed by a case maker or common org noun (e.g., U.S.A Army)
             re.compile(rf"""
                 \b(?i:{geopolitical_abbrvs_pattern}){dots_pattern}
                 (?=
