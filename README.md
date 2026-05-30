@@ -24,6 +24,7 @@
 - [Manifesto](#manifesto)
   - [✂ Why do I need a pair of "smart scissors" for text?](#-why-do-i-need-a-pair-of-smart-scissors-for-text)
   - [🔪 Are these shears just a rusty regex loop spray-painted in carbon fiber?](#-are-these-shears-just-a-rusty-regex-loop-spray-painted-in-carbon-fiber)
+- [🏁 Benchmarks](#-benchmarks)
 - [📦 Installation](#-installation)
   - [The Quick & Easy Way](#the-quick--easy-way)
   - [The From-Source Way](#the-from-source-way)
@@ -35,7 +36,6 @@
   - [Cleaner](#cleaner)
   - [Adapter](#adapter)
 - [🗺 Features & Roadmap](#-features--roadmap)
-- [🏁 Benchmarks](#-benchmarks)
 - [📜 Last note](#-last-note)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -66,6 +66,17 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline. Pass one fin
 
 ---
 
+## 🏁 Benchmarks
+
+Tested against 6 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, sentence-splitter) across 5 languages and 7 edge cases: compound abbreviations, CJK quotes, newline wrapping, chat logs, URLs, and more.
+
+**TL;DR:** yasbd ranked #1 in accuracy across almost every test, while staying competitive on speed as pure Python. blingfire is faster but brittle. pysbd and sentencex shred French abbreviations. nupunkt has an 11-second cold start.
+Full results, terminal output, and a performance graph can be found in **[benchmarks/](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks)**
+
+<img src="https://raw.githubusercontent.com/speedyk-005/yasbd-lib/main/benchmarks/bench.png" alt="SBD Benchmark Performance" width="800"/>
+
+---
+
 ## 📦 Installation
 
 Ready to do some cybernetic boundary shearing? Let's get you set up quickly and painlessly.
@@ -75,7 +86,7 @@ Ready to do some cybernetic boundary shearing? Let's get you set up quickly and 
 The simplest way to get started is with pip:
 
 ```bash
-pip install yasbd-lib
+pip install yasbd-lib -U
 ```
 
 > [!TIP]
@@ -247,15 +258,6 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/bl
 - [ ] 22+ language targets
 - [ ] CLI tool
 - [ ] REST API for remote boundary detection
-
----
-
-## 🏁 Benchmarks
-
-Tested against 6 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, sentence-splitter) across 5 languages and 7 edge cases: compound abbreviations, CJK quotes, newline wrapping, chat logs, URLs, and more.
-
-**TL;DR:** yasbd ranked #1 in accuracy across almost every test, while staying competitive on speed as pure Python. blingfire is faster but brittle. pysbd and sentencex shred French abbreviations. nupunkt has an 11-second cold start.
-Full results, terminal output, and a performance graph can be found in **[benchmarks/](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks)**
 
 ---
 
