@@ -237,10 +237,10 @@ class Rules:
                 rf"\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}){dots_pattern}(?=\s+\p{{N}})"
             ),
 
-            # Streets/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
+            # Streets/Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
             # excluding geopolitical ones not followed by a common starters
             re2.compile(rf"""
-                (?:\p{{Lu}}\.){{2,}}(?<!(?i:{geopolitical_abbrvs_pattern}))
+                (?:\p{{Lu}}\.)(?<!(?i:{geopolitical_abbrvs_pattern}))
                 (?!\s+(?:{common_starters_pattern})\b)
                 """, re2.X
             ),
@@ -252,9 +252,6 @@ class Rules:
                 (?!\s+(?:{common_starters_pattern})\b)
                """, re.X
             ),
-
-            # Collapsed middle name (e.g, Jonas E. Smith)
-            re2.compile(rf"\s\b(?:\p{{Lu}}){dots_pattern}(?=\s)"),
         ]
         # fmt: on
 
