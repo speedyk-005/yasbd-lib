@@ -160,22 +160,20 @@ class Rules:
         geopolitical_abbrvs_pattern = _build_abbr_pattern(cls.GEOPOLITICAL_ABBRVS)
         common_starters_pattern = _build_abbr_pattern(cls.COMMON_SENT_STARTERS)
 
-        # https://regex101.com/r/qBSyU5/12
+        # https://regex101.com/r/qBSyU5/14
         # Handle flattened lists due to messy OCR.
-        cls.HORIZONTAL_LIST_FINDER = re.compile(
-            rf"""
-            (?:   #  Must preceded by
-                ^\s*|     # A string start
-                [:{terminators_pattern}]\s+  # A terminator or double colon + space
-            )
+        cls.HORIZONTAL_LIST_FINDER = re2.compile(
+            r"""
+            # Must preceded by string or word boundary
+            (?:^|(?<![A-Z]\w+)\s+)
             (?:[•◦]\s+)?   # Optional bullet point (e.g., • 9.)
             (?:
                 [-*+]|      #  Markdown style list
-                (?:\d{{1,2}}[.)]{{1,2}}|[a-zA-Z]\))  #  Numbered and alphabetical list (e.g, a\), 34.\), 1.)
+                (?:\d{1,2}|[a-eA-E\p{Ll}])[.)]{1,2}  #  Numbered and alphabetical list (e.g, a\), 34.\), 1.)
             )
             (?=\s)  # Must followed by a space
             """,
-            re.X,
+            re2.X,
         )
 
         # https://regex101.com/r/VMzYsx/9

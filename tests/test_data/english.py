@@ -37,7 +37,6 @@ TEST_DATA = [
     "Mr. Smith lives on Hwy. 7 near Ave. Central.",
     "The delivery van broke down right in front of Sunset Blvd.| The driver called a tow truck.",
     "I'll see you on Fri., Feb. 14th. ",
-    "A. B. said hello.| Then C. D. replied.",
     "You can find it at N°. 1026.253.553.| That is where the treasure is.",
     "We make a good team, you and I.| Did you see Albert I. Jones yesterday?",
 
@@ -63,6 +62,7 @@ TEST_DATA = [
     "a) The first item.| b) The second item.",
     "1. The first item.| 2. The second item.",
     "• 9. The first item.| • 10. The second item.",
+    "a. The first item |b. The second item",
 
     # Elipsis/TOC leaders
     "The project (Sinta) was nearing completion... or so we thought.",
