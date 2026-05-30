@@ -61,7 +61,7 @@ class Rules:
         "paras", "sec", "sect", "secs", "subsec",
 
         # Legal / Numbering
-        "no", "nos", "reg", "regs",
+        "no", "nos", "n°", "reg", "regs",
 
         # Scientific / Math / Technical
         "approx", "eq", "eqn", "eqs", "est", "ex", "exs",
