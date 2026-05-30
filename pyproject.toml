@@ -1,6 +1,6 @@
 [project]
 name = "yasbd-lib"
-version = "0.1.0"
+version = "0.1.1"
 description = "A high-accuracy, from-scratch Sentence Boundary Detector (SBD) for production pipelines. Features a drop-in adapter for pysbd to fix edges cases without heavy refactoring."
 authors = [
   { name = "speedyk_005", email = "speedy40115719@gmail.com" }
@@ -34,7 +34,7 @@ dependencies = [
   "loguru>=0.7.3,<1.0",
   "regex>=2025.7.29",
   "ftfy>=6.2.0,<7.0",
-  "pydantic>=2.12.2,<3.0",
+  "pydantic>=2.11.0,<3.0",
 ]
 
 [project.optional-dependencies]
