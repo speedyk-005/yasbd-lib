@@ -8,6 +8,34 @@ class TrieNode:
         self.children = {}
         self.is_end = False
 
+    def add(self, word: str):
+        node = self
+        for char in word:
+            if char not in node.children:
+                node.children[char] = TrieNode()
+            node = node.children[char]
+        node.is_end = True
+
+    def to_regex(self) -> str:
+        if not self.children:
+            return ""
+        
+        parts = []
+        for char, child in sorted(self.children.items()):
+            child_regex = child.to_regex()
+            escaped_char = re2.escape(char)
+            parts.append(f"{escaped_char}{child_regex}")
+            
+        if len(parts) == 1:
+            res = parts[0]
+        else:
+            res = "(?:" + "|".join(parts) + ")"
+            
+        if self.is_end:
+            res = f"{res}?" if len(parts) > 1 else f"(?:{res})?"
+            
+        return res
+
 def _build_abbr_pattern(options: set[str]) -> str:
     """Build a safe escaped regex alternation pattern using a Trie.
 
@@ -17,40 +45,14 @@ def _build_abbr_pattern(options: set[str]) -> str:
     count = 0
     for opt in options:
         opt = opt.strip()
-        if not opt:
-            continue
-        count += 1
-        node = root
-        for char in opt:
-            if char not in node.children:
-                node.children[char] = TrieNode()
-            node = node.children[char]
-        node.is_end = True
+        if opt:
+            root.add(opt)
+            count += 1
 
     if count == 0:
         return r"(?!)"
 
-    def _to_regex(node):
-        if not node.children:
-            return ""
-        
-        parts = []
-        for char, child in sorted(node.children.items()):
-            child_regex = _to_regex(child)
-            escaped_char = re2.escape(char)
-            parts.append(f"{escaped_char}{child_regex}")
-            
-        if len(parts) == 1:
-            res = parts[0]
-        else:
-            res = "(?:" + "|".join(parts) + ")"
-            
-        if node.is_end:
-            res = f"{res}?" if len(parts) > 1 else f"(?:{res})?"
-            
-        return res
-
-    return _to_regex(root)
+    return root.to_regex()
 
 
 # fmt: off
