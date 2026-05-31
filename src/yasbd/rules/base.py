@@ -46,7 +46,7 @@ def _build_abbr_pattern(options: set[str]) -> str:
             res = "(?:" + "|".join(parts) + ")"
             
         if node.is_end:
-            res = f"(?:{res})?"
+            res = f"{res}?" if len(parts) > 1 else f"(?:{res})?"
             
         return res
 
