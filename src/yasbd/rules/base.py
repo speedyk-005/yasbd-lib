@@ -3,19 +3,54 @@ import re  # For simpler patterns
 import regex as re2
 
 
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.is_end = False
+
 def _build_abbr_pattern(options: set[str]) -> str:
-    """Build a safe escaped regex alternation pattern.
+    """Build a safe escaped regex alternation pattern using a Trie.
 
     Returns a never-match pattern if no valid options exist.
-    Ref: https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything?
     """
-    cleaned = [
-        re2.escape(opt.strip())
-        for opt in sorted(options, key=len, reverse=True)
-        if opt.strip()
-    ]
+    root = TrieNode()
+    count = 0
+    for opt in options:
+        opt = opt.strip()
+        if not opt:
+            continue
+        count += 1
+        node = root
+        for char in opt:
+            if char not in node.children:
+                node.children[char] = TrieNode()
+            node = node.children[char]
+        node.is_end = True
 
-    return "|".join(cleaned) if cleaned else r"(?!)"
+    if count == 0:
+        return r"(?!)"
+
+    def _to_regex(node):
+        if not node.children:
+            return ""
+        
+        parts = []
+        for char, child in sorted(node.children.items()):
+            child_regex = _to_regex(child)
+            escaped_char = re2.escape(char)
+            parts.append(f"{escaped_char}{child_regex}")
+            
+        if len(parts) == 1:
+            res = parts[0]
+        else:
+            res = "(?:" + "|".join(parts) + ")"
+            
+        if node.is_end:
+            res = f"(?:{res})?"
+            
+        return res
+
+    return _to_regex(root)
 
 
 # fmt: off
