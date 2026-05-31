@@ -1,21 +1,20 @@
 import re  # For simpler patterns
 
 import regex as re2
+from retrie.trie import Trie
 
 
 def _build_abbr_pattern(options: set[str]) -> str:
-    """Build a safe escaped regex alternation pattern.
+    """Build an optimised and escaped regex alternation pattern.
 
     Returns a never-match pattern if no valid options exist.
     Ref: https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything?
     """
-    cleaned = [
-        re2.escape(opt.strip())
-        for opt in sorted(options, key=len, reverse=True)
-        if opt.strip()
-    ]
+    if not options:
+        return r"(?!)"
 
-    return "|".join(cleaned) if cleaned else r"(?!)"
+    trie = Trie()
+    return trie.add(*options).pattern()
 
 
 # fmt: off

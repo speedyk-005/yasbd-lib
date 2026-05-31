@@ -35,9 +35,18 @@ dependencies = [
   "regex>=2025.7.29",
   "ftfy>=6.2.0,<7.0",
   "pydantic>=2.11.0,<3.0",
+  "retrie>=0.3.0,<1.0",
 ]
 
 [project.optional-dependencies]
+dev = [
+  "pytest>=8.3.5",
+  "pytest-cov>=6.2.1",
+  "pre-commit>=4.4.0",
+  "python-docstring-markdown>=0.2.2",
+  "ruff>=0.14.14",
+] 
+
 bench = [
   "pysbd",
   "sentencex",
@@ -47,13 +56,6 @@ bench = [
   "sentence-splitter",
   "setuptools<81",
   "matplotlib",
-]
-dev = [
-  "pytest>=8.3.5",
-  "pytest-cov>=6.2.1",
-  "pre-commit>=4.4.0",
-  "python-docstring-markdown>=0.2.2",
-  "ruff>=0.14.14",
 ]
 
 [project.urls]
