@@ -66,8 +66,10 @@ class BoundaryDetector:
 
         try:
             rule_module = import_module(f"yasbd.rules.{lang}")
-        except ModuleNotFoundError:
-            raise ValueError(f"Unsupported language: {lang!r}") from None
+        except ModuleNotFoundError as e:
+            if lang in str(e):
+                raise ValueError(f"Unsupported language: {lang!r}") from None
+            raise # Re-raise
 
         self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")()
 
