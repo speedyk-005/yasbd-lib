@@ -34,7 +34,7 @@ sentsplit            54/83 ( 65.1%)
 nupunkt              52/83 ( 62.7%)
 ```
 
-yasbd's only failure is `"At 5 a.m., Mr. Smith went to the bank. He left the bank at 6"` — the period after `a.m.` (abbreviation list) triggers the split protection, which then merges across the real sentence boundary. Every other library fails at least 6 cases.
+yasbd's only failure is `"He left the bank at 6 P.M. Mr. Smith then went to the store."` All-caps `P.M.` matches the acronym pattern `(?:\p{Lu}\.)`, which treats it like `U.S.` or `I.B.M.` and prevents splitting. Lowercase `a.m.` works fine. Every other library fails at least 6 cases.
 
 ## Cold vs Warm speed
 
