@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#! /usr/bin/env python3
 """Benchmark all SBD libraries across text sizes and plot."""
 
 import timeit
@@ -7,7 +7,10 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 from bench_utils import all_segmenters
+from rich.console import Console
+from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
 
+_console = Console()
 warnings.filterwarnings("ignore")
 
 BASE = """\
@@ -40,25 +43,34 @@ segs = all_segmenters(lang=LANG)
 sizes = []
 results = {name: [] for name in segs}
 
-for m in MULTIPLIERS:
-    text = BASE * m
-    nchars = len(text)
-    sizes.append(nchars)
+total_steps = len(MULTIPLIERS) * len(segs) * 2  # warmup + timing per combo
+with Progress(
+    SpinnerColumn(),
+    TextColumn("[progress.description]{task.description}"),
+    BarColumn(),
+    console=_console,
+) as progress:
+    task = progress.add_task("Benchmarking...", total=total_steps)
 
-    print(f"{m:4d}x ({nchars:>7,} chars):", end=" ", flush=True)
+    for m in MULTIPLIERS:
+        text = BASE * m
+        nchars = len(text)
+        sizes.append(nchars)
 
-    for name, seg in segs.items():
-        seg.lang = LANG
+        for name, seg in segs.items():
+            seg.lang = LANG
+            progress.update(task, description=f"{m:3d}x ({nchars:>7,} chars) {name}")
+            seg.segment(text)  # warmup
+            progress.advance(task)
+            t = timeit.timeit(lambda s=seg, t=text: s.segment(t), number=ITERS)
+            progress.advance(task)
+            ms = t / ITERS * 1000
+            results[name].append(ms)
 
-        # Warmup
-        seg.segment(text)
-
-        t = timeit.timeit(lambda s=seg, t=text: s.segment(t), number=ITERS)
-        ms = t / ITERS * 1000
-        results[name].append(ms)
-        print(f"{name}={ms:.1f}ms", end="  ", flush=True)
-
-    print()
+        _console.print(
+            f"{m:3d}x ({nchars:>7,} chars): "
+            + "  ".join(f"{name}={results[name][-1]:.1f}ms" for name in segs)
+        )
 
 # ── Plotting the Entire Ecosystem with Shaded Bounds ──
 

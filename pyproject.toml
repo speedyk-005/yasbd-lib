@@ -56,8 +56,8 @@ bench = [
   "sentence-splitter",
   "setuptools<81",
   "matplotlib",
+  "rich",
 ]
-
 [project.urls]
 Homepage = "https://github.com/speedyk-005/yasbd-lib"
 Repository = "https://github.com/speedyk-005/yasbd-lib"

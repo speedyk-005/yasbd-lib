@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
+import timeit
 import warnings
 from typing import Any, Type, TypeVar
 
-# Suppress loguru-based loggers (sentsplit uses loguru)
 from loguru import logger as _loguru
+from rich.console import Console
+from rich.progress import Progress, SpinnerColumn, TextColumn
 
 _loguru.disable("sentsplit")
+_console = Console()
 
 warnings.filterwarnings("ignore", category=UserWarning, module="sentsplit")
 warnings.filterwarnings("ignore", category=DeprecationWarning, module="pkg_resources")
@@ -36,13 +39,14 @@ class BaseSegmenter:
         self.lang = lang
         self.last_run_stats: dict[str, Any] | None = None
 
-    def segment(self, text: str) -> list[str]:
+    def segment(self, text: str, verbose: bool = False) -> list[str]:
         try:
             result = self._segment(text)
         except Exception as e:
             print(f"  {self.name} [{self.lang}]... ERROR")
             raise e
-        print(f"  {self.name} [{self.lang}]: {len(result)} sents")
+        if verbose:
+            print(f"  {self.name} [{self.lang}]: {len(result)} sents")
         return result
 
     def _segment(self, text: str) -> list[str]:
@@ -230,6 +234,35 @@ def all_segmenters(lang: str = "en") -> dict[str, BaseSegmenter]:
     for seg in _REGISTRY.values():
         seg.lang = lang
     return dict(_REGISTRY)
+
+
+def warm_time_segmenters(
+    text: str, lang: str = "en", number: int = 10
+) -> dict[str, dict[str, float | int]]:
+    """Run warm timing on all segmenters via the registry.
+
+    Returns {name: {"ms": float, "sents": int}}.
+    """
+    results: dict[str, dict[str, float | int]] = {}
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        transient=True,
+        console=_console,
+    ) as progress:
+        task = progress.add_task("Warming up...", total=len(_REGISTRY) * 2)
+        for name, seg in _REGISTRY.items():
+            seg.lang = lang
+            progress.update(task, description=f"Warming {name}...")
+            sents = seg.segment(text)  # warm-up
+            progress.advance(task)
+            progress.update(task, description=f"Timing {name}...")
+            t = timeit.timeit(lambda s=seg, t=text: s.segment(t), number=number)
+            progress.advance(task)
+            ms = t / number * 1000
+            results[name] = {"ms": ms, "sents": len(sents)}
+            _console.print(f"[bold]{name:20s}[/] {ms:.2f}ms  ({len(sents)} sents)")
+    return results
 
 
 def segment_and_print(text: str, lang: str = "en") -> dict[str, list[str]]:
