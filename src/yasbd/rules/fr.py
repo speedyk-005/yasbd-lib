@@ -3,9 +3,11 @@ from yasbd.rules.base import Rules
 
 # fmt: off
 class FrRules(Rules):
+
+
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Social / Professional
-        "m", "a.c.n", "a.m", "ch.-l", "e.v", "fr", "me", "mm", "r.p",
+        "m", "a.c.n", "a.m", "ch.-l", "e.v", "me", "mm", "r.p",
 
         # Noble / Royal / Religious
         "ll.aa", "ll.aa.ii", "ll.aa.rr", "ll.aa.ss", "ll.ee", "ll.mm",
@@ -19,7 +21,7 @@ class FrRules(Rules):
     }
 
     STREET_ABBRVS = Rules.STREET_ABBRVS | {
-        "av", "boul", "bd", "ch", "imp", "rte", "faub", "fg", "all", "carr",
+        "av", "boul", "bd", "ch", "imp", "faub", "fg", "all", "carr", "Pén"
     }
 
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {

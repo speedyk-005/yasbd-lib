@@ -69,7 +69,7 @@ class BoundaryDetector:
         except ModuleNotFoundError as e:
             if lang in str(e):
                 raise ValueError(f"Unsupported language: {lang!r}") from None
-            raise # Re-raise
+            raise  # Re-raise
 
         self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")()
 

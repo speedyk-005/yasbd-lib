@@ -8,7 +8,7 @@ class EsRules(Rules):
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Social / Professional
         "sr", "sra", "srta", "d", "dña", "dra", "lic", "gral",
-        "pdte", "ing", "profa",
+        "pdte", "profa",
 
         # Noble / Royal
         "s.m", "ss.mm", "s.a.r", "ss.aa.rr", "s.a.s", "s.s", "s.a",

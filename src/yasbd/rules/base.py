@@ -23,16 +23,19 @@ class Rules:
 
     TITLE_ABBRVS = {
         # Standard Professional (Universal Latin roots)
-        "dr", "drs", "prof", "hon", "rev", "supt", "insp",
+        "dr", "dir", "drs", "prof", "hon", "ing", "rev", "supt", "insp", "spec",
 
-        # Global Social (Overlap across English/Spanish/Portuguese/French)
-        "mr", "mrs", "ms", "st",
+        # Global Social
+        "mr", "mrs", "ms", "mme", "messrs", "mlle", "mmes", "mssrs",
+        "mmes", "mssrs", "st", "fr", "br"
 
         # Military (NATO/International Standardized Ranks)
-        "adm", "brig", "capt", "cmdr", "col", "cpl", "gen", "lt", "maj", "sgt", "pvt",
+        "adm", "brig", "capt", "cmdr",  "comdr", "commr",  "col", "cpl", "gen", "lt",
+        "maj", "sgt", "pvt",
 
         # Political/Administrative (Common in Western bureaucracy)
-        "gov", "rep", "sen", "pres"
+        "gov", "rep", "sen", "pres", "sec", "min", "mgr", "asst", "det", "surg",
+        "msgr", "amb",
     }
 
     GEOPOLITICAL_ABBRVS = {
@@ -50,23 +53,30 @@ class Rules:
     }
 
     REFERENCE_ABBRVS = {
-        # Publishing / Documents
-        "et al", "app", "apps", "cf", "ext", "fig", "figs", "l", "ll",
-        "n", "nn", "p", "pp", "pag", "pt", "pts", "ref", "refs", "tab",
-        "tbl", "tbls", "v", "vol", "vols",
+        # Publishing / Documents / Manuscripts
+        "app", "apps", "cf", "cod", "ext", "fig", "figs",
+        "fol", "illus", "l", "ll", "ms", "mss", "p", "pp",
+        "pag", "pt", "pts", "ref", "refs", "tab", "tbl",
+        "tbls", "v", "vol", "vols",
 
         # Section / Structure
-        "ann", "art", "arts", "cap", "cl", "cls", "col", "cols", "para",
-        "paras", "sec", "sect", "secs", "subsec",
+        "ann", "art", "arts", "cap", "cl", "cls", "col",
+        "cols", "para", "paras", "quaest", "sec", "sect",
+        "secs", "subsec",
 
-        # Legal / Numbering
-        "no", "nos", "n°", "reg", "regs",
+        # Legal / Numbering / Cross References
+        "a.c", "a.d", "a.u.c", "b.c", "lc", "n", "nn",
+        "no", "nos", "n°", "qv", "reg", "regs",
 
-        # Scientific / Math / Technical
-        "approx", "eq", "eqn", "eqs", "est", "ex", "exs",
+        # Scientific / Technical
+        "approx", "deg", "diam", "eq", "eqn", "eqs",
+        "est", "ex", "exs", "lat", "long", "max", "min",
+
+        # Commerce / Measurements
+        "alt", "fam", "ord", "qty", "std", "wt",
 
         # Academic
-        "univ", "s",
+        "et al", "s", "univ",
     }
 
     DATE_ABBRVS = {
@@ -75,8 +85,11 @@ class Rules:
         "sept", "oct", "nov", "dec", "déc",
 
         # Day
-        "mon", "tue", "wed", "thu", "fri", "sat", "sun",
-        "lun", "mar", "dom",
+        "mon", "tue", "wed", "thu", "thurs", "thur", "fri",
+        "sat", "sun", "lun", "mar", "dom",
+
+        # Others
+        "a.b", "b.c", "d.c",
     }
 
     MID_SENTENCE_ABBRVS = {
@@ -84,33 +97,35 @@ class Rules:
         "assoc", "mfg",
 
         # Bridge/connectors
-        "cf", "eg", "e.g", "ie", "i.e", "vs", "v", "viz", "ibid", "ca", "sc",
+        "cf", "eg", "e.g", "ie", "i.e", "i.q", "i.c", "a.k.a", "vs", "v", "viz",
+        "ibid", "ca", "sc",
 
-        # Street & directional anchors
-        "mt", "dist",
+        # Notes & postscript markers
+        "n.b", "p.s", "p.p.s", "sci", "scill", "s.vloc",
 
-        # General
-        "approx", "est", "intl", "misc",
+        # Others
+        "approx", "est", "intl", "misc", "mt", "dist",
     }
 
     STREET_ABBRVS = {
         "ave", "blvd", "blv", "ct", "ln", "pl", "rd", "sq", "st", "wy", "way"
+        "rte", "rt", "jct", "riv", "pen",
     }
 
     NAMES_WITH_EXCLAMATION = {
         # Tech, Corporate Entities, & Major Consumer Brands
         "Yahoo", "Yum", "Chips Ahoy", "Kahoot", "JOOP", "Walla",
-        "I Can't Believe It's Not Butter", "Pop",
+        "I Can't Believe It's Not Butter", "Pop", "FreshDirect", "Boost",
 
         # Gaming, Media, Animation, & Entertainment
         "Mamma Mia", "Jeopardy", "Oklahoma", "Oliver", "Shindig",
-        "Hailey's On It", "Airplane", "Osu", "Ha", "VSPO",
+        "Hailey's On It", "Airplane", "Osu", "VSPO", "bam", "go", "wham",
 
-        # Geopolitical Quirks / Municipalities
-        "Westward Ho", "Saint-Louis-du-Ha", "Baie-des-Ha",
+       # Geopolitical Quirks / Municipalities
+        "Westward Ho", "Saint-Louis-du-Ha", "Baie-des-Ha", "Ha"
 
         # Public Figures, Politics, & Manufacturing Brands
-        "Jeb", "Éxito", "Hey Man", "Basta", "Elliot S"
+        "Jeb", "Éxito", "Hey Man", "Basta", "Elliot S",
     }
 
     COMMON_ORG_NOUNS = set()

@@ -3,25 +3,19 @@ from yasbd.rules.base import Rules
 
 # fmt: off
 class EnRules(Rules):
+
+
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
-        # Social / Honorific
-        "messrs", "mlle", "mme", "mmes", "mssrs",
-
-        # Military (Additional)
-        "comdr", "cpls", "ens", "sgts",
-
-        # Academic / Professional / Medical
-        "asst", "det", "surg",
-
-        # Clerical / Religious
-        "fr", "msgr", "revs",
-
-        # Executive
-        "v.p",
+        "cong", "cpls", "ens", "sgts", "revs", "v.p", "del", "dep", "cllr",
     }
 
-    GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {"calif", "dc", "wash", "bc", "ont"}
-    STREET_ABBRVS = Rules.STREET_ABBRVS | {"expy", "hway", "hwy", "pkwy", "rt"}
+    GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {
+        "calif", "dc", "wash", "bc", "ont"
+    }
+    STREET_ABBRVS = Rules.STREET_ABBRVS | {
+        "bldg", "expy", "hway", "hwy", "pkwy", "isl",
+    }
+
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         # Publishing / Documents
         "ch", "chs", "ed", "eds", "fn", "fns",
@@ -69,9 +63,6 @@ class EnRules(Rules):
 
         # Other common starters
         "Do", "Did", "Millions",
-
-        # Slangs
-        # "Wanna", "Gonna", "Trynna",
     }
 # fmt: on
 
