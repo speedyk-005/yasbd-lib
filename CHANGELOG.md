@@ -2,7 +2,26 @@
 
 ---
 
-## [0.1.1] - Unreleased
+## [Unreleased]
+
+### Added
+- **EN_GOLDEN_DATA.py**: 84-case golden benchmark suite for English accuracy testing.
+- **run_golden.py**: Accuracy benchmark runner comparing all 7 libraries against the golden suite.
+- **Expanded abbreviation coverage**: Dozens of new abbreviations across all categories (TITLE, REFERENCE, DATE, MID_SENTENCE, STREET, NAMES_WITH_EXCLAMATION).
+
+### Changed
+- **Trie-based pattern building**: Replaced sorted `"|".join()` with `retrie.Trie` for optimized abbreviation regex generation.
+- **Benchmarks rewrite**: Cold/warm tables and all 8 scenario tables updated with real measured timings; accuracy table and conclusion added.
+- **Abbreviation redistribution**: Moved shared abbreviations (`fr`, `ing`, `messrs`, `mlle`, `mme`, etc.) from language-specific rules to base class; added language-specific additions in en.py, fr.py, es.py.
+- **Pydantic lower bound relaxed**: `>=2.11.0` (was `>=2.12.2`).
+
+### Fixed
+- **`ModuleNotFoundError` masking**: `boundary_detector.py` no longer masks unrelated import errors when the language *is* found but a sub-dependency is missing.
+- **P.M. false positive**: All-caps `P.M.` no longer caught by acronym pattern; hardcoded exclusion of `p\.m` and `a\.m` in the acronym regex.
+
+---
+
+## [0.1.1] - 2026-05-30
 
 ### Fixed
 - **Single-quote dialog**: No longer splits before the dialogue tag (e.g., `'Is this great?' she said.`). ([#23])
@@ -25,7 +44,3 @@ Initial release.
 - **pysbd adapter**: Drop-in `Segmenter` compatible with pysbd's API (`segment()`, `clean`, `char_span`)
 - **Dual API**: `detect()` for raw boundary offsets, `segment()` for sentence strings with `TextSpan` support
 - **Benchmarks**: 7-library comparison across 5 languages and 7 edge cases
-
-[0.1.0]: https://github.com/speedyk-005/yasbd-lib/releases/tag/v0.1.0
-[0.1.1]: https://github.com/speedyk-005/yasbd-lib/compare/v0.1.0...HEAD
-[#23]: https://github.com/speedyk-005/yasbd-lib/issues/23
