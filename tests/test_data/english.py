@@ -39,6 +39,7 @@ TEST_DATA = [
     "I'll see you on Fri., Feb. 14th. ",
     "You can find it at N°. 1026.253.553.| That is where the treasure is.",
     "We make a good team, you and I.| Did you see Albert I. Jones yesterday?",
+    "He left the bank at 6 P.M.| Mr. Smith then went to the store.",
 
     # Parentheses and quotes
     "He teaches science (He previously worked for 5 years as an engineer.) at the local University.",

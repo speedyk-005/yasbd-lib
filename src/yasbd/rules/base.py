@@ -217,7 +217,7 @@ class Rules:
 
         # fmt: off
         # Faster than one big regex
-        # https://regex101.com/r/svyCoU/19
+        # https://regex101.com/r/svyCoU/20
         cls.MID_SENTENCE_FINDER_LST = [
             # Three-dot ellipsis mid-thought (e.g., "... she didn't")
             # Only four dots (.... or . . . .) should be a sentence boundary.
@@ -256,7 +256,7 @@ class Rules:
             # Streets/Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
             # excluding geopolitical ones not followed by a common starters
             re2.compile(rf"""
-                (?:\p{{Lu}}\.)(?<!(?i:{geopolitical_abbrvs_pattern}))
+                (?:\p{{Lu}}\.)(?<!(?i:{geopolitical_abbrvs_pattern}|p\.m|a\.m){dots_pattern})
                 (?!\s+(?:{common_starters_pattern})\b)
                 """, re2.X
             ),
