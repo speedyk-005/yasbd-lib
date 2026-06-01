@@ -2,7 +2,7 @@
 
 ---
 
-## [Unreleased]
+## [0.1.2] - 2026-06-01
 
 ### Added
 - **EN_GOLDEN_DATA.py**: 84-case golden benchmark suite for English accuracy testing.
