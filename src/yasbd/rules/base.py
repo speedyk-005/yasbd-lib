@@ -87,9 +87,6 @@ class Rules:
         # Day
         "mon", "tue", "wed", "thu", "thurs", "thur", "fri",
         "sat", "sun", "lun", "mar", "dom",
-
-        # Others
-        "a.b", "b.c", "d.c",
     }
 
     MID_SENTENCE_ABBRVS = {
