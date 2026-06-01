@@ -102,4 +102,4 @@ ignore = ["B033", "E501", "E203"]
 "__init__.py" = ["F401", "F403"]
 
 [tool.ruff.format]
-exclude = [".git", ".venv", "build", "dist", "tests/test_data/*"]
+exclude = [".git", ".venv", "build", "dist", "tests/test_data/*", "*/EN_GOLDEN_DATA.py"]

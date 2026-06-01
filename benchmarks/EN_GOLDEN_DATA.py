@@ -179,8 +179,40 @@ GOLDEN_EN_RULES_TEST_CASES = [
             "The practice was not abandoned. . . .",
         ],
     ),
+
     # ── Additions: Not from pysbd ──
-    # Abbreviation chains
+
+    # Basic punctuation
+    (
+        "Hello world. How are you? I'm fine.",
+        ["Hello world.", "How are you?", "I'm fine."],
+    ),
+    (
+        "Did you remove num 2. Put it back.",
+        ["Did you remove num 2.", "Put it back."],
+    ),
+
+    # Abbreviations
+    (
+        "I need you to find 3 items, e.g. a hat, a coat, and a bag.",
+        ["I need you to find 3 items, e.g. a hat, a coat, and a bag."],
+    ),
+    (
+        "The agreement was signed by A.B. Holdings Ltd. in 2024",
+        ["The agreement was signed by A.B. Holdings Ltd. in 2024"],
+    ),
+    (
+        "The temperature reached 37.5°C at 6 a.m. on Tue., Feb. 4.",
+        ["The temperature reached 37.5°C at 6 a.m. on Tue., Feb. 4."],
+    ),
+    (
+        "The proof is shown in eq. (7) and ex. IV",
+        ["The proof is shown in eq. (7) and ex. IV"],
+    ),
+    (
+        "I'll see you on Fri., Feb. 14th.",
+        ["I'll see you on Fri., Feb. 14th."],
+    ),
     (
         "The report was published in Dec. It was approved by Prof. Smith and Dr. Jones.",
         [
@@ -211,9 +243,12 @@ GOLDEN_EN_RULES_TEST_CASES = [
         "Q. What is his name? A. His name is Alfred E. Sloan.",
         ["Q. What is his name?", "A. His name is Alfred E. Sloan."],
     ),
+    ("The meeting is at 9 a.m. Monday", ["The meeting is at 9 a.m. Monday"]),
+
     # Contiguous terminators
     ("Hello ! ! ! !", ["Hello ! ! ! !"]),
     ("Hello!? !! ?! Is that you?", ["Hello!? !! ?!", "Is that you?"]),
+
     # Ellipsis
     (
         '"How could we miss this!..." Mark shouted, slamming his hand on the desk.',
@@ -230,6 +265,7 @@ GOLDEN_EN_RULES_TEST_CASES = [
         "What I'm saying, the thing is . . . I didn't mean it.",
         ["What I'm saying, the thing is . . . I didn't mean it."],
     ),
+
     # Exclamation-safe words
     (
         "We spent the afternoon playing Adopt Me! on the computer while eating Chips Ahoy! cookies.",
@@ -244,37 +280,7 @@ GOLDEN_EN_RULES_TEST_CASES = [
         ],
     ),
     ("Yahoo! The server is down.", ["Yahoo!", "The server is down."]),
-    # ── From tests/test_data/english.py ──
-    # Basic punctuation
-    (
-        "Hello world. How are you? I'm fine.",
-        ["Hello world.", "How are you?", "I'm fine."],
-    ),
-    (
-        "Did you remove num 2. Put it back.",
-        ["Did you remove num 2.", "Put it back."],
-    ),
-    # Abbreviations
-    (
-        "I need you to find 3 items, e.g. a hat, a coat, and a bag.",
-        ["I need you to find 3 items, e.g. a hat, a coat, and a bag."],
-    ),
-    (
-        "The agreement was signed by A.B. Holdings Ltd. in 2024",
-        ["The agreement was signed by A.B. Holdings Ltd. in 2024"],
-    ),
-    (
-        "The temperature reached 37.5°C at 6 a.m. on Tue., Feb. 4.",
-        ["The temperature reached 37.5°C at 6 a.m. on Tue., Feb. 4."],
-    ),
-    (
-        "The proof is shown in eq. (7) and ex. IV",
-        ["The proof is shown in eq. (7) and ex. IV"],
-    ),
-    (
-        "I'll see you on Fri., Feb. 14th.",
-        ["I'll see you on Fri., Feb. 14th."],
-    ),
+
     # Parentheses and quotes
     (
         "(See Fig. 4. This outlines the memory layout.) The engine executes next.",
@@ -315,6 +321,7 @@ GOLDEN_EN_RULES_TEST_CASES = [
         'He said: "First sentence. Second sentence." Then done.',
         ['He said: "First sentence. Second sentence."', "Then done."],
     ),
+
     # Ellipsis
     (
         "The project (Sinta) was nearing completion... or so we thought.",
@@ -328,6 +335,7 @@ GOLDEN_EN_RULES_TEST_CASES = [
         "Why Complex Carbohydrates............... 19",
         ["Why Complex Carbohydrates............... 19"],
     ),
+
     # Decimal in time
     (
         "Life expectancy for Black women was 77.5 years in 2008.",
@@ -339,6 +347,7 @@ GOLDEN_EN_RULES_TEST_CASES = [
             "The LM's Descent Propulsion System began a 29-second burn at 109:23:39.9 to move the craft to the lower orbit,"
         ],
     ),
+
     # Mixed language
     (
         "我喜欢AI。 It is useful",

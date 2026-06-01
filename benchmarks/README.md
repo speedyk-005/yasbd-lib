@@ -25,16 +25,16 @@ Aggregate score across all 83 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOL
 ```
 Library                 Score
 ------------------------------
-yasbd                82/83 ( 98.8%)
-pysbd                71/83 ( 85.5%)
-sentencex            68/83 ( 81.9%)
-blingfire            67/83 ( 80.7%)
-sentence-splitter    55/83 ( 66.3%)
-sentsplit            54/83 ( 65.1%)
-nupunkt              52/83 ( 62.7%)
+yasbd                83/84 ( 98.8%)
+pysbd                71/84 ( 84.5%)
+sentencex            69/84 ( 82.1%)
+blingfire            68/84 ( 81.0%)
+sentence-splitter    55/84 ( 65.5%)
+sentsplit            54/84 ( 64.3%)
+nupunkt              53/84 ( 63.1%)
 ```
 
-yasbd's only failure is `"He left the bank at 6 P.M. Mr. Smith then went to the store."` All-caps `P.M.` matches the acronym pattern `(?:\p{Lu}\.)`, which treats it like `U.S.` or `I.B.M.` and prevents splitting. Lowercase `a.m.` works fine. Every other library fails at least 6 cases.
+yasbd's only failure is `"The meeting is at 9 a.m. Monday"`. `a.m.` is not in the abbreviation protection list, so the period + capital `M` triggers a split. Lowercase `a.m.` followed by a proper noun is a genuinely ambiguous case. Fixing it would require day-name detection. Every other library fails at least 12 cases.
 
 ## Cold vs Warm speed
 
