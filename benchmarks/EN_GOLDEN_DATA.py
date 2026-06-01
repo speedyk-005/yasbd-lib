@@ -244,4 +244,112 @@ GOLDEN_EN_RULES_TEST_CASES = [
         ],
     ),
     ("Yahoo! The server is down.", ["Yahoo!", "The server is down."]),
+    # ── From tests/test_data/english.py ──
+    # Basic punctuation
+    (
+        "Hello world. How are you? I'm fine.",
+        ["Hello world.", "How are you?", "I'm fine."],
+    ),
+    (
+        "Did you remove num 2. Put it back.",
+        ["Did you remove num 2.", "Put it back."],
+    ),
+    # Abbreviations
+    (
+        "I need you to find 3 items, e.g. a hat, a coat, and a bag.",
+        ["I need you to find 3 items, e.g. a hat, a coat, and a bag."],
+    ),
+    (
+        "The agreement was signed by A.B. Holdings Ltd. in 2024",
+        ["The agreement was signed by A.B. Holdings Ltd. in 2024"],
+    ),
+    (
+        "The temperature reached 37.5°C at 6 a.m. on Tue., Feb. 4.",
+        ["The temperature reached 37.5°C at 6 a.m. on Tue., Feb. 4."],
+    ),
+    (
+        "The proof is shown in eq. (7) and ex. IV",
+        ["The proof is shown in eq. (7) and ex. IV"],
+    ),
+    (
+        "I'll see you on Fri., Feb. 14th.",
+        ["I'll see you on Fri., Feb. 14th."],
+    ),
+    # Parentheses and quotes
+    (
+        "(See Fig. 4. This outlines the memory layout.) The engine executes next.",
+        ["(See Fig. 4. This outlines the memory layout.)", "The engine executes next."],
+    ),
+    (
+        'She turned to him, "This is great." she said.',
+        ['She turned to him, "This is great." she said.'],
+    ),
+    (
+        "'Is this okay?' she said.",
+        ["'Is this okay?' she said."],
+    ),
+    (
+        "Can you believe how much money he has made from his Where's Wally? series of books (published in the US as Where's Waldo?)?",
+        [
+            "Can you believe how much money he has made from his Where's Wally? series of books (published in the US as Where's Waldo?)?"
+        ],
+    ),
+    (
+        "According to his publisher, Smith bought the company in 1985 [or 1984?], but he wasn't active in its management until 1990.",
+        [
+            "According to his publisher, Smith bought the company in 1985 [or 1984?], but he wasn't active in its management until 1990."
+        ],
+    ),
+    (
+        'Then he stop. "wait" he said',
+        ["Then he stop.", '"wait" he said'],
+    ),
+    (
+        "The letter concluded with a simple warning: 'Do not follow me.' Then she left.",
+        [
+            "The letter concluded with a simple warning: 'Do not follow me.'",
+            "Then she left.",
+        ],
+    ),
+    (
+        'He said: "First sentence. Second sentence." Then done.',
+        ['He said: "First sentence. Second sentence."', "Then done."],
+    ),
+    # Ellipsis
+    (
+        "The project (Sinta) was nearing completion... or so we thought.",
+        ["The project (Sinta) was nearing completion... or so we thought."],
+    ),
+    (
+        "One further habit ... compounds. . . . The practice was not abandoned.",
+        ["One further habit ... compounds. . . .", "The practice was not abandoned."],
+    ),
+    (
+        "Why Complex Carbohydrates............... 19",
+        ["Why Complex Carbohydrates............... 19"],
+    ),
+    # Decimal in time
+    (
+        "Life expectancy for Black women was 77.5 years in 2008.",
+        ["Life expectancy for Black women was 77.5 years in 2008."],
+    ),
+    (
+        "The LM's Descent Propulsion System began a 29-second burn at 109:23:39.9 to move the craft to the lower orbit,",
+        [
+            "The LM's Descent Propulsion System began a 29-second burn at 109:23:39.9 to move the craft to the lower orbit,"
+        ],
+    ),
+    # Mixed language
+    (
+        "我喜欢AI。 It is useful",
+        ["我喜欢AI。", "It is useful"],
+    ),
+    (
+        "The meeting is at 2 p.m. 请别迟到。",
+        ["The meeting is at 2 p.m.", "请别迟到。"],
+    ),
+    (
+        "那个会议在下午两点。 Please don't be late!",
+        ["那个会议在下午两点。", "Please don't be late!"],
+    ),
 ]

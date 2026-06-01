@@ -18,18 +18,18 @@ The format is simple: throw edge cases at each library. Does it split where it s
 
 ## EN Golden benchmark
 
-Aggregate score across all 60 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOLDEN_DATA.py) via [`run_golden.py`](run_golden.py). A modified and expanded version of [pysbd's test suite](https://github.com/nipunsadvilkar/pySBD/blob/master/tests/lang/test_english.py): we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, and more.
+Aggregate score across all 83 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOLDEN_DATA.py) via [`run_golden.py`](run_golden.py). A modified and expanded version of [pysbd's test suite](https://github.com/nipunsadvilkar/pySBD/blob/master/tests/lang/test_english.py): we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, and more.
 
 ```
 Library                 Score
 ------------------------------
-yasbd                59/60 ( 98.3%)
-pysbd                54/60 ( 90.0%)
-sentencex            50/60 ( 83.3%)
-blingfire            49/60 ( 81.7%)
-sentence-splitter    39/60 ( 65.0%)
-nupunkt              39/60 ( 65.0%)
-sentsplit            38/60 ( 63.3%)
+yasbd                82/83 ( 98.8%)
+pysbd                71/83 ( 85.5%)
+sentencex            68/83 ( 81.9%)
+blingfire            67/83 ( 80.7%)
+sentence-splitter    55/83 ( 66.3%)
+sentsplit            54/83 ( 65.1%)
+nupunkt              52/83 ( 62.7%)
 ```
 
 yasbd's only failure is `"At 5 a.m., Mr. Smith went to the bank. He left the bank at 6"` — the period after `a.m.` (abbreviation list) triggers the split protection, which then merges across the real sentence boundary. Every other library fails at least 6 cases.

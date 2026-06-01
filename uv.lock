@@ -1162,6 +1162,15 @@ wheels = [
 ]
 
 [[package]]
+name = "retrie"
+version = "0.3.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/51/bb/09905b04e64a992284d2e1b907be2f8ef293a3a0855a7db6948235493380/retrie-0.3.1.tar.gz", hash = "sha256:a18e7a3a75b2671e72a6ab5f76116ce8c2a7dabc61d683d796307d0909c122e3", size = 10409, upload-time = "2024-02-22T10:05:30.536Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bb/1a/0ab5362044d27c3639befa0ffb1c37bc6f1df0034cb7bd705aa4a8882264/retrie-0.3.1-py2.py3-none-any.whl", hash = "sha256:cb67a394f93e66d3ee35592c0c65192f8c1d7f36e6a98e73306e439e97bf8d9d", size = 9466, upload-time = "2024-02-22T10:05:28.149Z" },
+]
+
+[[package]]
 name = "ruff"
 version = "0.15.13"
 source = { registry = "https://pypi.org/simple" }
@@ -1394,13 +1403,14 @@ wheels = [
 
 [[package]]
 name = "yasbd-lib"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "." }
 dependencies = [
     { name = "ftfy" },
     { name = "loguru" },
     { name = "pydantic" },
     { name = "regex" },
+    { name = "retrie" },
 ]
 
 [package.optional-dependencies]
@@ -1430,16 +1440,17 @@ requires-dist = [
     { name = "matplotlib", marker = "extra == 'bench'" },
     { name = "nupunkt", marker = "extra == 'bench'" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.4.0" },
-    { name = "pydantic", specifier = ">=2.12.2,<3.0" },
+    { name = "pydantic", specifier = ">=2.11.0,<3.0" },
     { name = "pysbd", marker = "extra == 'bench'" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.5" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=6.2.1" },
     { name = "python-docstring-markdown", marker = "extra == 'dev'", specifier = ">=0.2.2" },
     { name = "regex", specifier = ">=2025.7.29" },
+    { name = "retrie", specifier = ">=0.3.0,<1.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.14.14" },
     { name = "sentence-splitter", marker = "extra == 'bench'" },
     { name = "sentencex", marker = "extra == 'bench'" },
     { name = "sentsplit", marker = "extra == 'bench'" },
     { name = "setuptools", marker = "extra == 'bench'", specifier = "<81" },
 ]
-provides-extras = ["bench", "dev"]
+provides-extras = ["dev", "bench"]
