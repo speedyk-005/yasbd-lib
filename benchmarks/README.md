@@ -38,17 +38,17 @@ yasbd's only failure is `"The meeting is at 9 a.m. Monday"`. `a.m.` is not in th
 
 ## Cold vs Warm speed
 
-First call includes import + init + first segment. Subsequent calls are warm.
+First call includes import + init + first segment. Subsequent calls are warm. Tested on the [Normal text](#normal-text) shown below.
 
 | Library | Cold (ms) | Warm (ms) | Notes |
 |---|---|---|---|---|
-| sentencex | 14 | ~0 | Rust bindings loaded on import |
-| pysbd | 60 | ~0 | Rule-based, lightweight |
-| sentence-splitter | 73 | ~0 | Pure Python, no heavy deps |
-| sentsplit | 190 | ~0 | CRF model loaded on init |
-| blingfire | 392 | ~0 | C++ FSM model loaded from disk |
-| yasbd | 531 | ~0 | Regex compiled on first use |
-| nupunkt | 8,594 | ~0 | Loads full model into memory on init |
+| yasbd | 1.7 | 1.31 | Regex compiled on first use |
+| pysbd | 31.4 | 3.53 | Rule-based, lightweight |
+| sentencex | 14.6 | 0.07 | Rust bindings loaded on import |
+| blingfire | 458.3 | 0.10 | C++ FSM model loaded from disk |
+| sentence-splitter | 6.5 | 1.27 | Pure Python, no heavy deps |
+| sentsplit | 16.5 | 7.75 | CRF model loaded on init |
+| nupunkt | 10,767.1 | 1.02 | Loads full model into memory on init |
 
 <p align="center">
   <img src="bench.png" alt="SBD Benchmark Performance" width="800"/>
