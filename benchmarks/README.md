@@ -43,7 +43,7 @@ First call includes import + init + first segment. Subsequent calls are warm.
 | pysbd | 35 | 5 | Rule-based, lightweight |
 | sentence-splitter | 18 | 1 | Pure Python, no heavy deps |
 | sentsplit | 70 | 9 | CRF model loaded on init |
-| yasbd | 761 | 0.5 | Regex compiled on first use |
+| yasbd | 538 | 0.2 | Regex compiled on first use |
 | sentencex | 110 | 3 | Rust bindings loaded on import |
 | blingfire | 1,287 | 3 | C++ FSM model loaded from disk |
 | nupunkt | 13,181 | 1 | Loads full model into memory on init |
