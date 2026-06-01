@@ -171,7 +171,7 @@ class Rules:
         geopolitical_abbrvs_pattern = _build_abbr_pattern(cls.GEOPOLITICAL_ABBRVS)
         common_starters_pattern = _build_abbr_pattern(cls.COMMON_SENT_STARTERS)
 
-        # https://regex101.com/r/qBSyU5/14
+        # https://regex101.com/r/qBSyU5/15
         # Handle flattened lists due to messy OCR.
         cls.HORIZONTAL_LIST_FINDER = re2.compile(
             r"""
@@ -180,7 +180,7 @@ class Rules:
             (?:[•◦]\s+)?   # Optional bullet point (e.g., • 9.)
             (?:
                 [-*+]|      #  Markdown style list
-                (?:\d{1,2}|[a-eA-E\p{Ll}])[.)]{1,2}  #  Numbered and alphabetical list (e.g, a\), 34.\), 1.)
+                (?:\d{1,2}|[a-eA-E])[.)]{1,2}  #  Numbered and alphabetical list (e.g, a\), 34.\), 1.)
             )
             (?=\s)  # Must followed by a space
             """,

@@ -2,6 +2,11 @@
 
 ---
 
+## [0.1.3] - 2026-06-01
+
+### Fixed
+- **HORIZONTAL_LIST_FINDER over-match**: Single-letter abbreviations (`p.`, `h.`, `s.`) no longer treated as alphabetic list markers. Restricted marker range to `[a-eA-E]`.
+
 ## [0.1.2] - 2026-06-01
 
 ### Added
