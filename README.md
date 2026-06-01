@@ -188,7 +188,7 @@ print(res)
 
 ### Segmentation
 
-If you do not want to manage boundary offsets yourself (and who would?), [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-boundary_detector-BoundaryDetector-segment) wraps `detect()` with string slicing. It yields sentences as strings, one at a time. By default it strips leading and trailing whitespace and drops empty results. Set `preserve_whitespace=True` to keep original spacing around boundaries.
+If you do not want to manage boundary offsets yourself (and who would?), [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-boundary_detector-BoundaryDetector-segment) wraps `detect()` with string slicing. It yields sentences as strings, one at a time. By default it strips leading and trailing whitespace and drops empty results. Set `preserve_whitespace=True` to keep original spacing around boundaries for non-destructive output.
 
 ```python
 detector.lang = "en"
