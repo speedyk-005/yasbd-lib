@@ -68,6 +68,8 @@ class YasbdWrapper(BaseSegmenter):
         self._detector = BoundaryDetector(lang=self.lang)
 
     def _segment(self, text: str) -> list[str]:
+        if self._detector.lang != self.lang:
+            self._detector.lang = self.lang
         return list(self._detector.segment(text))
 
 
@@ -236,14 +238,11 @@ def all_segmenters(lang: str = "en") -> dict[str, BaseSegmenter]:
     return dict(_REGISTRY)
 
 
-def warm_time_segmenters(
-    text: str, lang: str = "en", number: int = 10
-) -> dict[str, dict[str, float | int]]:
+def warm_time_segmenters(text: str, lang: str = "en", number: int = 10):
     """Run warm timing on all segmenters via the registry.
 
     Returns {name: {"ms": float, "sents": int}}.
     """
-    results: dict[str, dict[str, float | int]] = {}
     with Progress(
         SpinnerColumn(),
         TextColumn("[progress.description]{task.description}"),
@@ -260,9 +259,7 @@ def warm_time_segmenters(
             t = timeit.timeit(lambda s=seg, t=text: s.segment(t), number=number)
             progress.advance(task)
             ms = t / number * 1000
-            results[name] = {"ms": ms, "sents": len(sents)}
             _console.print(f"[bold]{name:20s}[/] {ms:.2f}ms  ({len(sents)} sents)")
-    return results
 
 
 def segment_and_print(text: str, lang: str = "en") -> dict[str, list[str]]:

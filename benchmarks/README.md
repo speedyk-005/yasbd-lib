@@ -61,12 +61,7 @@ First call includes import + init + first segment. Subsequent calls are warm. Te
 The baseline. Standard English with titles, URLs, and decimal numbers. Every library should ace this.
 
 ```
-Dr. Anthony Fauci served as the director of the National Institute of Allergy and
-Infectious Diseases for 38 years. He retired in December 2022. "I want to let the
-next generation take over," he said in an interview. His work, which began under
-President Reagan, spanned six presidential administrations. According to a 2021
-report in The Lancet, the U.S. invested over $100 billion in pandemic preparedness.
-"That money saved lives," Fauci noted. See nih.gov for more details.
+Dr. Anthony Fauci served as the director of the National Institute of Allergy and Infectious Diseases for 38 years. He retired in December 2022. "I want to let the next generation take over," he said in an interview. His work, which began under President Reagan, spanned six presidential administrations. According to a 2021 report in The Lancet, the U.S. invested over $100 billion in pandemic preparedness. "That money saved lives," Fauci noted. See nih.gov for more details.
 ```
 
 <details>
@@ -139,6 +134,140 @@ report in The Lancet, the U.S. invested over $100 billion in pandemic preparedne
 </details>
 
 All libraries returned 7/7 sentences. `Dr.`, `U.S.`, `$100 billion`, `nih.gov` handled correctly across the board. nupunkt is 378x slower than sentencex on this input but it gets the job done.
+
+### Complex academic text
+
+URLs with query parameters, inline citations, nested quotes, copyright notices. The kind of text that breaks naive splitters.
+
+```
+Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.
+Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.
+My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.
+
+You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.
+
+As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."
+However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).
+
+The witness testified: "He said — and I quote — 'I will not comply.' Then he turned around and left. I couldn't believe it."
+
+Copyright © 2024 Example Corp. All rights reserved.
+```
+
+<details>
+<summary>click to see output</summary>
+
+```
+  yasbd [en]:
+    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
+    2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
+    3: 'My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.'
+    4: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
+    5: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
+    6: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
+    7: 'The witness testified: "He said — and I quote — \'I will not comply.\''
+    8: 'Then he turned around and left. I couldn\'t believe it."'
+    9: 'Copyright © 2024 Example Corp.'
+   10: 'All rights reserved.'
+
+  pysbd [en]:
+    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.\n'
+    2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.\n'
+    3: 'My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.\n\n'
+    4: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?'
+    5: 'ref=dept&v=2.0#contact.\n\n'
+    6: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."\n'
+    7: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).\n\n'
+    8: 'The witness testified: "He said — and I quote — \'I will not comply.\' Then he turned around and left. I couldn\'t believe it."\n\n'
+    9: 'Copyright © 2024 Example Corp. '
+   10: 'All rights reserved.'
+
+  sentencex [en]:
+    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.\n'
+    2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.\n'
+    3: 'My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.'
+    4: '\n\n'
+    5: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
+    6: '\n\n'
+    7: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."\n'
+    8: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
+    9: '\n\n'
+   10: 'The witness testified: "He said — and I quote — \'I will not comply.\' Then he turned around and left. I couldn\'t believe it."'
+   11: '\n\n'
+   12: 'Copyright © 2024 Example Corp. '
+   13: 'All rights reserved.'
+
+  sentsplit [en]:
+    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.\n'
+    2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.\n'
+    3: 'My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.\n'
+    4: '\n'
+    5: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.\n'
+    6: '\n'
+    7: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019;'
+    8: ' cf. Brown, 2018)."\n'
+    9: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).\n'
+   10: '\n'
+   11: 'The witness testified: "He said — and I quote — \'I will not comply.\''
+   12: ' Then he turned around and left.'
+   13: ' I couldn\'t believe it."\n'
+   14: '\n'
+   15: 'Copyright © 2024 Example Corp.'
+   16: ' All rights reserved.'
+
+  nupunkt [en]:
+    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
+    2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
+    3: 'My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.'
+    4: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
+    5: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
+    6: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
+    7: 'The witness testified: "He said — and I quote — \'I will not comply.\''
+    8: 'Then he turned around and left.'
+    9: 'I couldn\'t believe it."'
+   10: 'Copyright © 2024 Example Corp.'
+   11: 'All rights reserved.'
+
+  blingfire [en]:
+    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
+    2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
+    3: 'My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.'
+    4: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
+    5: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
+    6: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
+    7: 'The witness testified: "He said — and I quote — \'I will not comply.\''
+    8: 'Then he turned around and left.'
+    9: 'I couldn\'t believe it."'
+   10: 'Copyright © 2024 Example Corp.'
+   11: 'All rights reserved.'
+
+  sentence-splitter [en]:
+    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
+    2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
+    3: 'My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.'
+    4: ''
+    5: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
+    6: ''
+    7: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
+    8: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
+    9: ''
+   10: 'The witness testified: "He said — and I quote — \'I will not comply.\''
+   11: 'Then he turned around and left.'
+   12: 'I couldn\'t believe it."'
+   13: ''
+   14: 'Copyright © 2024 Example Corp. All rights reserved.'
+```
+</details>
+
+| Rank | Library | N sents | Warm Time (ms) | The Verdict |
+| --- | --- | --- | --- | --- |
+| **1** | **yasbd** | 10 | 3.24 | **Top pick.** Correct boundaries. Dialog splits into 2 pieces (all others: 3+). URL intact. |
+| **2** | **pysbd** | 10 | 6.45 | **Correct sentence count.** Breaks URL at `?` — a real accuracy miss. |
+| **3** | **blingfire** | 11 | 0.11 | **Fast.** Dialog splits into 3 pieces. URL intact. |
+| **4** | **nupunkt** | 11 | 1.00 | **Same output as blingfire.** 11s cold start. |
+| **5** | **sentencex** | 13 | 0.07 | **Fast but phantom sentences.** Counts empty paragraph breaks as sentences. |
+| **6** | **sentence-splitter** | 14 | 3.11 | **Phantom sentences from empty lines.** |
+| **7** | **sentsplit** | 16 | 18.90 | **Worst.** Phantom sentences, splits inside citations, dialog fragmented into 4 pieces. |
 
 ### Newline continuation
 
@@ -254,162 +383,22 @@ incl. the events of the s. XIX, was retransmitted.
 ```
 </details>
 
-| Library | Sents | Warm Time (ms) | Verdict |
-|---|---|---|---|
-| **yasbd** | **7** | 1.81 | **Top pick.** Joins all newlines, preserves `s. XIX` intact. |
-| **nupunkt** | **7** | 0.61 | Same output as yasbd. But 11s cold start makes it impractical. |
-| **blingfire** | 7 | 0.06 | Merges first two sentences into one. Also splits `s.` + `XIX`. |
-| **sentencex** | 8 | 0.03 | Splits `incl.` from `the events of the s. XIX`. |
-| **pysbd** | **16** | 3.24 | Splits on every `\n`. Text wrapping completely breaks it. |
-| **sentsplit** | **15** | 7.08 | Splits on every `\n`, plus splits `Fig.` from `3 for details)`. |
-| **sentence-splitter** | **15** | 1.32 | Splits on every `\n`. |
-
-### Complex academic text
-
-URLs with query parameters, inline citations, nested quotes, copyright notices. The kind of text that breaks naive splitters.
-
-```
-Dear Professor Johnson, I am writing to formally request an extension on the upcoming
-dissertation deadline. Pursuant to Section 4.3(a)(ii) of the university handbook
-(see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour
-grace period under extenuating circumstances. My advisor, Dr. A. B. Patel (M.D., Ph.D.),
-can corroborate my claim if needed.
-
-You can reach me at j.doe42@university.example.edu or visit my profile page at
-https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.
-
-As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are
-far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)." However, critics argue
-that "the methodology employed was fundamentally flawed" — a claim the authors vehemently
-deny (see Appendix A, Fig. 7).
-
-The witness testified: "He said — and I quote — 'I will not comply.' Then he turned
-around and left. I couldn't believe it."
-
-Copyright © 2024 Example Corp. All rights reserved.
-```
-
-<details>
-<summary>click to see output</summary>
-
-```
-  yasbd [en]:
-    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
-    2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
-    3: 'My advisor, Dr. A. B. Patel (M.D., Ph.D.), can corroborate my claim if needed.'
-    4: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
-    5: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
-    6: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
-    7: 'The witness testified: "He said — and I quote — \'I will not comply.\''
-    8: 'Then he turned around and left. I couldn\'t believe it."'
-    9: 'Copyright © 2024 Example Corp.'
-   10: 'All rights reserved.'
-
-  pysbd [en]:
-    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline. '
-    2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances. '
-    3: 'My advisor, Dr. A. B. Patel (M.D., Ph.D.), can corroborate my claim if needed.\n\n'
-    4: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?'
-    5: 'ref=dept&v=2.0#contact.\n\n'
-    6: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)." '
-    7: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).\n\n'
-    8: 'The witness testified: "He said — and I quote — \'I will not comply.\' Then he turned around and left. I couldn\'t believe it."\n\n'
-    9: 'Copyright © 2024 Example Corp. '
-   10: 'All rights reserved.'
-
-  sentencex [en]:
-    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline. '
-    2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances. '
-    3: 'My advisor, Dr. A. B. Patel (M.D., Ph.D.), can corroborate my claim if needed.'
-    4: '\n\n'
-    5: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
-    6: '\n\n'
-    7: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)." '
-    8: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
-    9: '\n\n'
-   10: 'The witness testified: "He said — and I quote — \'I will not comply.\' Then he turned around and left. I couldn\'t believe it."'
-   11: '\n\n'
-   12: 'Copyright © 2024 Example Corp. '
-   13: 'All rights reserved.'
-
-  sentsplit [en]:
-    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
-    2: ' Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
-    3: ' My advisor, Dr. A. B. Patel (M.D., Ph.D.), can corroborate my claim if needed.\n'
-    4: '\n'
-    5: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.\n'
-    6: '\n'
-    7: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019;'
-    8: ' cf. Brown, 2018)."'
-    9: ' However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).\n'
-   10: '\n'
-   11: 'The witness testified: "He said — and I quote — \'I will not comply.\''
-   12: ' Then he turned around and left.'
-   13: ' I couldn\'t believe it."\n'
-   14: '\n'
-   15: 'Copyright © 2024 Example Corp.'
-   16: ' All rights reserved.'
-
-  nupunkt [en]:
-    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
-    2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
-    3: 'My advisor, Dr. A. B. Patel (M.D., Ph.D.), can corroborate my claim if needed.'
-    4: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
-    5: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
-    6: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
-    7: 'The witness testified: "He said — and I quote — \'I will not comply.\''
-    8: 'Then he turned around and left.'
-    9: 'I couldn\'t believe it."'
-   10: 'Copyright © 2024 Example Corp.'
-   11: 'All rights reserved.'
-
-  blingfire [en]:
-    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
-    2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
-    3: 'My advisor, Dr. A. B. Patel (M.D., Ph.D.), can corroborate my claim if needed.'
-    4: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
-    5: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
-    6: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
-    7: 'The witness testified: "He said — and I quote — \'I will not comply.\''
-    8: 'Then he turned around and left.'
-    9: 'I couldn\'t believe it."'
-   10: 'Copyright © 2024 Example Corp.'
-   11: 'All rights reserved.'
-
-  sentence-splitter [en]:
-    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
-    2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
-    3: 'My advisor, Dr. A. B. Patel (M.D., Ph.D.), can corroborate my claim if needed.'
-    4: ''
-    5: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
-    6: ''
-    7: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
-    8: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
-    9: ''
-   10: 'The witness testified: "He said — and I quote — \'I will not comply.\''
-   11: 'Then he turned around and left.'
-   12: 'I couldn\'t believe it."'
-   13: ''
-   14: 'Copyright © 2024 Example Corp. All rights reserved.'
-```
-</details>
-
-| Rank | Library | N sents | Warm Time (ms) | The Verdict |
+| Rank | Library | Sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 10 | 3.28 | **Top pick.** Flawlessly parsed complex URLs, scientific abbreviations (`Dr. A. B. Patel`), and inline citations without breaking. It also handled the nested quotation blocks cleaner than the rest. |
-| **2** | **blingfire** | 11 | 0.11 | **Exceptional balance of speed and accuracy.** Matched the perfect parsing of `yasbd` for URLs and abbreviations. The only difference is that it chose to split the final multi-sentence testimonial quote into 3 clean sentences instead of 2. |
-| **3** | **sentencex** | 13 | 0.06 | **Blazing fast, but messy.** It handles the actual text (URLs, citations) perfectly, but it fails to strip out whitespace, counting empty newlines (`\n\n`) as standalone sentences. |
-| **4** | **sentence-splitter** | 14 | 2.30 | **Mediocre.** Correctly preserved URLs, but like `sentencex`, it polluted the count by turning empty lines into sentences. It also compressed the final copyright notice. |
-| **5** | **nupunkt** | 11 | 1.13 | **Inconsistent environment footprint.** While its warm run output is identical to `blingfire`, its massive 11–15 second initialization/cold-start overhead makes it a liability for real-world deployment. |
-| **6** | **pysbd** | 10 | 6.19 | **Fails on modern text.** A sentence segmenter shouldn't corrupt data, but `pysbd` fundamentally broke the complex profile URL right at the query parameter (`?`), leaving a severed fragment. |
-| **7** | **sentsplit** | 16 | 13.87 | **Worst by far.** It is both the slowest warm performer and highly erratic. It hallucinated sentences out of empty lines and aggressively broke apart standard academic citations inside parentheses (`...2019; / cf. Brown...`). |
+| **1** | **yasbd** | **7** | 1.61 | **Top pick.** Joins all newlines, preserves `s. XIX` intact. |
+| **2** | **nupunkt** | **7** | 0.77 | **Same accuracy as yasbd.** But 11s cold start makes it impractical. |
+| **3** | **blingfire** | 7 | 0.08 | **Fast but flawed.** Merges first two sentences. Splits `s.` + `XIX`. |
+| **4** | **sentencex** | 8 | 0.03 | **Splits `incl.`** from the sentence. One extra boundary. |
+| **5** | **pysbd** | **16** | 3.46 | **Splits on every `\n`.** Text wrapping completely breaks it. |
+| **6** | **sentsplit** | **15** | 7.58 | **Splits on every `\n`**, plus splits `Fig.` from `3 for details)`. |
+| **7** | **sentence-splitter** | **15** | 1.41 | **Splits on every `\n`.** Same count as sentsplit but cleaner output. |
 
 ### Chat Log
 
 This conversational chat context completely turns the rankings upside down. Standard rule-based or academic models fall apart here due to informal punctuation (multiple punctuation marks like `!!!`, `???`), lowercase abbreviations (`a.m.`, `dr.`, `sec.`), and lack of proper capitalization.
 
 ```
-ey!!! how r u doing??? i'm good... just finished work cool!!! wanna grab dinner later?? sure!!! where should we meet??? maybe 7pm???
+Hey!!! how r u doing??? i'm good... just finished work cool!!! wanna grab dinner later?? sure!!! where should we meet??? maybe 7pm???
 lol. OK.... sure?? fine. nah. idk. maybe. bruh. what even is this. broh !! 
 that is so sad 😭 I tougja we were friends.
 nah idk man. maybe it works... maybe not lol. i checked the logs at 3.14 a.m. and everything looked fine?? then the server just died.
@@ -425,7 +414,7 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
 
 ```
   yasbd [en]:
-    1: 'how matched up ey!!!'
+    1: 'Hey!!!'
     2: 'how r u doing???'
     3: "i'm good... just finished work cool!!!"
     4: 'wanna grab dinner later??'
@@ -448,7 +437,7 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
    21: 'idk anymore 😭'
 
   pysbd [en]:
-    1: "how matched up ey!!! how r u doing??? i'm good... just finished work cool!!! wanna grab dinner later?? "
+    1: "Hey!!! how r u doing??? i'm good... just finished work cool!!! wanna grab dinner later?? "
     2: 'sure!!! where should we meet??? maybe 7pm???\n'
     3: 'lol. '
     4: 'OK.... sure?? '
@@ -483,7 +472,7 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
    33: 'idk anymore 😭'
 
   sentencex [en]:
-    1: "how matched up ey!!! how r u doing??? i'm good... just finished work cool!!! wanna grab dinner later?? sure!!! where should we meet??? maybe 7pm???\nlol. "
+    1: "Hey!!! how r u doing??? i'm good... just finished work cool!!! wanna grab dinner later?? sure!!! where should we meet??? maybe 7pm???\nlol. "
     2: 'OK.... sure?? fine. '
     3: 'nah. '
     4: 'idk. '
@@ -512,28 +501,27 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
    27: 'maybe rollback?? maybe pray?? idk anymore 😭'
 
   sentsplit [en]:
-    1: 'how matched up ey!!!'
-    2: ' how r u doing??'
-    3: "? i'm good... just finished work cool!!!"
-    4: ' wanna grab dinner later??'
-    5: ' sure!!!'
-    6: ' where should we meet??'
-    7: '? maybe 7pm???\n'
-    8: 'lol. OK.... sure??'
-    9: ' fine. nah. idk. maybe. bruh. what even is this. broh !! \n'
-   10: 'that is so sad 😭 I tougja we were friends.\n'
-   11: 'nah idk man. maybe it works... maybe not lol. i checked the logs at 3.14 a.m. and everything looked fine??'
-   12: ' then the server just died.\n'
-   13: 'bruh. no warning no crash dump nothing. wait... did you even restart it or just stare at the terminal again.\n'
-   14: 'ngl the cpu hit 99.9% for like 20 mins straigja. btw i found the backup at jatps://test.example.org/logs/v2.1/index.jaml.\n'
-   15: 'dont touch it pls. also dr. kim said the patch from frn. 12 wasnt stable. kinda obvious now tbh. the db kept throwing ref. errors after sec. 4 loaded.\n'
-   16: 'weird thing is user no. 7 was still connected at 2 a.m. somehow. lmao this whole system feels haunted. ok so i reran the job... still broken. nice.\n'
-   17: 'absolutely elite engineering rigja there. maybe rollback??'
-   18: ' maybe pray??'
-   19: ' idk anymore 😭'
+    1: 'Hey!!! how r u doing??'
+    2: "? i'm good... just finished work cool!!!"
+    3: ' wanna grab dinner later??'
+    4: ' sure!!!'
+    5: ' where should we meet??'
+    6: '? maybe 7pm???\n'
+    7: 'lol. OK.... sure??'
+    8: ' fine. nah. idk. maybe. bruh. what even is this. broh !! \n'
+    9: 'that is so sad 😭 I tougja we were friends.\n'
+   10: 'nah idk man. maybe it works... maybe not lol. i checked the logs at 3.14 a.m. and everything looked fine??'
+   11: ' then the server just died.\n'
+   12: 'bruh. no warning no crash dump nothing. wait... did you even restart it or just stare at the terminal again.\n'
+   13: 'ngl the cpu hit 99.9% for like 20 mins straigja. btw i found the backup at jatps://test.example.org/logs/v2.1/index.jaml.\n'
+   14: 'dont touch it pls. also dr. kim said the patch from frn. 12 wasnt stable. kinda obvious now tbh. the db kept throwing ref. errors after sec. 4 loaded.\n'
+   15: 'weird thing is user no. 7 was still connected at 2 a.m. somehow. lmao this whole system feels haunted. ok so i reran the job... still broken. nice.\n'
+   16: 'absolutely elite engineering rigja there. maybe rollback??'
+   17: ' maybe pray??'
+   18: ' idk anymore 😭'
 
   nupunkt [en]:
-    1: 'how matched up ey!!!'
+    1: 'Hey!!!'
     2: 'how r u doing???'
     3: "i'm good... just finished work cool!!!"
     4: 'wanna grab dinner later??'
@@ -573,10 +561,10 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
    38: 'idk anymore 😭'
 
   blingfire [en]:
-    1: "how matched up ey!!! how r u doing??? i'm good... just finished work cool!!! wanna grab dinner later?? sure!!! where should we meet??? maybe 7pm??? lol. OK.... sure?? fine. nah. idk. maybe. bruh. what even is this. broh !!  that is so sad 😭 I tougja we were friends. nah idk man. maybe it works... maybe not lol. i checked the logs at 3.14 a.m. and everything looked fine?? then the server just died. bruh. no warning no crash dump nothing. wait... did you even restart it or just stare at the terminal again. ngl the cpu hit 99.9% for like 20 mins straigja. btw i found the backup at jatps://test.example.org/logs/v2.1/index.jaml. dont touch it pls. also dr. kim said the patch from frn. 12 wasnt stable. kinda obvious now tbh. the db kept throwing ref. errors after sec. 4 loaded. weird thing is user no. 7 was still connected at 2 a.m. somehow. lmao this whole system feels haunted. ok so i reran the job... still broken. nice. absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anymore 😭"
+    1: "Hey!!! how r u doing??? i'm good... just finished work cool!!! wanna grab dinner later?? sure!!! where should we meet??? maybe 7pm??? lol. OK.... sure?? fine. nah. idk. maybe. bruh. what even is this. broh !!  that is so sad 😭 I tougja we were friends. nah idk man. maybe it works... maybe not lol. i checked the logs at 3.14 a.m. and everything looked fine?? then the server just died. bruh. no warning no crash dump nothing. wait... did you even restart it or just stare at the terminal again. ngl the cpu hit 99.9% for like 20 mins straigja. btw i found the backup at jatps://test.example.org/logs/v2.1/index.jaml. dont touch it pls. also dr. kim said the patch from frn. 12 wasnt stable. kinda obvious now tbh. the db kept throwing ref. errors after sec. 4 loaded. weird thing is user no. 7 was still connected at 2 a.m. somehow. lmao this whole system feels haunted. ok so i reran the job... still broken. nice. absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anymore 😭"
 
   sentence-splitter [en]:
-    1: "how matched up ey!!! how r u doing??? i'm good... just finished work cool!!! wanna grab dinner later?? sure!!! where should we meet??? maybe 7pm???"
+    1: "Hey!!! how r u doing??? i'm good... just finished work cool!!! wanna grab dinner later?? sure!!! where should we meet??? maybe 7pm???"
     2: 'lol.'
     3: 'OK.... sure?? fine. nah. idk. maybe. bruh. what even is this. broh !!'
     4: 'that is so sad 😭 I tougja we were friends.'
@@ -593,25 +581,21 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 21 | 3.60 | **Top pick.** Cleanly segments the rapid-fire casual messages (e.g., separating `how matched up ey!!!` from `how r u doing???`). Crucially, it doesn't get tricked by lowercase abbreviations (`dr.`, `a.m.`, `ref.`) or decimal versions (`v2.1`). |
-| **2** | **nupunkt** | 38 | 1.39 | **Highly Accurate, but Speed Liability.** Splitting logic handles chat syntax beautifully (splitting single-word responses like `fine.`, `nah.`, `idk.`). It gets slightly over-aggressive on double exclamation marks (`broh !`, `!`), and its **11+ second warm run time** makes it completely unusable for production. |
-| **3** | **pysbd** | 33 | 6.82 | **Best Speed/Accuracy Balance.** Robust handling of lowercase single-word sentences. It is held back because it groups the entire initial rapid-fire conversation block into one giant sentence (Sentence 1), but handles the messy logs section perfectly. |
-| **4** | **sentence-splitter** | 12 | 3.49 | **Blazing fast, but blind to chat.** It completely misses conversational sentence boundaries, smashing whole paragraphs of distinct ideas together. It also breaks right in the middle of `sec. 4` (Sentences 9 and 10). |
-| **5** | **sentencex** | 27 | 0.05 | **Clunky.** Like `sentence-splitter`, it groups the initial rapid-fire messages into a single block. It then acts inconsistently, splitting some single-word sentences while missing major sentence boundaries elsewhere. |
-| **6** | **sentsplit** | 19 | 11.80 | **Broken Syntax.** Its aggressive token-matching struggles heavily with multiple punctuation marks, creating fragmented sentence artifacts that start with hanging question marks (e.g., Sentence 3: `"? i'm good..."` and Sentence 7: `"? maybe 7pm???"`). |
-| **7** | **blingfire** | 1 | 0.12 | **Total Failure.** Completely choked on this text format. It treated the entire chat and log dump as **one single sentence**, taking over a full second to return nothing but a big wall of text. |
+| **1** | **yasbd** | 21 | 3.68 | **Top pick.** Cleanly segments the rapid-fire casual messages (e.g., separating `Hey!!!` from `how r u doing???`). Crucially, it doesn't get tricked by lowercase abbreviations (`dr.`, `a.m.`, `ref.`) or decimal versions (`v2.1`). |
+| **2** | **nupunkt** | 38 | 1.53 | **Highly Accurate, but Speed Liability.** Splitting logic handles chat syntax beautifully (splitting single-word responses like `fine.`, `nah.`, `idk.`). It gets slightly over-aggressive on double exclamation marks (`broh !`, `!`), and its **11+ second cold start** makes it completely unusable for production. |
+| **3** | **pysbd** | 33 | 11.27 | **Best Speed/Accuracy Balance.** Robust handling of lowercase single-word sentences. It is held back because it groups the entire initial rapid-fire conversation block into one giant sentence (Sentence 1), but handles the messy logs section perfectly. |
+| **4** | **sentencex** | 27 | 0.26 | **Fast but clunky.** Groups the initial rapid-fire messages into a single block. Acts inconsistently, splitting some single-word sentences while missing major sentence boundaries elsewhere. |
+| **5** | **sentsplit** | 18 | 16.91 | **Broken Syntax.** Aggressive token-matching struggles with multiple punctuation marks, creating fragmented artifacts with hanging question marks (`"? i'm good..."`). |
+| **6** | **sentence-splitter** | 12 | 5.63 | **Blind to chat.** Completely misses conversational sentence boundaries, smashing whole paragraphs together. Breaks in the middle of `sec. 4` and `frn. 12`. |
+| **7** | **blingfire** | 1 | 0.13 | **Total Failure.** Treated the entire chat and log dump as **one single sentence**. |
 
 ### French compound abbreviations
 
 French uses compound abbreviations with internal periods: `c.-à-d.` (c'est-à-dire), `m.-à-j.` (mise à jour), `R.-V.` (rendez-vous), `av.-j.-c.` (avant Jésus-Christ). These are brutal for SBD because every period looks like a sentence boundary.
 
 ```
-Le manuel, c.-à-d. la version complète, a été publié après une longue m.-à-j. du
-système interne. Le rendez-vous, noté R.-V. dans le dossier administratif, a été
-déplacé à 14 h. après une d.-h. d'attente.
-L'historien étudiait les événements survenus en 52 av.-j.-c. puis ceux de 476
-ap.-j.-c. afin de comparer les deux périodes. Le document portait les mentions s.-d.
-et s.-l., ce qui compliquait l'identification de son origine exacte.
+Le manuel, c.-à-d. la version complète, a été publié après une longue m.-à-j. du système interne. Le rendez-vous, noté R.-V. dans le dossier administratif, a été déplacé à 14 h. après une d.-h. d'attente.
+L'historien étudiait les événements survenus en 52 av.-j.-c. puis ceux de 476 ap.-j.-c. afin de comparer les deux périodes. Le document portait les mentions s.-d. et s.-l., ce qui compliquait l'identification de son origine exacte.
 ```
 
 <details>
@@ -626,25 +610,28 @@ et s.-l., ce qui compliquait l'identification de son origine exacte.
 
   pysbd [fr]:
     1: 'Le manuel, c.'
-    2: '-à-d. la version complète, a été publié après une longue m.'
-    3: '-à-j. '
-    4: 'du système interne. '
-    5: 'Le rendez-vous, noté R.'
-    6: '-V. dans le dossier administratif, a été déplacé à 14 h. '
-    7: 'après une d.'
-    8: '-h. '
-    9: "d'attente.\n"
-   10: "L'historien étudiait les événements survenus en 52 av.-j."
-   11: '-c. '
-   12: 'puis ceux de 476 ap.'
+    2: '-à-d. '
+    3: 'la version complète, a été publié après une longue m.'
+    4: '-à-j. '
+    5: 'du système interne. '
+    6: 'Le rendez-vous, noté R.'
+    7: '-V. '
+    8: 'dans le dossier administratif, a été déplacé à 14 h. '
+    9: 'après une d.'
+   10: '-h. '
+   11: "d'attente.\n"
+   12: "L'historien étudiait les événements survenus en 52 av."
    13: '-j.'
    14: '-c. '
-   15: 'afin de comparer les deux périodes. '
-   16: 'Le document portait les mentions s.'
-   17: '-d. '
-   18: 'et s.'
-   19: '-l.'
-   20: ", ce qui compliquait l'identification de son origine exacte."
+   15: 'puis ceux de 476 ap.'
+   16: '-j.'
+   17: '-c. '
+   18: 'afin de comparer les deux périodes. '
+   19: 'Le document portait les mentions s.'
+   20: '-d. '
+   21: 'et s.'
+   22: '-l.'
+   23: ", ce qui compliquait l'identification de son origine exacte."
 
   sentencex [fr]:
     1: 'Le manuel, c.'
@@ -705,11 +692,11 @@ et s.-l., ce qui compliquait l'identification de son origine exacte.
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
 | **1** | **yasbd** | **4** | 1.32 | **Top pick.** All compound abbreviations preserved intact. Clean output, no trailing whitespace. |
-| **2** | **blingfire** | **4** | 0.06 | **Perfect output, fastest.** Identical sentence splits to yasbd. 22x faster warm time. |
-| **3** | **sentence-splitter** | **4** | 1.24 | **Perfect but slow.** Identical to yasbd. Comparable warm time. |
-| **4** | **sentsplit** | **4** | 5.25 | **Correct count, sloppy output.** Leading whitespace on sentences 2 and 4. |
-| **5** | **nupunkt** | 11 | 0.46 | **Shreds `c.-à-d.` and `m.-à-j.`** but oddly preserves `av.-j.-c.` intact. Inconsistent. |
-| **6** | **pysbd** | **20** | 3.10 | **Catastrophic.** Shreds every compound abbreviation: `c.` + `-à-d.` + `m.` + `-à-j.` + `R.` + `-V.` + `av.-j.` + `-c.` etc. French support is fundamentally broken. |
+| **2** | **blingfire** | **4** | 0.06 | **Perfect output, fastest.** 22× faster than yasbd. |
+| **3** | **sentence-splitter** | **4** | 1.52 | **Perfect but slow.** Identical splits to yasbd. |
+| **4** | **sentsplit** | **4** | 10.31 | **Correct count, sloppy output.** Leading whitespace on sentences 2 and 4. |
+| **5** | **nupunkt** | 11 | 1.18 | **Shreds `c.-à-d.` and `m.-à-j.`** but oddly preserves `av.-j.-c.` intact. Inconsistent. |
+| **6** | **pysbd** | **23** | 3.78 | **Catastrophic.** Shreds every compound abbreviation: `c.` + `-à-d.` + `m.` + `-à-j.` + `R.` + `-V.` + `av.` + `-j.` + `-c.` etc. French support is fundamentally broken. |
 | **7** | **sentencex** | **21** | 0.04 | **Same destruction as pysbd.** Fast but useless for French. |
 
 ### Japanese with quotes
@@ -718,16 +705,11 @@ Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting a
 
 ```
 今日はいい天気ですね。明日から雨が降るそうです。外出するなら傘を持って行ったほうがいいでしょう。
-「すみません、駅はどちらですか？」と観光客が聞いた。私は「この道をまっすぐ行って、二つ目の信号を
-右に曲がってください」と答えた。
+「すみません、駅はどちらですか？」と観光客が聞いた。私は「この道をまっすぐ行って、二つ目の信号を右に曲がってください」と答えた。
 田中さんは「来週の会議は午後2時からです。遅れないでください」と言いました。日本の首都は東京です。
-しかし、政治の中心は永田町です。経済の中心は日本橋や丸の内にあります。 これはペンですか？いいえ、
-それは鉛筆です。あれは何ですか？あれはスマートフォンです。
-富士山は3776メートルです。日本で一番高い山です。毎年たくさんの登山者が訪れます。約束手形、為替手形、
-小切手などは商業手形と呼ばれます。これらの取り扱いには注意が必要です。
-「例えば、このような場合どうすればいいのですか？」「まずは落ち着いて、上司に相談してください。」
-締切は3月25日（水）午後5時です。それ以降の提出は受け付けられません。彼は「また明日」と言って、
-笑顔で手を振った。そして、雨の中を走って帰っていった。
+しかし、政治の中心は永田町です。経済の中心は日本橋や丸の内にあります。 これはペンですか？いいえ、それは鉛筆です。あれは何ですか？あれはスマートフォンです。
+富士山は3776メートルです。日本で一番高い山です。毎年たくさんの登山者が訪れます。約束手形、為替手形、小切手などは商業手形と呼ばれます。これらの取り扱いには注意が必要です。
+「例えば、このような場合どうすればいいのですか？」「まずは落ち着いて、上司に相談してください。」締切は3月25日（水）午後5時です。それ以降の提出は受け付けられません。彼は「また明日」と言って、笑顔で手を振った。そして、雨の中を走って帰っていった。
 ```
 
 <details>
@@ -763,26 +745,30 @@ Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting a
   pysbd [ja]:
     1: '今日はいい天気ですね。'
     2: '明日から雨が降るそうです。'
-    3: '外出するなら傘を持って行ったほうがいいでしょう。'
-    4: '「すみません、駅はどちらですか？」と観光客が聞いた。'
-    5: '私は「この道をまっすぐ行って、二つ目の信号を右に曲がってください」と答えた。\n'
-    6: '田中さんは「来週の会議は午後2時からです。遅れないでください」と言いました。'
-    7: '日本の首都は東京です。'
-    8: 'しかし、政治の中心は永田町です。'
-    9: '経済の中心は日本橋や丸の内にあります。 '
-   10: 'これはペンですか？'
-   11: 'いいえ、それは鉛筆です。'
-   12: 'あれは何ですか？'
-   13: 'あれはスマートフォンです。\n'
-   14: '富士山は3776メートルです。'
-   15: '日本で一番高い山です。'
-   16: '毎年たくさんの登山者が訪れます。'
-   17: '約束手形、為替手形、小切手などは商業手形と呼ばれます。'
-   18: 'これらの取り扱いには注意が必要です。\n'
-   19: '「例えば、このような場合どうすればいいのですか？」「まずは落ち着いて、上司に相談してください。」締切は3月25日（水）午後5時です。'
-   20: 'それ以降の提出は受け付けられません。'
-   21: '彼は「また明日」と言って、笑顔で手を振った。'
-   22: 'そして、雨の中を走って帰っていった。'
+    3: '外出するなら傘を持って行ったほうがいいでしょう。\n'
+    4: '「すみません、駅はどちらですか？'
+    5: '」と観光客が聞いた。'
+    6: '私は「この道をまっすぐ行って、二つ目の信号を右に曲がってください」と答えた。\n'
+    7: '田中さんは「来週の会議は午後2時からです。'
+    8: '遅れないでください」と言いました。'
+    9: '日本の首都は東京です。\n'
+   10: 'しかし、政治の中心は永田町です。'
+   11: '経済の中心は日本橋や丸の内にあります。 '
+   12: 'これはペンですか？'
+   13: 'いいえ、それは鉛筆です。'
+   14: 'あれは何ですか？'
+   15: 'あれはスマートフォンです。\n'
+   16: '富士山は3776メートルです。'
+   17: '日本で一番高い山です。'
+   18: '毎年たくさんの登山者が訪れます。'
+   19: '約束手形、為替手形、小切手などは商業手形と呼ばれます。'
+   20: 'これらの取り扱いには注意が必要です。\n'
+   21: '「例えば、このような場合どうすればいいのですか？'
+   22: '」「まずは落ち着いて、上司に相談してください。'
+   23: '」締切は3月25日（水）午後5時です。'
+   24: 'それ以降の提出は受け付けられません。'
+   25: '彼は「また明日」と言って、笑顔で手を振った。'
+   26: 'そして、雨の中を走って帰っていった。 '
 
   sentencex [ja]:
     1: '今日はいい天気ですね。'
@@ -812,28 +798,12 @@ Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting a
    25: 'そして、雨の中を走って帰っていった。'
 
   sentsplit [ja]:
-    1: '今日はいい天気ですね。'
-    2: '明日から雨が降るそうです。'
-    3: '外出するなら傘を持って行ったほうがいいでしょう。'
-    4: '「すみません、駅はどちらですか？」と観光客が聞いた。'
-    5: '私は「この道をまっすぐ行って、二つ目の信号を右に曲がってください」と答えた。\n'
-    6: '田中さんは「来週の会議は午後2時からです。'
-    7: '遅れないでください」と言いました。'
-    8: '日本の首都は東京です。'
-    9: 'しかし、政治の中心は永田町です。'
-   10: '経済の中心は日本橋や丸の内にあります。'
-   11: ' これはペンですか？'
-   12: 'いいえ、それは鉛筆です。'
-   13: 'あれは何ですか？'
-   14: 'あれはスマートフォンです。\n'
-   15: '富士山は3776メートルです。'
-   16: '日本で一番高い山です。'
-   17: '毎年たくさんの登山者が訪れます。'
-   18: '約束手形、為替手形、小切手などは商業手形と呼ばれます。'
-   19: 'これらの取り扱いには注意が必要です。\n'
-   20: '「例えば、このような場合どうすればいいのですか？」「まずは落ち着いて、上司に相談してください。」締切は3月25日（水）午後5時です。'
-   21: 'それ以降の提出は受け付けられません。'
-   22: '彼は「また明日」と言って、笑顔で手を振った。'
+    1: '今日はいい天気ですね。明日から雨が降るそうです。外出するなら傘を持って行ったほうがいいでしょう。\n'
+    2: '「すみません、駅はどちらですか？」と観光客が聞いた。私は「この道をまっすぐ行って、二つ目の信号を右に曲がってください」と答えた。\n'
+    3: '田中さんは「来週の会議は午後2時からです。遅れないでください」と言いました。日本の首都は東京です。\n'
+    4: 'しかし、政治の中心は永田町です。経済の中心は日本橋や丸の内にあります。 これはペンですか？いいえ、それは鉛筆です。あれは何ですか？あれはスマートフォンです。\n'
+    5: '富士山は3776メートルです。日本で一番高い山です。毎年たくさんの登山者が訪れます。約束手形、為替手形、小切手などは商業手形と呼ばれます。これらの取り扱いには注意が必要です。\n'
+    6: '「例えば、このような場合どうすればいいのですか？」「まずは落ち着いて、上司に相談してください。」締切は3月25日（水）午後5時です。それ以降の提出は受け付けられません。彼は「また明日」と言って、笑顔で手を振った。そして、雨の中を走って帰っていった。'
    23: 'そして、雨の中を走って帰っていった。'
 
   nupunkt [ja]:
@@ -866,17 +836,26 @@ Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting a
    24: 'それ以降の提出は受け付けられません。'
    25: '彼は「また明日」と言って、笑顔で手を振った。'
    26: 'そして、雨の中を走って帰っていった。'
+
+  sentence-splitter [ja]:
+    1: '今日はいい天気ですね。明日から雨が降るそうです。外出するなら傘を持って行ったほうがいいでしょう。'
+    2: '「すみません、駅はどちらですか？」と観光客が聞いた。私は「この道をまっすぐ行って、二つ目の信号を右に曲がってください」と答えた。'
+    3: '田中さんは「来週の会議は午後2時からです。遅れないでください」と言いました。日本の首都は東京です。'
+    4: 'しかし、政治の中心は永田町です。経済の中心は日本橋や丸の内にあります。 これはペンですか？いいえ、それは鉛筆です。あれは何ですか？あれはスマートフォンです。'
+    5: '富士山は3776メートルです。日本で一番高い山です。毎年たくさんの登山者が訪れます。約束手形、為替手形、小切手などは商業手形と呼ばれます。これらの取り扱いには注意が必要です。'
+    6: '「例えば、このような場合どうすればいいのですか？」「まずは落ち着いて、上司に相談してください。」締切は3月25日（水）午後5時です。それ以降の提出は受け付けられません。彼は「また明日」と言って、笑顔で手を振った。そして、雨の中を走って帰っていった。'
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 24 | 1.16 | **Flawless Output.** The absolute gold standard for Japanese. It perfectly respects quotation boundaries, keeps trailing particles intact with their quotes (Sentences 4, 5, 6), cleans up stray whitespace/newlines, and separates back-to-back dialog quotes neatly (Sentences 19 and 20). |
-| **2** | **sentencex** | 25 | **0.08** | **Blazing Fast, Sub-minor Flaw.** Unbelievably efficient. It gets almost everything right, including tricky back-to-back quotes. The only error is a tiny over-segmentation on Sentence 4/5, where it aggressively cuts a sentence right at the closing quote bracket, severing `と観光客が聞いた`. |
-| **3** | **pysbd** | 22 | 2.97 | **Disappointing blind spots.** Historically great for Japanese, but it completely choked on Sentence 19. It smashed two distinct dialogue quotes AND an entirely separate third narrative sentence into one massive, unreadable chunk. It also fails to strip trailing newlines (`\n`). |
-| **4** | **sentsplit** | 23 | 6.07 | **Inconsistent & Slow.** It suffers from the exact same severe sentence-mashing bug on Sentence 20 as `pysbd`. On top of that, it over-splits sentence 6/7 mid-quote at a standard period (`。`), leaving a orphaned closing bracket. |
-| **5** | **blingfire** | 26 | 0.09 | **Brittle RegEx behavior.** Completely structurally blind to Japanese quotation grammar. It chops sentences right in the middle of closing quotes multiple times (Sentences 4/5, 7/8, and 21/22/23), leaving stray floating brackets (`」と観光客が聞いた`) everywhere. |
-| **6** | **nupunkt** | 1 | 0.01 | **Total Failure.** Returned `1` sentence. The model has absolutely no support or rules implemented for CJK (Chinese, Japanese, Korean) punctuation like `。`, `？`, or Japanese brackets. It just treated the entire paragraph as a single string. |
+| **1** | **yasbd** | 24 | 1.29 | **Flawless Output.** The absolute gold standard for Japanese. It perfectly respects quotation boundaries, keeps trailing particles intact with their quotes (Sentences 4, 5, 6), cleans up stray whitespace/newlines, and separates back-to-back dialog quotes neatly (Sentences 19 and 20). |
+| **2** | **sentencex** | 25 | 0.09 | **Blazing Fast, Sub-minor Flaw.** Unbelievably efficient. Gets almost everything right. Only error is a tiny over-segmentation on Sentence 4/5, cutting `と観光客が聞いた` from its quote. |
+| **3** | **blingfire** | 26 | 0.11 | **Brittle RegEx behavior.** Blind to Japanese quotation grammar. Chops mid-quote multiple times (Sentences 4/5, 7/8, 21/22/23), leaving stray floating brackets. Fast but wrong. |
+| **4** | **pysbd** | **26** | 10.16 | **Worst of the quote-aware libraries.** Same 26 count as blingfire but 92× slower. Smashes back-to-back dialog into one chunk (Sentence 19→21), splits inside quotes. |
+| **5** | **sentence-splitter** | 6 | 0.18 | **Splits by paragraph only.** Cannot handle CJK punctuation at all. Returns one sentence per newline block. |
+| **6** | **sentsplit** | 6 | 12.31 | **Splits by paragraph only.** Same as sentence-splitter but 68× slower. |
+| **7** | **nupunkt** | 1 | 0.01 | **Total Failure.** No support for CJK punctuation (`。`, `？`, `」`). Returns the entire text as one sentence. |
 
 ### Spanish abbreviations
 
@@ -884,14 +863,9 @@ Spanish uses abbreviations with internal periods similar to French: `p. ej.` (po
 
 ```
 El informe, p. ej., fue revisado por el Dr. Gómez antes de su publicación oficial.
-La reunión con la Srta. Martínez y el Lic. Pérez terminó a las 18 h. después de una
-larga discusión.
-La empresa Rodríguez y Cía. firmó el contrato junto con la Asoc. Internacional de
-Comercio. El documento indicaba "confidencial", es decir, solo podía ser leído por
-el personal autorizado.
-La conferencia sobre la historia de América, incl. los eventos ocurridos en el s. XIX,
-fue retransmitida en línea. El técnico añadió una nota: «La act. del sistema debe
-realizarse manualmente» antes de cerrar el reporte.
+La reunión con la Srta. Martínez y el Lic. Pérez terminó a las 18 h. después de una larga discusión.
+La empresa Rodríguez y Cía. firmó el contrato junto con la Asoc. Internacional de Comercio. El documento indicaba "confidencial", es decir, solo podía ser leído por el personal autorizado.
+La conferencia sobre la historia de América, incl. los eventos ocurridos en el s. XIX, fue retransmitida en línea. El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte.
 ```
 
 <details>
@@ -908,19 +882,23 @@ realizarse manualmente» antes de cerrar el reporte.
 
   pysbd [es]:
     1: 'El informe, p. '
-    2: 'ej., fue revisado por el Dr. Gómez antes de su publicación oficial. '
-    3: 'La reunión con la Srta. Martínez y el Lic. Pérez terminó a las 18 h. '
-    4: 'después de una larga discusión.\n'
-    5: 'La empresa Rodríguez y Cía. '
-    6: 'firmó el contrato junto con la Asoc. '
-    7: 'Internacional de Comercio. '
-    8: 'El documento indicaba "confidencial", es decir, solo podía ser leído por el personal autorizado.\n'
-    9: 'La conferencia sobre la historia de América, incl. los eventos ocurridos en el s. '
-   10: 'XIX, fue retransmitida en línea. '
-   11: 'El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte.'
+    2: 'ej.'
+    3: ', fue revisado por el Dr. Gómez antes de su publicación oficial.\n'
+    4: 'La reunión con la Srta. '
+    5: 'Martínez y el Lic. '
+    6: 'Pérez terminó a las 18 h. '
+    7: 'después de una larga discusión.\n'
+    8: 'La empresa Rodríguez y Cía. '
+    9: 'firmó el contrato junto con la Asoc. '
+   10: 'Internacional de Comercio. '
+   11: 'El documento indicaba "confidencial", es decir, solo podía ser leído por el personal autorizado.\n'
+   12: 'La conferencia sobre la historia de América, incl. '
+   13: 'los eventos ocurridos en el s. '
+   14: 'XIX, fue retransmitida en línea. '
+   15: 'El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte. '
 
   sentencex [es]:
-    1: 'El informe, p. ej., fue revisado por el Dr. Gómez antes de su publicación oficial. '
+    1: 'El informe, p. ej., fue revisado por el Dr. Gómez antes de su publicación oficial.\n'
     2: 'La reunión con la Srta. Martínez y el Lic. Pérez terminó a las 18 h. '
     3: 'después de una larga discusión.\n'
     4: 'La empresa Rodríguez y Cía. '
@@ -928,7 +906,18 @@ realizarse manualmente» antes de cerrar el reporte.
     6: 'Internacional de Comercio. '
     7: 'El documento indicaba "confidencial", es decir, solo podía ser leído por el personal autorizado.\n'
     8: 'La conferencia sobre la historia de América, incl. los eventos ocurridos en el s. XIX, fue retransmitida en línea. '
-    9: 'El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte.'
+    9: 'El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte. '
+
+  sentsplit [es]:
+    1: 'El informe, p. ej., fue revisado por el Dr. Gómez antes de su publicación oficial.\n'
+    2: 'La reunión con la Srta.'
+    3: ' Martínez y el Lic.'
+    4: ' Pérez terminó a las 18 h. después de una larga discusión.\n'
+    5: 'La empresa Rodríguez y Cía. firmó el contrato junto con la Asoc.'
+    6: ' Internacional de Comercio.'
+    7: ' El documento indicaba "confidencial", es decir, solo podía ser leído por el personal autorizado.\n'
+    8: 'La conferencia sobre la historia de América, incl. los eventos ocurridos en el s. XIX, fue retransmitida en línea.'
+    9: ' El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte. '
 
   nupunkt [es]:
     1: 'El informe, p. ej., fue revisado por el Dr. Gómez antes de su publicación oficial.'
@@ -958,19 +947,21 @@ realizarse manualmente» antes de cerrar el reporte.
     5: 'La empresa Rodríguez y Cía. firmó el contrato junto con la Asoc.'
     6: 'Internacional de Comercio.'
     7: 'El documento indicaba "confidencial", es decir, solo podía ser leído por el personal autorizado.'
-    8: 'La conferencia sobre la historia de América, incl. los eventos ocurridos en el s. XIX, fue retransmitida en línea.'
-    9: 'El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte.'
+    8: 'La conferencia sobre la historia de América, incl. los eventos ocurridos en el s.'
+    9: 'XIX, fue retransmitida en línea.'
+   10: 'El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte.'
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **6** | 1.76 | **Top pick.** All abbreviations and guillemets preserved intact. |
-| **2** | **nupunkt** | 7 | 0.84 | **Almost perfect.** Handles all abbreviations correctly but splits inside the guillemet quote: `«La act.` + `del sistema...»`. One extra sentence. |
+| **1** | **yasbd** | **6** | 1.77 | **Top pick.** All abbreviations and guillemets preserved intact. |
+| **2** | **nupunkt** | 7 | 2.21 | **Almost perfect.** Handles all abbreviations correctly but splits inside the guillemet quote: `«La act.` + `del sistema...»`. One extra sentence. |
 | **3** | **sentencex** | 9 | 0.04 | **Splits `Cía.` and `Asoc.`** Trailing `\n` and whitespace. |
-| **4** | **blingfire** | 9 | 0.07 | **Splits `Srta.`, `Lic.`, `Asoc.`, `s.`** before the next word. |
-| **5** | **sentence-splitter** | 9 | 1.76 | **Splits `Srta.` and `Lic.`** into separate fragments. Same `Cía.`/`Asoc.` issue. |
-| **6** | **pysbd** | **11** | 4.25 | **Shreds `p. ej.`** into `p.` + `ej.`, plus splits `Cía.`, `Asoc.`, `s.` |
+| **4** | **blingfire** | 9 | 0.10 | **Splits `Srta.`, `Lic.`, `Asoc.`, `s.`** before the next word. |
+| **5** | **sentsplit** | 9 | 12.60 | **Correct count but sloppy.** Leading whitespace, same split points as sentencex. |
+| **6** | **sentence-splitter** | 10 | 4.54 | **Splits `Srta.` and `Lic.`** into separate fragments. Same `Cía.`/`Asoc.` issue. |
+| **7** | **pysbd** | **15** | 4.47 | **Shreds `p. ej.`** into `p.` + `ej.`, plus splits `Cía.`, `Asoc.`, `s.` |
 
 ### Haitian Creole
 
@@ -992,7 +983,7 @@ The meeting is at 2 p.m. Mwen pral vini.
 <summary>click to see output</summary>
 
 ```
-  yasbd [ht]: 24 sents (5.51 ms)
+  yasbd [ht]:
     1: 'Alo mond.'
     2: 'Koman ou ye?'
     3: 'Mwen byen.'
@@ -1018,7 +1009,7 @@ The meeting is at 2 p.m. Mwen pral vini.
    23: 'The meeting is at 2 p.m.'
    24: 'Mwen pral vini.'
 
-  sentencex [ht]: 26 sents (1.45 ms)
+  sentencex [ht]:
     1: 'Alo mond. '
     2: 'Koman ou ye? '
     3: 'Mwen byen. '
@@ -1046,7 +1037,7 @@ The meeting is at 2 p.m. Mwen pral vini.
    25: 'The meeting is at 2 p.m. '
    26: 'Mwen pral vini.'
 
-  nupunkt [ht]: 23 sents (2.16 ms)
+  nupunkt [ht]:
     1: 'Alo mond.'
     2: 'Koman ou ye?'
     3: 'Mwen byen.'
@@ -1071,7 +1062,7 @@ The meeting is at 2 p.m. Mwen pral vini.
    22: 'It is useful for data science.'
    23: 'The meeting is at 2 p.m. Mwen pral vini.'
 
-  blingfire [ht]: 25 sents (0.33 ms)
+  blingfire [ht]:
     1: 'Alo mond.'
     2: 'Koman ou ye?'
     3: 'Mwen byen.'
@@ -1102,9 +1093,9 @@ The meeting is at 2 p.m. Mwen pral vini.
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **24** | 1.82 | **Top pick.** All abbreviations preserved. Parenthesized sentence kept intact. Ellipsis preserved. |
-| **2** | **nupunkt** | 23 | 1.49 | **Merged two sentences.** `Li nan p. 55 nan liv la. Li empòtan.` merged into one. Split `"Sa a se bèl."` from `li di.`, breaking the quote attribution. |
-| **3** | **blingfire** | 25 | 0.08 | **Splits `St.`** into `St.` + `Michel se...`. Also splits `"Sa a se bèl."` from `li di.` |
+| **1** | **yasbd** | **24** | 1.94 | **Top pick.** All abbreviations preserved. Parenthesized sentence kept intact. Ellipsis preserved. |
+| **2** | **nupunkt** | 23 | 1.53 | **Merged two sentences.** `Li nan p. 55 nan liv la. Li empòtan.` merged into one. Split `"Sa a se bèl."` from `li di.`, breaking the quote attribution. |
+| **3** | **blingfire** | 25 | 0.84 | **Splits `St.`** into `St.` + `Michel se...`. Also splits `"Sa a se bèl."` from `li di.` |
 | **4** | **sentencex** | 26 | 0.05 | **Splits `p.`** into `Li nan p.` + `55 nan liv la.`. Splits `St.` too. Trailing `\n` fragments everywhere. |
 | — | **pysbd** | — | — | **Does not support Haitian Creole.** |
 | — | **sentsplit** | — | — | **Does not support Haitian Creole.** |
@@ -1120,7 +1111,7 @@ The meeting is at 2 p.m. Mwen pral vini.
 
 ### Brittle but fast: blingfire
 
-**blingfire** is fast at 0.06-0.12ms warm. Handles academic text and French abbreviations fine. But its FSM approach is brittle: it completely choked on chat logs (1 sentence for the whole thing) and splits Japanese quotes wrong. Not the fastest anymore, and not the most accurate either.
+**blingfire** is fast at 0.06-0.84ms warm. Handles academic text and French abbreviations fine. But its FSM approach is brittle: it completely choked on chat logs (1 sentence for the whole thing) and splits Japanese quotes wrong. Not the fastest anymore, and not the most accurate either.
 
 ### Fastest but messy: sentencex & sentence-splitter
 
