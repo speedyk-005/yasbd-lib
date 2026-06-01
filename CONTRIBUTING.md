@@ -2,7 +2,7 @@
 
 The maintenance bench is open. Grab your protective eyewear, pick up your calipers, and let's calibrate some high-speed sentence shearing equipment.
 
-We don't do sloppy hacks or blunt tears here. yasbd is a zero-copy, low-memory, pointer-scanning boundary shearing unit. If you are here to modify the cutting edge, you must adhere to the strict mechanical tolerances outlined in this manual.
+We don't do sloppy hacks or blunt tears here. yasbd is a zero-copy, low-memory, rule-based boundary shearing unit. If you are here to modify the cutting edge, you must adhere to the strict mechanical tolerances outlined in this manual.
 
 ## Bench Setup
 

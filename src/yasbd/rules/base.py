@@ -323,7 +323,7 @@ class Rules:
         horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(text))
         if len(horiz_matches) >= 2:
             main_boundaries.difference_update(m.end() for m in horiz_matches)
-            # Shift boundaries the pointer back (1.\)| => |1.\), a. | => |a. ) to correctly
+            # Shift boundaries back (1.\)| => |1.\), a. | => |a. ) to correctly
             # terminate the preceding sentence before flattened horizontal list.
             main_boundaries.update(m.start() + 1 for m in horiz_matches if m.start())
 
