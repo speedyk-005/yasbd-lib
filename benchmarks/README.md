@@ -39,14 +39,14 @@ yasbd's only failure is `"At 5 a.m., Mr. Smith went to the bank. He left the ban
 First call includes import + init + first segment. Subsequent calls are warm.
 
 | Library | Cold (ms) | Warm (ms) | Notes |
-|---|---|---|---|
-| pysbd | 35 | 5 | Rule-based, lightweight |
-| sentence-splitter | 18 | 1 | Pure Python, no heavy deps |
-| sentsplit | 70 | 9 | CRF model loaded on init |
-| yasbd | 538 | 0.2 | Regex compiled on first use |
-| sentencex | 110 | 3 | Rust bindings loaded on import |
-| blingfire | 1,287 | 3 | C++ FSM model loaded from disk |
-| nupunkt | 13,181 | 1 | Loads full model into memory on init |
+|---|---|---|---|---|
+| sentencex | 14 | ~0 | Rust bindings loaded on import |
+| pysbd | 60 | ~0 | Rule-based, lightweight |
+| sentence-splitter | 73 | ~0 | Pure Python, no heavy deps |
+| sentsplit | 190 | ~0 | CRF model loaded on init |
+| blingfire | 392 | ~0 | C++ FSM model loaded from disk |
+| yasbd | 531 | ~0 | Regex compiled on first use |
+| nupunkt | 8,594 | ~0 | Loads full model into memory on init |
 
 <p align="center">
   <img src="bench.png" alt="SBD Benchmark Performance" width="800"/>
