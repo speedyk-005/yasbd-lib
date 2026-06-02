@@ -41,6 +41,7 @@ TEST_DATA = [
     "Me dirijo a Ud.| Mañana le enviaré el paquete.",
     "Se lo di a Uds.| Ellos lo confirmaron.",
     "Hablé con Ud.| Afortunadamente todo se resolvió.",
+    "Le escribí a Ud.| Sin embargo, no respondió.",
     "Pregunté por Vds.| Lamentablemente no estaban.",
     "Me dirijo a Ud.| ¿Cuándo me enviará el paquete?",
     # Dates

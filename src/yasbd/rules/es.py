@@ -21,10 +21,10 @@ class EsRules(Rules):
         "cf", "incl", "cía", "s",
     }
 
-    STREET_ABBRVS = {"_dummy_street_"}
+    STREET_ABBRVS = set()
 
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | Rules.STREET_ABBRVS | {
-        "ej", "p.ej", "vid", "cll", "cra", "diag", "transv", "mz", "mza", "lt", 
+        "ej", "p.ej", "vid", "cll", "cra", "diag", "transv", "mz", "mza", "lt",
         "urb", "asent", "dpto", "prov", "mnpio", "conj", "edif", "ofic", "km",
         "av", "avd", "c", "pso", "ctra", "pl", "blvr",
     }
@@ -33,7 +33,7 @@ class EsRules(Rules):
         "ee.uu", "ff.aa", "rr.hh", "cc.aa",
     }
 
-    COMMON_ORG_NOUNS = Rules.COMMON_ORG_NOUNS | {
+    ORG_PROPER_NOUNS = Rules.ORG_PROPER_NOUNS | {
         "Ministerio", "Universidad", "Gobierno", "Asociación", "Fundación",
         "Instituto", "Banco", "Hospital", "Colegio", "Comando", "Departamento",
     }
@@ -56,7 +56,7 @@ class EsRules(Rules):
         # Adverbs & Transitions (crucial for Ud. heuristic robustness)
         "Pero", "Entonces", "Así que", "Asi que", "Sin embargo", "Luego", "Además", "Aunque",
         "Afortunadamente", "Desafortunadamente", "Lamentablemente", "Felizmente", "Tristemente",
-        "Sinceramente", "Atentamente", "Posiblemente", "Probablemente", "Seguramente", 
+        "Sinceramente", "Atentamente", "Posiblemente", "Probablemente", "Seguramente",
         "Evidentemente", "Obviamente", "Claramente", "Efectivamente", "Realmente",
         "Verdaderamente", "Francamente", "Principalmente", "Generalmente", "Normalmente",
         "Especialmente", "Particularmente", "Finalmente", "Inicialmente", "Anteriormente",
@@ -78,7 +78,7 @@ class EsRules(Rules):
         "Con", "Contra", "De", "Desde", "Durante", "En", "Entre", "Hacia", "Hasta",
         "Mediante", "Según", "Sin", "So", "Sobre", "Tras", "Vía", "Versus",
         "Qué", "Quién", "Cuál", "Cuánto", "Cómo", "Cuándo", "Dónde", "Porqué", "Porque",
-        
+
         # Verbs and auxiliaries
         "Es", "Son", "Era", "Eran", "Fue", "Fueron", "Hay", "Tiene", "Tienen", "Está", "Están",
         "Había", "Habían", "Hubo", "Hubieron", "Estaba", "Estaban", "Estuvo", "Estuvieron", "Estuviera", "Estuvieran",
@@ -89,14 +89,14 @@ class EsRules(Rules):
         """Override base regex compilation to fix Spanish ellipsis behavior."""
         # 1. Let the base class build the default rules first
         super()._compile_regex_dynamically()
-        
-        # 2. Remove the strict English 3-dot ellipsis rule 
+
+        # 2. Remove the strict English 3-dot ellipsis rule
         # (which assumes 3 dots NEVER end a sentence)
         cls.MID_SENTENCE_FINDER_LST = [
             pat for pat in cls.MID_SENTENCE_FINDER_LST
             if pat.pattern != r"(?<!\.)(?:\s?\.){3}"
         ]
-        
+
         # 3. Add Spanish-specific ellipsis rule:
         # 3 dots only act as a mid-sentence pause IF followed by a lowercase letter.
         # Otherwise (like before a capital letter), they are allowed to break the sentence.
@@ -111,7 +111,7 @@ class EsRules(Rules):
         pronoun_abbrvs_pattern = _build_abbr_pattern({"ud", "uds", "vd", "vds"})
         common_starters_pattern = _build_abbr_pattern(cls.COMMON_SENT_STARTERS)
         dots_pattern = r"[.．]"
-        
+
         cls.MID_SENTENCE_FINDER_LST.append(
             re2.compile(rf"""
                 \b(?i:{pronoun_abbrvs_pattern}){dots_pattern}
