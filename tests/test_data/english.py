@@ -79,6 +79,13 @@ TEST_DATA = [
     "My dad logged into Yahoo! finance to check on Yum! Brands stock performance before dinner.",
     "Yahoo!| The server is down.",
 
+    # Bracketed references (fix for #34)
+    "Yan et al. [2004] analysed SSH variations.| The study was comprehensive.",
+    "Fig. [1] shows the architecture.| Figure 2 provides details.",
+    "See ref. [4] for the algorithm.| The implementation follows.",
+    "As shown in pp. [55-60], the results are significant.| This confirms our hypothesis.",
+    "See sec. [2.1] for details.| The methodology is described there.",
+
     # Mixed language
     "我喜欢AI。|It is useful",
     "The meeting is at 2 p.m.| 请别迟到。",

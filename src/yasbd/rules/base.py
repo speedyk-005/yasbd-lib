@@ -238,10 +238,10 @@ class Rules:
                rf"\b(?i:{_build_abbr_pattern(cls.MID_SENTENCE_ABBRVS)}){dots_pattern}"
             ),
 
-            # References abbrv followed by a number, a letter or opened paren (e.g., to p. 55, app. A)
+            # References abbrv followed by a number, a letter or opened paren/bracket (e.g., to p. 55, app. A, et al. [2004])
             re2.compile(rf"""
                 \b(?i:{_build_abbr_pattern(cls.REFERENCE_ABBRVS)}){dots_pattern}
-                (?=\s+(?:\(|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))
+                (?=\s+(?:\(|\[|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))
                 """, re2.X
             ),
 
