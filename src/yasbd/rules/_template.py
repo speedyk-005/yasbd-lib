@@ -37,7 +37,8 @@ class LangRules(Rules):
     DATE_ABBRVS = Rules.DATE_ABBRVS | {...}
 
     # Common nouns appearing inside organization or institution names.
-    COMMON_ORG_NOUNS = {...}
+    # e.g.: Army, Navy, ...
+    ORG_PROPER_NOUNS = {...}
 
     # Frequently occurring sentence starters used as weak boundary hints.
     COMMON_SENT_STARTERS = {...}

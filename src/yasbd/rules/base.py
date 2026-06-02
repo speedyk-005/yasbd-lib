@@ -125,7 +125,7 @@ class Rules:
         "Jeb", "Éxito", "Hey Man", "Basta", "Elliot S",
     }
 
-    COMMON_ORG_NOUNS = set()
+    ORG_PROPER_NOUNS = set()
     COMMON_SENT_STARTERS = set()
     QUOTATIVE_PARTICLES = set()
     CASE_MARKERS = set()
@@ -228,7 +228,7 @@ class Rules:
                 \b(?i:{geopolitical_abbrvs_pattern}){dots_pattern}
                 (?=
                     \s*(?:{_build_abbr_pattern(cls.CASE_MARKERS)})|
-                    \s+(?:{_build_abbr_pattern(cls.COMMON_ORG_NOUNS)})
+                    \s+(?:{_build_abbr_pattern(cls.ORG_PROPER_NOUNS)})
                 )
                 """, re.X
             ),
