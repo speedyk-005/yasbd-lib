@@ -37,6 +37,7 @@
   - [Cleaner](#cleaner)
   - [Adapter](#adapter)
 - [🗺 Features & Roadmap](#-features--roadmap)
+- [Contributors](#contributors)
 - [📜 Last note](#-last-note)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -261,6 +262,14 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/bl
 - [ ] 22+ language targets
 - [ ] CLI tool
 - [ ] REST API for remote boundary detection
+
+---
+
+## Contributors
+
+A massive thank you to the early pioneers helping make `yasbd` more accurate and scalable:
+
+- **[@JheanLL](https://github.com/JheanLL)** — For lightning-fast initiative on performance bottlenecks and Trie optimization design (#24).
 
 ---
 
