@@ -216,10 +216,6 @@ class Rules:
         # Faster than one big regex
         # https://regex101.com/r/svyCoU/20
         cls.MID_SENTENCE_FINDER_LST = [
-            # Three-dot ellipsis mid-thought (e.g., "... she didn't")
-            # Only four dots (.... or . . . .) should be a sentence boundary.
-            re.compile(r"(?<!\.)(?:\s?\.){3}"),
-
             # Title abbrv or initialisms (e.g., Dr. Paul)
             re.compile(rf"\b(?i:{title_abbrvs_pattern}){dots_pattern}"),
 

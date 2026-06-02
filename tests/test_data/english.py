@@ -70,7 +70,7 @@ TEST_DATA = [
     "The project (Sinta) was nearing completion... or so we thought.",
     '"How could we miss this!..."| Mark shouted, slamming his hand on the desk.',
     "We found a memory leak in the C# wrapper....| It was subtle.",
-    "What I'm saying, the thing is . . . I didn't mean it.",
+    "What I'm saying, the thing is . . .| I didn't mean it.",
     "One further habit ... compounds. . . .| The practice was not abandoned.",
     f"Why Complex Carbohydrates{'.' * 15} 19",
 

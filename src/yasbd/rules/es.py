@@ -1,3 +1,5 @@
+import regex as re2
+
 from yasbd.rules.base import Rules, _build_abbr_pattern
 
 
@@ -89,23 +91,10 @@ class EsRules(Rules):
         """Override base regex compilation to fix Spanish ellipsis behavior."""
         # 1. Let the base class build the default rules first
         super()._compile_regex_dynamically()
-
-        # 2. Remove the strict English 3-dot ellipsis rule
-        # (which assumes 3 dots NEVER end a sentence)
-        cls.MID_SENTENCE_FINDER_LST = [
-            pat for pat in cls.MID_SENTENCE_FINDER_LST
-            if pat.pattern != r"(?<!\.)(?:\s?\.){3}"
-        ]
-
-        # 3. Add Spanish-specific ellipsis rule:
-        # 3 dots only act as a mid-sentence pause IF followed by a lowercase letter.
-        # Otherwise (like before a capital letter), they are allowed to break the sentence.
+        
         import regex as re2
-        cls.MID_SENTENCE_FINDER_LST.append(
-            re2.compile(r"(?<!\.)(?:\s?\.){3}(?=\s+\p{Ll})")
-        )
 
-        # 4. Heurística para Ud./Uds./Vd./Vds.
+        # 2. Heurística para Ud./Uds./Vd./Vds.
         # No cortar si la siguiente palabra NO es un starter común (asumimos nombre propio).
         # Esto soluciona la ambigüedad "Ud. Marco" vs "Ud. Mañana".
         pronoun_abbrvs_pattern = _build_abbr_pattern({"ud", "uds", "vd", "vds"})
