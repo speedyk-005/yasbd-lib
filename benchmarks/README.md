@@ -42,7 +42,7 @@ yasbd's only failure is `"The meeting is at 9 a.m. Monday"`. `a.m.` is not in th
 First call includes import + init + first segment. Subsequent calls are warm. Tested on the [Normal text](#normal-text) shown below.
 
 | Library | Cold (ms) | Warm (ms) | Notes |
-|---|---|---|---|---|
+|---|---|---|---|
 | yasbd | 1.7 | 1.31 | Regex compiled on first use |
 | pysbd | 31.4 | 3.53 | Rule-based, lightweight |
 | sentencex | 14.6 | 0.07 | Rust bindings loaded on import |
