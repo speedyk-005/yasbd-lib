@@ -16,7 +16,7 @@ class EsRules(Rules):
         "ss.aa", "s.e", "v.e", "s.à.s.r", "aa", "mm", "rr", "ss",
     }
 
-    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
+    REFERENCE_ABBRVS = (Rules.REFERENCE_ABBRVS - {"no", "nos", "para"}) | {
         "pág", "núm", "nro", "dir", "t", "tel", "trad", "asoc", "aprox",
         "cf", "incl", "cía", "s",
     }

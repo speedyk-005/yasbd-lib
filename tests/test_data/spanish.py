@@ -16,6 +16,9 @@ TEST_DATA = [
     "Llama al dir. general al tel. 555-1234.",
     "Compré pan, leche, etc. para la cena.",
     "Lea p. ej. el capítulo 5.",
+    "Ayer le dije que no.| 5 personas llegaron después.",
+    "Lo dejo entre nos.| 3 personas lo saben.",
+    "El tren para.| 5 pasajeros bajan.",
     "La reunión es el lun. 15 de enero.",
     "Nació el 5 de abr. de 1990.",
     # Addresses & Locations
@@ -44,6 +47,9 @@ TEST_DATA = [
     "Le escribí a Ud.| Sin embargo, no respondió.",
     "Pregunté por Vds.| Lamentablemente no estaban.",
     "Me dirijo a Ud.| ¿Cuándo me enviará el paquete?",
+    "Espero que Ud. comprenda el problema.",
+    "Le informo a Ud. que mañana no hay clases.",
+    "El documento fue firmado por Ud. ayer.",
     # Dates
     "La reunión es el lun. 15 de enero.",
     "Él dijo (No estoy listo.) durante la reunión.",
