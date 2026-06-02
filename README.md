@@ -1,6 +1,6 @@
 <div align="center">
   <img src="https://github.com/speedyk-005/yasbd-lib/blob/main/yasbd_logo.png?raw=true" alt="Yasbd-lib Logo" width="500"/>
-  <p><i>“Even a pair of scissors deserves to be smart. Welcome to cybernetic boundary shearing.”</i></p>
+  <p><i>"Even a pair of scissors deserves to be smart. Welcome to cybernetic boundary shearing."</i></p>
 </div>
 
 [![Python Version](https://img.shields.io/badge/Python-3.11%20--%203.14-blue)](https://www.python.org/downloads/)
@@ -47,11 +47,12 @@
 
 ## Manifesto
 
-**Y**et **A**nother **S**entence **B**oundary **D**etector is a pair of smart scissors for text. Pointer-based, from-scratch [SBD](https://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) for production pipelines. Features a drop-in adapter for pysbd to fix edges cases without heavy refactoring. Five languages supported today (en, fr, es, ht, ja). Target is 22+.
+**Y**et **A**nother **S**entence **B**oundary **D**etector is a pair of smart scissors for text. Pointer-based, from-scratch [SBD](https://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) for production NLP pipelines. Fixes the accuracy gaps that made pysbd a liability in multilingual work.
 
 ###  ✂ Why do I need a pair of "smart scissors" for text?
 
-Running `re.split(r'\.\s+[A-Z]')` and praying. This blunt tool instantly shears titles like `Mr. Smith` or French corporate markers like `Sté. Générale` in half, scattering semantic fragments across your pipeline.
+Running `re.split(r'\.\s+[A-Z]')` and praying. This blunt tool instantly shears titles like `Mr. Smith` or French corporate markers like `Sté. Générale` in half, scattering semantic fragments across the pipeline.
+
 Punctuation is the most overloaded glyph set in text. A period alone does six jobs and only one is "sentence end." Generic split-on-punctuation fails on:
 
 - `Dr.` `Inc.` `U.S.A.` (abbreviation markers, not boundaries. ~47% of periods in news text are these)
@@ -65,17 +66,18 @@ And multilingual quirks a naive splitter never saw coming.
 
 ### 🔪 Are these shears just a rusty regex loop spray-painted in carbon fiber?
 
-Regex is how I cut. Not what I am. My brain is a two-pass pipeline. Pass one finds every possible boundary, greedy and over-inclusive. Pass two surgically removes false positives by cross-referencing 150+ curated abbreviations across 8 semantic categories, checking context before and after each candidate. Quote spans, parentheses, list markers, ellipsis, contiguous terminators -- each gets its own refiner.
+Regex is how I cut. Not what I am. My brain is a two-pass pipeline. Pass one finds every possible boundary, greedy and over-inclusive. Pass two surgically removes false positives by cross-referencing abbreviation lists, contextual grammar, and Unicode properties. Faster and more accurate than ML models on edge cases.
 
 ---
 
 ## 🏁 Benchmarks
 
-Tested against 6 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, sentence-splitter) across 5 languages and 7 edge cases: compound abbreviations, CJK quotes, newline wrapping, chat logs, URLs, and more.
+Tested against 6 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, sentence-splitter) across 5 languages and 7 edge cases: compound abbreviations, CJK quotes, newline wrapping, chat logs, URLs, decimals, and nested punctuation.
 
-**TL;DR:** yasbd ranked #1 in accuracy across almost every test, while staying competitive on speed as pure Python. blingfire is faster but brittle. pysbd and sentencex shred French abbreviations. nupunkt has an 11-second cold start.
+**TL;DR:** yasbd ranked #1 in accuracy across almost every test, while staying competitive on speed as pure Python. blingfire is faster but brittle. pysbd and sentencex shred French abbreviations.
 
-On our [golden benchmark](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks#golden-benchmark) (84 English edge cases adapted from pysbd's test suite with fixes and additions): yasbd scores **83/84 (98.8%)**, pysbd is second at **71/84 (84.5%)**.
+On our [golden benchmark](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks#golden-benchmark) (84 English edge cases adapted from pysbd's test suite with fixes and additions): yasbd scores **98.8%**, pysbd **84.5%**.
+
 Full results, terminal output, and a performance graph can be found in **[benchmarks/](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks)**
 
 <img src="https://raw.githubusercontent.com/speedyk-005/yasbd-lib/main/benchmarks/bench.png" alt="SBD Benchmark Performance" width="800"/>
@@ -165,7 +167,7 @@ The rule module loads lazily on first access. Switching mid-stream reimports the
 
 ### Boundary detection
 
-[`detect()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-boundary_detector-BoundaryDetector-detect) tells you where each sentence stops. Integer offsets into the original string. No copies, no slicing, no bookkeeping. Feed them to whatever downstream logic you already have.
+[`detect()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-boundary_detector-BoundaryDetector-detect) tells you where each sentence stops. Integer offsets into the original input stream.
 
 Two detection modes:
 
@@ -190,7 +192,7 @@ print(res)
 
 ### Segmentation
 
-If you do not want to manage boundary offsets yourself (and who would?), [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-boundary_detector-BoundaryDetector-segment) wraps `detect()` with string slicing. It yields sentences as strings, one at a time. By default it strips leading and trailing whitespace and drops empty results. Set `preserve_whitespace=True` to keep original spacing around boundaries for non-destructive output.
+If you do not want to manage boundary offsets yourself (and who would?), [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-boundary_detector-BoundaryDetector-segment) slices text for you.
 
 ```python
 detector.lang = "en"
@@ -210,10 +212,10 @@ print(res)
 ```
 
 > [!TIP]
-> **Inputs & streaming** — `detect()` and `segment()` accept plain strings, open file streams (`TextIOBase`), or a `StreamCleaner`. Both are generators: they yield results lazily without loading the entire source into memory. Internally, the text is split on blank lines into paragraphs, and each paragraph is processed independently with offset tracking between them.
+> **Inputs & streaming** — `detect()` and `segment()` accept plain strings, open file streams (`TextIOBase`), or a `StreamCleaner`. Both are generators: they yield results lazily without loading the entire document into memory.
 
 > [!TIP]
-> **ParagraphStream** — yasbd uses [`ParagraphStream`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-utils-paragraph_stream-ParagraphStream) internally to split text into paragraph blocks. You can import it directly if you need paragraph-level processing in your own code:
+> **ParagraphStream** — yasbd uses [`ParagraphStream`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-utils-paragraph_stream-ParagraphStream) internally to split text into paragraphs:
 > ```python
 > from yasbd.utils.paragraph_stream import ParagraphStream
 >
@@ -224,7 +226,7 @@ print(res)
 
 ### Cleaner
 
-OCRd a PDF or scraping noisy text? [`StreamCleaner`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-utils-cleaner-StreamCleaner) normalizes paragraphs before they hit the detector:
+OCRd a PDF or scraping noisy text? [`StreamCleaner`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-utils-cleaner-StreamCleaner) normalizes paragraphs before they hit the detector.
 
 ```python
 from yasbd.utils.cleaner import StreamCleaner
@@ -250,7 +252,7 @@ print(res)
 # ['田中さんは「準備は完了しました」そう言って部屋を出た。', 'Ｕ．Ｓ．Ａ．の経済政策は非常に複雑です。']
 ```
 
-Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-utils-pysbd_adapter-Segmenter) class. Same [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-utils-pysbd_adapter-Segmenter-segment) method. Even the [`TextSpan`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-utils-pysbd_adapter-TextSpan) class is there with `sent`, `start`, and `end` fields, hurray. It also handles leading whitespace the way pysbd expects it (trailing on the previous sentence instead of leading on the next).
+Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-utils-pysbd_adapter-Segmenter) class. Same [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-utils-pysbd_adapter-Segmenter-segment) method signature.
 
 ---
 
@@ -268,12 +270,20 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/bl
 
 ## Contributors
 
-A massive thank you to the early pioneers helping make `yasbd` more accurate and scalable:
+A massive thank you to the open source community helping make `yasbd` more accurate and scalable:
 
-- **[@JheanLL](https://github.com/JheanLL)** — For lightning-fast initiative on performance bottlenecks and Trie optimization design (#24).
+| Name | Contributions | Role |
+|------|---------------|------|
+| **[@speedyk-005](https://github.com/speedyk-005)** | 220 | Maintainer & Creator |
+| **[@JheanLL](https://github.com/JheanLL)** | 1 | Performance optimization & Trie design |
+| **[@Jah-yee](https://github.com/Jah-yee)** | 1 | Community contributor |
+
+Interested in contributing? See the [**Contributing Guide**](https://github.com/speedyk-005/yasbd-lib/blob/main/CONTRIBUTING.md) to get started!
 
 ---
 
 ## 📜 Last note
 
-**yasbd** is maintained by [speedyk-005](https://github.com/speedyk-005). Licensed under [Mozilla Public License 2.0](https://github.com/speedyk-005/yasbd-lib/blob/main/LICENSE) — you can use it in proprietary software, but modifications to the source files must stay open under MPL 2.0. Contributions are welcome; see [CONTRIBUTING.md](https://github.com/speedyk-005/yasbd-lib/blob/main/CONTRIBUTING.md).
+**yasbd** is maintained by [speedyk-005](https://github.com/speedyk-005). Licensed under [Mozilla Public License 2.0](https://github.com/speedyk-005/yasbd-lib/blob/main/LICENSE) — you can use it freely in commercial and private work.
+
+Star us on GitHub if you dig it. Tell your NLP pipeline we said hi. 🚀
