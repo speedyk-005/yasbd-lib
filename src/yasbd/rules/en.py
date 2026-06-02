@@ -27,23 +27,13 @@ class EnRules(Rules):
         "appt",
     }
 
-    COMMON_ORG_NOUNS = Rules.COMMON_ORG_NOUNS | {
-        # Government / Political
-        "Government", "Parliament", "Senate", "Congress", "Assembly",
-        "Ministry", "Department", "Bureau", "Agency", "Commission", "Board",
-        "Council", "Committee", "Authority", "Administration",
+    ORG_PROPER_NOUNS = {
+        # Military institutions
+        "Army", "Navy", "Air Force", "Pentagon",
 
-        # Education / Research
-        "University", "College", "Institute", "School", "Academy",
-
-        # Corporate / Business
-        "Corporation", "Company", "Association", "Foundation", "Trust",
-
-        # Military / Legal
-        "Army", "Navy", "Airforce", "Police", "Force", "Court",
-
-        # Media / Cultural
-        "Museum", "Gallery", "Theater", "Theatre", "Network",
+        # Political / legislative institutions
+        "Congress", "Senate", "House of Representatives", "Supreme Court",
+        "Cabinet", "Parliament", "Commons",
     }
 
     COMMON_SENT_STARTERS = {

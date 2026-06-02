@@ -22,7 +22,7 @@ TEST_DATA = [
     "That is JFK Jr.'s book.",
     "I visited the U.S.A. last year.",
     "I live in the E.U.| How about you?",
-    "I work for the U.S. Government in Virginia.",
+    "I work for the U.S. government in Virginia.",
     "I have lived in the U.S. for 20 years.",
     "She has $100.00 in her bag.",
     "She has $100.00.| It is in her bag.",
