@@ -110,8 +110,19 @@ trailing whitespace from each sentence\.
 <a name="yasbd-rules-base"></a>
 ## 🅼 yasbd\.rules\.base
 
+- **Constants:**
+  - 🆅 [FULLWIDTH\_GEOPOLITICAL\_ABBRVS](#yasbd-rules-base-FULLWIDTH_GEOPOLITICAL_ABBRVS)
 - **Classes:**
   - 🅲 [Rules](#yasbd-rules-base-Rules)
+
+### Constants
+
+<a name="yasbd-rules-base-FULLWIDTH_GEOPOLITICAL_ABBRVS"></a>
+### 🆅 yasbd\.rules\.base\.FULLWIDTH\_GEOPOLITICAL\_ABBRVS
+
+```python
+FULLWIDTH_GEOPOLITICAL_ABBRVS = {'Ｕ．Ｓ', 'Ｕ．Ｓ．Ａ', 'Ｕ．Ｋ', 'Ｅ．Ｕ', 'Ｕ．Ｎ', 'Ｕ．Ｓ．Ｓ．Ｒ', 'Ｕ．Ａ．Ｅ', 'Ｐ．Ｒ．Ｃ', 'Ｒ．Ｏ．Ｋ', 'ＥＥ．ＵＵ', 'ＦＦ．ＡＡ', 'ＲＲ．ＨＨ', 'ＣＣ．ＡＡ'}
+```
 
 ### Classes
 
