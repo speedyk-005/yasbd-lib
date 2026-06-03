@@ -266,7 +266,7 @@ class Rules:
 
             # Time abbreviations followed by a date token (e.g., 9 a.m. Monday)
             re.compile(
-                rf"\b(?i:[ap]{cls.DOTS_PATTERN}m{cls.DOTS_PATTERN})"
+                rf"(?:(?<=\d)|\b)(?i:[ap]{cls.DOTS_PATTERN}m{cls.DOTS_PATTERN})"
                 rf"(?=\s+(?i:{_build_abbr_pattern(cls.DATE_ABBRVS | cls.DATE_WORDS)})\b)"
             ),
 
