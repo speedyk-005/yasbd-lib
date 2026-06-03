@@ -332,6 +332,16 @@ class Rules:
             m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(text)
         )
 
+    def _post_process_boundaries(
+        self, main_boundaries: set[int], text: str
+    ) -> None:
+        """Hook for language-specific boundary filtering.
+
+        Override in subclasses to remove false-positive boundaries that
+        the regex passes cannot catch. Mutate ``main_boundaries`` in
+        place; do not touch any other engine state.
+        """
+
     def apply(
         self,
         text: str,
@@ -367,6 +377,7 @@ class Rules:
         )
         self._remove_toc_spans(main_boundaries, text)
         self._adjust_list_boundaries(main_boundaries, text)
+        self._post_process_boundaries(main_boundaries, text)
 
         # Remove contiguous term pos except last one (e.g., Hello! !!   !! )
         main_boundaries.difference_update(
