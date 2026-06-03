@@ -1,8 +1,6 @@
 import re
 
-from yasbd.rules.base import (
-    Rules, FULLWIDTH_GEOPOLITICAL_ABBRVS, _build_abbr_pattern
-)
+from yasbd.rules.base import FULLWIDTH_GEOPOLITICAL_ABBRVS, Rules, _build_abbr_pattern
 
 
 # fmt: off

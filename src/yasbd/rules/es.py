@@ -91,7 +91,6 @@ class EsRules(Rules):
         # Let the base class build the default rules first
         super()._compile_regex_dynamically()
 
-        import regex as re2
 
         # Ud./Uds./Vd./Vds. heuristic
         # Don't split if the next word is NOT a common starter (assumes it's a proper name).
