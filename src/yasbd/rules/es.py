@@ -25,7 +25,7 @@ class EsRules(Rules):
 
     STREET_ABBRVS = set()
 
-    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | Rules.STREET_ABBRVS | {
+    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {
         "ej", "p.ej", "vid", "cll", "cra", "diag", "transv", "mz", "mza", "lt",
         "urb", "asent", "dpto", "prov", "mnpio", "conj", "edif", "ofic", "km",
         "av", "avd", "c", "pso", "ctra", "pl", "blvr",

@@ -25,6 +25,7 @@ TEST_DATA = [
     "Nació el 5 de abr. de 1990.",
 
     # Addresses & Locations
+    "Yo vi un ave.| ¿Lo has visto también?",
     "Vive en la Av. Siempre Viva.",
     "Viven en la C. Mayor, 12.",
     "El accidente fue en la Cra. 50 con Cll. 100.",
