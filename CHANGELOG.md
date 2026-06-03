@@ -2,6 +2,22 @@
 
 ---
 
+## [0.1.4] - 2026-06-03
+
+### Added
+- **`_post_process_boundaries` hook**: Language-specific boundary filtering without touching regex patterns.
+
+### Changed
+- **Class-attributed regex patterns**: Promoted local pattern vars to class attrs in `base.py`; en/ja override geopolitical rule.
+- **STREET_ABBRVS merged into MID_SENTENCE_ABBRVS**: Street abbreviations now hard never-splits; English re-adds boundaries via `_post_process_boundaries` when followed by common sentence starter.
+- **`COMMON_ORG_NOUNS` renamed to `ORG_PROPER_NOUNS`**: Renamed and scoped to proper nouns only.
+- **Geopolitical abbreviations uppercased**: All `GEOPOLITICAL_ABBRVS` entries converted to uppercase across languages.
+
+### Fixed
+- **Japanese over-matching lookahead**: Pattern always matched; dropped `\b` (incompatible between CJK and full-width Latin).
+- **Spanish `ave` false negative**: Excluded from `MID_SENTENCE_ABBRVS` so "Yo vi un ave" doesn't trigger abbreviation guard.
+- **Opening bracket in reference abbreviation lookahead**: Added `[` to the lookahead character set.
+
 ## [0.1.3] - 2026-06-01
 
 ### Fixed
