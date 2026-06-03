@@ -19,6 +19,7 @@ TEST_DATA = [
     # Parentheses and quotes
     "Il a dit (Je viendrai demain.) pendant la réunion.",
     "Il a demandé: Êtes-vous prêt?| J'ai répondu oui.",
+    "Léa dit : « Bonjour ! Je suis Léa. Et toi ? »",
     'Elle s\'est tournée vers lui, "C\'est magnifique." dit-elle.',
 
     # Ellipsis
