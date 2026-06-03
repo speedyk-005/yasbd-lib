@@ -74,7 +74,7 @@ class EsRules(Rules):
     }
     @classmethod
     def _compile_regex_dynamically(cls):
-        """Override base regex compilation to fix Spanish ellipsis behavior."""
+        """Override base regex compilation to fix pronouns abbrvs behavior."""
         # Let the base class build the default rules first
         super()._compile_regex_dynamically()
 
