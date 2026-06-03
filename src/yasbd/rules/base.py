@@ -23,10 +23,10 @@ def _build_abbr_pattern(options: set[str]) -> str:
 # Pair with CASE_MARKERS (の, 的, 의, ...) in the regex pattern to
 # suppress splits when the abbreviation is bound to a following noun.
 FULLWIDTH_GEOPOLITICAL_ABBRVS = {
-    "ｕ．ｓ", "ｕ．ｓ．ａ", "ｕ．ｋ", "ｅ．ｕ",
-    "ｕ．ｎ", "ｕ．ｓ．ｓ．ｒ",
-    "ｕ．ａ．ｅ", "ｐ．ｒ．ｃ", "ｒ．ｏ．ｋ",
-    "ｅｅ．ｕｕ", "ｆｆ．ａａ", "ｒｒ．ｈｈ", "ｃｃ．ａａ",
+    "Ｕ．Ｓ", "Ｕ．Ｓ．Ａ", "Ｕ．Ｋ", "Ｅ．Ｕ",
+    "Ｕ．Ｎ", "Ｕ．Ｓ．Ｓ．Ｒ",
+    "Ｕ．Ａ．Ｅ", "Ｐ．Ｒ．Ｃ", "Ｒ．Ｏ．Ｋ",
+    "ＥＥ．ＵＵ", "ＦＦ．ＡＡ", "ＲＲ．ＨＨ", "ＣＣ．ＡＡ",
 }
 
 
@@ -53,13 +53,13 @@ class Rules:
 
     GEOPOLITICAL_ABBRVS = {
         # North Atlantic / Western Europe
-        "u.s", "u.s.a", "u.k", "e.u",
+        "U.S", "U.S.A", "U.K", "E.U",
 
         # Multilateral / Intergovernmental
-        "u.n", "u.s.s.r",
+        "U.N", "U.S.S.R",
 
         # Asia / Middle East
-        "u.a.e", "p.r.c", "r.o.k",
+        "U.A.E", "P.R.C", "R.O.K",
     }
 
     REFERENCE_ABBRVS = {

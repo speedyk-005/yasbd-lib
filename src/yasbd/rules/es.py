@@ -36,7 +36,7 @@ class EsRules(Rules):
     }
 
     GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {
-        "ee.uu", "ff.aa", "rr.hh", "cc.aa", "ee", "uu", "ff", "rr", "hh", "aa",
+        "EE.UU", "FF.AA", "RR.HH", "CC.AA", "EE", "UU", "FF", "RR", "HH", "AA",
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
