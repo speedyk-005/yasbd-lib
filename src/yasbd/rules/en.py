@@ -63,13 +63,17 @@ class EnRules(Rules):
         # Let the base class build the default rules first
         super()._compile_regex_dynamically()
 
-        cls.MID_SENTENCE_FINDER_LST.append(
+        cls.MID_SENTENCE_FINDER_LST.extend([
+            # Spaced three-dot ellipsis mid-thought (e.g., ". . . she didn't")
+            # Consecutive dots "..." or "...." still create sentence boundaries.
+            re.compile(r"(?<!\.)\.(?:\s\.){2}"),
+
             # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
             re.compile(rf"""
                 \b(?i:{cls.GEOPOLITICAL_ABBRVS_PATTERN}){cls.DOTS_PATTERN}
                 (?=\s+(?:{_build_abbr_pattern(cls.ORG_PROPER_NOUNS)}))
                 """, re.X
             ),
-        )
+        ])
 
 # fmt: on
