@@ -253,6 +253,12 @@ class Rules:
                 rf"\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}){cls.DOTS_PATTERN}(?=\s+\p{{N}})"
             ),
 
+            # Time abbreviations followed by a date prefix (e.g., 9 a.m. Monday)
+            re.compile(
+                rf"\b(?i:[ap]{cls.DOTS_PATTERN}m{cls.DOTS_PATTERN})"
+                rf"(?=\s+(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}))"
+            ),
+
             # Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
             # excluding geopolitical ones not followed by a common starters
             re2.compile(rf"""
