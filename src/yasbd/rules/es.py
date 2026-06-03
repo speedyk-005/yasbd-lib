@@ -32,17 +32,12 @@ class EsRules(Rules):
     }
 
     GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {
-        "ee.uu", "ff.aa", "rr.hh", "cc.aa",
+        "ee.uu", "ff.aa", "rr.hh", "cc.aa", "ee", "uu", "ff", "rr", "hh", "aa",
     }
-
-    ORG_PROPER_NOUNS = Rules.ORG_PROPER_NOUNS | {
-        "Ministerio", "Universidad", "Gobierno", "Asociación", "Fundación",
-        "Instituto", "Banco", "Hospital", "Colegio", "Comando", "Departamento",
-    }
-
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
-        "ene", "abr", "may", "ago", "dic", "lun" , "mar" ,"mié", "miér", "jue", "vie", "sáb", "dom",
+        "ene", "abr", "may", "ago", "dic", "lun" , "mar" ,"mié", "miér",
+        "jue", "vie", "sáb", "dom",
     }
 
     COMMON_SENT_STARTERS = {
@@ -91,7 +86,7 @@ class EsRules(Rules):
         """Override base regex compilation to fix Spanish ellipsis behavior."""
         # 1. Let the base class build the default rules first
         super()._compile_regex_dynamically()
-        
+
         import regex as re2
 
         # 2. Heurística para Ud./Uds./Vd./Vds.

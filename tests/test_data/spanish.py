@@ -32,14 +32,11 @@ TEST_DATA = [
     "Dobla en la Transv. 3 y sigue por la Diag. 5.",
     "La casa está en la Urb. Las Rosas, Mz. A, Lt. 15 del Asent. Humano.",
 
-    # Geopolitical & Organizations
+    # Geopolitical abbreviations
     "El presidente de los EE.UU. visitó Europa.",
     "Las FF.AA. emitieron un comunicado oficial.",
     "El departamento de RR.HH. aprobó las vacaciones.",
     "Es una de las CC.AA. más grandes de España.",
-    "El EE.UU. Gobierno aprobó la ley.",
-    "Las FF.AA. Ministerio anunciaron cambios.",
-    "El RR.HH. Instituto cerró hoy.",
 
     # Common Starters after abbreviations
     "Llegó el Sr. Por suerte trajo el paquete.",
