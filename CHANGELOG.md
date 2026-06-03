@@ -1,5 +1,10 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),  
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 ---
 
 ## [0.1.4] - 2026-06-03
@@ -9,14 +14,14 @@
 
 ### Changed
 - **Class-attributed regex patterns**: Promoted local pattern vars to class attrs in `base.py`; en/ja override geopolitical rule.
-- **STREET_ABBRVS merged into MID_SENTENCE_ABBRVS**: Street abbreviations now hard never-splits; English re-adds boundaries via `_post_process_boundaries` when followed by common sentence starter.
+- **STREET_ABBRVS merged into MID_SENTENCE_ABBRVS**: Street abbreviations now hard never-splits; English re-adds boundaries via `_post_process_boundaries` when followed by common sentence starter. (Co-authored by [@JheanLL](https://github.com/JheanLL))
 - **`COMMON_ORG_NOUNS` renamed to `ORG_PROPER_NOUNS`**: Renamed and scoped to proper nouns only.
 - **Geopolitical abbreviations uppercased**: All `GEOPOLITICAL_ABBRVS` entries converted to uppercase across languages.
 
 ### Fixed
 - **Japanese over-matching lookahead**: Pattern always matched; dropped `\b` (incompatible between CJK and full-width Latin).
-- **Spanish `ave` false negative**: Excluded from `MID_SENTENCE_ABBRVS` so "Yo vi un ave" doesn't trigger abbreviation guard.
-- **Opening bracket in reference abbreviation lookahead**: Added `[` to the lookahead character set.
+- **Spanish Ud./Vd. heuristic**: Don't split after `Ud.`/`Vd.` if next word is not a common starter (e.g., `Ud. Marco` stays together, `Ud. Mañana` splits). ([#31](https://github.com/speedyk-005/yasbd-lib/pull/31), [@JheanLL](https://github.com/JheanLL))
+- **Opening bracket in reference abbreviation lookahead**: Added `[` to the lookahead character set. ([#35](https://github.com/speedyk-005/yasbd-lib/pull/35), [@RoomWithOutRoof](https://github.com/RoomWithOutRoof))
 
 ## [0.1.3] - 2026-06-01
 
