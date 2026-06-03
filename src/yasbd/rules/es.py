@@ -23,6 +23,10 @@ class EsRules(Rules):
         "cf", "incl", "cía", "s",
     }
 
+    # Spanish street terms go in MID_SENTENCE_ABBRVS (hard never-splits rule).
+    # Clearing base STREET_ABBRVS to avoid English "ave" splitting "Yo vi un ave".
+    # Base STREET_ABBRVS uses a soft lookahead (splits on common starters like "El"),
+    # which would break "Av. El Sol".
     STREET_ABBRVS = set()
 
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {
@@ -84,14 +88,14 @@ class EsRules(Rules):
     @classmethod
     def _compile_regex_dynamically(cls):
         """Override base regex compilation to fix Spanish ellipsis behavior."""
-        # 1. Let the base class build the default rules first
+        # Let the base class build the default rules first
         super()._compile_regex_dynamically()
 
         import regex as re2
 
-        # 2. Heurística para Ud./Uds./Vd./Vds.
-        # No cortar si la siguiente palabra NO es un starter común (asumimos nombre propio).
-        # Esto soluciona la ambigüedad "Ud. Marco" vs "Ud. Mañana".
+        # Ud./Uds./Vd./Vds. heuristic
+        # Don't split if the next word is NOT a common starter (assumes it's a proper name).
+        # Resolves the ambiguity "Ud. Marco" vs "Ud. Mañana".
         pronoun_abbrvs_pattern = _build_abbr_pattern({"ud", "uds", "vd", "vds"})
 
         cls.MID_SENTENCE_FINDER_LST.append(
