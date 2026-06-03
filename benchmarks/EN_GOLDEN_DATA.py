@@ -55,8 +55,12 @@ GOLDEN_EN_RULES_TEST_CASES = [
         ["I live in the U.S.", "How about you?"],
     ),
     (
-        "I work for the U.S. Government in Virginia.",
-        ["I work for the U.S. Government in Virginia."],
+        "He serves in the U.S. Army.",
+        ["He serves in the U.S. Army."],
+    ),
+    (
+        "The U.S. government passed a new law.",
+        ["The U.S. government passed a new law."],
     ),
     (
         "I have lived in the U.S. for 20 years.",

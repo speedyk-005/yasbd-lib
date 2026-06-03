@@ -1,3 +1,5 @@
+import regex as re2
+
 from yasbd.rules.base import Rules, _build_abbr_pattern
 
 
@@ -21,26 +23,19 @@ class EsRules(Rules):
         "cf", "incl", "cía", "s",
     }
 
-    STREET_ABBRVS = set()
-
-    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {
+    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS - {"ave"} | {
         "ej", "p.ej", "vid", "cll", "cra", "diag", "transv", "mz", "mza", "lt",
         "urb", "asent", "dpto", "prov", "mnpio", "conj", "edif", "ofic", "km",
         "av", "avd", "c", "pso", "ctra", "pl", "blvr",
     }
 
     GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {
-        "ee.uu", "ff.aa", "rr.hh", "cc.aa",
+        "EE.UU", "FF.AA", "RR.HH", "CC.AA", "EE", "UU", "FF", "RR", "HH", "AA",
     }
-
-    ORG_PROPER_NOUNS = Rules.ORG_PROPER_NOUNS | {
-        "Ministerio", "Universidad", "Gobierno", "Asociación", "Fundación",
-        "Instituto", "Banco", "Hospital", "Colegio", "Comando", "Departamento",
-    }
-
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
-        "ene", "abr", "may", "ago", "dic", "lun" , "mar" ,"mié", "miér", "jue", "vie", "sáb", "dom",
+        "ene", "abr", "may", "ago", "dic", "lun" , "mar" ,"mié", "miér",
+        "jue", "vie", "sáb", "dom",
     }
 
     COMMON_SENT_STARTERS = {
@@ -48,74 +43,51 @@ class EsRules(Rules):
         "El", "La", "Los", "Las", "Un", "Una", "Unos", "Unas",
 
         # Pronouns
-        "Yo", "Tú", "Él", "Ella", "Usted", "Nosotros", "Vosotros", "Ellos",
-        "Ellas", "Aquel", "Aquél", "Aquella", "Aquello", "Aquellas",
-        "Aquellos", "Este", "Esta", "Estos", "Estas", "Ese", "Esa", "Esos",
-        "Esas", "Aquí", "Allí", "Quien", "Quienes", "Cual", "Cuales", "Cuanto",
+        "Yo", "Tú", "Él", "Ella", "Usted", "Nosotros", "Vosotros",
+        "Ellos", "Ellas", "Este", "Esta", "Estos", "Estas",
+        "Ese", "Esa", "Esos", "Esas",
+        "Aquel", "Aquella", "Aquellos", "Aquellas", "Aquí", "Allí",
+        "Quien", "Quienes", "Cual", "Cuales", "Cuanto",
 
-        # Adverbs & Transitions (crucial for Ud. heuristic robustness)
-        "Pero", "Entonces", "Así que", "Asi que", "Sin embargo", "Luego", "Además", "Aunque",
-        "Afortunadamente", "Desafortunadamente", "Lamentablemente", "Felizmente", "Tristemente",
-        "Sinceramente", "Atentamente", "Posiblemente", "Probablemente", "Seguramente",
-        "Evidentemente", "Obviamente", "Claramente", "Efectivamente", "Realmente",
-        "Verdaderamente", "Francamente", "Principalmente", "Generalmente", "Normalmente",
-        "Especialmente", "Particularmente", "Finalmente", "Inicialmente", "Anteriormente",
-        "Posteriormente", "Últimamente", "Recientemente", "Actualmente", "Brevemente",
-        "Curiosamente", "Increíblemente", "Sorprendentemente", "Casualmente", "Aparentemente",
-        "Supuestamente", "Teóricamente", "Básicamente", "Fundamentalmente", "Técnicamente",
-        "Prácticamente", "Literalmente", "Exactamente", "Precisamente", "Inmediatamente",
-        "Rápidamente", "Lentamente", "Súbitamente", "Repentinamente", "Inesperadamente",
-        "Constantemente", "Frecuentemente", "Ocasionalmente", "Raramente", "Apenas",
-        "Bastante", "Demasiado", "Mucho", "Poco", "Muy", "Tan", "Tanto", "Más", "Menos",
-        "Mejor", "Peor", "Igual", "Diferente", "Aparte", "Incluso", "También", "Tampoco",
-        "Sino", "Solo", "Solamente", "Únicamente", "Exclusivamente", "Inclusive", "Salvo",
-        "Excepto", "Mientras", "Entretanto", "Ahora", "Después", "Antes", "Temprano", "Tarde",
-        "Pronto", "Aún", "Todavía", "Ya", "Nunca", "Jamás", "Siempre", "Ayer", "Hoy", "Mañana",
-        "Anoche", "Anteayer", "Quizás", "Quizas", "Quizá", "Tal vez", "Ojalá", "Casi",
+        # Inverted punctuation (always start a new sentence in Spanish)
+        "¿", "¡",
+
+        # Adverbs & Transitions
+        "Pero", "Entonces", "Así que", "Sin embargo", "Luego", "Además",
+        "Aunque", "Tampoco", "También", "Incluso", "Solo", "Solamente",
+        "Más", "Menos", "Mejor", "Peor", "Mientras", "Ahora", "Después",
+        "Antes", "Temprano", "Tarde", "Pronto", "Siempre", "Nunca", "Jamás",
+        "Ya", "Aún", "Todavía", "Ayer", "Hoy", "Mañana", "Anoche",
+        "Quizás", "Quizá", "Tal vez", "Ojalá", "Casi",
+        "Finalmente", "Generalmente", "Normalmente", "Realmente",
+        "Seguramente", "Probablemente", "Lamentablemente", "Afortunadamente",
 
         # Prepositions & Interrogatives
-        "¿", "¡", "Por", "Para", "Como", "Cuando", "Donde", "A", "Ante", "Bajo", "Cabe",
-        "Con", "Contra", "De", "Desde", "Durante", "En", "Entre", "Hacia", "Hasta",
-        "Mediante", "Según", "Sin", "So", "Sobre", "Tras", "Vía", "Versus",
-        "Qué", "Quién", "Cuál", "Cuánto", "Cómo", "Cuándo", "Dónde", "Porqué", "Porque",
+        "Por", "Para", "Como", "Cuando", "Donde", "De", "Desde", "Durante",
+        "En", "Entre", "Hacia", "Hasta", "Mediante", "Según", "Sin", "Con",
+        "Sobre", "Tras", "Qué", "Quién", "Cuál", "Cuánto", "Cómo", "Cuándo",
+        "Dónde", "Porqué", "Porque",
 
-        # Verbs and auxiliaries
-        "Es", "Son", "Era", "Eran", "Fue", "Fueron", "Hay", "Tiene", "Tienen", "Está", "Están",
-        "Había", "Habían", "Hubo", "Hubieron", "Estaba", "Estaban", "Estuvo", "Estuvieron", "Estuviera", "Estuvieran",
-
+        # Verbs / auxiliaries
+        "Es", "Son", "Era", "Eran", "Fue", "Fueron", "Hay", "Tiene",
+        "Tienen", "Está", "Están", "Había", "Hubo", "Estaba", "Estuvo",
     }
     @classmethod
     def _compile_regex_dynamically(cls):
         """Override base regex compilation to fix Spanish ellipsis behavior."""
-        # 1. Let the base class build the default rules first
+        # Let the base class build the default rules first
         super()._compile_regex_dynamically()
 
-        # 2. Remove the strict English 3-dot ellipsis rule
-        # (which assumes 3 dots NEVER end a sentence)
-        cls.MID_SENTENCE_FINDER_LST = [
-            pat for pat in cls.MID_SENTENCE_FINDER_LST
-            if pat.pattern != r"(?<!\.)(?:\s?\.){3}"
-        ]
 
-        # 3. Add Spanish-specific ellipsis rule:
-        # 3 dots only act as a mid-sentence pause IF followed by a lowercase letter.
-        # Otherwise (like before a capital letter), they are allowed to break the sentence.
-        import regex as re2
-        cls.MID_SENTENCE_FINDER_LST.append(
-            re2.compile(r"(?<!\.)(?:\s?\.){3}(?=\s+\p{Ll})")
-        )
-
-        # 4. Heurística para Ud./Uds./Vd./Vds.
-        # No cortar si la siguiente palabra NO es un starter común (asumimos nombre propio).
-        # Esto soluciona la ambigüedad "Ud. Marco" vs "Ud. Mañana".
+        # Ud./Uds./Vd./Vds. heuristic
+        # Don't split if the next word is NOT a common starter (assumes it's a proper name).
+        # Resolves the ambiguity "Ud. Marco" vs "Ud. Mañana".
         pronoun_abbrvs_pattern = _build_abbr_pattern({"ud", "uds", "vd", "vds"})
-        common_starters_pattern = _build_abbr_pattern(cls.COMMON_SENT_STARTERS)
-        dots_pattern = r"[.．]"
 
         cls.MID_SENTENCE_FINDER_LST.append(
             re2.compile(rf"""
-                \b(?i:{pronoun_abbrvs_pattern}){dots_pattern}
-                (?!\s+(?:{common_starters_pattern})\b)
+                \b(?i:{pronoun_abbrvs_pattern})\.
+                (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
             """, re2.X)
         )
 

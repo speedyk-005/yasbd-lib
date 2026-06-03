@@ -20,12 +20,12 @@ class FrRules(Rules):
         "ms", "pl", "pref", "suppl", "suiv", "t", "trad",
     }
 
-    STREET_ABBRVS = Rules.STREET_ABBRVS | {
-        "av", "boul", "bd", "ch", "imp", "faub", "fg", "all", "carr", "Pén"
-    }
-
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {
+        # Bridge/connectors
         "c.-à-d", "c-à-d", "c-a-d", "p.ex", "n.b", "p.s", "éts", "sté", "ste",
+
+        # Streets
+        "av", "boul", "bd", "ch", "imp", "faub", "fg", "carr", "Pén"
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
