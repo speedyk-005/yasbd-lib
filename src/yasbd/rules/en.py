@@ -1,4 +1,6 @@
-from yasbd.rules.base import Rules
+import re
+
+from yasbd.rules.base import Rules, _build_abbr_pattern
 
 
 # fmt: off
@@ -27,15 +29,6 @@ class EnRules(Rules):
         "appt",
     }
 
-    ORG_PROPER_NOUNS = {
-        # Military institutions
-        "Army", "Navy", "Air Force", "Pentagon",
-
-        # Political / legislative institutions
-        "Congress", "Senate", "House of Representatives", "Supreme Court",
-        "Cabinet", "Parliament", "Commons",
-    }
-
     COMMON_SENT_STARTERS = {
         # Articles
         "The", "A", "An",
@@ -54,22 +47,29 @@ class EnRules(Rules):
         # Other common starters
         "Do", "Did", "Millions",
     }
+
+    ORG_PROPER_NOUNS = {
+        # Military institutions
+        "Army", "Navy", "Air Force", "Pentagon",
+
+        # Political / legislative institutions
+        "Congress", "Senate", "House of Representatives", "Supreme Court",
+        "Cabinet", "Parliament", "Commons",
+    }
+
+    @classmethod
+    def _compile_regex_dynamically(cls):
+        """Override base regex compilation to fix geopolitical split when used as adj"""
+        # Let the base class build the default rules first
+        super()._compile_regex_dynamically()
+
+        cls.MID_SENTENCE_FINDER_LST.append(
+            # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
+            re.compile(rf"""
+                \b(?i:{cls.GEOPOLITICAL_ABBRVS_PATTERN}){cls.DOTS_PATTERN}
+                (?=\s+(?:{_build_abbr_pattern(cls.ORG_PROPER_NOUNS)}))
+                """, re.X
+            ),
+        )
+
 # fmt: on
-
-
-if __name__ == "__main__":  # pragma: no cover
-    rule = EnRules()
-    text = """
-        The system requirements for the project are simple: 1. Python 3.12 environment. 2. At least 8GB of RAM. 3. Access to the PUA character set for Sinta markers. Please ensure these are met before initialization.
-
-        To install Sinta, follow these steps:
-        1. They Clone the repository from the internal server.
-        2. Initialize the virtual environment using the provided script.
-        3. Run the $O(n)$ test suite to verify performance.
-        Deployment will follow successful testing.
-
-        The project (which had been delayed for months. ) was finally complete.
-    """
-    sentences = rule.apply(text, True)
-    for s in sentences:
-        print(repr(s))

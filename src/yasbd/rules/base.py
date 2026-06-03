@@ -17,6 +17,19 @@ def _build_abbr_pattern(options: set[str]) -> str:
     return trie.add(*options).pattern()
 
 
+# Full-width geopolitical abbreviations (CJKV convention).
+# Used in mixed-script text where Latin abbreviations are rendered
+# with full-width (U+FF0E) periods instead of ASCII (U+002E).
+# Pair with CASE_MARKERS (の, 的, 의, ...) in the regex pattern to
+# suppress splits when the abbreviation is bound to a following noun.
+FULLWIDTH_GEOPOLITICAL_ABBRVS = {
+    "ｕ．ｓ", "ｕ．ｓ．ａ", "ｕ．ｋ", "ｅ．ｕ",
+    "ｕ．ｎ", "ｕ．ｓ．ｓ．ｒ",
+    "ｕ．ａ．ｅ", "ｐ．ｒ．ｃ", "ｒ．ｏ．ｋ",
+    "ｅｅ．ｕｕ", "ｆｆ．ａａ", "ｒｒ．ｈｈ", "ｃｃ．ａａ",
+}
+
+
 # fmt: off
 class Rules:
     TERMINATORS = {"。", "．", ".", "！", "!", "？", "?", "‼", "⁉", "⁈"}
@@ -41,15 +54,12 @@ class Rules:
     GEOPOLITICAL_ABBRVS = {
         # North Atlantic / Western Europe
         "u.s", "u.s.a", "u.k", "e.u",
-        "ｕ．ｓ", "ｕ．ｓ．ａ", "ｕ．ｋ", "ｅ．ｕ",
 
         # Multilateral / Intergovernmental
         "u.n", "u.s.s.r",
-        "ｕ．ｎ", "ｕ．ｓ．ｓ．ｒ",
 
         # Asia / Middle East
         "u.a.e", "p.r.c", "r.o.k",
-        "ｕ．ａ．ｅ", "ｐ．ｒ．ｃ", "ｒ．ｏ．ｋ",
     }
 
     REFERENCE_ABBRVS = {
@@ -125,7 +135,6 @@ class Rules:
         "Jeb", "Éxito", "Hey Man", "Basta", "Elliot S",
     }
 
-    ORG_PROPER_NOUNS = set()
     COMMON_SENT_STARTERS = set()
     QUOTATIVE_PARTICLES = set()
     CASE_MARKERS = set()
@@ -165,11 +174,11 @@ class Rules:
     @classmethod
     def _compile_regex_dynamically(cls):
         """Compile language-specific regex patterns."""
-        terminators_pattern = "".join(cls.TERMINATORS)
-        dots_pattern = r"[.．]"
-        title_abbrvs_pattern = _build_abbr_pattern(cls.TITLE_ABBRVS)
-        geopolitical_abbrvs_pattern = _build_abbr_pattern(cls.GEOPOLITICAL_ABBRVS)
-        common_starters_pattern = _build_abbr_pattern(cls.COMMON_SENT_STARTERS)
+        cls.TERMINATORS_PATTERN = "".join(cls.TERMINATORS)
+        cls.DOTS_PATTERN = r"[.．]"
+        cls.TITLE_ABBRVS_PATTERN = _build_abbr_pattern(cls.TITLE_ABBRVS)
+        cls.GEOPOLITICAL_ABBRVS_PATTERN = _build_abbr_pattern(cls.GEOPOLITICAL_ABBRVS)
+        cls.COMMON_STARTERS_PATTERN = _build_abbr_pattern(cls.COMMON_SENT_STARTERS)
 
         # https://regex101.com/r/qBSyU5/15
         # Handle flattened lists due to messy OCR.
@@ -191,15 +200,15 @@ class Rules:
         cls.NAIVE_BOUNDARY_FINDER = re2.compile(
             rf"""
             # Split if left token is a unicase letter (Always)
-            (?<=\p{{Lo}}\s*[{terminators_pattern}])|
+            (?<=\p{{Lo}}\s*[{cls.TERMINATORS_PATTERN}])|
 
             # Split after any terminators followed by a a newline,
             # common sentence starter, Space+Upper or unicase letter
-            (?<=[{terminators_pattern}])
+            (?<=[{cls.TERMINATORS_PATTERN}])
             (?=
                 \s*\n|
                 \s+(?:[^\p{{Ll}}]|
-                \s+(?<!\.\.)(?i:{common_starters_pattern})\b)|
+                \s+(?<!\.\.)(?i:{cls.COMMON_STARTERS_PATTERN})\b)|
                 \s*\p{{Lo}}
             )|
 
@@ -207,7 +216,7 @@ class Rules:
             (?<=[\p{{LU}}\p{{Ll}}][​。！？।])(?=[\p{{Lu}}])|
 
             # Cluster of terminators (e.g hello!!! r u ok?)
-            (?<=[{terminators_pattern.replace('.', '')}]{{2,}})(?=\s)
+            (?<=[{cls.TERMINATORS_PATTERN.replace('.', '')}]{{2,}})(?=\s)
             """,
             re2.X,
         )
@@ -217,48 +226,38 @@ class Rules:
         # https://regex101.com/r/svyCoU/20
         cls.MID_SENTENCE_FINDER_LST = [
             # Title abbrv or initialisms (e.g., Dr. Paul)
-            re.compile(rf"\b(?i:{title_abbrvs_pattern}){dots_pattern}"),
-
-            # Geopolitical abbrv is followed by a case maker or common org noun (e.g., U.S.A Army)
-            re.compile(rf"""
-                \b(?i:{geopolitical_abbrvs_pattern}){dots_pattern}
-                (?=
-                    \s*(?:{_build_abbr_pattern(cls.CASE_MARKERS)})|
-                    \s+(?:{_build_abbr_pattern(cls.ORG_PROPER_NOUNS)})
-                )
-                """, re.X
-            ),
+            re.compile(rf"\b(?i:{cls.TITLE_ABBRVS_PATTERN}){cls.DOTS_PATTERN}"),
 
             # Abbrv that NEVER ends a sentence
             re.compile(
-               rf"\b(?i:{_build_abbr_pattern(cls.MID_SENTENCE_ABBRVS)}){dots_pattern}"
+               rf"\b(?i:{_build_abbr_pattern(cls.MID_SENTENCE_ABBRVS)}){cls.DOTS_PATTERN}"
             ),
 
             # References abbrv followed by a number, a letter or opened paren/bracket (e.g., to p. 55, app. A, et al. [2004])
             re2.compile(rf"""
-                \b(?i:{_build_abbr_pattern(cls.REFERENCE_ABBRVS)}){dots_pattern}
+                \b(?i:{_build_abbr_pattern(cls.REFERENCE_ABBRVS)}){cls.DOTS_PATTERN}
                 (?=\s+(?:\(|\[|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))
                 """, re2.X
             ),
 
             # Date abbrv followed by a number
             re2.compile(
-                rf"\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}){dots_pattern}(?=\s+\p{{N}})"
+                rf"\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}){cls.DOTS_PATTERN}(?=\s+\p{{N}})"
             ),
 
             # Streets/Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
             # excluding geopolitical ones not followed by a common starters
             re2.compile(rf"""
-                (?:\p{{Lu}}\.)(?<!(?i:{geopolitical_abbrvs_pattern}|p\.m|a\.m){dots_pattern})
-                (?!\s+(?:{common_starters_pattern})\b)
+                (?:\p{{Lu}}\.)(?<!(?i:{cls.GEOPOLITICAL_ABBRVS_PATTERN}|p\.m|a\.m){cls.DOTS_PATTERN})
+                (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                 """, re2.X
             ),
             re.compile(rf"""
                 (?:
-                    \b(?i:{_build_abbr_pattern(cls.STREET_ABBRVS)}){dots_pattern}|
+                    \b(?i:{_build_abbr_pattern(cls.STREET_ABBRVS)}){cls.DOTS_PATTERN}|
                     (?i:{_build_abbr_pattern(cls.NAMES_WITH_EXCLAMATION)})[! ！‼]
                 )
-                (?!\s+(?:{common_starters_pattern})\b)
+                (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                """, re.X
             ),
         ]
@@ -268,7 +267,7 @@ class Rules:
         cls.QUOTE_AND_PAREN_END_FINDER = re2.compile(
             rf"""
             (?<=
-                [{terminators_pattern}]   # A terminator
+                [{cls.TERMINATORS_PATTERN}]   # A terminator
                 (?:'\s|["”]|\s*[»\p{{Pf}}\p{{Pe}}])     # Closing quotes/parens
             )
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
@@ -281,7 +280,7 @@ class Rules:
         )
 
         # https://regex101.com/r/ffqwjh/2
-        cls.CONTIGUOUS_TERMINATORS_FINDER = re.compile(rf"(?:\s*+[{terminators_pattern}]){{2,}}")
+        cls.CONTIGUOUS_TERMINATORS_FINDER = re.compile(rf"(?:\s*+[{cls.TERMINATORS_PATTERN}]){{2,}}")
 
     def _remove_quote_and_paren_spans(
         self,

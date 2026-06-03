@@ -93,13 +93,11 @@ class EsRules(Rules):
         # No cortar si la siguiente palabra NO es un starter común (asumimos nombre propio).
         # Esto soluciona la ambigüedad "Ud. Marco" vs "Ud. Mañana".
         pronoun_abbrvs_pattern = _build_abbr_pattern({"ud", "uds", "vd", "vds"})
-        common_starters_pattern = _build_abbr_pattern(cls.COMMON_SENT_STARTERS)
-        dots_pattern = r"[.．]"
 
         cls.MID_SENTENCE_FINDER_LST.append(
             re2.compile(rf"""
-                \b(?i:{pronoun_abbrvs_pattern}){dots_pattern}
-                (?!\s+(?:{common_starters_pattern})\b)
+                \b(?i:{pronoun_abbrvs_pattern}){cls.DOTS_PATTERN}
+                (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
             """, re2.X)
         )
 
