@@ -29,6 +29,7 @@ TEST_DATA = [
     "She has $100.00.| It is in her bag.",
     "The meeting is at 2 p.m.| Please be on time.",
     "The meeting is at 9 a.m. Monday.",
+    "The meeting is at 2 p.m.| Martin called.",
     "Q. What is his name?| A. His name is Alfred E. Sloan.",
     "I need you to find 3 items, e.g. a hat, a coat, and a bag.",
     "The report was published in Dec.| It was approved by Prof. Smith and Dr. Jones.",

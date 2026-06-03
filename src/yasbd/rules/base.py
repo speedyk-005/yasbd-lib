@@ -108,6 +108,16 @@ class Rules:
         "sat", "sun", "lun", "mar", "dom",
     }
 
+    DATE_WORDS = {
+        # Months
+        "january", "february", "march", "april", "june", "july",
+        "september", "october", "november", "december",
+
+        # Days
+        "monday", "tuesday", "wednesday", "thursday", "friday",
+        "saturday", "sunday",
+    }
+
     MID_SENTENCE_ABBRVS = {
         # Business entity bridges
         "assoc", "mfg",
@@ -253,10 +263,10 @@ class Rules:
                 rf"\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}){cls.DOTS_PATTERN}(?=\s+\p{{N}})"
             ),
 
-            # Time abbreviations followed by a date prefix (e.g., 9 a.m. Monday)
+            # Time abbreviations followed by a date token (e.g., 9 a.m. Monday)
             re.compile(
                 rf"\b(?i:[ap]{cls.DOTS_PATTERN}m{cls.DOTS_PATTERN})"
-                rf"(?=\s+(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}))"
+                rf"(?=\s+(?i:{_build_abbr_pattern(cls.DATE_ABBRVS | cls.DATE_WORDS)})\b)"
             ),
 
             # Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
