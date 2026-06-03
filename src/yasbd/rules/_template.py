@@ -36,10 +36,6 @@ class LangRules(Rules):
     # Month, weekday, and calendar abbreviations.
     DATE_ABBRVS = Rules.DATE_ABBRVS | {...}
 
-    # Common nouns appearing inside organization or institution names.
-    # e.g.: Army, Navy, ...
-    ORG_PROPER_NOUNS = {...}
-
     # Frequently occurring sentence starters used as weak boundary hints.
     COMMON_SENT_STARTERS = {...}
 
@@ -55,4 +51,14 @@ class LangRules(Rules):
     # Verbs commonly used for dialogue attribution or reported speech.
     REPORTING_WORDS = {...}
 
+    @classmethod
+    def _compile_regex_dynamically(cls):
+        """Override to add extra patterns to ``MID_SENTENCE_FINDER_LST``.
+
+        Call ``super()._compile_regex_dynamically()`` first, then
+        ``cls.MID_SENTENCE_FINDER_LST.append(...)``. Class-attributed
+        patterns (``cls.DOTS_PATTERN``, ``cls.TERMINATORS_PATTERN``, …)
+        are available after the ``super()`` call.
+        """
+        super()._compile_regex_dynamically()
 # fmt: on
