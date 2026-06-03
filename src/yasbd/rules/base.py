@@ -121,10 +121,9 @@ class Rules:
 
         # Others
         "approx", "est", "intl", "misc", "mt", "dist",
-    }
 
-    STREET_ABBRVS = {
-        "ave", "blvd", "blv", "ct", "ln", "pl", "rd", "sq", "st", "wy", "way"
+        # Streets
+        "ave", "blvd", "blv", "ct", "ln", "pl", "rd", "sq", "st", "wy",
         "rte", "rt", "jct", "riv", "pen",
     }
 
@@ -254,7 +253,7 @@ class Rules:
                 rf"\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}){cls.DOTS_PATTERN}(?=\s+\p{{N}})"
             ),
 
-            # Streets/Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
+            # Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
             # excluding geopolitical ones not followed by a common starters
             re2.compile(rf"""
                 (?:\p{{Lu}}\.)(?<!(?i:{cls.GEOPOLITICAL_ABBRVS_PATTERN}|p\.m|a\.m){cls.DOTS_PATTERN})
@@ -262,10 +261,7 @@ class Rules:
                 """, re2.X
             ),
             re.compile(rf"""
-                (?:
-                    \b(?i:{_build_abbr_pattern(cls.STREET_ABBRVS)}){cls.DOTS_PATTERN}|
-                    (?i:{_build_abbr_pattern(cls.NAMES_WITH_EXCLAMATION)})[! ！‼]
-                )
+                (?:(?i:{_build_abbr_pattern(cls.NAMES_WITH_EXCLAMATION)})[! ！‼])
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                """, re.X
             ),

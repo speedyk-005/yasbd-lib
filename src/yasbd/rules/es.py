@@ -23,13 +23,7 @@ class EsRules(Rules):
         "cf", "incl", "cía", "s",
     }
 
-    # Spanish street terms go in MID_SENTENCE_ABBRVS (hard never-splits rule).
-    # Clearing base STREET_ABBRVS to avoid English "ave" splitting "Yo vi un ave".
-    # Base STREET_ABBRVS uses a soft lookahead (splits on common starters like "El"),
-    # which would break "Av. El Sol".
-    STREET_ABBRVS = set()
-
-    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {
+    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS - {"ave"} | {
         "ej", "p.ej", "vid", "cll", "cra", "diag", "transv", "mz", "mza", "lt",
         "urb", "asent", "dpto", "prov", "mnpio", "conj", "edif", "ofic", "km",
         "av", "avd", "c", "pso", "ctra", "pl", "blvr",
@@ -92,7 +86,7 @@ class EsRules(Rules):
 
         cls.MID_SENTENCE_FINDER_LST.append(
             re2.compile(rf"""
-                \b(?i:{pronoun_abbrvs_pattern}){cls.DOTS_PATTERN}
+                \b(?i:{pronoun_abbrvs_pattern})\.
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
             """, re2.X)
         )

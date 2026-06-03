@@ -14,9 +14,6 @@ class EnRules(Rules):
     GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {
         "calif", "dc", "wash", "bc", "ont"
     }
-    STREET_ABBRVS = Rules.STREET_ABBRVS | {
-        "bldg", "expy", "hway", "hwy", "pkwy", "isl",
-    }
 
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         # Publishing / Documents
@@ -48,6 +45,13 @@ class EnRules(Rules):
         "Do", "Did", "Millions",
     }
 
+    STREET_ABBRVS = {
+        "ave", "blvd", "blv", "ct", "ln", "pl", "rd", "sq", "st", "wy",
+        "rte", "rt", "jct", "riv", "pen", "bldg", "expy", "hway", "hwy",
+        "pkwy", "isl",
+    }
+    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | STREET_ABBRVS
+
     ORG_PROPER_NOUNS = {
         # Military institutions
         "Army", "Navy", "Air Force", "Pentagon",
@@ -70,10 +74,24 @@ class EnRules(Rules):
 
             # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
             re.compile(rf"""
-                \b(?i:{cls.GEOPOLITICAL_ABBRVS_PATTERN}){cls.DOTS_PATTERN}
+                \b(?i:{cls.GEOPOLITICAL_ABBRVS_PATTERN})\.
                 (?=\s+(?:{_build_abbr_pattern(cls.ORG_PROPER_NOUNS)}))
                 """, re.X
             ),
         ])
+
+        # Street abbrv followed by a common starters
+        cls.ENDING_STREET_ABBRVS_FINDER = re.compile(rf"""
+            (?:\b(?i:{_build_abbr_pattern(cls.STREET_ABBRVS)})\.)
+            (?=\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
+           """, re.X
+        )
+
+    def _post_process_boundaries(
+        self, main_boundaries: set[int], text: str
+    ) -> None:
+        main_boundaries.update(
+            m.end() for m in self.ENDING_STREET_ABBRVS_FINDER.finditer(text)
+        )
 
 # fmt: on

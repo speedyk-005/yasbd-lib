@@ -24,10 +24,7 @@ class LangRules(Rules):
     # Citation and reference abbreviations commonly used mid-text.
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {...}
 
-    # Street and address abbreviations (Ave., Blvd., Rd., etc.).
-    STREET_ABBRVS = Rules.STREET_ABBRVS | {...}
-
-    # Common inline abbreviations that should not end a sentence.
+    # Common inline abbreviations that should not end a sentence (e.g., Blvd., etc.).
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {...}
 
     # Names or titles containing "!" that should not trigger sentence breaks.
@@ -57,4 +54,5 @@ class LangRules(Rules):
         """Hook for language-specific boundary filtering that the regex
         passes cannot catch. Override and mutate ``main_boundaries``.
         """
+        pass
 # fmt: on
