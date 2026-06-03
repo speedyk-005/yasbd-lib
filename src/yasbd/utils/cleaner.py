@@ -93,17 +93,15 @@ def _clean_ocr_text(text: str):
 CLEANING_PIPELINE = {
     "fix_mojibake": ftfy.fix_text,
     "fix_ocr_text": _clean_ocr_text,
-    "unwrap_htmls": lambda t: (
-        t if not "<" in t else HTML_TAGS_FINDER.sub("", t)
-    ),
-    "normalize_slashes":  lambda t: (
-        t if not "///" in t
-        else CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", t)
+    "unwrap_htmls": lambda t: (t if not "<" in t else HTML_TAGS_FINDER.sub("", t)),
+    "normalize_slashes": lambda t: (
+        t if not "///" in t else CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", t)
     ),
     "normalize_spaces": lambda t: (
         t if not " " in t else MULTIPLE_SPACES_FINDER.sub(" ", t)
     ),
 }
+
 
 class StreamCleaner(StreamCleanerStub):
     """Normalize and clean noisy text by applying ``ftfy``, HTML sanitization,
@@ -130,9 +128,7 @@ class StreamCleaner(StreamCleanerStub):
 
     @validate_input
     def __init__(
-        self,
-        source: str | TextIOBase,
-        steps_to_skip: list[str] | None = None
+        self, source: str | TextIOBase, steps_to_skip: list[str] | None = None
     ) -> None:
         """Implements the iterator protocol. Yields cleaned paragraph strings.
 
