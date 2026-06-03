@@ -272,11 +272,11 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/bl
 
 A massive thank you to the open source community helping make `yasbd` more accurate and scalable:
 
-| Name | Contributions | Role |
+| Name | Role |
 |------|---------------|------|
-| **[@speedyk-005](https://github.com/speedyk-005)** | 220 | Maintainer & Creator |
-| **[@JheanLL](https://github.com/JheanLL)** | 1 | Performance optimization & Trie design |
-| **[@Jah-yee](https://github.com/Jah-yee)** | 1 | Community contributor |
+| **[@speedyk-005](https://github.com/speedyk-005)**| Maintainer & Creator |
+| **[@JheanLL](https://github.com/JheanLL)** | Trie prototype design & Spanish rule contributions |
+| **[@Jah-yee](https://github.com/Jah-yee)** | Community contributor |
 
 Interested in contributing? See the [**Contributing Guide**](https://github.com/speedyk-005/yasbd-lib/blob/main/CONTRIBUTING.md) to get started!
 
