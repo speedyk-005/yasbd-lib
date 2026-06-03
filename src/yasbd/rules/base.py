@@ -100,7 +100,7 @@ class Rules:
 
     DATE_ABBRVS = {
         # Months
-        "jan", "feb", "mar", "apr", "jun", "jul", "sep",
+        "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep",
         "sept", "oct", "nov", "dec", "déc",
 
         # Day
@@ -111,7 +111,8 @@ class Rules:
     DATE_WORDS = {
         # Months
         "january", "february", "march", "april", "june", "july",
-        "september", "october", "november", "december",
+        "august", "september", "october", "november", "december",
+        # "May" is intentionally omitted because it is also a common modal verb.
 
         # Days
         "monday", "tuesday", "wednesday", "thursday", "friday",
