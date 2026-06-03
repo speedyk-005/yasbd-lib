@@ -42,14 +42,14 @@ yasbd's only failure is `"The meeting is at 9 a.m. Monday"`. `a.m.` is not in th
 First call includes import + init + first segment. Subsequent calls are warm. Tested on the [Normal text](#normal-text) shown below.
 
 | Library | Cold (ms) | Warm (ms) | Notes |
-|---|---|---|---|
-| yasbd | 1.7 | 1.31 | Regex compiled on first use |
-| pysbd | 31.4 | 3.53 | Rule-based, lightweight |
+|---|---|---|---|---|
+| yasbd | 10.8 | 1.47 | Regex compiled on first use |
+| pysbd | 11.7 | 5.09 | Rule-based, lightweight |
 | sentencex | 14.6 | 0.07 | Rust bindings loaded on import |
-| blingfire | 458.3 | 0.10 | C++ FSM model loaded from disk |
-| sentence-splitter | 6.5 | 1.27 | Pure Python, no heavy deps |
-| sentsplit | 16.5 | 7.75 | CRF model loaded on init |
-| nupunkt | 10,767.1 | 1.02 | Loads full model into memory on init |
+| blingfire | 201.1 | 0.09 | C++ FSM model loaded from disk |
+| sentence-splitter | 14.5 | 6.11 | Pure Python, no heavy deps |
+| sentsplit | 21.9 | 10.0 | CRF model loaded on init |
+| nupunkt | 9,701.0 | 3.66 | Loads full model into memory on init |
 
 <p align="center">
   <img src="bench.png" alt="SBD Benchmark Performance" width="800"/>
