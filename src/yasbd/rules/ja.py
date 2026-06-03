@@ -37,8 +37,8 @@ class JaRules(Rules):
         cls.MID_SENTENCE_FINDER_LST.append(
             # Geopolitical abbrv is followed by a case maker (e.g., Ｕ．Ｓ．Ａ．の経済政策)
             re.compile(rf"""
-                \b(?i:{cls.GEOPOLITICAL_ABBRVS_PATTERN}){cls.DOTS_PATTERN}
-                (?=\s*(?:{_build_abbr_pattern(cls.CASE_MARKERS)})|)
+                (?i:{cls.GEOPOLITICAL_ABBRVS_PATTERN}){cls.DOTS_PATTERN}
+                (?=\s*(?:{_build_abbr_pattern(cls.CASE_MARKERS)}))
                 """, re.X
             ),
         )
