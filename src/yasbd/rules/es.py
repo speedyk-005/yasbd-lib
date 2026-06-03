@@ -49,41 +49,34 @@ class EsRules(Rules):
         "El", "La", "Los", "Las", "Un", "Una", "Unos", "Unas",
 
         # Pronouns
-        "Yo", "Tú", "Él", "Ella", "Usted", "Nosotros", "Vosotros", "Ellos",
-        "Ellas", "Aquel", "Aquél", "Aquella", "Aquello", "Aquellas",
-        "Aquellos", "Este", "Esta", "Estos", "Estas", "Ese", "Esa", "Esos",
-        "Esas", "Aquí", "Allí", "Quien", "Quienes", "Cual", "Cuales", "Cuanto",
+        "Yo", "Tú", "Él", "Ella", "Usted", "Nosotros", "Vosotros",
+        "Ellos", "Ellas", "Este", "Esta", "Estos", "Estas",
+        "Ese", "Esa", "Esos", "Esas",
+        "Aquel", "Aquella", "Aquellos", "Aquellas", "Aquí", "Allí",
+        "Quien", "Quienes", "Cual", "Cuales", "Cuanto",
 
-        # Adverbs & Transitions (crucial for Ud. heuristic robustness)
-        "Pero", "Entonces", "Así que", "Asi que", "Sin embargo", "Luego", "Además", "Aunque",
-        "Afortunadamente", "Desafortunadamente", "Lamentablemente", "Felizmente", "Tristemente",
-        "Sinceramente", "Atentamente", "Posiblemente", "Probablemente", "Seguramente",
-        "Evidentemente", "Obviamente", "Claramente", "Efectivamente", "Realmente",
-        "Verdaderamente", "Francamente", "Principalmente", "Generalmente", "Normalmente",
-        "Especialmente", "Particularmente", "Finalmente", "Inicialmente", "Anteriormente",
-        "Posteriormente", "Últimamente", "Recientemente", "Actualmente", "Brevemente",
-        "Curiosamente", "Increíblemente", "Sorprendentemente", "Casualmente", "Aparentemente",
-        "Supuestamente", "Teóricamente", "Básicamente", "Fundamentalmente", "Técnicamente",
-        "Prácticamente", "Literalmente", "Exactamente", "Precisamente", "Inmediatamente",
-        "Rápidamente", "Lentamente", "Súbitamente", "Repentinamente", "Inesperadamente",
-        "Constantemente", "Frecuentemente", "Ocasionalmente", "Raramente", "Apenas",
-        "Bastante", "Demasiado", "Mucho", "Poco", "Muy", "Tan", "Tanto", "Más", "Menos",
-        "Mejor", "Peor", "Igual", "Diferente", "Aparte", "Incluso", "También", "Tampoco",
-        "Sino", "Solo", "Solamente", "Únicamente", "Exclusivamente", "Inclusive", "Salvo",
-        "Excepto", "Mientras", "Entretanto", "Ahora", "Después", "Antes", "Temprano", "Tarde",
-        "Pronto", "Aún", "Todavía", "Ya", "Nunca", "Jamás", "Siempre", "Ayer", "Hoy", "Mañana",
-        "Anoche", "Anteayer", "Quizás", "Quizas", "Quizá", "Tal vez", "Ojalá", "Casi",
+        # Inverted punctuation (always start a new sentence in Spanish)
+        "¿", "¡",
+
+        # Adverbs & Transitions
+        "Pero", "Entonces", "Así que", "Sin embargo", "Luego", "Además",
+        "Aunque", "Tampoco", "También", "Incluso", "Solo", "Solamente",
+        "Más", "Menos", "Mejor", "Peor", "Mientras", "Ahora", "Después",
+        "Antes", "Temprano", "Tarde", "Pronto", "Siempre", "Nunca", "Jamás",
+        "Ya", "Aún", "Todavía", "Ayer", "Hoy", "Mañana", "Anoche",
+        "Quizás", "Quizá", "Tal vez", "Ojalá", "Casi",
+        "Finalmente", "Generalmente", "Normalmente", "Realmente",
+        "Seguramente", "Probablemente", "Lamentablemente", "Afortunadamente",
 
         # Prepositions & Interrogatives
-        "¿", "¡", "Por", "Para", "Como", "Cuando", "Donde", "A", "Ante", "Bajo", "Cabe",
-        "Con", "Contra", "De", "Desde", "Durante", "En", "Entre", "Hacia", "Hasta",
-        "Mediante", "Según", "Sin", "So", "Sobre", "Tras", "Vía", "Versus",
-        "Qué", "Quién", "Cuál", "Cuánto", "Cómo", "Cuándo", "Dónde", "Porqué", "Porque",
+        "Por", "Para", "Como", "Cuando", "Donde", "De", "Desde", "Durante",
+        "En", "Entre", "Hacia", "Hasta", "Mediante", "Según", "Sin", "Con",
+        "Sobre", "Tras", "Qué", "Quién", "Cuál", "Cuánto", "Cómo", "Cuándo",
+        "Dónde", "Porqué", "Porque",
 
-        # Verbs and auxiliaries
-        "Es", "Son", "Era", "Eran", "Fue", "Fueron", "Hay", "Tiene", "Tienen", "Está", "Están",
-        "Había", "Habían", "Hubo", "Hubieron", "Estaba", "Estaban", "Estuvo", "Estuvieron", "Estuviera", "Estuvieran",
-
+        # Verbs / auxiliaries
+        "Es", "Son", "Era", "Eran", "Fue", "Fueron", "Hay", "Tiene",
+        "Tienen", "Está", "Están", "Había", "Hubo", "Estaba", "Estuvo",
     }
     @classmethod
     def _compile_regex_dynamically(cls):
