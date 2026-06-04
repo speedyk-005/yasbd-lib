@@ -4,7 +4,7 @@
 </div>
 
 [![Python Version](https://img.shields.io/badge/Python-3.11%20--%203.14-blue)](https://www.python.org/downloads/)
-[![PyPI](https://img.shields.io/pypi/v/yasbd-lib)](https://pypi.org/project/yasbd-lib)
+[![PyPI](https://img.shields.io/pypi/v/yasbd-lib?kill_cache=1)](https://pypi.org/project/yasbd-lib)
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/yasbd-lib?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/yasbd-lib)
 [![Coverage Status](https://coveralls.io/repos/github/speedyk-005/yasbd-lib/badge.svg?branch=main&kill_cache=1)](https://coveralls.io/github/speedyk-005/yasbd-lib?branch=main)
 [![Stability](https://img.shields.io/badge/stability-alpha-red)](https://github.com/speedyk-005/yasbd-lib)
