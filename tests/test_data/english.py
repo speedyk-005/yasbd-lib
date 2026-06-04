@@ -11,7 +11,7 @@ TEST_DATA = [
     "Her email is Jane.Doe@example.com.| I sent her an email.",
     "The site is: https://www.example.50.com/new-site/awesome_content.html.| Please check it out.",
 
-    # Abbreviations
+    # -- Abbreviations --
     "My name is Jonas E. Smith.",
     "Please turn to p. 55.",
     "Were Jane and co. at the party?",
@@ -41,6 +41,11 @@ TEST_DATA = [
     "You can find it at N°. 1026.253.553.| That is where the treasure is.",
     "We make a good team, you and I.| Did you see Albert I. Jones yesterday?",
     "He left the bank at 6 P.M.| Mr. Smith then went to the store.",
+
+    # scientific units (fix for #33)
+    "Each tick denotes an increase of 100 meV.| Each data point follows.",
+    "The supply reached 10 kV.| Measurements continued.",
+    "The frequency was 20 MHz.| The receiver locked.",
     # day-month (fix for #29)
     "The meeting is at 9 a.m. Monday.",
     "The event starts at 11a.m. Tue.",
