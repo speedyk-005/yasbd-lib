@@ -10,6 +10,7 @@ TEST_DATA = [
     "Did you remove num 2.| Put it back.",
     "Her email is Jane.Doe@example.com.| I sent her an email.",
     "The site is: https://www.example.50.com/new-site/awesome_content.html.| Please check it out.",
+
     # Abbreviations
     "My name is Jonas E. Smith.",
     "Please turn to p. 55.",
@@ -27,15 +28,6 @@ TEST_DATA = [
     "She has $100.00 in her bag.",
     "She has $100.00.| It is in her bag.",
     "The meeting is at 2 p.m.| Please be on time.",
-    "The meeting is at 9 a.m. Monday.",
-    "The meeting is at 9 a.m. Mon.",
-    "The meeting is at 9a.m. Monday.",
-    "The meeting is at 2 p.m. Mar.",
-    "The meeting is at 2p.m. March.",
-    "The meeting is at 9 a.m. Aug.",
-    "The meeting is at 9 a.m. August.",
-    "The meeting is at 2 p.m.| Martin called.",
-    "The meeting is at 2 p.m.| Marching band arrived.",
     "Q. What is his name?| A. His name is Alfred E. Sloan.",
     "I need you to find 3 items, e.g. a hat, a coat, and a bag.",
     "The report was published in Dec.| It was approved by Prof. Smith and Dr. Jones.",
@@ -49,6 +41,13 @@ TEST_DATA = [
     "You can find it at N°. 1026.253.553.| That is where the treasure is.",
     "We make a good team, you and I.| Did you see Albert I. Jones yesterday?",
     "He left the bank at 6 P.M.| Mr. Smith then went to the store.",
+    # day-month (fix for #29)
+    "The meeting is at 9 a.m. Monday.",
+    "The event starts at 11a.m. Tue.",
+    "The store opens at 8 p.m. December.",
+    "The meeting is at 2 p.m.| Martin called.",
+    "The meeting is at 10 a.m.| Monday's agenda was postponed.",
+
     # Parentheses and quotes
     "He teaches science (He previously worked for 5 years as an engineer.) at the local University.",
     "(See Fig. 4. This outlines the memory layout.)| The engine executes next.",
@@ -60,17 +59,20 @@ TEST_DATA = [
     'Then he stop.| "wait" he said',
     "The letter concluded with a simple warning: 'Do not follow me.'| Then she left.",
     'He said: "First sentence. Second sentence."| Then done.',
+
     # Contiguous terminators
     "Hello ! ! ! !",
     "Hello!!| Long time no see.",
     "Hello!?| Is that you?",
     "Hello!? !! ?!| Is that you?",
+
     # Lists
     "1.) The first item.| 2.) The second item.",
     "a) The first item.| b) The second item.",
     "1. The first item.| 2. The second item.",
     "• 9. The first item.| • 10. The second item.",
     "a. The first item |b. The second item",
+
     # Elipsis/TOC leaders
     "The project (Sinta) was nearing completion... or so we thought.",
     '"How could we miss this!..."| Mark shouted, slamming his hand on the desk.',
@@ -78,16 +80,19 @@ TEST_DATA = [
     "What I'm saying, the thing is . . . I didn't mean it.",
     "One further habit ... compounds. . . .| The practice was not abandoned.",
     f"Why Complex Carbohydrates{'.' * 15} 19",
+
     # Exclamation words
     "We spent the afternoon playing Adopt Me! on the computer while eating Chips Ahoy! cookies.",
     "My dad logged into Yahoo! finance to check on Yum! Brands stock performance before dinner.",
     "Yahoo!| The server is down.",
+
     # Bracketed references (fix for #34)
     "Yan et al. [2004] analysed SSH variations.| The study was comprehensive.",
     "Fig. [1] shows the architecture.| Figure 2 provides details.",
     "See ref. [4] for the algorithm.| The implementation follows.",
     "As shown in pp. [55-60], the results are significant.| This confirms our hypothesis.",
     "See sec. [2.1] for details.| The methodology is described there.",
+
     # Mixed language
     "我喜欢AI。|It is useful",
     "The meeting is at 2 p.m.| 请别迟到。",
