@@ -335,7 +335,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@speedyk-005](https://github.com/speedyk-005)** | Maintainer & Creator |
 | **[@JheanLL](https://github.com/JheanLL)** | Trie prototype design & Spanish rule contributions |
 | **[@Jah-yee](https://github.com/Jah-yee)** | Community contributor |
-| **[@Rajesh270712](https://github.com/Rajesh270712)** | English rule contributions |
+| **[@Rajesh270712](https://github.com/Rajesh270712)** | Base + English rule contributions |
 
 Interested in contributing? See the [**Contributing Guide**](https://github.com/speedyk-005/yasbd-lib/blob/main/CONTRIBUTING.md) to get started!
 
