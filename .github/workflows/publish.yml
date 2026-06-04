@@ -11,6 +11,7 @@ jobs:
 
     permissions:
       id-token: write  # required for PyPI trusted publishing (OIDC)
+      contents: write  # REQUIRED to create a GitHub Release
 
     environment:
       name: pypi  # must match PyPI trusted publisher config
@@ -34,6 +35,18 @@ jobs:
             echo "Version mismatch: tag=$TAG pyproject=$VERSION"
             exit 1
           fi
+
+      - name: Build package
+        run: python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: yasbd-lib ${{ github.ref_name }}
+          generate_release_notes: true
 
       - name: Build package
         run: python -m build
