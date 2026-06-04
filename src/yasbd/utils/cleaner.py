@@ -1,5 +1,5 @@
 import re
-from collections.abc import Iterator
+from collections.abc import Iterator, Collection
 from io import TextIOBase
 
 import ftfy
@@ -124,17 +124,21 @@ class StreamCleaner(StreamCleanerStub):
         ["Don't be naïve"]
         >>> list(StreamCleaner(""))
         []
+        >>> StreamCleaner("Hello world", steps_to_skip=["nothing"])
+        Traceback (most recent call last):
+        ...
+        ValueError: Invalid step(s) to skip: ...
     """
 
     @validate_input
     def __init__(
-        self, source: str | TextIOBase, steps_to_skip: list[str] | None = None
+        self, source: str | TextIOBase, steps_to_skip: Collection[str] | None = None
     ) -> None:
         """Implements the iterator protocol. Yields cleaned paragraph strings.
 
         Args:
             source: Plain text string or open text stream (e.g., ``StringIO``).
-            steps_to_skip: A list of steps to ignore. All steps will run if not provided.
+            steps_to_skip: A collection of steps to ignore. All steps will run if not provided.
                 choices are:
                     - fix_mojibake
                     - fix_ocr_text
@@ -145,7 +149,14 @@ class StreamCleaner(StreamCleanerStub):
         if isinstance(source, (str, TextIOBase)):
             source = ParagraphStream(source, skip_empty_lines=True)
         self._source = iter(source)
-        self.steps_to_skip = steps_to_skip if steps_to_skip else []
+        self.steps_to_skip = set(steps_to_skip or ())
+
+        invalid_steps = self.steps_to_skip - set(CLEANING_PIPELINE)
+        if invalid_steps:
+            raise ValueError(
+                f"Invalid step(s) to skip: {', '.join(sorted(invalid_steps))}. "
+                f"Valid steps are: {', '.join(CLEANING_PIPELINE.keys())}"
+            )
 
     def __iter__(self) -> Iterator[str]:
         return self
