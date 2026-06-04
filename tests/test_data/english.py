@@ -41,6 +41,12 @@ TEST_DATA = [
     "You can find it at N°. 1026.253.553.| That is where the treasure is.",
     "We make a good team, you and I.| Did you see Albert I. Jones yesterday?",
     "He left the bank at 6 P.M.| Mr. Smith then went to the store.",
+    # day-month (fix for #29)
+    "The meeting is at 9 a.m. Monday.",
+    "The event starts at 11a.m. Tue.",
+    "The store opens at 8 p.m. December.",
+    "The meeting is at 2 p.m.| Martin called.",
+    "The meeting is at 10 a.m.| Monday's agenda was postponed.",
 
     # Parentheses and quotes
     "He teaches science (He previously worked for 5 years as an engineer.) at the local University.",

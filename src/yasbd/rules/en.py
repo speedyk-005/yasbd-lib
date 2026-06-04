@@ -61,6 +61,17 @@ class EnRules(Rules):
         "Cabinet", "Parliament", "Commons",
     }
 
+    DATE_WORDS = {
+        # Months
+        "january", "february", "march", "april", "june", "july",
+        "august", "september", "october", "november", "december",
+        # "May" is intentionally omitted because it is also a common modal verb.
+
+        # Days
+        "monday", "tuesday", "wednesday", "thursday", "friday",
+        "saturday", "sunday",
+    }
+
     @classmethod
     def _compile_regex_dynamically(cls):
         """Override base regex compilation to fix geopolitical split when used as adj"""
@@ -78,6 +89,15 @@ class EnRules(Rules):
                 (?=\s+(?:{_build_abbr_pattern(cls.ORG_PROPER_NOUNS)}))
                 """, re.X
             ),
+
+            # Time abbreviations followed by a date token (e.g., 9 a.m. Monday)
+            re.compile(rf"""
+                (?:(?<=\d)|\b)(?i:[ap]\.m\.)
+                (?=
+                    \s+(?i:{_build_abbr_pattern(cls.DATE_ABBRVS | cls.DATE_WORDS)})
+                    (?:\.|\s|$)
+                )
+            """, re.X),
         ])
 
         # Street abbrv followed by a common starters

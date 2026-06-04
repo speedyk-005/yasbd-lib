@@ -100,7 +100,7 @@ class Rules:
 
     DATE_ABBRVS = {
         # Months
-        "jan", "feb", "mar", "apr", "jun", "jul", "sep",
+        "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep",
         "sept", "oct", "nov", "dec", "déc",
 
         # Day
@@ -266,7 +266,6 @@ class Rules:
                """, re.X
             ),
         ]
-        # fmt: on
 
         # https://regex101.com/r/EGkRU8/6
         cls.QUOTE_AND_PAREN_END_FINDER = re2.compile(
@@ -287,6 +286,7 @@ class Rules:
         # https://regex101.com/r/ffqwjh/2
         cls.CONTIGUOUS_TERMINATORS_FINDER = re.compile(rf"(?:\s*+[{cls.TERMINATORS_PATTERN}]){{2,}}")
 
+    # fmt: on
     def _remove_quote_and_paren_spans(
         self,
         main_boundaries: set[int],
