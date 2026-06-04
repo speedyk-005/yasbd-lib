@@ -23,6 +23,11 @@ class EsRules(Rules):
         "cf", "incl", "cía", "s",
     }
 
+    HEADING_TOKENS = Rules.HEADING_TOKENS | {
+    "Artículo", "Anexo", "Capítulo", "Sección", "Subsección", "Unidad",
+    "Módulo", "División",
+    }
+
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS - {"ave"} | {
         "ej", "p.ej", "vid", "cll", "cra", "diag", "transv", "mz", "mza", "lt",
         "urb", "asent", "dpto", "prov", "mnpio", "conj", "edif", "ofic", "km",

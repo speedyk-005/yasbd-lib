@@ -100,7 +100,8 @@ class Rules:
 
     HEADING_TOKENS = {
         "Part", "Parte", "Section", "Subsection", "Article",
-        "Module", "Division", "Usage", "Unit",
+        "Module", "Division", "Usage", "Unit", "Volume",
+        "Preface",  "Introduction",
     }
 
     DATE_ABBRVS = {

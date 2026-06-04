@@ -26,6 +26,8 @@ class EnRules(Rules):
         "appt",
     }
 
+    HEADING_TOKENS = Rules.HEADING_TOKENS | {"Chapter", "Appendix",}
+
     COMMON_SENT_STARTERS = {
         # Articles
         "The", "A", "An",
