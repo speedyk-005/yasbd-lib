@@ -7,21 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.4] - 2026-06-03
+## [0.1.4] - 2026-06-04
 
 ### Added
-- **`_post_process_boundaries` hook**: Language-specific boundary filtering without touching regex patterns.
+- **`_post_process_boundaries` hook** [#39]((https://github.com/speedyk-005/yasbd-lib/pull/39)): Language-aware sentence boundary correction without modifying regex core pipeline.
+- **StreamCleaner step pipeline control (`steps_to_skip`)** [#41]((https://github.com/speedyk-005/yasbd-lib/pull/41)): Selectively disable cleanup stages like OCR normalization, HTML sanitization, whitespace normalization, and mojibake correction.
 
 ### Changed
-- **Class-attributed regex patterns**: Promoted local pattern vars to class attrs in `base.py`; en/ja override geopolitical rule.
-- **STREET_ABBRVS merged into MID_SENTENCE_ABBRVS**: Street abbreviations now hard never-splits; English re-adds boundaries via `_post_process_boundaries` when followed by common sentence starter. (Co-authored by [@JheanLL](https://github.com/JheanLL))
-- **`COMMON_ORG_NOUNS` renamed to `ORG_PROPER_NOUNS`**: Renamed and scoped to proper nouns only.
-- **Geopolitical abbreviations uppercased**: All `GEOPOLITICAL_ABBRVS` entries converted to uppercase across languages.
+- **Regex architecture refactor in `base.py`**: Promoted local regex patterns into class-level attributes for consistency and reuse.
+- **`STREET_ABBRVS` merged into `MID_SENTENCE_ABBRVS`**: Street abbreviations are now strictly non-splitting; English restores boundary logic via post-processing hook.
+- **`COMMON_ORG_NOUNS` renamed to `ORG_PROPER_NOUNS`**: Renamed and restricted to proper nouns only.
+- **Geopolitical abbreviations normalization**: Standardized casing across languages for consistent detection behavior.
 
 ### Fixed
-- **Japanese over-matching lookahead**: Pattern always matched; dropped `\b` (incompatible between CJK and full-width Latin).
-- **Spanish Ud./Vd. heuristic**: Don't split after `Ud.`/`Vd.` if next word is not a common starter (e.g., `Ud. Marco` stays together, `Ud. Mañana` splits). ([#31](https://github.com/speedyk-005/yasbd-lib/pull/31), [@JheanLL](https://github.com/JheanLL))
-- **Opening bracket in reference abbreviation lookahead**: Added `[` to the lookahead character set. ([#35](https://github.com/speedyk-005/yasbd-lib/pull/35), [@RoomWithOutRoof](https://github.com/RoomWithOutRoof))
+- **Sentence splitting bug after `a.m./p.m.` + date tokens** ([#40](https://github.com/speedyk-005/yasbd-lib/pull/40)): Prevented incorrect segmentation when time tokens precede month/day expressions.
+- **Japanese over-matching boundary logic**: Removed invalid `\b` dependency in CJK context.
+- **Spanish `Ud.` / `Vd.` context splitting issue** ([#31](https://github.com/speedyk-005/yasbd-lib/pull/31)): Prevents incorrect sentence break when followed by proper nouns.
+- **Reference abbreviation bracket edge case** ([#35](https://github.com/speedyk-005/yasbd-lib/pull/35)): Added `[` to lookahead set to prevent false boundary triggers.
+- **Time-date pipeline cleanup (English-specific logic)** ([#40](https://github.com/speedyk-005/yasbd-lib/pull/40)): Ensures time/date handling is isolated to English rules without affecting other languages.
 
 ## [0.1.3] - 2026-06-01
 
@@ -36,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Expanded abbreviation coverage**: Dozens of new abbreviations across all categories (TITLE, REFERENCE, DATE, MID_SENTENCE, STREET, NAMES_WITH_EXCLAMATION).
 
 ### Changed
-- **Trie-based pattern building**: Replaced sorted `"|".join()` with `retrie.Trie` for optimized abbreviation regex generation.
+- **Trie-based pattern building** [Commit 2c2f7df]((https://github.com/speedyk-005/yasbd-lib/commit/2c2f7dfbeac91162c25df4ea5c2d17ea4150fdd7)): Replaced sorted `"|".join()` with `retrie.Trie` for optimized abbreviation regex generation.
 - **Benchmarks rewrite**: Cold/warm tables and all 8 scenario tables updated with real measured timings; accuracy table and conclusion added.
 - **Abbreviation redistribution**: Moved shared abbreviations (`fr`, `ing`, `messrs`, `mlle`, `mme`, etc.) from language-specific rules to base class; added language-specific additions in en.py, fr.py, es.py.
 - **Pydantic lower bound relaxed**: `>=2.11.0` (was `>=2.12.2`).
@@ -50,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.1] - 2026-05-30
 
 ### Fixed
-- **Single-quote dialog**: No longer splits before the dialogue tag (e.g., `'Is this great?' she said.`). ([#23])
+- **Single-quote dialog** ([#23](https://github.com/speedyk-005/yasbd-lib/issues/34 )): No longer splits before the dialogue tag (e.g., `'Is this great?' she said.`).
 - **Ellipsis mid-thought**: Three-dot ellipsis (`...`) no longer splits mid-sentence. Only four dots are sentence boundaries.
 - **Initialism detection**: Pronoun `I` no longer triggers false splits in names like `Albert I. Jones`.
 - **N° reference**: Added to reference abbreviations to prevent split in `N°. 1026.253.553.`
