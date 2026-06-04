@@ -14,7 +14,7 @@ TEST_DATA = [
 
     # structural headings
     "Chapit 1. Kòmansman an.| Li te fè nwa deyò.| Pa t gen anyen k ap bouje.",
-    "Pati II. Entwodiksyon.| Sistèm nan kòmanse isit la.| Inisyalizasyon swiv."
+    "Pati II. Entwodiksyon.| Sistèm nan kòmanse isit la.| Inisyalizasyon swiv.",
     "Rapò a fini.| Chapit 3. Rezilta ak analiz.| Gen amelyorasyon klè.",
 
     # Parentheses and quotes
