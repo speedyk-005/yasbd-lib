@@ -24,6 +24,9 @@ class LangRules(Rules):
     # Citation and reference abbreviations commonly used mid-text.
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {...}
 
+    # structural headings (e.g., Section, Chapter, etc.).
+    HEADING_TOKENS = Rules.HEADING_TOKENS | {...}
+
     # Common inline abbreviations that should not end a sentence (e.g., Blvd., etc.).
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {...}
 

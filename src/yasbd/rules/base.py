@@ -98,6 +98,11 @@ class Rules:
         "et al", "s", "univ",
     }
 
+    HEADING_TOKENS = {
+        "Part", "Parte", "Section", "Subsection", "Article",
+        "Module", "Division", "Usage", "Unit",
+    }
+
     DATE_ABBRVS = {
         # Months
         "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep",
@@ -265,6 +270,13 @@ class Rules:
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                """, re.X
             ),
+
+            # structural headings (e.g., "Section 1. The Beginning.")
+            re.compile(r"""
+                ^\s*(?:_build_abbr_pattern({cls.HEADING_TOKENS}))\w+
+                \s+(?:[\dIVXLCDM]+\.){1,3}
+                """, re.X | re.M
+            )
         ]
 
         # https://regex101.com/r/EGkRU8/6
