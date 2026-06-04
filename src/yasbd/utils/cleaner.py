@@ -1,5 +1,5 @@
 import re
-from collections.abc import Iterator, Collection
+from collections.abc import Collection, Iterator
 from io import TextIOBase
 
 import ftfy
@@ -78,7 +78,7 @@ NO_SPACE_BETWEEN_SENTENCES_FINDER = re.compile(r"(?<=\w\.)(?=[A-Z][a-z])")
 CONSECUTIVE_FORWARD_SLASH_FINDER = re.compile(r"\/{3}")
 
 
-def _clean_ocr_text(text: str):
+def _clean_ocr_text(text: str) -> str:
     cleaned_text = text.replace("''", '"')
     cleaned_text = NEWLINE_IN_MIDDLE_OF_WORD_FINDER.sub("", cleaned_text)
     cleaned_text = NEWLINE_FOLLOWED_BY_PERIOD_FINDER.sub("", cleaned_text)
@@ -93,12 +93,12 @@ def _clean_ocr_text(text: str):
 CLEANING_PIPELINE = {
     "fix_mojibake": ftfy.fix_text,
     "fix_ocr_text": _clean_ocr_text,
-    "unwrap_htmls": lambda t: (t if not "<" in t else HTML_TAGS_FINDER.sub("", t)),
+    "unwrap_htmls": lambda t: t if "<" not in t else HTML_TAGS_FINDER.sub("", t),
     "normalize_slashes": lambda t: (
-        t if not "///" in t else CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", t)
+        t if "///" not in t else CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", t)
     ),
     "normalize_spaces": lambda t: (
-        t if not " " in t else MULTIPLE_SPACES_FINDER.sub(" ", t)
+        t if " " not in t else MULTIPLE_SPACES_FINDER.sub(" ", t)
     ),
 }
 
@@ -151,8 +151,7 @@ class StreamCleaner(StreamCleanerStub):
         self._source = iter(source)
         self.steps_to_skip = set(steps_to_skip or ())
 
-        invalid_steps = self.steps_to_skip - set(CLEANING_PIPELINE)
-        if invalid_steps:
+        if invalid_steps := self.steps_to_skip - set(CLEANING_PIPELINE):
             raise ValueError(
                 f"Invalid step(s) to skip: {', '.join(sorted(invalid_steps))}. "
                 f"Valid steps are: {', '.join(CLEANING_PIPELINE.keys())}"

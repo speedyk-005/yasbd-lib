@@ -275,7 +275,7 @@ Common cleanup operations include:
 - Rejoining hyphenated words split across lines
 - Merging vertically stacked characters
 
-Individual cleanup steps can be disabled:
+Individual cleanup steps can be disabled by provided a collection of steps to skip:
 
 ```python
 cleaner = StreamCleaner(
