@@ -1,6 +1,6 @@
 [project]
 name = "yasbd-lib"
-version = "0.1.3"
+version = "0.1.4"
 description = "A high-accuracy, from-scratch Sentence Boundary Detector (SBD) for production pipelines. Features a drop-in adapter for pysbd to fix edges cases without heavy refactoring."
 authors = [
   { name = "speedyk_005", email = "speedy40115719@gmail.com" }
