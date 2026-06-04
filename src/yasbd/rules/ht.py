@@ -8,6 +8,10 @@ class HtRules(Rules):
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {"sek"} - {"ex", "exs", "tab"}
     DATE_ABBRVS = Rules.DATE_ABBRVS | {"okt", "fev", "des"}
 
+    HEADING_TOKENS = Rules.HEADING_TOKENS | {
+        "Chapit", "Pati", "Seksyon", "Atik", "Inite", "Modil", "Divizyon"
+    }
+
     COMMON_SENT_STARTERS = {
         # Pronouns
         "Mwen", "Nou", "Ou", "Li", "Yo", "Sa", "Sila",

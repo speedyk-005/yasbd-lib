@@ -20,6 +20,10 @@ class FrRules(Rules):
         "ms", "pl", "pref", "suppl", "suiv", "t", "trad",
     }
 
+    HEADING_TOKENS = Rules.HEADING_TOKENS | {
+        "Annexe", "Chapitre", "Sous-section", "Unité",  "Préface",
+    }
+
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {
         # Bridge/connectors
         "c.-à-d", "c-à-d", "c-a-d", "p.ex", "n.b", "p.s", "éts", "sté", "ste",

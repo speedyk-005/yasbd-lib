@@ -98,6 +98,12 @@ class Rules:
         "et al", "s", "univ",
     }
 
+    HEADING_TOKENS = {
+        "Part", "Parte", "Section", "Subsection", "Article",
+        "Module", "Division", "Usage", "Unit", "Volume",
+        "Preface",  "Introduction",
+    }
+
     DATE_ABBRVS = {
         # Months
         "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep",
@@ -231,7 +237,7 @@ class Rules:
 
         # fmt: off
         # Faster than one big regex
-        # https://regex101.com/r/svyCoU/20
+        # https://regex101.com/r/svyCoU/21
         cls.MID_SENTENCE_FINDER_LST = [
             # Title abbrv or initialisms (e.g., Dr. Paul)
             re.compile(rf"\b(?i:{cls.TITLE_ABBRVS_PATTERN}){cls.DOTS_PATTERN}"),
@@ -265,6 +271,13 @@ class Rules:
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                """, re.X
             ),
+
+            # structural headings (e.g., "Section 1. The Beginning.")
+            re.compile(rf"""
+                \b(?:{_build_abbr_pattern(cls.HEADING_TOKENS)})\s+
+                (?:[\dIVXLCDM]+{cls.DOTS_PATTERN}){{1,3}}
+                """, re.X
+            )
         ]
 
         # https://regex101.com/r/EGkRU8/6
