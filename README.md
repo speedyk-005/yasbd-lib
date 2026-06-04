@@ -81,8 +81,8 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 - TOC leader suppression
 - List marker re-alignmen
 - Contiguous terminator collapsing
+- Language specifical final fixups
 
-Then a **_post_process_boundaries hook** lets each language file apply final fixups.
 ---
 
 ## 🏁 Benchmarks
