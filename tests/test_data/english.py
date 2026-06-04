@@ -41,6 +41,10 @@ TEST_DATA = [
     "You can find it at N°. 1026.253.553.| That is where the treasure is.",
     "We make a good team, you and I.| Did you see Albert I. Jones yesterday?",
     "He left the bank at 6 P.M.| Mr. Smith then went to the store.",
+    # scientific units (fix for #33)
+    "Each tick denotes an increase of 100 meV.| Each data point follows.",
+    "The supply reached 10 kV.| Measurements continued.",
+    "The frequency was 20 MHz.| The receiver locked.",
 
     # Parentheses and quotes
     "He teaches science (He previously worked for 5 years as an engineer.) at the local University.",
