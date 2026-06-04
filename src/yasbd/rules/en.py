@@ -93,7 +93,10 @@ class EnRules(Rules):
             # Time abbreviations followed by a date token (e.g., 9 a.m. Monday)
             re.compile(rf"""
                 (?:(?<=\d)|\b)(?i:[ap]\.m\.)
-                (?=\s+(?i:{_build_abbr_pattern(cls.DATE_ABBRVS | cls.DATE_WORDS)})\b)
+                (?=
+                    \s+(?i:{_build_abbr_pattern(cls.DATE_ABBRVS | cls.DATE_WORDS)})
+                    (?:\.|\s|$)
+                )
             """, re.X),
         ])
 
