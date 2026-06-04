@@ -7,11 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.4] - 2026-06-03
+## [0.1.4] - 2026-06-04
 
 ### Added
-- **`_post_process_boundaries` hook**: Language-aware sentence boundary correction without modifying regex core pipeline.
-- **StreamCleaner step pipeline control (`steps_to_skip`)**: Selectively disable cleanup stages like OCR normalization, HTML sanitization, whitespace normalization, and mojibake correction.
+- **`_post_process_boundaries` hook** [#39]((https://github.com/speedyk-005/yasbd-lib/pull/39)): Language-aware sentence boundary correction without modifying regex core pipeline.
+- **StreamCleaner step pipeline control (`steps_to_skip`)** [#41]((https://github.com/speedyk-005/yasbd-lib/pull/41)): Selectively disable cleanup stages like OCR normalization, HTML sanitization, whitespace normalization, and mojibake correction.
 
 ### Changed
 - **Regex architecture refactor in `base.py`**: Promoted local regex patterns into class-level attributes for consistency and reuse.
@@ -39,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Expanded abbreviation coverage**: Dozens of new abbreviations across all categories (TITLE, REFERENCE, DATE, MID_SENTENCE, STREET, NAMES_WITH_EXCLAMATION).
 
 ### Changed
-- **Trie-based pattern building**: Replaced sorted `"|".join()` with `retrie.Trie` for optimized abbreviation regex generation.
+- **Trie-based pattern building** [Commit 2c2f7df]((https://github.com/speedyk-005/yasbd-lib/commit/2c2f7dfbeac91162c25df4ea5c2d17ea4150fdd7)): Replaced sorted `"|".join()` with `retrie.Trie` for optimized abbreviation regex generation.
 - **Benchmarks rewrite**: Cold/warm tables and all 8 scenario tables updated with real measured timings; accuracy table and conclusion added.
 - **Abbreviation redistribution**: Moved shared abbreviations (`fr`, `ing`, `messrs`, `mlle`, `mme`, etc.) from language-specific rules to base class; added language-specific additions in en.py, fr.py, es.py.
 - **Pydantic lower bound relaxed**: `>=2.11.0` (was `>=2.12.2`).
