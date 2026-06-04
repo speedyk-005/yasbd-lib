@@ -33,8 +33,9 @@
   - [Want to Help Make yasbd Even Better?](#want-to-help-make-yasbd-even-better)
 - [📟 Usage](#-usage)
   - [Initialization](#initialization)
-  - [Boundary detection](#boundary-detection)
-  - [Segmentation](#segmentation)
+  - [Core Methods](#core-methods)
+      - [Boundary detection](#boundary-detection)
+      - [Segmentation](#segmentation)
   - [Cleaner](#cleaner)
   - [Adapter](#adapter)
 - [🗺 Features & Roadmap](#-features--roadmap)
@@ -179,7 +180,15 @@ detector.lang = "es"
 
 The rule module loads lazily on first access. Switching mid-stream reimports the module and rebinds the pattern cache. Zero config, no restarts needed.
 
-### Boundary detection
+### Core Methods
+The two primary APIs are detect() and segment().
+
+Both methods accept plain strings, open text streams (TextIOBase), or a StreamCleaner instance. Inputs are processed lazily as a stream of paragraphs, allowing large documents to be handled without loading everything into memory at once.
+
+- `detect()` yields sentence boundary offsets.
+- `segment()` yields sentence strings.
+
+#### Boundary detection
 
 [`detect()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-boundary_detector-BoundaryDetector-detect) tells you where each sentence stops. Integer offsets into the original input stream.
 
@@ -204,7 +213,7 @@ print(res)
 # [25, 48, ParagraphEOF, 27]
 ```
 
-### Segmentation
+#### Segmentation
 
 If you do not want to manage boundary offsets yourself (and who would?), [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-boundary_detector-BoundaryDetector-segment) slices text for you.
 
@@ -226,21 +235,19 @@ print(res)
 ```
 
 > [!TIP]
-> **Inputs & streaming** — `detect()` and `segment()` accept plain strings, open file streams (`TextIOBase`), or a `StreamCleaner`. Both are generators: they yield results lazily without loading the entire source into memory. Internally, the text is split on blank lines into paragraphs, and each paragraph is processed independently with offset tracking between them.
-
-> [!TIP]
 > **ParagraphStream** — yasbd uses [`ParagraphStream`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-utils-paragraph_stream-ParagraphStream) internally to split text into paragraph blocks. You can import it directly if you need paragraph-level processing in your own code:
 > ```python
 > from yasbd.utils.paragraph_stream import ParagraphStream
 >
-> for para in ParagraphStream(text):
+> for para in ParagraphStream(text):  # or an opened file
 >     print(para)  # each paragraph block
 > ```
 > You can also skip empty lines with `skip_empty_lines=True`
 
 ### Cleaner
 
-OCRd a PDF or scraping noisy text? [`StreamCleaner`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-utils-cleaner-StreamCleaner) normalizes paragraphs before they hit the detector.
+OCR'd a PDF, parsed a DOCX, or scraped noisy HTML? "StreamCleaner" normalizes text before it reaches the language detector or sentence segmenter.
+StreamCleaner accepts either a string or an open text stream and yields cleaned paragraphs lazily.
 
 ```python
 from yasbd.utils.cleaner import StreamCleaner
@@ -250,7 +257,44 @@ list(cleaner)
 # ['Hello world. This is messy.']
 ```
 
-It collapses multiple spaces, strips HTML tags, removes page numbers, re-joins hyphenated words split across lines, and more. Pass it directly to `detect()` or `segment()` instead of a string.
+"StreamCleaner" implements the iterator protocol and yields cleaned paragraphs one at a time. It can consume plain strings, open text files, and other text streams.
+
+```python
+from yasbd.utils.cleaner import StreamCleaner
+
+with open("document.txt", encoding="utf-8") as f:
+    for paragraph in StreamCleaner(f):
+        print(paragraph)
+```
+
+Common cleanup operations include:
+
+- Fixing mojibake and OCR artifacts
+- Removing HTML tags
+- Normalizing whitespace and repeated slashes
+- Rejoining hyphenated words split across lines
+- Merging vertically stacked characters
+
+Individual cleanup steps can be disabled by provided a collection of steps to skip:
+
+```python
+cleaner = StreamCleaner(
+    text,
+    steps_to_skip=[
+        "fix_ocr_text",
+        "normalize_spaces",
+    ],
+)
+```
+Available steps:
+
+- "fix_mojibake"
+- "fix_ocr_text"
+- "unwrap_htmls"
+- "normalize_slashes"
+- "normalize_spaces"
+
+You can pass a "StreamCleaner" instance directly to "detect()" or "segment()" to clean text as it is processed.
 
 ### Adapter
 
