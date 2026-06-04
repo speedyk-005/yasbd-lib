@@ -16,6 +16,7 @@ changelog:
         
     - title: '🛠️ Changed'
       labels:
+        - refactor
         - performance
         - python
         
