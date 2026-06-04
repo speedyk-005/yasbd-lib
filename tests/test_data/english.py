@@ -48,6 +48,11 @@ TEST_DATA = [
     "The meeting is at 2 p.m.| Martin called.",
     "The meeting is at 10 a.m.| Monday's agenda was postponed.",
 
+    # structural headings (fix for #36)
+    "Chapter 1. The Beginning.| It was dark and quiet in the room. | Nothing moved.",
+    "Section 3.1. Scope of Work.| The project covers multiple languages.",
+    "The results were inconclusive.| Chapter 3. Discussion follows immediately.| The team revised the model.",
+
     # Parentheses and quotes
     "He teaches science (He previously worked for 5 years as an engineer.) at the local University.",
     "(See Fig. 4. This outlines the memory layout.)| The engine executes next.",

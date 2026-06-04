@@ -24,6 +24,11 @@ TEST_DATA = [
     "La reunión es el lun. 15 de enero.",
     "Nació el 5 de abr. de 1990.",
 
+    # structural headings
+    "Capítulo 1. El Comienzo.| Estaba oscuro afuera. | Nada se movía.",
+    "Parte II. Introducción.| El sistema comienza aquí. | La inicialización sigue.",
+    "El informe fue completado.| Capítulo 3. Análisis de resultados.",
+
     # Addresses & Locations
     "Yo vi un ave.| ¿Lo has visto también?",
     "Vive en la Av. Siempre Viva.",

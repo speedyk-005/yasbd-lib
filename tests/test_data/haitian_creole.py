@@ -12,6 +12,11 @@ TEST_DATA = [
     "Li te fèt nan mwa janv.| Li te vini an fevriye.",
     "St. Michel se yon kote bèl.| Li toupre vil la.",
 
+    # structural headings
+    "Chapit 1. Kòmansman an.| Li te fè nwa deyò.| Pa t gen anyen k ap bouje.",
+    "Pati II. Entwodiksyon.| Sistèm nan kòmanse isit la.| Inisyalizasyon swiv."
+    "Rapò a fini.| Chapit 3. Rezilta ak analiz.| Gen amelyorasyon klè.",
+
     # Parentheses and quotes
     "Li te di (Mwen prale demen.) pandan l ap pale.",
     "Li te mande: Èske ou vini?| Mwen repon wi.",

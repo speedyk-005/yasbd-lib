@@ -16,6 +16,11 @@ TEST_DATA = [
     "Ils habitent au 5 bd. Saint-Michel.",
     "L'ambassadeur a rencontré LL. AA. le prince et la princesse.",
 
+    # structural headings
+    "Chapitre 1. Introduction.| Il faisait sombre. | Rien ne bougeait.",
+    "Partie II. Analyse.| Le système commence ici. | L’initialisation suit.",
+    "Les données ont été validées.| Chapitre 4. Méthodologie.",
+
     # Parentheses and quotes
     "Il a dit (Je viendrai demain.) pendant la réunion.",
     "Il a demandé: Êtes-vous prêt?| J'ai répondu oui.",
