@@ -237,7 +237,7 @@ class Rules:
 
         # fmt: off
         # Faster than one big regex
-        # https://regex101.com/r/svyCoU/20
+        # https://regex101.com/r/svyCoU/21
         cls.MID_SENTENCE_FINDER_LST = [
             # Title abbrv or initialisms (e.g., Dr. Paul)
             re.compile(rf"\b(?i:{cls.TITLE_ABBRVS_PATTERN}){cls.DOTS_PATTERN}"),
@@ -273,10 +273,10 @@ class Rules:
             ),
 
             # structural headings (e.g., "Section 1. The Beginning.")
-            re.compile(r"""
-                ^\s*(?:_build_abbr_pattern({cls.HEADING_TOKENS}))\w+
-                \s+(?:[\dIVXLCDM]+\.){1,3}
-                """, re.X | re.M
+            re.compile(rf"""
+                \b(?:{_build_abbr_pattern(cls.HEADING_TOKENS)})\s+
+                (?:[\dIVXLCDM]+{cls.DOTS_PATTERN}){{1,3}}
+                """, re.X
             )
         ]
 
