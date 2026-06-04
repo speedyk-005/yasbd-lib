@@ -10,8 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.4] - 2026-06-04
 
 ### Added
-- **`_post_process_boundaries` hook** [#39]((https://github.com/speedyk-005/yasbd-lib/pull/39)): Language-aware sentence boundary correction without modifying regex core pipeline.
-- **StreamCleaner step pipeline control (`steps_to_skip`)** [#41]((https://github.com/speedyk-005/yasbd-lib/pull/41)): Selectively disable cleanup stages like OCR normalization, HTML sanitization, whitespace normalization, and mojibake correction.
+- **`_post_process_boundaries` hook** ([#39](https://github.com/speedyk-005/yasbd-lib/pull/39)): Language-aware sentence boundary correction without modifying regex core pipeline.
+- **StreamCleaner step pipeline control (`steps_to_skip`)** ([#41](https://github.com/speedyk-005/yasbd-lib/pull/41)): Selectively disable cleanup stages like OCR normalization, HTML sanitization, whitespace normalization, and mojibake correction.
 
 ### Changed
 - **Regex architecture refactor in `base.py`**: Promoted local regex patterns into class-level attributes for consistency and reuse.
@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Geopolitical abbreviations normalization**: Standardized casing across languages for consistent detection behavior.
 
 ### Fixed
+- **Multilingual structural heading detection** ([#44](https://github.com/speedyk-005/yasbd-lib/pull/44)): Prevents structural headings from triggering false sentence splits in EN, ES, FR, and HT context. Fixes [#36](https://github.com/speedyk-005/yasbd-lib/issues/36).
+- **Sentence splitting after mixed-case scientific units** ([#42](https://github.com/speedyk-005/yasbd-lib/pull/42)): Fixes boundary suppression caused by treating mixed-case units (e.g., `meV.`, `kV.`) as standard abbreviations. Fixes [#33](https://github.com/speedyk-005/yasbd-lib/issues/33).
 - **Sentence splitting bug after `a.m./p.m.` + date tokens** ([#40](https://github.com/speedyk-005/yasbd-lib/pull/40)): Prevented incorrect segmentation when time tokens precede month/day expressions.
 - **Japanese over-matching boundary logic**: Removed invalid `\b` dependency in CJK context.
 - **Spanish `Ud.` / `Vd.` context splitting issue** ([#31](https://github.com/speedyk-005/yasbd-lib/pull/31)): Prevents incorrect sentence break when followed by proper nouns.
@@ -29,37 +31,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.3] - 2026-06-01
 
 ### Fixed
-- **HORIZONTAL_LIST_FINDER over-match**: Single-letter abbreviations (`p.`, `h.`, `s.`) no longer treated as alphabetic list markers. Restricted marker range to `[a-eA-E]`.
+- **Horizontal list finder over-match safety**: Restricts single-letter abbreviations (`p.`, `h.`, `s.`) from being incorrectly identified as alphabetic list markers by capping the range to `[a-eA-E]`.
 
 ## [0.1.2] - 2026-06-01
 
 ### Added
-- **EN_GOLDEN_DATA.py**: 84-case golden benchmark suite for English accuracy testing.
-- **run_golden.py**: Accuracy benchmark runner comparing all 7 libraries against the golden suite.
-- **Expanded abbreviation coverage**: Dozens of new abbreviations across all categories (TITLE, REFERENCE, DATE, MID_SENTENCE, STREET, NAMES_WITH_EXCLAMATION).
+- **English golden benchmark suite (`EN_GOLDEN_DATA.py`)**: Introduced an 84-case golden validation set for English accuracy testing.
+- **Golden benchmark execution runner (`run_golden.py`)**: Added an automated script to run accuracy comparisons across seven different libraries against the golden suite.
+- **Expanded abbreviation coverage**: Added dozens of new terms across all core abbreviation categories (TITLE, REFERENCE, DATE, MID_SENTENCE, STREET, NAMES_WITH_EXCLAMATION).
 
 ### Changed
-- **Trie-based pattern building** [Commit 2c2f7df]((https://github.com/speedyk-005/yasbd-lib/commit/2c2f7dfbeac91162c25df4ea5c2d17ea4150fdd7)): Replaced sorted `"|".join()` with `retrie.Trie` for optimized abbreviation regex generation.
-- **Benchmarks rewrite**: Cold/warm tables and all 8 scenario tables updated with real measured timings; accuracy table and conclusion added.
-- **Abbreviation redistribution**: Moved shared abbreviations (`fr`, `ing`, `messrs`, `mlle`, `mme`, etc.) from language-specific rules to base class; added language-specific additions in en.py, fr.py, es.py.
-- **Pydantic lower bound relaxed**: `>=2.11.0` (was `>=2.12.2`).
+- **Trie-based pattern compilation** ([Commit 2c2f7df](https://github.com/speedyk-005/yasbd-lib/commit/2c2f7dfbeac91162c25df4ea5c2d17ea4150fdd7)): Replaced sorted `"|".join()` with `retrie.Trie` for optimized abbreviation regex generation.
+- **Performance benchmarks rewrite**: Re-engineered cold/warm benchmarking tables, updated eight scenario tables with empirical runtimes, and appended accuracy metrics and conclusions.
+- **Abbreviation logical redistribution**: Migrated shared tokens (e.g., `fr`, `ing`, `mme`) to the base configuration, allowing language-specific inheritance to handle localized overrides.
+- **Pydantic version requirement relaxation**: Lowered the dependency constraint from `>=2.12.2` to `>=2.11.0` to maximize environment compatibility.
 
 ### Fixed
-- **`ModuleNotFoundError` masking**: `boundary_detector.py` no longer masks unrelated import errors when the language *is* found but a sub-dependency is missing.
-- **P.M. false positive**: All-caps `P.M.` no longer caught by acronym pattern; hardcoded exclusion of `p\.m` and `a\.m` in the acronym regex.
+- **Module import error resolution**: Patched `boundary_detector.py` to stop swallowing unrelated import issues when a valid language class exists but lacks a sub-dependency.
+- **PM/AM boundary false positives**: Excluded all-caps `P.M.` from being captured by the general acronym rules via targeted exclusions.
 
 ---
 
 ## [0.1.1] - 2026-05-30
 
 ### Fixed
-- **Single-quote dialog** ([#23](https://github.com/speedyk-005/yasbd-lib/issues/34 )): No longer splits before the dialogue tag (e.g., `'Is this great?' she said.`).
-- **Ellipsis mid-thought**: Three-dot ellipsis (`...`) no longer splits mid-sentence. Only four dots are sentence boundaries.
-- **Initialism detection**: Pronoun `I` no longer triggers false splits in names like `Albert I. Jones`.
-- **N° reference**: Added to reference abbreviations to prevent split in `N°. 1026.253.553.`
+- **Single-quote dialogue split bug** ([#23](https://github.com/speedyk-005/yasbd-lib/issues/34)): Fixed issues where the engine split text prematurely before a trailing dialogue tag (e.g., `'Is this great?' she said.`).
+- **Ellipsis split suppression**: Prevented three-dot ellipsis (`...`) from acting as a terminal boundary, reserving splits strictly for four-dot boundaries.
+- **Roman numeral initialism protection**: Stopped the pronoun `I` from triggering false sentence breaks in name strings like `Albert I. Jones`.
+- **Numero reference split suppression**: Added `N°.` to the reference abbreviation lexicon to prevent false breaks.
 
 ### Changed
-- **HORIZONTAL_LIST_FINDER**: Switched to `re2` for lookbehind support. Uses `\b` + negative lookbehind for capitalized words instead of requiring a terminator prefix. Supports other scripts via `\p{Ll}`.
+- **List finder regex backend migration**: Replaced standard regex search with `re2` to utilize lookbehinds, supporting non-Latin scripts via unicode class properties.
 
 ---
 
@@ -67,9 +69,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial release.
 
-- **5 languages**: English, French, Spanish, Haitian Creole, Japanese
-- **2-pass algorithm**: Pre-processing (double abbreviations, names, lists) + main split via lookbehind-based abbreviation guard
-- **Performance**: ~16.5× faster than pysbd on 10.8K character benchmarks
-- **pysbd adapter**: Drop-in `Segmenter` compatible with pysbd's API (`segment()`, `clean`, `char_span`)
-- **Dual API**: `detect()` for raw boundary offsets, `segment()` for sentence strings with `TextSpan` support
-- **Benchmarks**: 7-library comparison across 5 languages and 7 edge cases
+### Added
+- **Multilingual language engine**: Added core splitting support for 5 initial languages including English, French, Spanish, Haitian Creole, and Japanese.
+- **Two-pass boundary engine**: Implements an optimized two-pass architecture featuring pre-processing rules and a main lookbehind abbreviation guard.
+- **High-speed performance benchmark**: Tested speeds up to 16.5× faster than `pysbd` on 10.8K character benchmarking datasets.
+- **Drop-in PySBD compatibility**: Included a drop-in `Segmenter` adapter that mirrors `pysbd`'s API interface, exposing `segment()`, `clean`, and `char_span` capabilities.
+- **Flexible dual-mode API**: Exposes `detect()` for retrieving raw boundary offset slices and `segment()` for producing rich text string spans.
+- **Comprehensive benchmarking harness**: Bundles comparative analysis scripts comparing seven libraries across seven distinct edge-case scenarios.
