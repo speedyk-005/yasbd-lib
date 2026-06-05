@@ -1,6 +1,3 @@
-# English test data for yasbd
-# Format: (input_text, expected_sentences)
-
 ISO_CODE = "en"
 TEST_DATA = [
     # Basic punctuation

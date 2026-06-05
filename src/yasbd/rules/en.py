@@ -76,7 +76,7 @@ class EnRules(Rules):
 
     @classmethod
     def _compile_regex_dynamically(cls):
-        """Override base regex compilation to fix geopolitical split when used as adj"""
+        """Override base regex compilation to handle ellipsis, geopolit and time"""
         # Let the base class build the default rules first
         super()._compile_regex_dynamically()
 
