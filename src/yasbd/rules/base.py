@@ -16,30 +16,25 @@ def _build_abbr_pattern(options: set[str]) -> str:
     trie = Trie()
     return trie.add(*options).pattern()
 
-
+# fmt: off
 # Full-width geopolitical abbreviations (CJKV convention).
 # Used in mixed-script text where Latin abbreviations are rendered
 # with full-width (U+FF0E) periods instead of ASCII (U+002E).
 # Pair with CASE_MARKERS (の, 的, 의, ...) in the regex pattern to
 # suppress splits when the abbreviation is bound to a following noun.
 FULLWIDTH_GEOPOLITICAL_ABBRVS = {
-    "Ｕ．Ｓ",
-    "Ｕ．Ｓ．Ａ",
-    "Ｕ．Ｋ",
-    "Ｅ．Ｕ",
-    "Ｕ．Ｎ",
-    "Ｕ．Ｓ．Ｓ．Ｒ",
-    "Ｕ．Ａ．Ｅ",
-    "Ｐ．Ｒ．Ｃ",
-    "Ｒ．Ｏ．Ｋ",
-    "ＥＥ．ＵＵ",
-    "ＦＦ．ＡＡ",
-    "ＲＲ．ＨＨ",
-    "ＣＣ．ＡＡ",
+    "Ｕ．Ｓ", "Ｕ．Ｓ．Ａ", "Ｕ．Ｋ", "Ｅ．Ｕ", "Ｕ．Ｎ", "Ｕ．Ｓ．Ｓ．Ｒ",
+    "Ｕ．Ａ．Ｅ", "Ｐ．Ｒ．Ｃ", "Ｒ．Ｏ．Ｋ", "ＥＥ．ＵＵ", "ＦＦ．ＡＡ",
+    "ＲＲ．ＨＨ", "ＣＣ．ＡＡ", "Ｎ．Ｙ", "Ｆ．Ｂ．Ｉ",
+    
+    # Missing International Orgs & Regions
+    "Ｗ．Ｔ．Ｏ", "Ｗ．Ｈ．Ｏ", "Ｄ．Ｃ",
+    
+    # Missing Intelligence, Defense & Agencies
+    "Ｃ．Ｉ．Ａ", "Ｎ．Ｓ．Ａ", "Ｕ．Ｓ．Ｓ", "Ｕ．Ｓ．Ｎ",
 }
 
 
-# fmt: off
 class Rules:
     TERMINATORS = {"。", "．", ".", "！", "!", "？", "?", "‼", "⁉", "⁈"}
 
