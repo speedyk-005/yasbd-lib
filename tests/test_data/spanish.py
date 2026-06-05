@@ -48,6 +48,10 @@ TEST_DATA = [
     "Fui a la Cra. Para ver el desfile.",
     "Llegó el Sr. García.| Como no estaba, se fue.",
 
+    # quoted text with dashes
+    "El problema —¿y quién lo iba a decir?— fue resuelto rápido.",
+    "La decisión —¡increíblemente difícil!— cambió todo.",
+
     # Pronoun heuristic (Ud./Vd.)
     "Me dirijo a Ud. Marco, para saludarlo.",
     "Me dirijo a Ud.| Mañana le enviaré el paquete.",

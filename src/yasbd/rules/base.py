@@ -157,10 +157,11 @@ class Rules:
     # https://regex101.com/r/tI9Cmg/2
     VERTICAL_LIST_START_FINDER = re2.compile(r"(?<=^\s*(?:[\p{L}\p{N}]\.){1,3})(?=\s)")
 
-    # https://regex101.com/r/JYdWZw/4
+    # https://regex101.com/r/JYdWZw/5
     QUOTE_AND_PAREN_FINDER = re2.compile(
         r"""
-        (?:\p{Pi}|»|(?:^|(?<=[\s:]))(['""])).+?(?:\p{Pf}|«|\1)|  # Quoted text
+        (?:\p{Pi}|»|(?:^|(?<=[\s:]))(['""])).+?(?:\p{Pf}|«|\1)|  # Quoted text (quotation marks)
+        —.+?[,.!?]\s*—|          # Quoted text (dashes)
         \p{Ps}.+?\p{Pe}  # Parenthesized text
         """,
         re2.X,
