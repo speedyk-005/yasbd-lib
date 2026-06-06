@@ -271,7 +271,7 @@ def segment_and_print(text: str, lang: str = "en") -> dict[str, list[str]]:
         try:
             sents = seg.segment(text)
             results[name] = sents
-            print(f"  {name} [{lang}]:")
+            print(f"  {name} [{lang}] ({len(sents)} sents):")
             for i, s in enumerate(sents, 1):
                 print(f"    {i}: {s!r}")
             print()

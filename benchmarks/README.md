@@ -23,17 +23,15 @@ The format is simple: throw edge cases at each library. Does it split where it s
 
 Aggregate score across all 85 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOLDEN_DATA.py) via [`run_golden.py`](run_golden.py). A modified and expanded version of [pysbd's official golden rule set](https://github.com/nipunsadvilkar/pySBD/blob/master/tests/lang/test_english.py): we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, and more.
 
-```
-Library                 Score
-------------------------------
-yasbd                85/85 (100.0%)
-pysbd                72/85 ( 84.7%)
-sentencex            70/85 ( 82.4%)
-blingfire            69/85 ( 81.2%)
-sentence-splitter    56/85 ( 65.9%)
-sentsplit            55/85 ( 64.7%)
-nupunkt              53/85 ( 62.4%)
-```
+| Library | Score |
+|---|---|
+| **yasbd** | 85/85 (100.0%) |
+| pysbd | 72/85 (84.7%) |
+| sentencex | 70/85 (82.4%) |
+| blingfire | 69/85 (81.2%) |
+| sentence-splitter | 56/85 (65.9%) |
+| sentsplit | 55/85 (64.7%) |
+| nupunkt | 53/85 (62.4%) |
 
 yasbd achieves a perfect 85/85 score. The test suite was expanded to 85 cases with additional edge cases for contiguous terminators, exclamation-safe words, and mixed-script text.
 
