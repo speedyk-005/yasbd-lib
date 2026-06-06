@@ -77,6 +77,7 @@ class EsRules(Rules):
         "Es", "Son", "Era", "Eran", "Fue", "Fueron", "Hay", "Tiene",
         "Tienen", "Está", "Están", "Había", "Hubo", "Estaba", "Estuvo",
     }
+
     @classmethod
     def _compile_regex_dynamically(cls):
         """Override base regex compilation to fix pronouns abbrvs behavior."""

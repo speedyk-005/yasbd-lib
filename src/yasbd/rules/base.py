@@ -17,28 +17,6 @@ def _build_abbr_pattern(options: set[str]) -> str:
     return trie.add(*options).pattern()
 
 
-# Full-width geopolitical abbreviations (CJKV convention).
-# Used in mixed-script text where Latin abbreviations are rendered
-# with full-width (U+FF0E) periods instead of ASCII (U+002E).
-# Pair with CASE_MARKERS (の, 的, 의, ...) in the regex pattern to
-# suppress splits when the abbreviation is bound to a following noun.
-FULLWIDTH_GEOPOLITICAL_ABBRVS = {
-    "Ｕ．Ｓ",
-    "Ｕ．Ｓ．Ａ",
-    "Ｕ．Ｋ",
-    "Ｅ．Ｕ",
-    "Ｕ．Ｎ",
-    "Ｕ．Ｓ．Ｓ．Ｒ",
-    "Ｕ．Ａ．Ｅ",
-    "Ｐ．Ｒ．Ｃ",
-    "Ｒ．Ｏ．Ｋ",
-    "ＥＥ．ＵＵ",
-    "ＦＦ．ＡＡ",
-    "ＲＲ．ＨＨ",
-    "ＣＣ．ＡＡ",
-}
-
-
 # fmt: off
 class Rules:
     TERMINATORS = {"。", "．", ".", "！", "!", "？", "?", "‼", "⁉", "⁈"}
@@ -49,7 +27,7 @@ class Rules:
 
         # Global Social
         "mr", "mrs", "ms", "mme", "messrs", "mlle", "mmes", "mssrs",
-        "mmes", "mssrs", "st", "fr", "br"
+        "mmes", "mssrs", "st", "fr", "br",
 
         # Military (NATO/International Standardized Ranks)
         "adm", "brig", "capt", "cmdr",  "comdr", "commr",  "col", "cpl", "gen", "lt",
@@ -73,10 +51,10 @@ class Rules:
 
     REFERENCE_ABBRVS = {
         # Publishing / Documents / Manuscripts
-        "app", "apps", "cf", "cod", "ext", "fig", "figs",
-        "fol", "illus", "l", "ll", "ms", "mss", "p", "pp",
-        "pag", "pt", "pts", "ref", "refs", "tab", "tbl",
-        "tbls", "v", "vol", "vols",
+        "app", "apps", "cf", "cod", "diag", "ext", "fig", "figs",
+        "fol", "illus", "l", "ll", "ms", "mss", "p", "pp", "pag",
+        "pt", "pts", "ref", "refs", "tab", "tbl", "tbls", "v", "vol",
+        "vols",
 
         # Section / Structure
         "ann", "art", "arts", "cap", "cl", "cls", "col",
@@ -85,7 +63,7 @@ class Rules:
 
         # Legal / Numbering / Cross References
         "a.c", "a.d", "a.u.c", "b.c", "lc", "n", "nn",
-        "no", "nos", "n°", "qv", "reg", "regs",
+        "no", "nos", "n°", "n.º", "qv", "reg", "regs",
 
         # Scientific / Technical
         "approx", "deg", "diam", "eq", "eqn", "eqs",
@@ -143,7 +121,7 @@ class Rules:
         "Hailey's On It", "Airplane", "Osu", "VSPO", "bam", "go", "wham",
 
        # Geopolitical Quirks / Municipalities
-        "Westward Ho", "Saint-Louis-du-Ha", "Baie-des-Ha", "Ha"
+        "Westward Ho", "Saint-Louis-du-Ha", "Baie-des-Ha", "Ha",
 
         # Public Figures, Politics, & Manufacturing Brands
         "Jeb", "Éxito", "Hey Man", "Basta", "Elliot S",
@@ -211,29 +189,29 @@ class Rules:
             re2.X,
         )
 
-        # https://regex101.com/r/VMzYsx/9
+        # https://regex101.com/r/VMzYsx/10
         cls.NAIVE_BOUNDARY_FINDER = re2.compile(
             rf"""
-            # Split if left token is a unicase letter (Always)
-            (?<=\p{{Lo}}\s*[{cls.TERMINATORS_PATTERN}])|
+            (?:
+                # Split if left token is a unicase letter (Always)
+                (?<=\p{{Lo}}\s*[{cls.TERMINATORS_PATTERN}])|
 
-            # Split after any terminators followed by a a newline,
-            # common sentence starter, Space+Upper or unicase letter
-            (?<=[{cls.TERMINATORS_PATTERN}])
-            (?=
-                \s*\n|
-                \s+(?:[^\p{{Ll}}]|
-                \s+(?<!\.\.)(?i:{cls.COMMON_STARTERS_PATTERN})\b)|
-                \s*\p{{Lo}}
-            )|
+                # Split after any terminators followed by a a newline,
+                # common sentence starter, Space+Upper or unicase letter
+                (?<=[{cls.TERMINATORS_PATTERN}])
+                (?=
+                    \s*[\n\p{{Lo}}]|
+                    \s+(?:[^\p{{Ll}}]|
+                    \s+(?<!\.\.)(?i:{cls.COMMON_STARTERS_PATTERN})\b)
+               )|
 
-            # Split at transition between Latin letters separate by alien
-            (?<=[\p{{LU}}\p{{Ll}}][​。！？।])(?=[\p{{Lu}}])|
+                # Split at transition between Latin letters separate by alien
+                (?<=[\p{{LU}}\p{{Ll}}][​。！？।])(?=[\p{{Lu}}])
+            )
 
-            # Cluster of terminators (e.g hello!!! r u ok?)
-            (?<=[{cls.TERMINATORS_PATTERN.replace('.', '')}]{{2,}})(?=\s)
-            """,
-            re2.X,
+            # Not followed by another terminators (clusters)
+            (?!(\s*+[{cls.TERMINATORS_PATTERN}])+)
+            """, re2.X,
         )
 
         # fmt: off
@@ -260,10 +238,15 @@ class Rules:
                 rf"\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}){cls.DOTS_PATTERN}(?=\s+\p{{N}})"
             ),
 
+            # A dot followed by an superscript indicator (e.g. n.º, ​1.º)
+            re.compile(r"\.(?=[ºª])"),
+
             # Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
             # excluding geopolitical ones not followed by a common starters
             re2.compile(rf"""
-                (?<!\p{{Ll}})(?:\p{{Lu}}\.)(?<!(?i:{cls.GEOPOLITICAL_ABBRVS_PATTERN}|p\.m|a\.m){cls.DOTS_PATTERN})
+                (?:(?<={cls.DOTS_PATTERN}|[\p{{Lu}}\s])
+                \p{{Lu}}|\b\p{{Lo}})\.
+                (?<!(?i:{cls.GEOPOLITICAL_ABBRVS_PATTERN}|p\.m|a\.m){cls.DOTS_PATTERN})
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                 """, re2.X
             ),
@@ -289,16 +272,12 @@ class Rules:
                 (?:'\s|["”]|\s*[»\p{{Pf}}\p{{Pe}}])     # Closing quotes/parens
             )
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
-                \s*\p{{Po}}|
-                {_build_abbr_pattern(cls.QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}|
-                \s*[\p{{Ll}}]
+                \s*[\p{{Po}}\p{{Ll}}\p{{Pe}}]|
+                {_build_abbr_pattern(cls.QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}
             )
             """,
             re2.X,
         )
-
-        # https://regex101.com/r/ffqwjh/2
-        cls.CONTIGUOUS_TERMINATORS_FINDER = re.compile(rf"(?:\s*+[{cls.TERMINATORS_PATTERN}]){{2,}}")
 
     # fmt: on
     def _remove_quote_and_paren_spans(
@@ -388,14 +367,6 @@ class Rules:
         self._remove_toc_spans(main_boundaries, text)
         self._adjust_list_boundaries(main_boundaries, text)
         self._post_process_boundaries(main_boundaries, text)
-
-        # Remove contiguous term pos except last one (e.g., Hello! !!   !! )
-        main_boundaries.difference_update(
-            *(
-                range(m.start(), m.end() - 1)
-                for m in self.CONTIGUOUS_TERMINATORS_FINDER.finditer(text)
-            )
-        )
 
         main_boundaries.update({0, len(text)})
         return sorted(main_boundaries)

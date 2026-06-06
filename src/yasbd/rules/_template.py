@@ -8,8 +8,8 @@ class LangRules(Rules):
 
     Copy this file and rename it to ``<lang>.py`` (e.g.
     ``fr.py``), rename the class to ``<Lang>Rules`` (e.g.
-    ``FrRules``) and override only the sets your language needs
-    (please, not all of them).
+    ``FrRules``) and override only the sets your language needs,
+    (please, not all of them). Then remove the others.
     """
 
     # Extra sentence terminators used by the language.
@@ -24,7 +24,8 @@ class LangRules(Rules):
     # Citation and reference abbreviations commonly used mid-text.
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {...}
 
-    # structural headings (e.g., Section, Chapter, etc.).
+    # Structural headings (e.g., Section, Chapter, etc.).
+    # Not too useful for CJKV languages style
     HEADING_TOKENS = Rules.HEADING_TOKENS | {...}
 
     # Common inline abbreviations that should not end a sentence (e.g., Blvd., etc.).
@@ -37,16 +38,13 @@ class LangRules(Rules):
     DATE_ABBRVS = Rules.DATE_ABBRVS | {...}
 
     # Frequently occurring sentence starters used as weak boundary hints.
+    # Not too useful for languages without spaces
     COMMON_SENT_STARTERS = {...}
 
     # -- Mostly useful for unicase or weakly-cased languages --
 
     # Quotative particles used after speech, thoughts, or labels.
     QUOTATIVE_PARTICLES = {...}
-
-    # Postpositional case markers that tightly bind an abbreviation to the clause
-    # (Japanese の, Chinese 的, etc.).
-    CASE_MARKERS = {...}
 
     # Verbs commonly used for dialogue attribution or reported speech.
     REPORTING_WORDS = {...}

@@ -4,24 +4,20 @@ from yasbd.rules.base import Rules
 
 
 # fmt: off
-class JaRules(Rules):
+class ZhRules(Rules):
 
 
     NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {
-        "トニカクカワイイ", "アイカツ", "マギ", "けいおん", "ラブライブ",
-        "ハイキュー！", "這いよれ"
+        "排球少年！", "总之就是非常可爱", "偶像活动", "轻音少女", "魔笛",
+        "潜行吧", "闪跃吧", "笨蛋、测验、召唤兽"
     }
 
-    COMMON_SENT_STARTERS = {
-        "しかし", "また", "そして", "したがって", "そのため", "一方", "なお", "つまり"
-    }
+    # Chinese has only one pure postnominal quotative particle
+    QUOTATIVE_PARTICLES = {"如是"}
 
-    QUOTATIVE_PARTICLES = {
-        # core quotation particles
-        "と", "って", "などと",
-
-        # embedded quotation structures
-        "ように", "らしいと", "そうだと",
+    REPORTING_WORDS = {
+        "说", "道", "喊", "问", "答", "回答", "称", "指出",
+        "表示", "认为", "坦言", "强调", "写道", "报道", "解释", "反驳"
     }
 
     @classmethod
