@@ -116,9 +116,7 @@ class BoundaryDetector:
         """
 
         if self.verbose:  # pragma: no cover
-            logger.info(
-                "Called with type={}, relative={}", type(source).__name__, relative
-            )
+            logger.info("Called with type={}, relative={}", type(source).__name__, relative)
 
         para_iter = (
             ParagraphStream(source) if isinstance(source, (str, TextIOBase)) else source
@@ -156,7 +154,8 @@ class BoundaryDetector:
         """Split text into sentences.
 
         Args:
-            source: Plain text string or ``TextIOBase`` stream (e.g., ``StringIO``, opened file).
+            source: Plain text string or ``TextIOBase`` stream
+                (e.g., ``StringIO``, opened file).
             preserve_whitespace: If ``False`` (default), strip leading and
                 trailing whitespace from each sentence.
 

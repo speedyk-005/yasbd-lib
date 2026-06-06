@@ -72,12 +72,8 @@ class Segmenter:
         self._detector = BoundaryDetector(lang=language)
 
         # Legacy pysbd API compatibility mappings
-        self.cleaner = lambda t: SimpleNamespace(
-            clean=lambda: "".join(StreamCleaner(t))
-        )
-        self.processor = lambda t: SimpleNamespace(
-            process=lambda: self._process_text(t)
-        )
+        self.cleaner = lambda t: SimpleNamespace(clean=lambda: "".join(StreamCleaner(t)))
+        self.processor = lambda t: SimpleNamespace(process=lambda: self._process_text(t))
         self.language_module = SimpleNamespace(ISO_CODE=language)
 
     @property

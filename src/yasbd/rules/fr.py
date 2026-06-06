@@ -11,7 +11,7 @@ class FrRules(Rules):
 
         # Noble / Royal / Religious
         "ll.aa", "ll.aa.ii", "ll.aa.rr", "ll.aa.ss", "ll.ee", "ll.mm",
-        "ll.mm.ii.rr", "nn.ss", "ll", "aa", "ii", "rr", "ss", "ee", "mm",
+        "ll.mm.ii.rr", "nn.ss", "ll", "aa", "ii", "rr", "ss", "ee",
     }
 
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {

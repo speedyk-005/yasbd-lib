@@ -20,7 +20,8 @@ def _pretty_errors(error: ValidationError) -> str:
     >>> from pydantic import ValidationError
     >>> err = ValidationError.from_exception_data(
     ...     "TestModel",
-    ...     [{"type": "int_parsing", "loc": ("x",), "msg": "Input should be a valid integer", "input": "not_an_int"}]
+    ...     [{"type": "int_parsing", "loc": ("x",),
+    ...      "msg": "Input should be a valid integer", "input": "not_an_int"}]
     ... )
     >>> print(_pretty_errors(err))
     ...
@@ -29,9 +30,8 @@ def _pretty_errors(error: ValidationError) -> str:
       Found: (input='not_an_int', type=str)
     ...
     """
-    lines = [
-        f"{error.error_count()} validation error for {getattr(error, 'subtitle', '') or error.title}."
-    ]
+    sub = getattr(error, "subtitle", "") or error.title
+    lines = [f"{error.error_count()} validation error for {sub}."]
     for ind, err in enumerate(error.errors(), start=1):
         msg = err["msg"]
 
@@ -48,9 +48,7 @@ def _pretty_errors(error: ValidationError) -> str:
         if not isinstance(input_value, str):
             input_value = reprlib.repr(input_value)
         else:
-            input_value = (
-                input_value if len(input_value) < 500 else input_value[:500] + "..."
-            )
+            input_value = input_value if len(input_value) < 500 else input_value[:500] + "..."
 
         lines.append(
             (
@@ -67,7 +65,8 @@ def validate_input(fn):
     """
     A decorator that validates function inputs and outputs
 
-    A wrapper around Pydantic's `validate_call` that catches`ValidationError` and re-raises it as a more user-friendly `InvalidInputError`.
+    A wrapper around Pydantic's `validate_call` that catches `ValidationError`
+    and re-raises it as a more user-friendly `InvalidInputError`.
     """
     validated_fn = validate_call(fn, config=ConfigDict(arbitrary_types_allowed=True))
 

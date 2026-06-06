@@ -37,8 +37,9 @@ class PtRules(Rules):
         "ex", "p.ex", "vid", "vd", "of",
 
         # Addresses / Urban transport markers
-        "r", "av", "al", "vía", "transv", "bc", "ch", "estr", "pl", "pç", "pça", "br", "rs", "sp",
-        "qd", "lt", "urb", "ap", "apt", "apto", "bl", "cj", "ed", "edif", "sl", "jd", "m.g",
+        "r", "av", "al", "vía", "transv", "bc", "ch", "estr", "pl",
+        "pç", "pça", "br", "rs", "sp", "qd", "lt", "urb", "ap", "apt",
+        "apto", "bl", "cj", "ed", "edif", "sl", "jd", "m.g",
     }
 
     GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {

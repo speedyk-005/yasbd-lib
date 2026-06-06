@@ -63,10 +63,7 @@ def test_segment_multiple_langs(subtests, lang, test_data):
 def test_segment_noisy_input(en_detector):
     """test that random noisy input does not crash the segmenter."""
     chars = (
-        string.ascii_letters
-        + string.digits
-        + string.punctuation
-        + "z.?! Dr. Mr. Inc. etc."
+        string.ascii_letters + string.digits + string.punctuation + "z.?! Dr. Mr. Inc. etc."
     )
 
     for _ in range(100):

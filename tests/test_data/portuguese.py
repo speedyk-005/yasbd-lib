@@ -44,7 +44,7 @@ TEST_DATA = [
     # Quoted text with em-dashes
     "O problema —por que ninguém viu isso?— foi resolvido.",
     "A decisão —incrivelmente difícil!— mudou tudo.",
-   
+
     # Dates / Embedded Parentheticals
     "A reunião é na seg. 15 de janeiro.",
     "Ele disse (Não estou pronto.) durante a reunião.",

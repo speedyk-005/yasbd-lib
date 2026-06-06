@@ -97,9 +97,7 @@ CLEANING_PIPELINE = {
     "normalize_slashes": lambda t: (
         t if "///" not in t else CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", t)
     ),
-    "normalize_spaces": lambda t: (
-        t if " " not in t else MULTIPLE_SPACES_FINDER.sub(" ", t)
-    ),
+    "normalize_spaces": lambda t: t if " " not in t else MULTIPLE_SPACES_FINDER.sub(" ", t),
 }
 
 

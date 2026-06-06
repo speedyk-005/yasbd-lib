@@ -91,12 +91,11 @@ omit = ["*/_template.py", "*/cleaner_stub.py"]
 
 [tool.ruff]
 target-version = "py311"
-line-length = 88
+line-length = 95
 
 [tool.ruff.lint]
 # E, W (Flake8), F (Pyflakes), I (Isort), B (Bugbear)
 select = ["E", "F", "I", "W", "B"]
-ignore = ["B033", "E501", "E203"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401", "F403"]

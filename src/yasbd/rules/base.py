@@ -27,7 +27,7 @@ class Rules:
 
         # Global Social
         "mr", "mrs", "ms", "mme", "messrs", "mlle", "mmes", "mssrs",
-        "mmes", "mssrs", "st", "fr", "br",
+        "st", "fr", "br",
 
         # Military (NATO/International Standardized Ranks)
         "adm", "brig", "capt", "cmdr",  "comdr", "commr",  "col", "cpl", "gen", "lt",
@@ -89,7 +89,7 @@ class Rules:
 
         # Day
         "mon", "tue", "wed", "thu", "thurs", "thur", "fri",
-        "sat", "sun", "lun", "mar", "dom",
+        "sat", "sun", "lun", "dom",
     }
 
     MID_SENTENCE_ABBRVS = {
@@ -138,9 +138,12 @@ class Rules:
     # https://regex101.com/r/JYdWZw/5
     QUOTE_AND_PAREN_FINDER = re2.compile(
         r"""
-        (?:\p{Pi}|»|(?:^|(?<=[\s:]))(['""])).+?(?:\p{Pf}|«|\1)|  # Quoted text (quotation marks)
-        —.+?[,.!?]\s*—|          # Quoted text (dashes)
-        \p{Ps}.+?\p{Pe}  # Parenthesized text
+        # Quoted text with quotations or dashes
+        (?:\p{Pi}|»|(?:^|(?<=[\s:]))(['""])).+?(?:\p{Pf}|«|\1)|
+        —.+?[,.!?]\s*—|
+
+        # Parenthesized text
+        \p{Ps}.+?\p{Pe}
         """,
         re2.X,
     )
@@ -182,7 +185,7 @@ class Rules:
             (?:[•◦]\s+)?   # Optional bullet point (e.g., • 9.)
             (?:
                 [-*+]|      #  Markdown style list
-                (?:\d{1,2}|[a-eA-E])[.)]{1,2}  #  Numbered and alphabetical list (e.g, a\), 34.\), 1.)
+                (?:\d{1,2}|[a-eA-E])[.)]{1,2}  # Numbered/alphabetical list
             )
             (?=\s)  # Must followed by a space
             """,
@@ -226,7 +229,7 @@ class Rules:
                rf"\b(?i:{_build_abbr_pattern(cls.MID_SENTENCE_ABBRVS)}){cls.DOTS_PATTERN}"
             ),
 
-            # References abbrv followed by a number, a letter or opened paren/bracket (e.g., to p. 55, app. A, et al. [2004])
+            # References abbrv + number/letter/bracket (e.g., to p. 55, app. A, et al. [2004])
             re2.compile(rf"""
                 \b(?i:{_build_abbr_pattern(cls.REFERENCE_ABBRVS)}){cls.DOTS_PATTERN}
                 (?=\s+(?:\(|\[|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))
