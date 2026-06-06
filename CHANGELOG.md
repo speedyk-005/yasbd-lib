@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.3.0] - Unreleased
+
+### Added
+- **Four new languages** ([#48](https://github.com/speedyk-005/yasbd-lib/pull/48)): Russian (ru), Arabic (ar), Chinese (zh), and Portuguese (pt)
+- **Base abbreviation expansion**: Added `diag` to `REFERENCE_ABBRVS`.
+
+### Changed
+- **`NAIVE_BOUNDARY_FINDER` cluster logic unification**: Merged contiguous terminator handling into the lookahead assertion for more consistent behavior and fewer edge-case bugs.
+- **`FULLWIDTH_GEOPOLITICAL_ABBRVS` moved to class-level attribute** with dynamic regex matching instead of static sets.
+
+### Fixed
+- **Full-width geopolitical abbreviation over-matching**: Replaced static set with dynamic regex to prevent false splits in mixed-script text.
+- **Acronym/initialism boundary constraint**: Tightened uppercase initialism detection to require a preceding dot, uppercase letter, or space, preventing false protection of `S/A.`-style patterns.
+- **Superscript indicator false splits**: Added protection to prevent boundary breaks after ordinal markers.
+- **Em-dash quoted text splitting**: Added em-dash pattern to `QUOTE_AND_PAREN_FINDER` so dialogue quoted with dashes (`—text! —`) is no longer split prematurely.
+
 ## [0.2.0] - 2026-06-04
 
 ### Added
