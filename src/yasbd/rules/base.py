@@ -50,10 +50,10 @@ class Rules:
 
     REFERENCE_ABBRVS = {
         # Publishing / Documents / Manuscripts
-        "app", "apps", "cf", "cod", "ext", "fig", "figs",
-        "fol", "illus", "l", "ll", "ms", "mss", "p", "pp",
-        "pag", "pt", "pts", "ref", "refs", "tab", "tbl",
-        "tbls", "v", "vol", "vols",
+        "app", "apps", "cf", "cod", "diag", "ext", "fig", "figs",
+        "fol", "illus", "l", "ll", "ms", "mss", "p", "pp", "pag",
+        "pt", "pts", "ref", "refs", "tab", "tbl", "tbls", "v", "vol",
+        "vols",
 
         # Section / Structure
         "ann", "art", "arts", "cap", "cl", "cls", "col",
@@ -62,7 +62,7 @@ class Rules:
 
         # Legal / Numbering / Cross References
         "a.c", "a.d", "a.u.c", "b.c", "lc", "n", "nn",
-        "no", "nos", "n°", "qv", "reg", "regs",
+        "no", "nos", "n°", "n.º", "qv", "reg", "regs",
 
         # Scientific / Technical
         "approx", "deg", "diam", "eq", "eqn", "eqs",
@@ -236,6 +236,9 @@ class Rules:
             re2.compile(
                 rf"\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}){cls.DOTS_PATTERN}(?=\s+\p{{N}})"
             ),
+
+            # A dot followed by an superscript indicator (e.g. n.º, ​1.º)
+            re.compile(r"\.(?=[ºª])"),
 
             # Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
             # excluding geopolitical ones not followed by a common starters
