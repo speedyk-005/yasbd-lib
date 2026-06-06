@@ -206,29 +206,29 @@ class Rules:
             re2.X,
         )
 
-        # https://regex101.com/r/VMzYsx/9
+        # https://regex101.com/r/VMzYsx/10
         cls.NAIVE_BOUNDARY_FINDER = re2.compile(
             rf"""
-            # Split if left token is a unicase letter (Always)
-            (?<=\p{{Lo}}\s*[{cls.TERMINATORS_PATTERN}])|
+            (?:
+                # Split if left token is a unicase letter (Always)
+                (?<=\p{{Lo}}\s*[{cls.TERMINATORS_PATTERN}])|
 
-            # Split after any terminators followed by a a newline,
-            # common sentence starter, Space+Upper or unicase letter
-            (?<=[{cls.TERMINATORS_PATTERN}])
-            (?=
-                \s*\n|
-                \s+(?:[^\p{{Ll}}]|
-                \s+(?<!\.\.)(?i:{cls.COMMON_STARTERS_PATTERN})\b)|
-                \s*\p{{Lo}}
-            )|
+                # Split after any terminators followed by a a newline,
+                # common sentence starter, Space+Upper or unicase letter
+                (?<=[{cls.TERMINATORS_PATTERN}])
+                (?=
+                    \s*[\n\p{{Lo}}]|
+                    \s+(?:[^\p{{Ll}}]|
+                    \s+(?<!\.\.)(?i:{cls.COMMON_STARTERS_PATTERN})\b)
+               )|
 
-            # Split at transition between Latin letters separate by alien
-            (?<=[\p{{LU}}\p{{Ll}}][​。！？।])(?=[\p{{Lu}}])|
+                # Split at transition between Latin letters separate by alien
+                (?<=[\p{{LU}}\p{{Ll}}][​。！？।])(?=[\p{{Lu}}])
+            )
 
-            # Cluster of terminators (e.g hello!!! r u ok?)
-            (?<=[{cls.TERMINATORS_PATTERN.replace('.', '')}]{{2,}})(?=\s)
-            """,
-            re2.X,
+            # Not followed by another terminators (clusters)
+            (?!(\s*+[{cls.TERMINATORS_PATTERN}])+)
+            """, re2.X,
         )
 
         # fmt: off
@@ -292,9 +292,6 @@ class Rules:
             """,
             re2.X,
         )
-
-        # https://regex101.com/r/ffqwjh/2
-        cls.CONTIGUOUS_TERMINATORS_FINDER = re.compile(rf"(?:\s*+[{cls.TERMINATORS_PATTERN}]){{2,}}")
 
     # fmt: on
     def _remove_quote_and_paren_spans(
@@ -384,14 +381,6 @@ class Rules:
         self._remove_toc_spans(main_boundaries, text)
         self._adjust_list_boundaries(main_boundaries, text)
         self._post_process_boundaries(main_boundaries, text)
-
-        # Remove contiguous term pos except last one (e.g., Hello! !!   !! )
-        main_boundaries.difference_update(
-            *(
-                range(m.start(), m.end() - 1)
-                for m in self.CONTIGUOUS_TERMINATORS_FINDER.finditer(text)
-            )
-        )
 
         main_boundaries.update({0, len(text)})
         return sorted(main_boundaries)

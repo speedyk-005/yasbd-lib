@@ -76,7 +76,8 @@ class ArRules(Rules):
         "أكد", "يؤكد", "أكدت", "مؤكد", "مؤكدا",
         "أوضح", "يوضح", "أوضحت", "موضح", "موضحا",
     }
-    
+
+    @classmethod
     def _compile_regex_dynamically(cls):
         """Override base regex compilation to handle ellipsis protection."""
         super()._compile_regex_dynamically()
