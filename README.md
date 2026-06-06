@@ -48,7 +48,7 @@
 
 ## 🎬 Manifesto
 
-**Y**et **A**nother **S**entence **B**oundary **D**etector is a pair of smart scissors for text. Pointer-based, from-scratch [SBD](https://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) for production NLP pipelines. Features a drop-in adapter for pysbd to fix edge cases without heavy refactoring. Five languages supported today (en, fr, es, ht, ja). Target is 22+ as they were in pysbd.
+**Y**et **A**nother **S**entence **B**oundary **D**etector is a pair of smart scissors for text. Pointer-based, from-scratch [SBD](https://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) for production NLP pipelines. Features a drop-in adapter for pysbd to fix edge cases without heavy refactoring. Nine languages supported today (en, fr, es, ht, ja, pt, ru, ar, zh). Target is 22+ as they were in pysbd.
 
 ###  ✂ Why do I need a pair of "smart scissors" for text?
 
