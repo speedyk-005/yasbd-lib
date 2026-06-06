@@ -1,6 +1,6 @@
 import re
 
-from yasbd.rules.base import Rules, _build_abbr_pattern
+from yasbd.rules.base import Rules
 
 
 # fmt: off
@@ -31,8 +31,8 @@ class JaRules(Rules):
         super()._compile_regex_dynamically()
 
         cls.MID_SENTENCE_FINDER_LST.append(
-            # Full-width geopolitical abbrv
-            re.compile(rf"(?:[\uFF21-\uFF3A\uFF41-\uFF5A]．){{1,5}}")
+            # Full-width geopolitical abbreviations
+            re.compile(r"(?:[\uFF21-\uFF3A\uFF41-\uFF5A\uFF10-\uFF19]．){1,5}")
         )
 
 # fmt: on

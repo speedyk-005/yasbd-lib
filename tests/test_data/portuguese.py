@@ -4,7 +4,7 @@ TEST_DATA = [
     "Olá mundo.| Como estás?| Bem, obrigado.",
     "Qual é o teu nome?| Chamo-me Carlos.",
     "Que dia tão maravilhoso!| O sol brilha, os pássaros cantam...| É um dia perfeito para um piquenique.",
-    "Viste o filme ontem à noite?.| Sim, foi incrível.| Adorei!| A atuação foi excelente, embora o final tenha sido um pouco previsível.",
+    "Viste o filme ontem à noite?| Sim, foi incrível.| Adorei!| A atuação foi excelente, embora o final tenha sido um pouco previsível.",
 
     # Abbreviations
     "O Sr. Garcia chegou ontem.| A Sra. Lopes também.",

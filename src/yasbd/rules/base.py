@@ -17,6 +17,7 @@ def _build_abbr_pattern(options: set[str]) -> str:
     return trie.add(*options).pattern()
 
 
+# fmt: off
 class Rules:
     TERMINATORS = {"。", "．", ".", "！", "!", "？", "?", "‼", "⁉", "⁈"}
 
@@ -26,7 +27,7 @@ class Rules:
 
         # Global Social
         "mr", "mrs", "ms", "mme", "messrs", "mlle", "mmes", "mssrs",
-        "mmes", "mssrs", "st", "fr", "br"
+        "mmes", "mssrs", "st", "fr", "br",
 
         # Military (NATO/International Standardized Ranks)
         "adm", "brig", "capt", "cmdr",  "comdr", "commr",  "col", "cpl", "gen", "lt",
@@ -120,7 +121,7 @@ class Rules:
         "Hailey's On It", "Airplane", "Osu", "VSPO", "bam", "go", "wham",
 
        # Geopolitical Quirks / Municipalities
-        "Westward Ho", "Saint-Louis-du-Ha", "Baie-des-Ha", "Ha"
+        "Westward Ho", "Saint-Louis-du-Ha", "Baie-des-Ha", "Ha",
 
         # Public Figures, Politics, & Manufacturing Brands
         "Jeb", "Éxito", "Hey Man", "Basta", "Elliot S",

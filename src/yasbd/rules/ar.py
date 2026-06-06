@@ -12,14 +12,14 @@ class ArRules(Rules):
     TITLE_ABBRVS = {
         # Academic & Professional
         "أ", "د", "أ.د", "م", "أ.م", "د.م", "ط", "ص", "باحث",
-        
+
         # Military, Legal & Administrative
         "لو", "عم", "عق", "مقد", "رائد", "نق", "لـو", "عـم",
         "ستشار", "ق", "ر.م", "س", "س.س", "م.ع", "م.م", "م.ع.م",
-        
+
         # Religious & Classical Honorifics
         "ص", "ع", "ر", "ق", "ج", "ط.ع", "ب.ع", "ح", "أب", "مطران", "نّيافة",
-        
+
         # Social & Formal Address
         "أ", "سـم", "معالي", "دولة"
     }
@@ -44,7 +44,7 @@ class ArRules(Rules):
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {
         # Calendar & Time Eras
         "هـ", "م", "ق.م", "ب.م", "ش", "س", "د",
-        
+
         # Location & General
         "ص.ب", "ت.إ", "إلخ", "ت.ف", "ت"
     }
@@ -52,16 +52,16 @@ class ArRules(Rules):
     DATE_ABBRVS = {
         # Days (Rarely abbreviated, but initial letters sometimes appear in schedules)
         "ح", "ن", "ث", "ر", "خ", "ج", "س",
-        
+
         # Months (Almost never abbreviated with periods; full names are always preferred)
     }
 
     COMMON_SENT_STARTERS = {
         # Transitions & Adversatives (However, Yet, While)
-        "ولكن", "بيد", "غير", "إلا", "بينما", 
+        "ولكن", "بيد", "غير", "إلا", "بينما",
 
         # Contextual Markers (Since, Given that)
-        "حيث", "علماً", "منذ", 
+        "حيث", "علماً", "منذ",
 
         # Logical Payouts (Therefore, Consequently, For example)
         "بناءً", "لذلك", "وبالتالي", "نتيجة", "مثلاً", "عموماً"
@@ -82,7 +82,7 @@ class ArRules(Rules):
         """Override base regex compilation to handle ellipsis protection."""
         super()._compile_regex_dynamically()
         cls.MID_SENTENCE_FINDER_LST.append(
-            # Never split after ellipsis
-            re.compile(r"\.{3,}")
+            # Never split after ellipsis (ASCII, Unicode, full-width)
+            re.compile(rf"{cls.DOTS_PATTERN}{{3,}}|\u2026")
         )
 # fmt: on
