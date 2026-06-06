@@ -46,10 +46,6 @@ class LangRules(Rules):
     # Quotative particles used after speech, thoughts, or labels.
     QUOTATIVE_PARTICLES = {...}
 
-    # Postpositional case markers that tightly bind an abbreviation to the clause
-    # (Japanese の, Chinese 的, etc.).
-    CASE_MARKERS = {...}
-
     # Verbs commonly used for dialogue attribution or reported speech.
     REPORTING_WORDS = {...}
 
