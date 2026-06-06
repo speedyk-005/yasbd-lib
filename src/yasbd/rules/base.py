@@ -285,9 +285,8 @@ class Rules:
                 (?:'\s|["”]|\s*[»\p{{Pf}}\p{{Pe}}])     # Closing quotes/parens
             )
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
-                \s*\p{{Po}}|
-                {_build_abbr_pattern(cls.QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}|
-                \s*[\p{{Ll}}]
+                \s*[\p{{Po}}\p{{Ll}}\p{{Pe}}]|
+                {_build_abbr_pattern(cls.QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}
             )
             """,
             re2.X,
