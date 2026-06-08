@@ -100,6 +100,12 @@ TEST_DATA = [
     "As shown in pp. [55-60], the results are significant.| This confirms our hypothesis.",
     "See sec. [2.1] for details.| The methodology is described there.",
 
+    # Newlines (fix for #50)
+    "The simplest way\nto get started is with pip.",
+    "10 languages supported today\n|Target is 22+.",
+    "About the project\n|A CLA is necessary to make sure that someone contributing...",
+    "> Somewhere, something incredible\n> is waiting to be known",
+
     # Mixed language
     "我喜欢AI。|It is useful",
     "The meeting is at 2 p.m.| 请别迟到。",
