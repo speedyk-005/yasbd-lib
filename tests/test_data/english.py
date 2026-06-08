@@ -74,6 +74,7 @@ TEST_DATA = [
     "Hello!? !! ?!| Is that you?",
 
     # Lists
+    "I really want letter A.| I know that I asked you for the B.| I changed my mind.",
     "1.) The first item.| 2.) The second item.",
     "a) The first item.| b) The second item.",
     "1. The first item.| 2. The second item.",

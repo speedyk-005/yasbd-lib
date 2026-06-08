@@ -314,11 +314,33 @@ class Rules:
     def _adjust_list_boundaries(self, main_boundaries: set[int], text: str) -> None:
         """Remove and re-align boundaries around list markers."""
         horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(text))
-        if len(horiz_matches) >= 2:
-            main_boundaries.difference_update(m.end() for m in horiz_matches)
+        list_introducers = set(self.TERMINATORS) | {":", "\n"}
+        valid_horiz_matches = []
+        last_valid_end = None
+        for match in horiz_matches:
+            if match.start() == 0:
+                is_valid = True
+            elif text[match.start() - 1] in list_introducers:
+                is_valid = True
+            elif last_valid_end is not None:
+                intervening_text = text[last_valid_end:match.start()]
+                is_valid = not any(
+                    char in self.TERMINATORS for char in intervening_text
+                )
+            else:
+                is_valid = False
+
+            if is_valid:
+                valid_horiz_matches.append(match)
+                last_valid_end = match.end()
+
+        if len(valid_horiz_matches) >= 2:
+            main_boundaries.difference_update(m.end() for m in valid_horiz_matches)
             # Shift boundaries back (1.\)| => |1.\), a. | => |a. ) to correctly
             # terminate the preceding sentence before flattened horizontal list.
-            main_boundaries.update(m.start() + 1 for m in horiz_matches if m.start())
+            main_boundaries.update(
+                m.start() + 1 for m in valid_horiz_matches if m.start()
+            )
 
         main_boundaries.difference_update(
             m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(text)
