@@ -90,9 +90,6 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 10 languages supported today. Target is 22+.
 
-<details>
-<summary>Click here to see full language info</summary>
-
 |  | Code | Language |
 |--|------|----------|
 | 🇸🇦 | ar   | Arabic |
@@ -105,8 +102,6 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇵🇹 | pt   | Portuguese |
 | 🇷🇺 | ru   | Russian |
 | 🇨🇳 | zh   | Chinese |
-
-</details>
 
 ---
 
