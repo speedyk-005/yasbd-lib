@@ -322,7 +322,7 @@ class Rules:
         # Quick contextual heuristic
         is_flattened_list = (
             len(horiz_matches) >= 2
-            and  (
+            and (
                 ":" in text
                 or text[horiz_matches[0].start()] == text.lstrip()[0]
             )
