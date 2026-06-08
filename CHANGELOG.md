@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Fixed
+- **Single-letter markers within prose** ([#52](https://github.com/speedyk-005/yasbd-lib/issues/52)): Prevented single capital-letter markers (e.g. `A.`, `B.`) embedded mid-sentence from being misclassified as flattened list items. Horizontal-list flattening now only triggers when the first marker sits at an item start (text/line start or after a terminator/closing punctuation).
+
+---
+
 ## [0.2.0] - 2026-06-04
 
 ### Added

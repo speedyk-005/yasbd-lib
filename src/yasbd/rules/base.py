@@ -311,10 +311,28 @@ class Rules:
             for m in self.TOC_LEADER_FINDER.finditer(text):
                 main_boundaries.difference_update(range(*m.span()))
 
+    @staticmethod
+    def _is_list_item_start(match, text: str) -> bool:
+        """Return True if ``match`` begins at a list-item start.
+
+        A genuine flattened list begins at the start of the text/line or
+        immediately after a sentence terminator or closing punctuation.
+        This guards against single-letter markers (e.g. ``A.``/``B.``)
+        appearing mid-sentence within ordinary prose.
+        """
+        before = text[: match.start()].rstrip()
+        return not before or before[-1] in ".!?:)"
+
     def _adjust_list_boundaries(self, main_boundaries: set[int], text: str) -> None:
         """Remove and re-align boundaries around list markers."""
         horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(text))
-        if len(horiz_matches) >= 2:
+        # Only flatten as a genuine list when the first marker sits at an
+        # "item start" (text/line start or right after a terminator/closing
+        # punctuation). Single-letter markers embedded mid-prose (e.g.
+        # "... letter A. I know ... the B. I changed ...") are not lists.
+        if len(horiz_matches) >= 2 and self._is_list_item_start(
+            horiz_matches[0], text
+        ):
             main_boundaries.difference_update(m.end() for m in horiz_matches)
             # Shift boundaries back (1.\)| => |1.\), a. | => |a. ) to correctly
             # terminate the preceding sentence before flattened horizontal list.
