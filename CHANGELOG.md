@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Fixed
+- **Incorrect segmentation of single-letter markers within sentences** ([#52](https://github.com/speedyk-005/yasbd-lib/issues/52)): Prevents embedded single-letter markers (e.g., `A.`, `B.`) in prose from being misclassified as horizontal list items. Adds an item-start context check to `_adjust_list_boundaries`.
+
 ## [0.2.0] - 2026-06-04
 
 ### Added

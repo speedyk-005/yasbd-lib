@@ -311,10 +311,20 @@ class Rules:
             for m in self.TOC_LEADER_FINDER.finditer(text):
                 main_boundaries.difference_update(range(*m.span()))
 
+    def _is_at_item_start(self, match, text: str) -> bool:
+        """Check whether a horizontal-list match begins a genuine list item."""
+        start = match.start()
+        if start == 0:
+            return True
+        prefix = text[:start].rstrip()
+        if not prefix:
+            return False
+        return prefix[-1] in self.TERMINATORS or prefix[-1] in ":)"
+
     def _adjust_list_boundaries(self, main_boundaries: set[int], text: str) -> None:
         """Remove and re-align boundaries around list markers."""
         horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(text))
-        if len(horiz_matches) >= 2:
+        if len(horiz_matches) >= 2 and self._is_at_item_start(horiz_matches[0], text):
             main_boundaries.difference_update(m.end() for m in horiz_matches)
             # Shift boundaries back (1.\)| => |1.\), a. | => |a. ) to correctly
             # terminate the preceding sentence before flattened horizontal list.
