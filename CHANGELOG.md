@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.0] - Unreleased
 
 ### Added
-- **Four new languages** ([#48](https://github.com/speedyk-005/yasbd-lib/pull/48)): Russian (ru), Arabic (ar), Chinese (zh), and Portuguese (pt)
+- **Five new languages** ([#48](https://github.com/speedyk-005/yasbd-lib/pull/48), [#54](https://github.com/speedyk-005/yasbd-lib/pull/54)): Russian (ru), Arabic (ar), Chinese (zh), German (de), and Portuguese (pt)
 - **Base abbreviation expansion**: Added `diag` to `REFERENCE_ABBRVS`.
 
 ### Changed
