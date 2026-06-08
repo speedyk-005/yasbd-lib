@@ -38,7 +38,7 @@ TEST_DATA = [
     "Das Projekt (Sinta) stand kurz vor dem Abschluss... oder so dachten wir.",
     '„Wie konnten wir das übersehen!...“| Mark schrie und schlug mit der Hand auf den Tisch.',
     "Wir haben ein Speicherleck im C#-Wrapper gefunden....| Es war subtil.",
- 
+
     # Mixed language
     # "Ich mag KI.| It is useful.",
     "Das Treffen ist um 14 Uhr.| 请别迟到。",
