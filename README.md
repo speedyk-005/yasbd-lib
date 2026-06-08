@@ -48,7 +48,25 @@
 
 ## 🎬 Manifesto
 
-**Y**et **A**nother **S**entence **B**oundary **D**etector is a pair of smart scissors for text. Pointer-based, from-scratch [SBD](https://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) for production NLP pipelines. Features a drop-in adapter for pysbd to fix edge cases without heavy refactoring. Five languages supported today (en, fr, es, ht, ja). Target is 22+ as they were in pysbd.
+**Y**et **A**nother **S**entence **B**oundary **D**etector is a pair of smart scissors for text. Pointer-based, from-scratch [SBD](https://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) for production NLP pipelines. Features a drop-in adapter for pysbd to fix edge cases without heavy refactoring. 10 languages supported today (ar, de, en, es, fr, ht, ja, pt, ru, zh). Target is 22+ as they were in pysbd.
+
+<details>
+<summary>Click here to see full language info</summary>
+
+|  | Code | Language |
+|--|------|----------|
+| 🇸🇦 | ar   | Arabic |
+| 🇩🇪 | de   | German |
+| 🇬🇧 | en   | English |
+| 🇪🇸 | es   | Spanish |
+| 🇫🇷 | fr   | French |
+| 🇭🇹 | ht   | Haitian Creole |
+| 🇯🇵 | ja   | Japanese |
+| 🇵🇹 | pt   | Portuguese |
+| 🇷🇺 | ru   | Russian |
+| 🇨🇳 | zh   | Chinese |
+
+</details>
 
 ###  ✂ Why do I need a pair of "smart scissors" for text?
 
@@ -91,7 +109,7 @@ Tested against 6 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, s
 
 **TL;DR:** yasbd ranked #1 in accuracy across almost every test, while staying competitive on speed as pure Python. blingfire is faster but brittle. pysbd and sentencex shred French abbreviations.
 
-On our [golden benchmark](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks#golden-benchmark) (84 English edge cases adapted from pysbd's test suite with fixes and additions): yasbd scores **98.8%**, pysbd **84.5%**.
+On our [golden benchmark](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks#golden-benchmark) (85 English edge cases adapted from pysbd's official golden rule set with fixes and additions): yasbd scores **100.0%**, pysbd **84.7%**.
 
 Full results, terminal output, and a performance graph can be found in **[benchmarks/](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks)**
 

@@ -21,21 +21,19 @@ The format is simple: throw edge cases at each library. Does it split where it s
 
 ## EN Golden benchmark
 
-Aggregate score across all 83 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOLDEN_DATA.py) via [`run_golden.py`](run_golden.py). A modified and expanded version of [pysbd's test suite](https://github.com/nipunsadvilkar/pySBD/blob/master/tests/lang/test_english.py): we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, and more.
+Aggregate score across all 85 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOLDEN_DATA.py) via [`run_golden.py`](run_golden.py). A modified and expanded version of [pysbd's official golden rule set](https://github.com/nipunsadvilkar/pySBD/blob/master/tests/lang/test_english.py): we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, and more.
 
-```
-Library                 Score
-------------------------------
-yasbd                83/84 ( 98.8%)
-pysbd                71/84 ( 84.5%)
-sentencex            69/84 ( 82.1%)
-blingfire            68/84 ( 81.0%)
-sentence-splitter    55/84 ( 65.5%)
-sentsplit            54/84 ( 64.3%)
-nupunkt              53/84 ( 63.1%)
-```
+| Library | Score |
+|---|---|
+| **yasbd** | 85/85 (100.0%) |
+| pysbd | 72/85 (84.7%) |
+| sentencex | 70/85 (82.4%) |
+| blingfire | 69/85 (81.2%) |
+| sentence-splitter | 56/85 (65.9%) |
+| sentsplit | 55/85 (64.7%) |
+| nupunkt | 53/85 (62.4%) |
 
-yasbd's only failure is `"The meeting is at 9 a.m. Monday"`. `a.m.` is not in the abbreviation protection list, so the period + capital `M` triggers a split. Lowercase `a.m.` followed by a proper noun is a genuinely ambiguous case. Fixing it would require day-name detection. Every other library fails at least 12 cases.
+yasbd achieves a perfect 85/85 score. The test suite was expanded to 85 cases with additional edge cases for contiguous terminators, exclamation-safe words, and mixed-script text.
 
 ## Cold vs Warm speed
 
