@@ -20,9 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - **Full-width geopolitical abbreviation over-matching**: Replaced static set with dynamic regex to prevent false splits in mixed-script text.
-- **Acronym/initialism boundary constraint**: Tightened uppercase initialism detection to require a preceding dot, uppercase letter, or space, preventing false protection of `S/A.`-style patterns.
+- **Acronym/initialism boundary constraint**: Simplified lookbehind to `[.\s]` to reduce false positive matches in edge cases.
 - **Superscript indicator false splits**: Added protection to prevent boundary breaks after ordinal markers.
 - **Em-dash quoted text splitting**: Added em-dash pattern to `QUOTE_AND_PAREN_FINDER` so dialogue quoted with dashes (`—text! —`) is no longer split prematurely.
+- **Test data**: Added boundary test cases for `then`/`Danach` as sentence starters in English and German.
 
 ## [0.2.0] - 2026-06-04
 

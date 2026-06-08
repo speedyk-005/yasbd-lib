@@ -247,8 +247,10 @@ class Rules:
             # Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
             # excluding geopolitical ones not followed by a common starters
             re2.compile(rf"""
-                (?:(?<={cls.DOTS_PATTERN}|[\p{{Lu}}\s])
-                \p{{Lu}}|\b\p{{Lo}})\.
+                (?:
+                    (?<=[.\s])
+                    \p{{Lu}}|\b\p{{Lo}}
+                )\.
                 (?<!(?i:{cls.GEOPOLITICAL_ABBRVS_PATTERN}|p\.m|a\.m){cls.DOTS_PATTERN})
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                 """, re2.X
@@ -266,7 +268,6 @@ class Rules:
                 """, re.X
             )
         ]
-
 
         # https://regex101.com/r/EGkRU8/7
         cls.QUOTE_AND_PAREN_END_FINDER = re2.compile(

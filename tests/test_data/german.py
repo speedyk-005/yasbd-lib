@@ -18,6 +18,7 @@ TEST_DATA = [
     "Der Beweis ist in Gl. (7) und Bsp. IV dargestellt.",
     "Wir sehen uns am Fr., 14. Feb.",
     "Sie finden es unter Nr. 1026.253.553.| Dort ist der Schatz.",
+    "Wir wählen zuerst Option A.| Danach besprechen wir die Details.",
 
     # Structural headings
     "Kapitel 1. Der Anfang.| Es war dunkel und still im Raum. | Nichts bewegte sich.",
@@ -40,7 +41,6 @@ TEST_DATA = [
     "Wir haben ein Speicherleck im C#-Wrapper gefunden....| Es war subtil.",
 
     # Mixed language
-    # "Ich mag KI.| It is useful.",
     "Das Treffen ist um 14 Uhr.| 请别迟到。",
     "那个会议在下午两点。|Please don't be late!"
 ]
