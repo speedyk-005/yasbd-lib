@@ -80,6 +80,10 @@ TEST_DATA = [
     "• 9. The first item.| • 10. The second item.",
     "a. The first item |b. The second item",
 
+    # Single-letter markers in prose (fix for #52)
+    "I really want letter A.| I know that I asked you for the B.| I changed my mind.",
+    "I am number 1.| I am number 2.| I changed my mind.",
+
     # Elipsis/TOC leaders
     "The project (Sinta) was nearing completion... or so we thought.",
     '"How could we miss this!..."| Mark shouted, slamming his hand on the desk.',
