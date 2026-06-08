@@ -39,7 +39,6 @@ class JaRules(Rules):
     @classmethod
     def _compile_regex_dynamically(cls):
         """Override base regex compilation to fix geopolitical split when used as adj"""
-        # Let the base class build the default rules first
         super()._compile_regex_dynamically()
 
         cls.MID_SENTENCE_FINDER_LST.append(

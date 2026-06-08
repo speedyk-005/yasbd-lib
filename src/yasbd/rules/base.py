@@ -30,7 +30,7 @@ class Rules:
         "st", "fr", "br",
 
         # Military (NATO/International Standardized Ranks)
-        "adm", "brig", "capt", "cmdr",  "comdr", "commr",  "col", "cpl", "gen", "lt",
+        "adm", "brig", "capt", "cmdr", "comdr", "commr", "col", "cpl", "gen", "lt",
         "maj", "sgt", "pvt",
 
         # Political/Administrative (Common in Western bureaucracy)
@@ -79,7 +79,7 @@ class Rules:
     HEADING_TOKENS = {
         "Part", "Parte", "Section", "Subsection", "Article",
         "Module", "Division", "Usage", "Unit", "Volume",
-        "Preface",  "Introduction",
+        "Preface", "Introduction",
     }
 
     DATE_ABBRVS = {
@@ -358,6 +358,9 @@ class Rules:
         Returns:
             Sorted list of character offsets at which sentences end.
         """
+        if not text or text.isspace():
+            return [len(text)]
+
         text = self.NEWLINE_INSIDE_SENTENCE_FINDER.sub(" ", text)
         main_boundaries = {
             m.end() for m in self.NAIVE_BOUNDARY_FINDER.finditer(text)

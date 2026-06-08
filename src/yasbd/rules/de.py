@@ -100,7 +100,6 @@ class DeRules(Rules):
     @classmethod
     def _compile_regex_dynamically(cls):
         """Override base regex compilation to handle ellipsis, ord num and time"""
-        # Let the base class build the default rules first
         super()._compile_regex_dynamically()
 
         cls.MID_SENTENCE_FINDER_LST.extend([
