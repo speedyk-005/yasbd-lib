@@ -311,10 +311,36 @@ class Rules:
             for m in self.TOC_LEADER_FINDER.finditer(text):
                 main_boundaries.difference_update(range(*m.span()))
 
+    def _is_flattened_list(self, text: str, horiz_matches: list) -> bool:
+        """Decide whether *horiz_matches* describe a real flattened list.
+
+        Single-letter alphabetical tokens such as ``A.`` or ``B.`` also match
+        ``HORIZONTAL_LIST_FINDER`` even when they merely end a sentence inside
+        ordinary prose (e.g. ``"... letter A. I know ..."``). A genuine
+        flattened list is anchored: at least one marker sits at the start of
+        the text or directly after a sentence terminator/colon/newline, which
+        is where a real list item would begin. Prose markers, by contrast, are
+        embedded after normal words and are never anchored.
+        """
+        if len(horiz_matches) < 2:
+            return False
+
+        anchors = set(self.TERMINATORS) | {":", "\n"}
+        for m in horiz_matches:
+            start = m.start()
+            if start == 0:
+                return True
+            prev = start - 1
+            while prev >= 0 and text[prev].isspace():
+                prev -= 1
+            if prev >= 0 and text[prev] in anchors:
+                return True
+        return False
+
     def _adjust_list_boundaries(self, main_boundaries: set[int], text: str) -> None:
         """Remove and re-align boundaries around list markers."""
         horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(text))
-        if len(horiz_matches) >= 2:
+        if self._is_flattened_list(text, horiz_matches):
             main_boundaries.difference_update(m.end() for m in horiz_matches)
             # Shift boundaries back (1.\)| => |1.\), a. | => |a. ) to correctly
             # terminate the preceding sentence before flattened horizontal list.
