@@ -34,6 +34,9 @@ TEST_DATA = [
     "The proof is shown in eq. (7) and ex. IV",
     "Mr. Smith lives on Hwy. 7 near Ave. Central.",
     "The delivery van broke down right in front of Sunset Blvd.| The driver called a tow truck.",
+
+    # Single-letter markers in prose (fix for #52)
+    "I really want letter A.| I know that I asked you for the B.| I changed my mind.",
     "I'll see you on Fri., Feb. 14th. ",
     "You can find it at N°. 1026.253.553.| That is where the treasure is.",
     "We make a good team, you and I.| Did you see Albert I. Jones yesterday?",
