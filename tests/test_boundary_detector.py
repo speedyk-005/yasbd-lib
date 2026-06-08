@@ -91,6 +91,10 @@ def test_detect_paragraph_eof_sentinel(en_detector):
     result = list(en_detector.detect("Hello. World.", relative=True))
     assert result == [6, 13]
 
+    # Empty paragraph = sentinel at start
+    result = list(en_detector.detect("\n\nHello.", relative=True))
+    assert result == [ParagraphEOF, 6]
+
     # Three paragraphs = two sentinels
     result = list(en_detector.detect("Hi.\n\nBye.\n\nOh.", relative=True))
     assert result == [3, ParagraphEOF, 4, ParagraphEOF, 3]
