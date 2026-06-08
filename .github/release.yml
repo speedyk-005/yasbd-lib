@@ -14,17 +14,18 @@ changelog:
         - enhancement
         - new-language(s)
         
-    - title: '🛠️ Changed'
+    - title: '⚙️ Changed'
       labels:
         - refactor
         - performance
         - python
+        - optimization
         
     - title: '🐛 Fixed'
       labels:
         - bug
         - edge-cases
-        - Patch
+        - patch
         
     - title: '📝 Documentation'
       labels:
