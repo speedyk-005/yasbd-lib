@@ -25,6 +25,8 @@ class HtRules(Rules):
         "Poutan", "Sepandan", "Anplis", "Epitou", "Men", "Sinon", "Otreman",
         "Kidonk", "Donk", "Antretan", "Pakonsekan", "Pa konsekan",
         "Pandan se tan", "Pandansetan",
+        "Apre", "Lè", "Pita", "Finalman", "Okòmansman",
+        "Kounye a", "Premye", "Denye", "Anvan",
 
         # Other common starters
         "Yon", "Eske", "Èske",

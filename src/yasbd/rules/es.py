@@ -66,6 +66,10 @@ class EsRules(Rules):
         "Quizás", "Quizá", "Tal vez", "Ojalá", "Casi",
         "Finalmente", "Generalmente", "Normalmente", "Realmente",
         "Seguramente", "Probablemente", "Lamentablemente", "Afortunadamente",
+        "Posteriormente", "Previamente", "Últimamente", "Actualmente", "Antiguamente", "Próximamente",
+        "Inmediatamente", "Simultáneamente", "Sucesivamente",
+        "Primero", "Segundo", "Tercero", "Último",
+        "Anteriormente", "Consecuentemente", "Subsiguientemente",
 
         # Prepositions & Interrogatives
         "Por", "Para", "Como", "Cuando", "Donde", "De", "Desde", "Durante",

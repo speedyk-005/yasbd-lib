@@ -71,6 +71,10 @@ class PtRules(Rules):
         # Adverbs
         "Contudo", "Todavia", "Entretanto", "Porém", "Além disso", "Portanto",
         "Assim", "Consequentemente", "Enquanto",
+        "Depois", "Então", "Atualmente", "Finalmente", "Inicialmente",
+        "Posteriormente", "Seguinte", "Último",
+        "Primeiramente", "Primeiro", "Segundo", "Terceiro",
+        "Por último", "Antigamente", "Previamente", "Imediatamente",
 
         # Other common starters
         "Faz", "Fez", "Milhões",

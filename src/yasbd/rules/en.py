@@ -42,6 +42,9 @@ class EnRules(Rules):
         # Adverbs
         "However", "Moreover", "Nevertheless", "Therefore", "Consequently",
         "Meanwhile", "Besides", "Furthermore", "Otherwise",
+        "Then", "Afterwards", "Later", "Currently",
+        "Finally", "Initially", "Subsequently", "Next", "Last", "First",
+        "Second", "Third", "Lastly", "Formerly",
 
         # Other common starters
         "Do", "Did", "Millions",

@@ -52,6 +52,10 @@ class FrRules(Rules):
         # Adverbs
         "Mais", "Donc", "Alors", "Cependant", "Toutefois", "Néanmoins",
         "Ainsi", "Puis", "Ensuite", "Voici", "Voilà",
+        "Plus tard", "Actuellement", "Finalement", "Initialement",
+        "Par la suite", "Suivant", "Dernier",
+        "Premièrement", "Deuxièmement", "Troisièmement",
+        "Enfin", "Auparavant", "Désormais", "Dorénavant",
 
         # Question words
         "Qui", "Que", "Qu'", "Quand", "Où", "Pourquoi", "Comment", "Combien",

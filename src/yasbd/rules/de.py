@@ -72,6 +72,10 @@ class DeRules(Rules):
         "Allerdings", "Zudem", "Dennoch", "Deshalb", "Folglich", "Darum",
         "Mittlerweile", "Außerdem", "Darüberhinaus", "Ansonsten", "Jedoch",
         "Ebenso", "Somit", "Dann", "Denn",
+        "Später", "Derzeit", "Inzwischen", "Schließlich", "Anfangs", "Danach",
+        "Nächst", "Nächste", "Letzt", "Letzte",
+        "Erstens", "Zweitens", "Drittens", "Zuletzt",
+        "Früher", "Zuvor", "Daraufhin",
 
         # Other starters
         "Tun", "Tat", "Millionen", "Gestern", "Heute", "Morgen",
