@@ -151,8 +151,8 @@ class Rules:
     # https://regex101.com/r/0P9f2V/1
     TOC_LEADER_FINDER = re.compile(r"[^\W_][\s\.]{4,}\d")
 
-    # https://regex101.com/r/ZOZlLb/2/substitution
-    NEWLINE_INSIDE_SENTENCE_FINDER = re2.compile(r"(?<=[,:;)\w\s])\n(?=([a-z(]))")
+    # https://regex101.com/r/ZOZlLb/3/substitution
+    NEWLINE_INSIDE_SENTENCE_FINDER = re2.compile(r"(?<=[,:;)\w\s])\n(?=([a-z(>]))")
 
     _REGEX_CACHED = False
     # fmt: on
@@ -196,6 +196,9 @@ class Rules:
         cls.NAIVE_BOUNDARY_FINDER = re2.compile(
             rf"""
             (?:
+                # Newline not followed by another newline
+                 (?<=\n(?!\n))|
+
                 # Split if left token is a unicase letter (Always)
                 (?<=\p{{Lo}}\s*[{cls.TERMINATORS_PATTERN}])|
 
@@ -213,7 +216,7 @@ class Rules:
             )
 
             # Not followed by another terminators (clusters)
-            (?!(\s*+[{cls.TERMINATORS_PATTERN}])+)
+            (?!\s*+[{cls.TERMINATORS_PATTERN}])
             """, re2.X,
         )
 

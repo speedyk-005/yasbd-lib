@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Acronym/initialism boundary constraint**: Simplified lookbehind to `[.\s]` to reduce false positive matches in edge cases.
 - **Superscript indicator false splits**: Added protection to prevent boundary breaks after ordinal markers.
 - **Em-dash quoted text splitting**: Added em-dash pattern to `QUOTE_AND_PAREN_FINDER` so dialogue quoted with dashes (`—text! —`) is no longer split prematurely.
-- **Test data**: Added boundary test cases for `then`/`Danach` as sentence starters in English and German.
+- **Newline boundary handling** ([#64](https://github.com/speedyk-005/yasbd-lib/pull/64)): Added `\n` to `NAIVE_BOUNDARY_FINDER` and updated `NEWLINE_INSIDE_SENTENCE_FINDER` to recognize `>` continuation, preventing markdown heading merging.
 
 ## [0.2.0] - 2026-06-04
 
