@@ -26,6 +26,7 @@
 - [🎬 Manifesto](#-manifesto)
   - [✂ Why do I need a pair of "smart scissors" for text?](#-why-do-i-need-a-pair-of-smart-scissors-for-text)
   - [🔪 Are these shears just a rusty regex loop spray-painted in carbon fiber?](#-are-these-shears-just-a-rusty-regex-loop-spray-painted-in-carbon-fiber)
+- [🌐 Supported Languages](#-supported-languages)
 - [🏁 Benchmarks](#-benchmarks)
 - [📦 Installation](#-installation)
   - [The Quick & Easy Way](#the-quick--easy-way)
@@ -48,25 +49,7 @@
 
 ## 🎬 Manifesto
 
-**Y**et **A**nother **S**entence **B**oundary **D**etector is a pair of smart scissors for text. Pointer-based, from-scratch [SBD](https://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) for production NLP pipelines. Features a drop-in adapter for pysbd to fix edge cases without heavy refactoring. 10 languages supported today (ar, de, en, es, fr, ht, ja, pt, ru, zh). Target is 22+ as they were in pysbd.
-
-<details>
-<summary>Click here to see full language info</summary>
-
-|  | Code | Language |
-|--|------|----------|
-| 🇸🇦 | ar   | Arabic |
-| 🇩🇪 | de   | German |
-| 🇬🇧 | en   | English |
-| 🇪🇸 | es   | Spanish |
-| 🇫🇷 | fr   | French |
-| 🇭🇹 | ht   | Haitian Creole |
-| 🇯🇵 | ja   | Japanese |
-| 🇵🇹 | pt   | Portuguese |
-| 🇷🇺 | ru   | Russian |
-| 🇨🇳 | zh   | Chinese |
-
-</details>
+**Y**et **A**nother **S**entence **B**oundary **D**etector is a pair of smart scissors for text. Pointer-based, from-scratch [SBD](https://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) for production NLP pipelines. Features a drop-in adapter for pysbd to fix edge cases without heavy refactoring. 10 languages supported today. Target is 22+ as they were in pysbd.
 
 ###  ✂ Why do I need a pair of "smart scissors" for text?
 
@@ -100,6 +83,28 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 - List marker re-alignmen
 - Contiguous terminator collapsing
 - Language specifical final fixups
+
+---
+
+## 🌐 Supported Languages
+
+<details>
+<summary>Click here to see full language info</summary>
+
+|  | Code | Language |
+|--|------|----------|
+| 🇸🇦 | ar   | Arabic |
+| 🇩🇪 | de   | German |
+| 🇬🇧 | en   | English |
+| 🇪🇸 | es   | Spanish |
+| 🇫🇷 | fr   | French |
+| 🇭🇹 | ht   | Haitian Creole |
+| 🇯🇵 | ja   | Japanese |
+| 🇵🇹 | pt   | Portuguese |
+| 🇷🇺 | ru   | Russian |
+| 🇨🇳 | zh   | Chinese |
+
+</details>
 
 ---
 

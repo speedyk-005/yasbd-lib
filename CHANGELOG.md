@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.3.0] - Unreleased
+## [0.3.0] - 2026-06-08
 
 ### Added
 - **Five new languages** ([#48](https://github.com/speedyk-005/yasbd-lib/pull/48), [#54](https://github.com/speedyk-005/yasbd-lib/pull/54)): Russian (ru), Arabic (ar), Chinese (zh), German (de), and Portuguese (pt)
@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **`NAIVE_BOUNDARY_FINDER` cluster logic unification**: Merged contiguous terminator handling into the lookahead assertion for more consistent behavior and fewer edge-case bugs.
 - **`FULLWIDTH_GEOPOLITICAL_ABBRVS` moved to class-level attribute** with dynamic regex matching instead of static sets.
+- **`COMMON_SENT_STARTERS` expanded** with time-related adverbs (Then, Afterwards, Later, etc.) across all 9 languages.
 
 ### Fixed
 - **Full-width geopolitical abbreviation over-matching**: Replaced static set with dynamic regex to prevent false splits in mixed-script text.
