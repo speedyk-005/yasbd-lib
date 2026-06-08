@@ -29,6 +29,7 @@ TEST_DATA = [
     "I need you to find 3 items, e.g. a hat, a coat, and a bag.",
     "The report was published in Dec.| It was approved by Prof. Smith and Dr. Jones.",
     "The agreement was signed by A.B. Holdings Ltd. in 2024",
+    "I really want letter A.| I know that I asked you for the B.| I changed my mind.",
     "The temperature reached 37.5°C at 6 a.m. on Tue., Feb. 4.",
     "See fig. 2 in vol. 3, ch. 4, pp. 18-22.",
     "The proof is shown in eq. (7) and ex. IV",

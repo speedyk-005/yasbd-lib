@@ -311,10 +311,30 @@ class Rules:
             for m in self.TOC_LEADER_FINDER.finditer(text):
                 main_boundaries.difference_update(range(*m.span()))
 
+    @staticmethod
+    def _is_alpha_dot_list_context(
+        text: str, horiz_matches: list[re2.Match]
+    ) -> bool:
+        """Return True when alphabetic dot markers look like a real list."""
+        alpha_dot_matches = [
+            m for m in horiz_matches if re2.match(r"\s*[A-Ea-e]\.", m.group())
+        ]
+        if len(alpha_dot_matches) != len(horiz_matches):
+            return True
+
+        first_match = alpha_dot_matches[0]
+        if first_match.start() == 0:
+            return True
+
+        prefix = text[: first_match.start()].rstrip()
+        return bool(prefix) and prefix[-1] in ":\n"
+
     def _adjust_list_boundaries(self, main_boundaries: set[int], text: str) -> None:
         """Remove and re-align boundaries around list markers."""
         horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(text))
-        if len(horiz_matches) >= 2:
+        if len(horiz_matches) >= 2 and self._is_alpha_dot_list_context(
+            text, horiz_matches
+        ):
             main_boundaries.difference_update(m.end() for m in horiz_matches)
             # Shift boundaries back (1.\)| => |1.\), a. | => |a. ) to correctly
             # terminate the preceding sentence before flattened horizontal list.
