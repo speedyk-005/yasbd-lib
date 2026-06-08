@@ -109,8 +109,7 @@ class DeRules(Rules):
             re.compile(r"\s\d+\."),
 
             # Multi-part abbreviations with spaces (like "d. h.", "z. B.", "i. d. R.")
-            # Besides it is rare for a German text to end with a single lowercase letter
-            re.compile(r"\b[a-zA-Z]\."),
+            re.compile(r"\b[a-zA-Z]\.(?!\s+\w{2,})"),
 
             # Number/Time abbreviations followed by a date token (e.g., 9 a.m. Monday)
             re.compile(rf"""
