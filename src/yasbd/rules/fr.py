@@ -21,7 +21,7 @@ class FrRules(Rules):
     }
 
     HEADING_TOKENS = Rules.HEADING_TOKENS | {
-        "Annexe", "Chapitre", "Sous-section", "Unité",  "Préface",
+        "Annexe", "Chapitre", "Sous-section", "Unité", "Préface",
     }
 
     MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {
