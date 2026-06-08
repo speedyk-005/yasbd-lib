@@ -358,6 +358,9 @@ class Rules:
         Returns:
             Sorted list of character offsets at which sentences end.
         """
+        if not text or text.isspace():
+            return [len(text)]
+
         text = self.NEWLINE_INSIDE_SENTENCE_FINDER.sub(" ", text)
         main_boundaries = {
             m.end() for m in self.NAIVE_BOUNDARY_FINDER.finditer(text)

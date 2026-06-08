@@ -125,14 +125,7 @@ class BoundaryDetector:
         offset = 0
         is_first_pos = True
         for para in para_iter:
-            if not para or para.isspace():
-                if not relative:
-                    offset += len(para)
-                else:
-                    yield ParagraphEOF
-                continue
-
-            if relative and not is_first_pos:
+            if relative and (not is_first_pos or para.isspace()):
                 yield ParagraphEOF
             is_first_pos = False
 
