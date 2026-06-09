@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.4.0] - Unreleased
+
+### Fixed
+- **Emoji boundary detection** ([#73](https://github.com/speedyk-005/yasbd-lib/issues/73), [#77](https://github.com/speedyk-005/yasbd-lib/pull/77)): Emojis following terminal punctuation are now kept attached to the preceding sentence instead of being fragmented off (`Done. 🎉 Amazing result.` => correct grouping).
+- **English `TITLE_ABBRVS`**: Excluded `min` to prevent false split suppression (minute/minimum should not suppress sentence boundaries).
+
+### Changed
+- **Variable renames for clarity**:
+  - `MID_SENTENCE_ABBRVS` => `INLINE_ONLY_ABBRVS`
+  - `HEADING_TOKENS` => `SECTION_MARKERS`
+  - `GEOPOLITICAL_ABBRVS` => `DOTTED_GEOPOL_ABBRVS`
+- **Spanish `COMMON_SENT_STARTERS` cleaned**: Removed 15 prepositions (En, Por, Para, De, etc.) and 15 verbs (Es, Son, Fue, Hay, etc.) that caused false sentence boundaries after `Ud.`/`Vd.` abbreviations.
+
 ## [0.3.0] - 2026-06-08
 
 ### Added
