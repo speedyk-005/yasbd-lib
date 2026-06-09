@@ -24,7 +24,7 @@ class ArRules(Rules):
         "سـم", "معالي", "دولة"
     }
 
-    GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {
+    DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
         "و.م.أ", "المملكة.المتحدة", "الاتحاد.الأوروبي",
         "أ.م", "الاتحاد.السوفيتي",
         "الإمارات", "ج.ص.ش", "كوريا.الجنوبية"
@@ -34,14 +34,14 @@ class ArRules(Rules):
         "ص", "ج", "مج", "ت", "ط", "ع", "ب", "ح", "خ", "ف", "ق", "ن", "انظر", "قارن"
     }
 
-    HEADING_TOKENS = {
+    SECTION_MARKERS = {
         "فصل", "الفصل", "باب", "الباب", "جزء", "الجزء", "قسم", "القسم",
         "مادة", "المادة", "بند", "البند", "مقدمة", "المقدمة", "تمهيد", "التمهيد",
         "خاتمة", "الخاتمة", "كتاب", "الكتاب", "ملحق", "الملحق", "فهرس", "الفهرس",
         "المبحث", "المطلب", "المسألة"
     }
 
-    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {
+    INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
         # Calendar & Time Eras
         "هـ", "م", "ق.م", "ب.م", "ش", "س", "د",
 

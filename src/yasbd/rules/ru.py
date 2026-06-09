@@ -27,7 +27,7 @@ class RuRules(Rules):
     # English geopolitical abbreviations (USA, UK, NATO, etc.) may appear in
     # Russian texts but are typically replaced by Russian equivalents or treated
     # as foreign Latin-script tokens rather than native patterns.
-    GEOPOLITICAL_ABBRVS = set()
+    DOTTED_GEOPOL_ABBRVS = set()
 
     REFERENCE_ABBRVS = {
         "см", "ср", "цит", "цит по", "с", "стр", "гл", "разд", "раздл", "§",
@@ -35,13 +35,13 @@ class RuRules(Rules):
         "и.о", "ч", "изд", "собр", "соч", "т", "тт"
     }
 
-    HEADING_TOKENS = {
+    SECTION_MARKERS = {
         "Глава", "Часть", "Раздел", "Статья", "Параграф",
         "Том", "Книга", "Подраздел", "Модуль", "Дивизион",
         "Использование", "Единица", "Предисловие", "Введение"
     }
 
-    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {
+    INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
         "в", "вв", "г", "гг", "до н.э", "н.э", "руб", "коп", "долл", "тыс",
         "млн", "млрд", "трлн", "экз", "ед", "шт", "ул", "пр", "пер", "пл",
         "обл", "р-н", "окт", "нояб", "дек", "янв", "февр", "март", "апр",

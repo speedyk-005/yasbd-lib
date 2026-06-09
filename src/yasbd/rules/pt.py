@@ -24,12 +24,12 @@ class PtRules(Rules):
         "incl", "cia", "vol", "ed", "puj",
     }
 
-    HEADING_TOKENS = Rules.HEADING_TOKENS | {
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {
         "Artigo", "Anexo", "Capítulo", "Secção", "Seção", "Subsecção", "Subseção",
         "Unidade", "Módulo", "Divisão",
     }
 
-    MID_SENTENCE_ABBRVS = (Rules.MID_SENTENCE_ABBRVS - {"ave"}) | {
+    INLINE_ONLY_ABBRVS = (Rules.INLINE_ONLY_ABBRVS - {"ave"}) | {
         # Business entity bridges
         "assoc",
 
@@ -42,7 +42,7 @@ class PtRules(Rules):
         "apto", "bl", "cj", "ed", "edif", "sl", "jd", "m.g",
     }
 
-    GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {
+    DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
         "E.U.A", "U.E", "P.T", "F.A", "R.H",
     }
 

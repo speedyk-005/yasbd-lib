@@ -38,7 +38,7 @@ class Rules:
         "msgr", "amb",
     }
 
-    GEOPOLITICAL_ABBRVS = {
+    DOTTED_GEOPOL_ABBRVS = {
         # North Atlantic / Western Europe
         "U.S", "U.S.A", "U.K", "E.U",
 
@@ -76,7 +76,7 @@ class Rules:
         "et al", "s", "univ",
     }
 
-    HEADING_TOKENS = {
+    SECTION_MARKERS = {
         "Part", "Parte", "Section", "Subsection", "Article",
         "Module", "Division", "Usage", "Unit", "Volume",
         "Preface", "Introduction",
@@ -92,7 +92,7 @@ class Rules:
         "sat", "sun", "lun", "dom",
     }
 
-    MID_SENTENCE_ABBRVS = {
+    INLINE_ONLY_ABBRVS = {
         # Business entity bridges
         "assoc", "mfg",
 
@@ -173,7 +173,7 @@ class Rules:
         cls.TERMINATORS_PATTERN = "".join(cls.TERMINATORS)
         cls.DOTS_PATTERN = r"[.．]"
         cls.TITLE_ABBRVS_PATTERN = _build_abbr_pattern(cls.TITLE_ABBRVS)
-        cls.GEOPOLITICAL_ABBRVS_PATTERN = _build_abbr_pattern(cls.GEOPOLITICAL_ABBRVS)
+        cls.DOTTED_GEOPOL_ABBRVS_PATTERN = _build_abbr_pattern(cls.DOTTED_GEOPOL_ABBRVS)
         cls.COMMON_STARTERS_PATTERN = _build_abbr_pattern(cls.COMMON_SENT_STARTERS)
 
         # https://regex101.com/r/qBSyU5/15
@@ -229,7 +229,7 @@ class Rules:
 
             # Abbrv that NEVER ends a sentence
             re.compile(
-               rf"\b(?i:{_build_abbr_pattern(cls.MID_SENTENCE_ABBRVS)}){cls.DOTS_PATTERN}"
+               rf"\b(?i:{_build_abbr_pattern(cls.INLINE_ONLY_ABBRVS)}){cls.DOTS_PATTERN}"
             ),
 
             # References abbrv + number/letter/bracket (e.g., to p. 55, app. A, et al. [2004])
@@ -254,7 +254,7 @@ class Rules:
                     (?<=[.\s])
                     \p{{Lu}}|\b\p{{Lo}}
                 )\.
-                (?<!(?i:{cls.GEOPOLITICAL_ABBRVS_PATTERN}|p\.m|a\.m){cls.DOTS_PATTERN})
+                (?<!(?i:{cls.DOTTED_GEOPOL_ABBRVS_PATTERN}|p\.m|a\.m){cls.DOTS_PATTERN})
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                 """, re2.X
             ),
@@ -266,7 +266,7 @@ class Rules:
 
             # structural headings (e.g., "Section 1. The Beginning.")
             re.compile(rf"""
-                \b(?:{_build_abbr_pattern(cls.HEADING_TOKENS)})\s+
+                \b(?:{_build_abbr_pattern(cls.SECTION_MARKERS)})\s+
                 (?:[\dIVXLCDM]+{cls.DOTS_PATTERN}){{1,3}}
                 """, re.X
             )

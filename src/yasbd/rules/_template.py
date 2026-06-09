@@ -19,17 +19,17 @@ class LangRules(Rules):
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {...}
 
     # Country and regional abbreviations written with periods (U.S., E.U., etc.).
-    GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {...}
+    DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {...}
 
     # Citation and reference abbreviations commonly used mid-text.
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {...}
 
     # Structural headings (e.g., Section, Chapter, etc.).
     # Not too useful for CJKV languages style
-    HEADING_TOKENS = Rules.HEADING_TOKENS | {...}
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {...}
 
     # Common inline abbreviations that should not end a sentence (e.g., Blvd., etc.).
-    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {...}
+    INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {...}
 
     # Names or titles containing "!" that should not trigger sentence breaks.
     NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {...}

@@ -8,7 +8,7 @@ class HtRules(Rules):
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {"sek"} - {"ex", "exs", "tab"}
     DATE_ABBRVS = Rules.DATE_ABBRVS | {"okt", "fev", "des"}
 
-    HEADING_TOKENS = Rules.HEADING_TOKENS | {
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {
         "Chapit", "Pati", "Seksyon", "Atik", "Inite", "Modil", "Divizyon"
     }
 

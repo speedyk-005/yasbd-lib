@@ -23,18 +23,18 @@ class EsRules(Rules):
         "cf", "incl", "cía", "s",
     }
 
-    HEADING_TOKENS = Rules.HEADING_TOKENS | {
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {
     "Artículo", "Anexo", "Capítulo", "Sección", "Subsección", "Unidad",
     "Módulo", "División",
     }
 
-    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS - {"ave"} | {
+    INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS - {"ave"} | {
         "ej", "p.ej", "vid", "cll", "cra", "diag", "transv", "mz", "mza", "lt",
         "urb", "asent", "dpto", "prov", "mnpio", "conj", "edif", "ofic", "km",
         "av", "avd", "c", "pso", "ctra", "pl", "blvr",
     }
 
-    GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {
+    DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
         "EE.UU", "FF.AA", "RR.HH", "CC.AA", "EE", "UU", "FF", "RR", "HH", "AA",
     }
 
