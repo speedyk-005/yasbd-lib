@@ -59,14 +59,14 @@ First call includes import + init + first segment. Subsequent calls are warm. Te
 
 The baseline. Standard English with titles, URLs, and decimal numbers. Every library should ace this.
 
-```
+```txt
 Dr. Anthony Fauci served as the director of the National Institute of Allergy and Infectious Diseases for 38 years. He retired in December 2022. "I want to let the next generation take over," he said in an interview. His work, which began under President Reagan, spanned six presidential administrations. According to a 2021 report in The Lancet, the U.S. invested over $100 billion in pandemic preparedness. "That money saved lives," Fauci noted. See nih.gov for more details.
 ```
 
 <details>
 <summary>click to see output</summary>
 
-```
+```txt
   yasbd [en]:
     1: 'Dr. Anthony Fauci served as the director of the National Institute of Allergy and Infectious Diseases for 38 years.'
     2: 'He retired in December 2022.'
@@ -138,7 +138,7 @@ All libraries returned 7/7 sentences. `Dr.`, `U.S.`, `$100 billion`, `nih.gov` h
 
 URLs with query parameters, inline citations, nested quotes, copyright notices. The kind of text that breaks naive splitters.
 
-```
+```txt
 Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.
 Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.
 My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.
@@ -156,7 +156,7 @@ Copyright © 2024 Example Corp. All rights reserved.
 <details>
 <summary>click to see output</summary>
 
-```
+```txt
   yasbd [en]:
     1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
     2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
@@ -272,7 +272,7 @@ Copyright © 2024 Example Corp. All rights reserved.
 
 Sentences that wrap across lines should not be split. This tests whether the library treats `\n` as a sentence boundary or just whitespace.
 
-```
+```txt
 This is a sentence that wraps
 to a second line but should not be split into two.
 Dr. Smith went to Washington
@@ -290,7 +290,7 @@ incl. the events of the s. XIX, was retransmitted.
 <details>
 <summary>click to see output</summary>
 
-```
+```txt
   yasbd [en]:
     1: 'This is a sentence that wraps\nto a second line but should not be split into two.'
     2: 'Dr. Smith went to Washington\nand met with the president.'
@@ -396,14 +396,14 @@ incl. the events of the s. XIX, was retransmitted.
 
 Emoji are increasingly common in modern text. The question: does the emoji belong to the preceding sentence (it's a reaction) or the next one (it sets the tone)? The answer is ambiguous by nature, but a good SBD should keep them attached to the preceding sentence rather than fragmenting them off.
 
-```
+```txt
 Hello world. 😊 How are you? Nice work! 👍 Next step. Done. 🎉 Amazing result.
 ```
 
 <details>
 <summary>click to see output</summary>
 
-```
+```txt
   yasbd [en]:
     1: 'Hello world. 😊'
     2: 'How are you?'
@@ -470,7 +470,7 @@ Hello world. 😊 How are you? Nice work! 👍 Next step. Done. 🎉 Amazing res
 
 This conversational chat context completely turns the rankings upside down. Standard rule-based or academic models fall apart here due to informal punctuation (multiple punctuation marks like `!!!`, `???`), lowercase abbreviations (`a.m.`, `dr.`, `sec.`), and lack of proper capitalization.
 
-```
+```txt
 Hey!!! how r u doing??? i'm good... just finished work cool!!! wanna grab dinner later?? sure!!! where should we meet??? maybe 7pm???
 lol. OK.... sure?? fine. nah. idk. maybe. bruh. what even is this. broh !! 
 that is so sad 😭 I tougja we were friends.
@@ -485,7 +485,7 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
 <details>
 <summary>click to see output</summary>
 
-```
+```txt
   yasbd [en]:
     1: 'Hey!!!'
     2: 'how r u doing???'
@@ -666,7 +666,7 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
 
 French uses compound abbreviations with internal periods: `c.-à-d.` (c'est-à-dire), `m.-à-j.` (mise à jour), `R.-V.` (rendez-vous), `av.-j.-c.` (avant Jésus-Christ). These are brutal for SBD because every period looks like a sentence boundary.
 
-```
+```txt
 Le manuel, c.-à-d. la version complète, a été publié après une longue m.-à-j. du système interne. Le rendez-vous, noté R.-V. dans le dossier administratif, a été déplacé à 14 h. après une d.-h. d'attente.
 L'historien étudiait les événements survenus en 52 av.-j.-c. puis ceux de 476 ap.-j.-c. afin de comparer les deux périodes. Le document portait les mentions s.-d. et s.-l., ce qui compliquait l'identification de son origine exacte.
 ```
@@ -674,7 +674,7 @@ L'historien étudiait les événements survenus en 52 av.-j.-c. puis ceux de 476
 <details>
 <summary>click to see output</summary>
 
-```
+```txt
   yasbd [fr]:
     1: 'Le manuel, c.-à-d. la version complète, a été publié après une longue m.-à-j. du système interne.'
     2: "Le rendez-vous, noté R.-V. dans le dossier administratif, a été déplacé à 14 h. après une d.-h. d'attente."
@@ -776,7 +776,7 @@ L'historien étudiait les événements survenus en 52 av.-j.-c. puis ceux de 476
 
 Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting as sentence boundaries. The challenge is keeping quotes intact: `「...？」` should not be split mid-quote.
 
-```
+```txt
 今日はいい天気ですね。明日から雨が降るそうです。外出するなら傘を持って行ったほうがいいでしょう。
 「すみません、駅はどちらですか？」と観光客が聞いた。私は「この道をまっすぐ行って、二つ目の信号を右に曲がってください」と答えた。
 田中さんは「来週の会議は午後2時からです。遅れないでください」と言いました。日本の首都は東京です。
@@ -788,7 +788,7 @@ Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting a
 <details>
 <summary>click to see output</summary>
 
-```
+```txt
   yasbd [ja]:
     1: '今日はいい天気ですね。'
     2: '明日から雨が降るそうです。'
@@ -934,7 +934,7 @@ Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting a
 
 Spanish uses abbreviations with internal periods similar to French: `p. ej.` (por ejemplo), `Cía.` (Compañía), `Asoc.` (Asociación), `s.` (siglo), `act.` (actualización). Plus guillemets `«...»` for quotes.
 
-```
+```txt
 El informe, p. ej., fue revisado por el Dr. Gómez antes de su publicación oficial.
 La reunión con la Srta. Martínez y el Lic. Pérez terminó a las 18 h. después de una larga discusión.
 La empresa Rodríguez y Cía. firmó el contrato junto con la Asoc. Internacional de Comercio. El documento indicaba "confidencial", es decir, solo podía ser leído por el personal autorizado.
@@ -944,7 +944,7 @@ La conferencia sobre la historia de América, incl. los eventos ocurridos en el 
 <details>
 <summary>click to see output</summary>
 
-```
+```txt
   yasbd [es]:
     1: 'El informe, p. ej., fue revisado por el Dr. Gómez antes de su publicación oficial.'
     2: 'La reunión con la Srta. Martínez y el Lic. Pérez terminó a las 18 h. después de una larga discusión.'
@@ -1040,7 +1040,7 @@ La conferencia sobre la historia de América, incl. los eventos ocurridos en el 
 
 Haitian Creole (Kreyòl) uses French-derived abbreviations (`fig.`, `p.`, `St.`, `p.m.`) and standard Latin punctuation. Only 4 of 7 libraries support `ht`.
 
-```
+```txt
 Alo mond. Koman ou ye? Mwen byen. Kisa ou ap fè? Mwen ap li yon liv.
 Gade fig. 2 pou rezilta yo. Li nan p. 55 nan liv la. Li empòtan.
 Li te fèt nan mwa janv. Li te vini an fevriye. St. Michel se yon kote bèl.
@@ -1055,7 +1055,7 @@ The meeting is at 2 p.m. Mwen pral vini.
 <details>
 <summary>click to see output</summary>
 
-```
+```txt
   yasbd [ht]:
     1: 'Alo mond.'
     2: 'Koman ou ye?'
