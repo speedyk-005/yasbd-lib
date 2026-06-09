@@ -110,6 +110,11 @@ TEST_DATA = [
     "About the project\n|A CLA is necessary to make sure that someone contributing...",
     "> Somewhere, something incredible\n> is waiting to be known",
 
+    # Emojis (fix for #73)
+    "Nice work! 👍| Next step.",
+    "Done. 🎉| Amazing result.",
+    "The alternative is to put it before the full stop 👉.| So cool, right?",
+
     # Mixed language
     "我喜欢AI。|It is useful",
     "The meeting is at 2 p.m.| 请别迟到。",
