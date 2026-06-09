@@ -195,7 +195,7 @@ class Rules:
         # https://regex101.com/r/VMzYsx/10
         cls.NAIVE_BOUNDARY_FINDER = re2.compile(
             rf"""
-            (?p)(?:
+            (?:
                 # Newline not followed by another newline
                  (?<=\n)(?!\n)|
 
@@ -211,8 +211,9 @@ class Rules:
                     \s+(?<!\.\.)(?i:{cls.COMMON_STARTERS_PATTERN})\b)
                )|
 
-               # Emojis followed by an uppercase letter
-               (?<=\s*\p{{Emoji_Presentation}})(?=\s*\p{{Lu}})|
+               # Emoji after terminator + uppercase, or emoji + common starter
+               (?<=[{cls.TERMINATORS_PATTERN}]\s*\p{{Emoji_Presentation}}+)|
+               (?<=\s+\p{{Emoji_Presentation}})(?=\s*(?:{cls.COMMON_STARTERS_PATTERN})\b)|
 
                 # Split at transition between Latin letters separate by alien
                 (?<=[\p{{LU}}\p{{Ll}}][​。！？।])(?=[\p{{Lu}}])

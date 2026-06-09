@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.4.0] - Unreleased
 
 ### Fixed
-- **Emoji boundary detection** ([#73](https://github.com/speedyk-005/yasbd-lib/issues/73), [#77](https://github.com/speedyk-005/yasbd-lib/pull/77)): Emojis following terminal punctuation are now kept attached to the preceding sentence instead of being fragmented off (`Done. 🎉 Amazing result.` => correct grouping).
+- **Emoji boundary detection** ([#73](https://github.com/speedyk-005/yasbd-lib/issues/73), [#77](https://github.com/speedyk-005/yasbd-lib/pull/77)): Emojis following terminal punctuation now stay with the preceding sentence. Besides, split after emoji + common sentence starter.
 - **English `TITLE_ABBRVS`**: Excluded `min` to prevent false split suppression (minute/minimum should not suppress sentence boundaries).
 
 ### Changed
