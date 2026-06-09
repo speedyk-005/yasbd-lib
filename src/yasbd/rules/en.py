@@ -7,7 +7,7 @@ from yasbd.rules.base import Rules, _build_abbr_pattern
 class EnRules(Rules):
 
 
-    TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
+    TITLE_ABBRVS = (Rules.TITLE_ABBRVS - {"min"}) | {
         "cong", "cpls", "ens", "sgts", "revs", "v.p", "del", "dep", "cllr",
     }
 
