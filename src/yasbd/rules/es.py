@@ -72,15 +72,9 @@ class EsRules(Rules):
         "Primero", "Segundo", "Tercero", "Último",
         "Anteriormente", "Consecuentemente", "Subsiguientemente",
 
-        # Prepositions & Interrogatives
-        "Por", "Para", "Como", "Cuando", "Donde", "De", "Desde", "Durante",
-        "En", "Entre", "Hacia", "Hasta", "Mediante", "Según", "Sin", "Con",
-        "Sobre", "Tras", "Qué", "Quién", "Cuál", "Cuánto", "Cómo", "Cuándo",
+        # Question words
+        "Como", "Cuando", "Donde", "Qué", "Quién", "Cuál", "Cuánto", "Cómo", "Cuándo",
         "Dónde", "Porqué", "Porque",
-
-        # Verbs / auxiliaries
-        "Es", "Son", "Era", "Eran", "Fue", "Fueron", "Hay", "Tiene",
-        "Tienen", "Está", "Están", "Había", "Hubo", "Estaba", "Estuvo",
     }
 
     @classmethod
