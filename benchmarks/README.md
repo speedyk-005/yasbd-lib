@@ -392,6 +392,80 @@ incl. the events of the s. XIX, was retransmitted.
 | **6** | **sentsplit** | **15** | 7.58 | **Splits on every `\n`**, plus splits `Fig.` from `3 for details)`. |
 | **7** | **sentence-splitter** | **15** | 1.41 | **Splits on every `\n`.** Same count as sentsplit but cleaner output. |
 
+### Emoji boundaries
+
+Emoji are increasingly common in modern text. The question: does the emoji belong to the preceding sentence (it's a reaction) or the next one (it sets the tone)? The answer is ambiguous by nature, but a good SBD should keep them attached to the preceding sentence rather than fragmenting them off.
+
+```
+Hello world. 😊 How are you? Nice work! 👍 Next step. Done. 🎉 Amazing result.
+```
+
+<details>
+<summary>click to see output</summary>
+
+```
+  yasbd [en]:
+    1: 'Hello world. 😊'
+    2: 'How are you?'
+    3: 'Nice work! 👍'
+    4: 'Next step.'
+    5: 'Done. 🎉'
+    6: 'Amazing result.'
+
+  pysbd [en]:
+    1: 'Hello world. '
+    2: '😊 How are you? '
+    3: 'Nice work! '
+    4: '👍 Next step. '
+    5: 'Done. '
+    6: '🎉 Amazing result.'
+
+  sentencex [en]:
+    1: 'Hello world. '
+    2: '😊 How are you? '
+    3: 'Nice work! '
+    4: '👍 Next step. '
+    5: 'Done. '
+    6: '🎉 Amazing result.'
+
+  sentsplit [en]:
+    1: 'Hello world.'
+    2: ' 😊 How are you?'
+    3: ' Nice work!'
+    4: ' 👍 Next step.'
+    5: ' Done. 🎉 Amazing result.'
+
+  nupunkt [en]:
+    1: 'Hello world.'
+    2: '😊 How are you?'
+    3: 'Nice work!'
+    4: '👍 Next step.'
+    5: 'Done.'
+    6: '🎉 Amazing result.'
+
+  blingfire [en]:
+    1: 'Hello world. 😊 How are you?'
+    2: 'Nice work! 👍 Next step. Done. 🎉 Amazing result.'
+
+  sentence-splitter [en]:
+    1: 'Hello world. 😊 How are you?'
+    2: 'Nice work! 👍 Next step.'
+    3: 'Done. 🎉 Amazing result.'
+```
+</details>
+
+| Rank | Library | N sents | Warm Time (ms) | The Verdict |
+| --- | --- | --- | --- | --- |
+| **1** | **yasbd** | 6 | 0.37 | **Emoji stays attached.** Period + emoji kept as one unit before the next sentence starts. Clean output. |
+| **2** | **pysbd** | 6 | 0.76 | **Detaches each emoji.** Same count, but `😊 How are you?` reads like the emoji is leading. |
+| **3** | **sentencex** | 6 | 0.02 | **Same detachment as pysbd.** Fast but wrong grouping. |
+| **4** | **nupunkt** | 6 | 0.27 | **Also detaches emojis.** Same fragmentation. |
+| **5** | **sentsplit** | 5 | 2.14 | **Merges last two sentences.** `Done. 🎉 Amazing result.` glued together. Leading whitespace everywhere. |
+| **6** | **sentence-splitter** | 3 | 0.95 | **Under-splits.** Collapses everything into 3 chunks, but at least keeps emojis with their sentences. |
+| **7** | **blingfire** | 2 | 0.02 | **Total failure.** Joins entire first half into one sentence. FSM has no concept of emoji. |
+
+---
+
 ### Chat Log
 
 This conversational chat context completely turns the rankings upside down. Standard rule-based or academic models fall apart here due to informal punctuation (multiple punctuation marks like `!!!`, `???`), lowercase abbreviations (`a.m.`, `dr.`, `sec.`), and lack of proper capitalization.
