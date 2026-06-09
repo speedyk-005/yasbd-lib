@@ -12,7 +12,7 @@ class DeRules(Rules):
         "h", "hr", "hnr", "hll", "frl", "min", "pfr", "ass", "​projektass",
     }
 
-    GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {
+    DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
         "D.H", "E.V", "G.M.B.H", "I.G", "A.D", "K.U.K"
     }
 
@@ -26,7 +26,7 @@ class DeRules(Rules):
         "abs", "art", "az", "lit", "m.w.n", "rspr",
     }
 
-    HEADING_TOKENS = Rules.HEADING_TOKENS | {
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {
         "Abschnitt", "Anhang", "Artikel", "Band", "Beispiel",
         "Einleitung", "Exposé", "Kapitel", "Paragraf", "Präambel",
         "Schlusswort", "Seite", "Teil", "Vorwort", "Zusammenfassung",
@@ -35,7 +35,7 @@ class DeRules(Rules):
     # Multi-part abbreviations with spaces (like "d. h.", "z. B.", "i. d. R.")
     # are removed from this literal set. They are caught dynamically later
     # in the pipeline by the cls.MID_SENTENCE_FINDER_LST regex rule.
-    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | {
+    INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
        # Bridge / Logical connectors
        "bzw", "evtl", "ggf", "ggfs", "inkl", "lt", "sog",
        "zzgl", "bspw", "insb", "ca", "bsp",
@@ -85,7 +85,7 @@ class DeRules(Rules):
         "str", "gasse", "pl", "allee", "weg", "hbf", "platz",
         "ring", "ufer", "chaussee", "damm", "brücke", "geb"
     }
-    MID_SENTENCE_ABBRVS |= STREET_ABBRVS
+    INLINE_ONLY_ABBRVS |= STREET_ABBRVS
 
     DATE_WORDS = {
         # Months

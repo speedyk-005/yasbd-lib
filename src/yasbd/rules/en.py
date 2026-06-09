@@ -7,11 +7,11 @@ from yasbd.rules.base import Rules, _build_abbr_pattern
 class EnRules(Rules):
 
 
-    TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
+    TITLE_ABBRVS = (Rules.TITLE_ABBRVS - {"min"}) | {
         "cong", "cpls", "ens", "sgts", "revs", "v.p", "del", "dep", "cllr",
     }
 
-    GEOPOLITICAL_ABBRVS = Rules.GEOPOLITICAL_ABBRVS | {
+    DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
         "calif", "dc", "wash", "bc", "ont"
     }
 
@@ -26,7 +26,7 @@ class EnRules(Rules):
         "appt",
     }
 
-    HEADING_TOKENS = Rules.HEADING_TOKENS | {"Chapter", "Appendix",}
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {"Chapter", "Appendix",}
 
     COMMON_SENT_STARTERS = {
         # Articles
@@ -55,7 +55,7 @@ class EnRules(Rules):
         "rte", "rt", "jct", "riv", "pen", "bldg", "expy", "hway", "hwy",
         "pkwy", "isl",
     }
-    MID_SENTENCE_ABBRVS = Rules.MID_SENTENCE_ABBRVS | STREET_ABBRVS
+    INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | STREET_ABBRVS
 
     ORG_PROPER_NOUNS = {
         # Military institutions
@@ -89,7 +89,7 @@ class EnRules(Rules):
 
             # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
             re.compile(rf"""
-                \b(?i:{cls.GEOPOLITICAL_ABBRVS_PATTERN})\.
+                \b(?i:{cls.DOTTED_GEOPOL_ABBRVS_PATTERN})\.
                 (?=\s+(?:{_build_abbr_pattern(cls.ORG_PROPER_NOUNS)}))
                 """, re.X
             ),
