@@ -92,7 +92,7 @@ If you changed any docstrings or public interfaces, regenerate the docs:
 uv pip install -e ".[dev]"
 
 # Generate API_REFERENCES.md from docstrings
-uv run python -m python_docstring_markdown ./src/yasbd API_REFERENCES.md
+bash scripts/gen_api_docs.sh
 
 # Generate/update README TOC (GitHub-compatible)
 npx doctoc --github README.md
