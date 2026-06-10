@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **English `TITLE_ABBRVS`**: Excluded `min` to prevent false split suppression (minute/minimum should not suppress sentence boundaries).
 
 ### Changed
+- **API doc generation** ([#83](https://github.com/speedyk-005/yasbd-lib/pull/83)): Replaced `python_docstring_markdown` with `pydoc-markdown`, fixing broken anchor links for re-exported symbols. Added `scripts/gen_api_docs.sh` for easy regeneration.
 - **`log_info` helper**: Extracted to `yasbd.utils.logger` — gated logging without repeating `if verbose:`.
 - **Unsupported language error messages** ([#78](https://github.com/speedyk-005/yasbd-lib/pull/78)): now list supported codes and suggest close matches (e.g. `eng` => `en`).
 - **Variable renames for clarity**:
