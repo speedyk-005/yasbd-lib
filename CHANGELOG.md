@@ -9,11 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.0] - Unreleased
 
+### Added
+- **Custom exception classes** ([#78](https://github.com/speedyk-005/yasbd-lib/pull/78)): `YasbdError` (base), `UnsupportedLanguageError`, and `InvalidInputError` with ValueError/TypeError mixins.
+
 ### Fixed
-- **Emoji boundary detection** ([#73](https://github.com/speedyk-005/yasbd-lib/issues/73), [#77](https://github.com/speedyk-005/yasbd-lib/pull/77)): Emojis following terminal punctuation now stay with the preceding sentence. Besides, split after emoji + common sentence starter.
+- **Emoji boundary detection** ([#77](https://github.com/speedyk-005/yasbd-lib/pull/77)): Emojis following terminal punctuation now stay with the preceding sentence. Besides, split after emoji + common sentence starter.
 - **English `TITLE_ABBRVS`**: Excluded `min` to prevent false split suppression (minute/minimum should not suppress sentence boundaries).
 
 ### Changed
+- **Unsupported language errors msg** now list supported codes and suggest close matches (e.g. `eng` => `en`).
 - **Variable renames for clarity**:
   - `MID_SENTENCE_ABBRVS` => `INLINE_ONLY_ABBRVS`
   - `HEADING_TOKENS` => `SECTION_MARKERS`
