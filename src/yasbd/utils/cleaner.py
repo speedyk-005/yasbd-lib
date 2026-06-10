@@ -173,7 +173,11 @@ class StreamCleaner(StreamCleanerStub):
             )
 
         self.extra_steps = list(extra_steps or ())
-        log_info(self.verbose, "StreamCleaner initialized with {} extra step(s)", len(self.extra_steps))
+        log_info(
+            self.verbose,
+            "StreamCleaner initialized with {} extra step(s)",
+            len(self.extra_steps),
+        )
 
     def __iter__(self) -> Iterator[str]:
         return self
@@ -191,7 +195,9 @@ class StreamCleaner(StreamCleanerStub):
                     cleaned_text = CLEANING_PIPELINE[step_name](cleaned_text)
 
             for step in self.extra_steps:
-                log_info(self.verbose, "Applying extra step: {}", getattr(step, "__name__", step))
+                log_info(
+                    self.verbose, "Applying extra step: {}", getattr(step, "__name__", step)
+                )
                 try:
                     result = step(cleaned_text)
                     assert isinstance(result, str), (

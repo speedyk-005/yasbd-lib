@@ -106,6 +106,7 @@ select = ["E", "F", "I", "W", "B"]
 "__init__.py" = ["F401", "F403", "I001"]
 "src/yasbd/utils/cleaner.py" = ["E501"]
 "tests/test_data/*" = ["E501"]
+"benchmarks/*" = ["E501"]
 
 [tool.ruff.format]
 exclude = [".git", ".venv", "build", "dist", "tests/test_data/*", "*/EN_GOLDEN_DATA.py"]

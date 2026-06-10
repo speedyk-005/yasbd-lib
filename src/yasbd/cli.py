@@ -259,7 +259,8 @@ def detect(
         "--steps-to-skip", "--skip", help="Comma-separated cleaning steps to skip."
     ),
     extra_step=Arg(
-        "--extra-step", "-e",
+        "--extra-step",
+        "-e",
         help="External shell command to run as an extra cleaning step (repeatable).",
     ),
     verbose=Arg("--verbose", "-v", help="Enable verbose logging."),
