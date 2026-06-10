@@ -72,9 +72,11 @@ class BoundaryDetector:
             if lang not in str(e):
                 raise
             supported = get_supported_langs()
-            close = difflib.get_close_matches(lang, supported, n=3, cutoff=0.5)
-            msg = f"Unsupported language: {lang!r}\n\nSupported language codes:\n  {', '.join(supported)}"
-            if close:
+            msg = (
+                f"Unsupported language: {lang!r}\n\n"
+                f"Supported language codes:\n  {', '.join(supported)}"
+            )
+            if close := difflib.get_close_matches(lang, supported, n=3, cutoff=0.5):
                 msg += f"\n\n💡 Did you mean:\n  {', '.join(close)}"
             raise ValueError(msg) from None
 
