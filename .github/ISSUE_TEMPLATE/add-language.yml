@@ -1,6 +1,6 @@
 name: 🌍 Request New Language Support
 description: Ask for a new language to be added to yasbd-lib.
-title: "[LANG] Add support for <Language Name>"
+title: "[feat] Add support for <Language Name>"
 labels: ["enhancement", "language-request"]
 body:
   - type: markdown
