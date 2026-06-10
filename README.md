@@ -116,7 +116,7 @@ Tested against 6 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, s
 
 **TL;DR:** yasbd ranked #1 in accuracy across almost every test, while staying competitive on speed as pure Python. blingfire is faster but brittle. pysbd and sentencex shred French abbreviations.
 
-On our [golden benchmark](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks#golden-benchmark) (85 English edge cases adapted from pysbd's official golden rule set with fixes and additions): yasbd scores **100.0%**, pysbd **84.7%**.
+On our [golden benchmark](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks#en-golden-benchmark) (92 English edge cases adapted from pysbd's official golden rule set with fixes and additions): yasbd scores **98.9%**, pysbd **83.7%**.
 
 Full results, terminal output, and a performance graph can be found in **[benchmarks/](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks)**
 

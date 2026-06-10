@@ -21,19 +21,19 @@ The format is simple: throw edge cases at each library. Does it split where it s
 
 ## EN Golden benchmark
 
-Aggregate score across all 85 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOLDEN_DATA.py) via [`run_golden.py`](run_golden.py). A modified and expanded version of [pysbd's official golden rule set](https://github.com/nipunsadvilkar/pySBD/blob/master/tests/lang/test_english.py): we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, and more.
+Aggregate score across all 92 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOLDEN_DATA.py) via [`run_golden.py`](run_golden.py). A modified and expanded version of [pysbd's official golden rule set](https://github.com/nipunsadvilkar/pySBD/blob/master/tests/lang/test_english.py): we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, academic citations, and more.
 
 | Library | Score |
 |---|---|
-| **yasbd** | 85/85 (100.0%) |
-| pysbd | 72/85 (84.7%) |
-| sentencex | 70/85 (82.4%) |
-| blingfire | 69/85 (81.2%) |
-| sentence-splitter | 56/85 (65.9%) |
-| sentsplit | 55/85 (64.7%) |
-| nupunkt | 53/85 (62.4%) |
+| **yasbd** | 91/92 (98.9%) |
+| pysbd | 77/92 (83.7%) |
+| sentsplit | 61/92 (66.3%) |
+| sentence-splitter | 60/92 (65.2%) |
+| nupunkt | 59/92 (64.1%) |
+| sentencex | 56/92 (60.9%) |
+| blingfire | 0/92 (0.0%) |
 
-yasbd achieves a perfect 85/85 score. The test suite was expanded to 85 cases with additional edge cases for contiguous terminators, exclamation-safe words, and mixed-script text.
+yasbd achieves 91/92 (98.9%). The only failing case is the `Ave.` abbreviation followed by a capitalized new sentence — a known limitation of rule-based abbreviation suppression. The test suite has been expanded from 85 to 92 cases with additional academic citation patterns.
 
 ## Cold vs Warm speed
 
