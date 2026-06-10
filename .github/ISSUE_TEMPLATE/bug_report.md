@@ -1,8 +1,8 @@
 ---
 name: 🐛 Bug Report
 about: Report a text segmenting error or broken edge case in yasbd-lib.
-title: '[BUG] '
-labels: bug, triage
+title: '[bug] '
+labels: bug, edge-cases
 assignees: ''
 ---
 
