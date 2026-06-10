@@ -364,9 +364,17 @@ yasbd --help         # top-level commands
 yasbd segment --help # per-command options
 yasbd detect --help
 yasbd clean --help
+```
 
 CLI API reference at [`API_REFERENCES.md#yasbd-cli`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-cli).
-```
+
+#### About JSONL
+
+When writing to a file with `--destination`, output is JSONL (one JSON object per line):
+
+- **segment / clean**: `{"no": 1, "text": "Hello."}`
+- **detect**: `{"no": 1, "offset": 6}` or `{"no": 2, "offset": 13}`
+- **detect --relative**: `{"no": 3, "eof": true}` on paragraph boundaries
 
 ### Adapter
 
