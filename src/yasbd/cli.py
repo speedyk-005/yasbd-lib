@@ -228,7 +228,7 @@ def clean(
     """
     input_text = _resolve_input(text, file)
 
-    skip = set(s.strip() for s in steps_to_skip.split(",")) if steps_to_skip else None
+    skip = {s.strip() for s in steps_to_skip.split(",")} if steps_to_skip else None
 
     # lazy import to avoid pulling in ftfy et al. for other commands
     from yasbd.utils.cleaner import StreamCleaner
