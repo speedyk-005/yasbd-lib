@@ -216,7 +216,7 @@ Both methods accept plain strings, open text streams (TextIOBase), or a StreamCl
 
 #### Boundary detection
 
-[`detect()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-boundary_detector-BoundaryDetector-detect) tells you where each sentence stops. Integer offsets into the original input stream.
+[`detect()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.boundary_detector.BoundaryDetector.detect) tells you where each sentence stops. Integer offsets into the original input stream.
 
 Two detection modes:
 
@@ -241,7 +241,7 @@ print(res)
 
 #### Segmentation
 
-If you do not want to manage boundary offsets yourself (and who would?), [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-boundary_detector-BoundaryDetector-segment) slices text for you.
+If you do not want to manage boundary offsets yourself (and who would?), [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.boundary_detector.BoundaryDetector.segment) slices text for you.
 
 ```python
 detector.lang = "en"
@@ -261,7 +261,7 @@ print(res)
 ```
 
 > [!TIP]
-> **ParagraphStream** — yasbd uses [`ParagraphStream`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-utils-paragraph_stream-ParagraphStream) internally to split text into paragraph blocks. You can import it directly if you need paragraph-level processing in your own code:
+> **ParagraphStream** — yasbd uses [`ParagraphStream`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.utils.paragraph_stream.ParagraphStream) internally to split text into paragraph blocks. You can import it directly if you need paragraph-level processing in your own code:
 > ```python
 > from yasbd.utils.paragraph_stream import ParagraphStream
 >
@@ -396,7 +396,7 @@ yasbd detect --help
 yasbd clean --help
 ```
 
-CLI API reference at [`API_REFERENCES.md#yasbd-cli`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-cli).
+CLI API reference at [`API_REFERENCES.md#yasbd.cli`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.cli).
 
 #### About JSONL
 
@@ -420,7 +420,7 @@ print(res)
 # ['田中さんは「準備は完了しました」そう言って部屋を出た。', 'Ｕ．Ｓ．Ａ．の経済政策は非常に複雑です。']
 ```
 
-Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-utils-pysbd_adapter-Segmenter) class. Same [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-utils-pysbd_adapter-Segmenter-segment) method signature.
+Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.utils.pysbd_adapter.Segmenter) class. Same [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.utils.pysbd_adapter.Segmenter.segment) method signature.
 
 ---
 
