@@ -27,7 +27,16 @@ def _stdout_is_pipe() -> bool:
 
 
 def _resolve_input(text: Optional[str], file: Optional[str]) -> str:
-    """Resolve input text from a positional string, --file option, or stdin pipe."""
+    """Resolve input text from a positional string, --file option, or stdin pipe.
+
+    >>> _resolve_input("Hello.", None)
+    'Hello.'
+    >>> _resolve_input(None, "pyproject.toml").startswith("[project]")
+    True
+    >>> _resolve_input("hi", "f.txt")  # doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+    SystemExit
+    """
     if text and file:
         print("Error: provide text argument or --file, not both.", file=sys.stderr)
         sys.exit(1)
@@ -40,6 +49,16 @@ def _resolve_input(text: Optional[str], file: Optional[str]) -> str:
 
 
 def _to_json(no: int, item) -> str:
+    """Serialize an output item to one JSONL line.
+
+    >>> _to_json(1, "Hello.")
+    '{"no": 1, "text": "Hello."}'
+    >>> _to_json(1, 6)
+    '{"no": 1, "offset": 6}'
+    >>> from yasbd import ParagraphEOF
+    >>> _to_json(3, ParagraphEOF)
+    '{"no": 3, "eof": true}'
+    """
     if item is ParagraphEOF:
         return json.dumps({"no": no, "eof": True})
     if isinstance(item, int):
@@ -48,7 +67,24 @@ def _to_json(no: int, item) -> str:
 
 
 def _output(items, destination: Optional[str], *, label: str):
-    """Write enumerated items to stdout or JSONL to a file."""
+    """Write enumerated items to stdout or JSONL to a file.
+
+    >>> _output(["A.", "B."], None, label="test")  # doctest: +SKIP
+    [1] 'A.'
+    [2] 'B.'
+    >>> _output(["Hi.", ParagraphEOF, "There."], None, label="test")  # doctest: +SKIP
+    [1] 'Hi.'
+    ---
+    [3] 'There.'
+    >>> import tempfile, os
+    >>> tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
+    >>> _output(["A.", "B.", "C."], tmp.name, label="test")
+    >>> os.path.getsize(tmp.name) > 0
+    True
+    >>> Path(tmp.name).read_text()
+    '{"no": 1, "text": "A."}\\n{"no": 2, "text": "B."}\\n{"no": 3, "text": "C."}\\n'
+    >>> os.unlink(tmp.name)
+    """
     count = 0
     if destination:
         with open(destination, "w", encoding="utf-8") as f:
