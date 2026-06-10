@@ -1,16 +1,9 @@
 import reprlib
-from collections.abc import Iterable
 from functools import wraps
 
 from pydantic import ConfigDict, ValidationError, validate_call
 
-IterableOfStr = (str | Iterable[str],)
-
-
-class InvalidInputError(Exception):
-    """Raised when invalid input(s) are encountered."""
-
-    pass
+from yasbd.exceptions import InvalidInputError
 
 
 def _pretty_errors(error: ValidationError) -> str:

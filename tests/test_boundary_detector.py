@@ -5,7 +5,7 @@ import string
 import pytest
 
 from tests import ALL_TEST_DATA
-from yasbd import BoundaryDetector, ParagraphEOF
+from yasbd import BoundaryDetector, ParagraphEOF, UnsupportedLanguageError
 
 
 @pytest.fixture(scope="module")
@@ -28,8 +28,8 @@ def test_segment_empty_input(input_text, en_detector):
 
 
 def test_unsupported_language():
-    """test that unknown language codes raise ValueError."""
-    with pytest.raises(ValueError, match="Unsupported language"):
+    """test that unknown language codes raise UnsupportedLanguageError."""
+    with pytest.raises(UnsupportedLanguageError, match="Unsupported language"):
         BoundaryDetector(lang="xx")
 
 
