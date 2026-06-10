@@ -13,6 +13,17 @@ cli = Radicli(
 )
 
 
+def _resolve_input(text: Optional[str], file: Optional[str]) -> str:
+    """Resolve input text from a positional string or --file option. Mutually exclusive."""
+    if text and file:
+        print("Error: provide text argument or --file, not both.", file=sys.stderr)
+        sys.exit(1)
+    if not text and not file:
+        print("Error: provide text argument or --file.", file=sys.stderr)
+        sys.exit(1)
+    return text or Path(file).read_text(encoding="utf-8")
+
+
 def _output(items, destination: Optional[str], *, label: str):
     """Write enumerated items to stdout or pipe-separated to a file."""
     count = 0
@@ -33,7 +44,7 @@ def _output(items, destination: Optional[str], *, label: str):
         )
     else:
         for i, item in enumerate(items, 1):
-            print(f"[{i}] {item}")
+            print(f"[{i}] {item!r}")
 
 
 @cli.command(
@@ -54,13 +65,7 @@ def segment(
     verbose: bool = False,
 ):
     """Split text into sentences."""
-    if text and file:
-        print("Error: provide text argument or --file, not both.", file=sys.stderr)
-        sys.exit(1)
-    if not text and not file:
-        print("Error: provide text argument or --file.", file=sys.stderr)
-        sys.exit(1)
-    input_text = text or Path(file).read_text(encoding="utf-8")
+    input_text = _resolve_input(text, file)
     detector = BoundaryDetector(lang=lang, preserve_quote_and_paren=True, verbose=verbose)
     _output(
         detector.segment(input_text, preserve_whitespace=preserve_whitespace),
@@ -87,13 +92,7 @@ def detect(
     verbose: bool = False,
 ):
     """Detect sentence boundary offsets (character positions)."""
-    if text and file:
-        print("Error: provide text argument or --file, not both.", file=sys.stderr)
-        sys.exit(1)
-    if not text and not file:
-        print("Error: provide text argument or --file.", file=sys.stderr)
-        sys.exit(1)
-    input_text = text or Path(file).read_text(encoding="utf-8")
+    input_text = _resolve_input(text, file)
     detector = BoundaryDetector(lang=lang, preserve_quote_and_paren=True, verbose=verbose)
     _output(
         detector.detect(input_text, relative=relative),
