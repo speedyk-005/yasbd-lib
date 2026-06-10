@@ -103,6 +103,8 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇷🇺 | ru   | Russian |
 | 🇨🇳 | zh   | Chinese |
 
+You can also get a list from `yasbd.get_supported_langs`.
+
 ---
 
 ## 🏁 Benchmarks
