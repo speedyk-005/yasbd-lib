@@ -172,11 +172,9 @@ body:
     id: examples
     attributes:
       label: 🧪 Example Sentences
-      description: Give us a few sample paragraphs. Show us exactly where sentences should split.
+      description: Give us a few sample paragraphs. Show us exactly where sentences should split using '|'.
       placeholder: |
-        Text: "Hello Dr. Smith. How are you? I am good."
-        Sentence 1: "Hello Dr. Smith."
-        Sentence 2: "How are you?"
-        Sentence 3: "I am good."
+        Hello Dr. Smith.| How are you?| I am good.
+        Who are you? I'm Prof. Mark.|
     validations:
       required: true
