@@ -426,13 +426,15 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/bl
 
 ## 🗺 Features & Roadmap
 
+- [x] Base segmenter
 - [x] Regex caching (compile once per language class)
 - [x] Drop-in pysbd adapter (same API, no pipeline changes)
 - [x] StreamCleaner for OCR'd and noisy text
 - [x] CLI tool
-- [ ] spaCy integration
-- [ ] 22+ language targets
-- [ ] REST API for remote boundary detection
+- [ ] Automatic language detection with caching (#74)
+- [ ] spaCy v3 pipeline component factory (#28)
+- [ ] 22+ language targets (#20)
+- [ ] REST API for remote boundary detection *(stretch)*
 
 ---
 
