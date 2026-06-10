@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Custom exception classes**: `YasbdError` (base), `UnsupportedLanguageError`, and `InvalidInputError` with ValueError/TypeError mixins.
+- **Radicli-based CLI** ([#79](https://github.com/speedyk-005/yasbd-lib/pull/79)): `segment`, `detect`, `clean`, and `langs` subcommands with auto-stdin detection, JSONL output, and ~3.3x faster startup vs typer.
 
 ### Fixed
 - **Emoji boundary detection** ([#77](https://github.com/speedyk-005/yasbd-lib/pull/77)): Emojis following terminal punctuation now stay with the preceding sentence. Besides, split after emoji + common sentence starter.
