@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.4.0] - Unreleased
 
 ### Added
+- **`StreamCleaner` extra steps**: Custom cleaning functions run after the built-in pipeline. CLI via `--extra-step` / `-e` on `yasbd clean`, repeatable.
+- **`CleanStepError`**: Raised when an extra step fails or returns non-string.
+- **CLI short flags**: `-w` for `--preserve-whitespace`, `-r` for `--relative`.
 - **Custom exception classes**: `YasbdError` (base), `UnsupportedLanguageError`, and `InvalidInputError` with ValueError/TypeError mixins.
 - **Radicli-based CLI** ([#79](https://github.com/speedyk-005/yasbd-lib/pull/79)): `segment`, `detect`, `clean`, and `langs` subcommands with auto-stdin detection, JSONL output, and ~3.3x faster startup vs typer.
 
@@ -18,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **English `TITLE_ABBRVS`**: Excluded `min` to prevent false split suppression (minute/minimum should not suppress sentence boundaries).
 
 ### Changed
+- **`log_info` helper**: Extracted to `yasbd.utils.logger` — gated logging without repeating `if verbose:`.
 - **Unsupported language error messages** ([#78](https://github.com/speedyk-005/yasbd-lib/pull/78)): now list supported codes and suggest close matches (e.g. `eng` => `en`).
 - **Variable renames for clarity**:
   - `MID_SENTENCE_ABBRVS` => `INLINE_ONLY_ABBRVS`

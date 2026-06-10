@@ -8,3 +8,7 @@ class UnsupportedLanguageError(YasbdError, ValueError):
 
 class InvalidInputError(YasbdError, TypeError):
     """Raised when invalid input(s) are encountered."""
+
+
+class CleanStepError(YasbdError, TypeError):
+    """Raised when a StreamCleaner extra step fails (non-callable or non-str return)."""

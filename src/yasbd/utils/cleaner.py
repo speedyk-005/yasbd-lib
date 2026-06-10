@@ -1,12 +1,14 @@
 import re
-from collections.abc import Collection, Iterator
+from collections.abc import Callable, Collection, Iterator
 from io import TextIOBase
 
 import ftfy
 import regex as re2  # For complex patterns
 
+from yasbd.exceptions import CleanStepError
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
+from yasbd.utils.logger import log_info
 from yasbd.utils.paragraph_stream import ParagraphStream
 
 # fmt: off
@@ -126,11 +128,22 @@ class StreamCleaner(StreamCleanerStub):
         Traceback (most recent call last):
         ...
         ValueError: Invalid step(s) to skip: ...
+        >>> list(StreamCleaner("Hello™ world", extra_steps=[lambda t: t.replace("™", "")]))
+        ['Hello world']
+        >>> list(StreamCleaner("hello", extra_steps=[lambda t: 1/0]))
+        Traceback (most recent call last):
+        ...
+        yasbd.exceptions.CleanStepError: extra step '<lambda>' raised ZeroDivisionError (see above for details)
     """
 
     @validate_input
     def __init__(
-        self, source: str | TextIOBase, steps_to_skip: Collection[str] | None = None
+        self,
+        source: str | TextIOBase,
+        steps_to_skip: Collection[str] | None = None,
+        extra_steps: Collection[Callable[[str], str]] | None = None,
+        *,
+        verbose: bool = False,
     ) -> None:
         """Implements the iterator protocol. Yields cleaned paragraph strings.
 
@@ -143,17 +156,28 @@ class StreamCleaner(StreamCleanerStub):
                     - unwrap_htmls
                     - normalize_slashes
                     - normalize_spaces
+            extra_steps: Optional user-defined cleaning functions, run after built-in steps.
+                Each function must accept and return ``str``.
+            verbose: Enable verbose logging.
         """
         if isinstance(source, (str, TextIOBase)):
             source = ParagraphStream(source, skip_empty_lines=True)
         self._source = iter(source)
         self.steps_to_skip = set(steps_to_skip or ())
+        self.verbose = verbose
 
         if invalid_steps := self.steps_to_skip - set(CLEANING_PIPELINE):
             raise ValueError(
                 f"Invalid step(s) to skip: {', '.join(sorted(invalid_steps))}. "
                 f"Valid steps are: {', '.join(CLEANING_PIPELINE.keys())}"
             )
+
+        self.extra_steps = list(extra_steps or ())
+        log_info(
+            self.verbose,
+            "StreamCleaner initialized with {} extra step(s)",
+            len(self.extra_steps),
+        )
 
     def __iter__(self) -> Iterator[str]:
         return self
@@ -165,9 +189,27 @@ class StreamCleaner(StreamCleanerStub):
                 continue
 
             cleaned_text = stripped
-            for step in CLEANING_PIPELINE:
-                if step not in self.steps_to_skip:
-                    cleaned_text = CLEANING_PIPELINE[step](cleaned_text)
+            for step_name in CLEANING_PIPELINE:
+                if step_name not in self.steps_to_skip:
+                    log_info(self.verbose, "Applying step: {}", step_name)
+                    cleaned_text = CLEANING_PIPELINE[step_name](cleaned_text)
+
+            for step in self.extra_steps:
+                log_info(
+                    self.verbose, "Applying extra step: {}", getattr(step, "__name__", step)
+                )
+                try:
+                    result = step(cleaned_text)
+                    assert isinstance(result, str), (
+                        f"extra step {getattr(step, '__name__', step)!r} "
+                        f"returned {type(result).__name__}, expected str"
+                    )
+                except Exception as exc:
+                    raise CleanStepError(
+                        f"extra step {getattr(step, '__name__', step)!r} "
+                        f"raised {type(exc).__name__} (see above for details)"
+                    ) from exc
+                cleaned_text = result
             return cleaned_text
 
         raise StopIteration

@@ -274,11 +274,15 @@ print(res)
 
 OCR'd a PDF, parsed a DOCX, or scraped noisy HTML? "StreamCleaner" normalizes text before it reaches the language detector or sentence segmenter.
 StreamCleaner accepts either a string or an open text stream and yields cleaned paragraphs lazily.
+You can pass a "StreamCleaner" instance directly to "detect()" or "segment()" to clean text as it is processed.
 
 ```python
 from yasbd.utils.cleaner import StreamCleaner
 
-cleaner = StreamCleaner("Hello  world.   This is  messy.")
+cleaner = StreamCleaner(
+    "Hello  world.   This is  messy.",
+    verbose=True,  # Default to False
+)
 list(cleaner)
 # ['Hello world. This is messy.']
 ```
@@ -301,7 +305,7 @@ Common cleanup operations include:
 - Rejoining hyphenated words split across lines
 - Merging vertically stacked characters
 
-Individual cleanup steps can be disabled by provided a collection of steps to skip:
+**Skip** built-in steps you don't want:
 
 ```python
 cleaner = StreamCleaner(
@@ -312,15 +316,30 @@ cleaner = StreamCleaner(
     ],
 )
 ```
-Available steps:
 
-- "fix_mojibake"
-- "fix_ocr_text"
-- "unwrap_htmls"
-- "normalize_slashes"
-- "normalize_spaces"
+**Add** custom cleaning steps:
 
-You can pass a "StreamCleaner" instance directly to "detect()" or "segment()" to clean text as it is processed.
+```python
+cleaner = StreamCleaner(
+    text,
+    extra_steps=[
+        lambda t: t.replace("™", ""),
+        lambda t: t.upper(),
+    ],
+)
+```
+
+Each extra step must accept and return a `str`. If a step raises or returns a non-string, a `CleanStepError` is raised with the original exception chained.
+
+Available built-in steps:
+
+| Step | What it does |
+|------|-------------|
+| `fix_mojibake` | Fixes Unicode mojibake via ftfy |
+| `fix_ocr_text` | Repairs OCR artifacts, rejoins hyphenated words, removes page markers |
+| `unwrap_htmls` | Strips HTML tags (including `<script>`, `<style>` and their content) |
+| `normalize_slashes` | Collapses `///` triple slashes |
+| `normalize_spaces` | Collapses multiple spaces into one |
 
 ### CLI
 
@@ -329,6 +348,10 @@ The `yasbd` command works right from your terminal. Install once, pipe
 anything into it, get sentences back.
 
 ```bash
+# List supported language codes
+yasbd langs
+# ar, de, en, es, fr, ht, ja, pt, ru, zh
+
 # Split text into sentences
 yasbd segment "Dr. Smith works here. Is he there?"
 # [1] 'Dr. Smith works here.'
@@ -339,14 +362,6 @@ yasbd detect "Hello world. How are you?"
 # [1] 12
 # [2] 24
 
-# Clean noisy text (HTML, mojibake, OCR artifacts)
-yasbd clean "<script>x</script>Hello <b>world</b>."
-# [1] 'Hello world.'
-
-# List supported language codes
-yasbd langs
-# ar, de, en, es, fr, ht, ja, pt, ru, zh
-
 # Read from file
 yasbd segment --file document.txt
 yasbd segment --file input.txt --destination output.txt  # JSONL output
@@ -356,8 +371,20 @@ echo "Hello. World." | yasbd segment | cat
 # Hello.
 # World.
 
-# Chaining: clean HTML (skip unwrap) then segment in Spanish
-yasbd clean --file dirty.html --skip unwrap_htmls | yasbd segment --lang es
+# Clean noisy text (HTML, mojibake, OCR artifacts)
+yasbd clean "<script>x</script>Hello <b>world</b>."
+# [1] 'Hello <b>world</b>.'
+
+# Clean with extra shell command step (e.g., transliterate via external tool)
+yasbd clean "naïve café" --extra-step "sed 's/é/e/g; s/ï/i/g'"
+# [1] 'naive cafe'
+
+# Repeatable --extra-step for multiple shell commands
+yasbd clean "HELLO." -e "tr 'A-Z' 'a-z'" -e "sed 's/\./!/g'"
+# [1] 'hello!'
+
+# Chaining: Skip HTML unwrap then segment in Spanish with verbosity
+yasbd clean --file dirty.html --skip unwrap_htmls | yasbd segment --lang es -v
 
 # Version
 yasbd --version
