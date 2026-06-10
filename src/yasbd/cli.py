@@ -6,7 +6,7 @@ from typing import Optional
 
 from radicli import Arg, Radicli
 
-from yasbd import BoundaryDetector, __version__, get_supported_langs
+from yasbd import BoundaryDetector, ParagraphEOF, __version__, get_supported_langs
 
 cli = Radicli(
     prog="yasbd",
@@ -61,7 +61,10 @@ def _output(items, destination: Optional[str], *, label: str):
             print(item)
     else:
         for i, item in enumerate(items, 1):
-            print(f"[{i}] {item!r}")
+            if item is ParagraphEOF:
+                print("---")
+            else:
+                print(f"[{i}] {item!r}")
 
 
 @cli.command(
