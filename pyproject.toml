@@ -36,6 +36,7 @@ dependencies = [
   "ftfy>=6.2.0,<7.0",
   "pydantic>=2.11.0,<3.0",
   "retrie>=0.3.0,<1.0",
+  "radicli>=0.0.25,<1.0",
 ]
 
 [project.optional-dependencies]
@@ -57,6 +58,7 @@ bench = [
   "setuptools<81",
   "matplotlib",
   "rich",
+  "radicli",
 ]
 [project.urls]
 Homepage = "https://github.com/speedyk-005/yasbd-lib"
@@ -64,6 +66,9 @@ Repository = "https://github.com/speedyk-005/yasbd-lib"
 Documentation = "https://speedyk-005.github.io/yasbd/"
 Issues = "https://github.com/speedyk-005/yasbd-lib/issues"
 Changelog = "https://github.com/speedyk-005/yasbd-lib/blob/main/CHANGELOG.md"
+
+[project.scripts]
+yasbd = "yasbd.cli:main"
 
 [build-system]
 requires = [
