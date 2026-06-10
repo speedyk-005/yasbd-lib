@@ -1,3 +1,4 @@
+import json
 import os
 import stat
 import sys
@@ -38,22 +39,24 @@ def _resolve_input(text: Optional[str], file: Optional[str]) -> str:
     return text or Path(file).read_text(encoding="utf-8")
 
 
+def _to_json(no: int, item) -> str:
+    if item is ParagraphEOF:
+        return json.dumps({"no": no, "eof": True})
+    if isinstance(item, int):
+        return json.dumps({"no": no, "offset": item})
+    return json.dumps({"no": no, "text": item})
+
+
 def _output(items, destination: Optional[str], *, label: str):
-    """Write enumerated items to stdout or pipe-separated to a file."""
+    """Write enumerated items to stdout or JSONL to a file."""
     count = 0
     if destination:
         with open(destination, "w", encoding="utf-8") as f:
-            first = True
-            for item in items:
-                if first:
-                    f.write(str(item))
-                    first = False
-                else:
-                    f.write(" | " + str(item))
+            for i, item in enumerate(items, 1):
+                f.write(_to_json(i, item) + "\n")
                 count += 1
-            f.write("\n")
         print(
-            f"Wrote {count} {label} to {destination} separated by ' | '",
+            f"Wrote {count} {label} to {destination}",
             file=sys.stderr,
         )
     elif _stdout_is_pipe():

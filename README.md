@@ -346,7 +346,7 @@ yasbd langs
 
 # Read from file
 yasbd segment --file document.txt
-yasbd segment --file input.txt --destination output.txt  # items are sep by " | "
+yasbd segment --file input.txt --destination output.txt  # JSONL output
 
 # Pipe support — auto-detects, skips [N] enumeration
 echo "Hello. World." | yasbd segment | cat
