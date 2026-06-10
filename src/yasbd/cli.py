@@ -101,6 +101,36 @@ def detect(
     )
 
 
+@cli.command(
+    "clean",
+    text=Arg(help="Text to clean. Use --file to read from a file instead."),
+    file=Arg("--file", "-f", help="Read input from a text file."),
+    destination=Arg("--destination", "-d", help="Write cleaned text to a file."),
+    steps_to_skip=Arg("--steps-to-skip", "--skip", help="Comma-separated cleaning steps to skip."),
+    verbose=Arg("--verbose", help="Enable verbose logging."),
+)
+def clean(
+    text: Optional[str] = None,
+    file: Optional[str] = None,
+    destination: Optional[str] = None,
+    steps_to_skip: Optional[str] = None,
+    verbose: bool = False,
+):
+    """Clean and normalize noisy text paragraphs."""
+    input_text = _resolve_input(text, file)
+
+    skip = set(s.strip() for s in steps_to_skip.split(",")) if steps_to_skip else None
+
+    # lazy import to avoid pulling in ftfy et al. for other commands
+    from yasbd.utils.cleaner import StreamCleaner
+
+    _output(
+        StreamCleaner(input_text, steps_to_skip=skip),
+        destination,
+        label="paragraph(s)"
+    )
+
+
 @cli.command("langs")
 def langs():
     """List supported language codes."""
