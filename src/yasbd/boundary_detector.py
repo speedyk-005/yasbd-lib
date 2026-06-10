@@ -1,3 +1,4 @@
+import difflib
 from collections.abc import Generator, Iterable
 from importlib import import_module
 from io import TextIOBase
@@ -5,6 +6,7 @@ from itertools import tee
 
 from loguru import logger
 
+from yasbd.rules import get_supported_langs
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
 from yasbd.utils.paragraph_stream import ParagraphStream
@@ -67,9 +69,14 @@ class BoundaryDetector:
         try:
             rule_module = import_module(f"yasbd.rules.{lang}")
         except ModuleNotFoundError as e:
-            if lang in str(e):
-                raise ValueError(f"Unsupported language: {lang!r}") from None
-            raise  # Re-raise
+            if lang not in str(e):
+                raise
+            supported = get_supported_langs()
+            close = difflib.get_close_matches(lang, supported, n=3, cutoff=0.5)
+            msg = f"Unsupported language: {lang!r}\n\nSupported language codes:\n  {', '.join(supported)}"
+            if close:
+                msg += f"\n\n💡 Did you mean:\n  {', '.join(close)}"
+            raise ValueError(msg) from None
 
         self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")()
 
