@@ -1,0 +1,182 @@
+name: 🌍 Request New Language Support
+description: Ask for a new language to be added to yasbd-lib.
+title: "[LANG] Add support for <Language Name>"
+labels: ["enhancement", "language-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Tell us about a language we should support!
+        Please fill out this form to help us build the rules for your requested language. You do not need to provide any code.
+
+  - type: input
+    id: language-name
+    attributes:
+      label: 🏳️ Language Name
+      placeholder: e.g., French, Japanese, Arabic, Polish
+    validations:
+      required: true
+
+  - type: dropdown
+    id: lang-iso
+    attributes:
+      label: 🆔 ISO 639-1 Code
+      description: Select the 2-letter language code.
+      options:
+        - "ab" # Abkhazian
+        - "af" # Afrikaans
+        - "am" # Amharic
+        - "ar" # Arabic
+        - "as" # Assamese
+        - "az" # Azerbaijani
+        - "ba" # Bashkir
+        - "be" # Belarusian
+        - "bg" # Bulgarian
+        - "bn" # Bengali
+        - "bo" # Tibetan
+        - "br" # Breton
+        - "bs" # Bosnian
+        - "ca" # Catalan
+        - "ce" # Cebuano
+        - "cs" # Czech
+        - "cy" # Welsh
+        - "da" # Danish
+        - "de" # German
+        - "el" # Greek
+        - "en" # English
+        - "eo" # Esperanto
+        - "es" # Spanish
+        - "et" # Estonian
+        - "eu" # Basque
+        - "fa" # Persian
+        - "fi" # Finnish
+        - "fo" # Faroese
+        - "fr" # French
+        - "gl" # Galician
+        - "gn" # Guarani
+        - "gu" # Gujarati
+        - "gv" # Manx
+        - "ha" # Hausa
+        - "haw" # Hawaiian (ISO 639-2/3 used for non-2-letter)
+        - "hi" # Hindi
+        - "hr" # Croatian
+        - "ht" # Haitian
+        - "hu" # Hungarian
+        - "hy" # Armenian
+        - "ia" # Interlingua
+        - "id" # Indonesian
+        - "is" # Icelandic
+        - "it" # Italian
+        - "he" # Hebrew
+        - "ja" # Japanese
+        - "jv" # Javanese
+        - "ka" # Georgian
+        - "kk" # Kazakh
+        - "km" # Central Khmer
+        - "kn" # Kannada
+        - "ko" # Korean
+        - "la" # Latin
+        - "lb" # Luxembourgish
+        - "ln" # Lingala
+        - "lo" # Lao
+        - "lt" # Lithuanian
+        - "lv" # Latvian
+        - "mg" # Malagasy
+        - "mi" # Maori
+        - "mk" # Macedonian
+        - "ml" # Malayalam
+        - "mn" # Mongolian
+        - "mr" # Marathi
+        - "ms" # Malay
+        - "mt" # Maltese
+        - "my" # Burmese
+        - "ne" # Nepali
+        - "nl" # Dutch
+        - "nn" # Norwegian Nynorsk
+        - "no" # Norwegian
+        - "oc" # Occitan
+        - "pa" # Panjabi
+        - "pl" # Polish
+        - "ps" # Pushto
+        - "pt" # Portuguese
+        - "ro" # Romanian
+        - "ru" # Russian
+        - "sa" # Sanskrit
+        - "sco" # Scots
+        - "sd" # Sindhi
+        - "si" # Sinhala
+        - "sk" # Slovak
+        - "sl" # Slovenian
+        - "sn" # Shona
+        - "so" # Somali
+        - "sq" # Albanian
+        - "sr" # Serbian
+        - "su" # Sundanese
+        - "sv" # Swedish
+        - "sw" # Swahili
+        - "ta" # Tamil
+        - "te" # Telugu
+        - "tg" # Tajik
+        - "th" # Thai
+        - "tk" # Turkmen
+        - "tl" # Tagalog
+        - "tr" # Turkish
+        - "tt" # Tatar
+        - "uk" # Ukrainian
+        - "ur" # Urdu
+        - "uz" # Uzbek
+        - "vi" # Vietnamese
+        - "war" # Waray
+        - "yi" # Yiddish
+        - "yo" # Yoruba
+        - "zh" # Mandarin Chinese
+    validations:
+      required: true
+
+  - type: textarea
+    id: end-markers
+    attributes:
+      label: 🛑 Sentence End Markers
+      description: What punctuation marks show that a sentence is finished? (e.g., `.`, `!`, `?`, `。`, `؟`)
+      placeholder: |
+        - .
+        - !
+        - ?
+    validations:
+      required: true
+
+  - type: textarea
+    id: abbreviations
+    attributes:
+      label: 🔍 Common Abbreviations (Titles & Words)
+      description: List common abbreviations that use dots but do NOT end a sentence.
+      placeholder: |
+        - Titles (like Mr., Dr., Sr.)
+        - Dates (like Jan., Feb., Mon.)
+        - Places (like St., Ave., U.S.)
+        - Other words (like etc., e.g., approx.)
+    validations:
+      required: true
+
+  - type: textarea
+    id: unique-rules
+    attributes:
+      label: ✨ Special Language Rules (Optional)
+      description: Does this language have weird rules for split sentences? (e.g., no spaces between words, unique quote marks, or words like "said" that change things?)
+      placeholder: |
+        Explain any special quirks here!
+    validations:
+      required: false
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: 🧪 Example Sentences
+      description: Give us a few sample paragraphs. Show us exactly where sentences should split.
+      placeholder: |
+        Text: "Hello Dr. Smith. How are you? I am good."
+        Sentence 1: "Hello Dr. Smith."
+        Sentence 2: "How are you?"
+        Sentence 3: "I am good."
+    validations:
+      required: true
