@@ -192,7 +192,7 @@ def _output(items, destination: Optional[str], *, label: str):
     destination=Arg("--destination", "-d", help="Write output to a file."),
     lang=Arg("--lang", "-l", help="Language code (e.g., 'en', 'fr', 'de')."),
     preserve_whitespace=Arg(
-        "--preserve-whitespace", help="Preserve original whitespace in output."
+        "--preserve-whitespace", "-w", help="Preserve original whitespace in output."
     ),
     verbose=Arg("--verbose", "-v", help="Enable verbose logging."),
 )
@@ -224,7 +224,7 @@ def segment(
     file=Arg("--file", "-f", help="Read input from a text file."),
     destination=Arg("--destination", "-d", help="Write boundary offsets to a file."),
     lang=Arg("--lang", "-l", help="Language code (e.g., 'en', 'fr', 'de')."),
-    relative=Arg("--relative", help="Yield paragraph-relative offsets."),
+    relative=Arg("--relative", "-r", help="Yield paragraph-relative offsets."),
     verbose=Arg("--verbose", "-v", help="Enable verbose logging."),
 )
 def detect(
