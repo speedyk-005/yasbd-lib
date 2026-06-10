@@ -35,9 +35,11 @@
 - [📟 Usage](#-usage)
   - [Initialization](#initialization)
   - [Core Methods](#core-methods)
-      - [Boundary detection](#boundary-detection)
-      - [Segmentation](#segmentation)
+    - [Boundary detection](#boundary-detection)
+    - [Segmentation](#segmentation)
   - [Cleaner](#cleaner)
+  - [CLI](#cli)
+    - [About JSONL](#about-jsonl)
   - [Adapter](#adapter)
 - [🗺 Features & Roadmap](#-features--roadmap)
 - [🤝 Contributors](#-contributors)
@@ -168,6 +170,8 @@ That's awesome. See [**Contributing Guide**](https://github.com/speedyk-005/yasb
 ## 📟 Usage
 
 > [!TIP]
+> Not a Pythonista? Jump straight to the [CLI](#cli) section.
+>
 > Looking for the pysbd drop-in replacement? Jump straight to the [Adapter](#adapter) section.
 
 ### Initialization
@@ -318,6 +322,63 @@ Available steps:
 
 You can pass a "StreamCleaner" instance directly to "detect()" or "segment()" to clean text as it is processed.
 
+### CLI
+
+Do you just want to split text into sentences without writing Python?
+The `yasbd` command works right from your terminal. Install once, pipe
+anything into it, get sentences back.
+
+```bash
+# Split text into sentences
+yasbd segment "Dr. Smith works here. Is he there?"
+# [1] 'Dr. Smith works here.'
+# [2] 'Is he there?'
+
+# Detect boundary offsets
+yasbd detect "Hello world. How are you?"
+# [1] 12
+# [2] 24
+
+# Clean noisy text (HTML, mojibake, OCR artifacts)
+yasbd clean "<script>x</script>Hello <b>world</b>."
+# [1] 'Hello world.'
+
+# List supported language codes
+yasbd langs
+# ar, de, en, es, fr, ht, ja, pt, ru, zh
+
+# Read from file
+yasbd segment --file document.txt
+yasbd segment --file input.txt --destination output.txt  # JSONL output
+
+# Pipe support — auto-detects, skips [N] enumeration
+echo "Hello. World." | yasbd segment | cat
+# Hello.
+# World.
+
+# Chaining: clean HTML (skip unwrap) then segment in Spanish
+yasbd clean --file dirty.html --skip unwrap_htmls | yasbd segment --lang es
+
+# Version
+yasbd --version
+
+# Full help
+yasbd --help         # top-level commands
+yasbd segment --help # per-command options
+yasbd detect --help
+yasbd clean --help
+```
+
+CLI API reference at [`API_REFERENCES.md#yasbd-cli`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd-cli).
+
+#### About JSONL
+
+When writing to a file with `--destination`, output is JSONL (one JSON object per line):
+
+- **segment / clean**: `{"no": 1, "text": "Hello."}`
+- **detect**: `{"no": 1, "offset": 6}` or `{"no": 2, "offset": 13}`
+- **detect --relative**: `{"no": 3, "eof": true}` on paragraph boundaries
+
 ### Adapter
 
 Migrating from pysbd? Swap the import and keep your pipeline:
@@ -341,9 +402,9 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/bl
 - [x] Regex caching (compile once per language class)
 - [x] Drop-in pysbd adapter (same API, no pipeline changes)
 - [x] StreamCleaner for OCR'd and noisy text
+- [x] CLI tool
 - [ ] spaCy integration
 - [ ] 22+ language targets
-- [ ] CLI tool
 - [ ] REST API for remote boundary detection
 
 ---

@@ -1079,6 +1079,15 @@ wheels = [
 ]
 
 [[package]]
+name = "radicli"
+version = "0.0.26"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/98/c5/791d72624ec5474e5a1d4149098e41e3e3ca79a9ce9333e8c75076ea5888/radicli-0.0.26.tar.gz", hash = "sha256:81c8c186b4c5785f7504e13d7d524ccb86de604adf06131ca64b817f41c76a99", size = 49444, upload-time = "2025-09-09T11:18:38.89Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/07/46/8e99fbce511217eec4730a08824a200a073fd67d76ae7e3d985501c5268c/radicli-0.0.26-py3-none-any.whl", hash = "sha256:42faaa9fcd430653be72f64cdcf73c105e9b19eaa0cd5ffa2719d91144b52f96", size = 35233, upload-time = "2025-09-09T11:18:37.467Z" },
+]
+
+[[package]]
 name = "regex"
 version = "2026.4.4"
 source = { registry = "https://pypi.org/simple" }
@@ -1437,12 +1446,13 @@ wheels = [
 
 [[package]]
 name = "yasbd-lib"
-version = "0.1.3"
+version = "0.3.0"
 source = { editable = "." }
 dependencies = [
     { name = "ftfy" },
     { name = "loguru" },
     { name = "pydantic" },
+    { name = "radicli" },
     { name = "regex" },
     { name = "retrie" },
 ]
@@ -1453,6 +1463,7 @@ bench = [
     { name = "matplotlib" },
     { name = "nupunkt" },
     { name = "pysbd" },
+    { name = "radicli" },
     { name = "rich" },
     { name = "sentence-splitter" },
     { name = "sentencex" },
@@ -1480,6 +1491,8 @@ requires-dist = [
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.5" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=6.2.1" },
     { name = "python-docstring-markdown", marker = "extra == 'dev'", specifier = ">=0.2.2" },
+    { name = "radicli", specifier = ">=0.0.25,<1.0" },
+    { name = "radicli", marker = "extra == 'bench'" },
     { name = "regex", specifier = ">=2025.7.29" },
     { name = "retrie", specifier = ">=0.3.0,<1.0" },
     { name = "rich", marker = "extra == 'bench'" },
