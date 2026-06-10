@@ -127,6 +127,12 @@ class StreamCleaner(StreamCleanerStub):
         Traceback (most recent call last):
         ...
         ValueError: Invalid step(s) to skip: ...
+        >>> list(StreamCleaner("Hello™ world", extra_steps=[lambda t: t.replace("™", "")]))
+        ['Hello world']
+        >>> list(StreamCleaner("hello", extra_steps=[lambda t: 1/0]))
+        Traceback (most recent call last):
+        ...
+        yasbd.exceptions.CleanStepError: extra step '<lambda>' raised ZeroDivisionError (see above for details)
     """
 
     @validate_input
