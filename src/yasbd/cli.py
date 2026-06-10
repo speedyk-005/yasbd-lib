@@ -93,7 +93,7 @@ def _create_external_cleaner(
                 timeout=timeout,
                 check=True,
             )
-            return process.stdout
+            return process.stdout.removesuffix("\n")
 
         except subprocess.TimeoutExpired:
             print(f"Cleaner command timed out after {timeout}s", file=sys.stderr)
