@@ -6,6 +6,7 @@ from itertools import tee
 
 from loguru import logger
 
+from yasbd.exceptions import UnsupportedLanguageError
 from yasbd.rules import get_supported_langs
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
@@ -78,7 +79,7 @@ class BoundaryDetector:
             )
             if close := difflib.get_close_matches(lang, supported, n=3, cutoff=0.5):
                 msg += f"\n\n💡 Did you mean:\n  {', '.join(close)}"
-            raise ValueError(msg) from None
+            raise UnsupportedLanguageError(msg) from None
 
         self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")()
 
