@@ -4,13 +4,20 @@
 
 - 🅼 [yasbd](#yasbd)
 - 🅼 [yasbd\.boundary\_detector](#yasbd-boundary_detector)
+- 🅼 [yasbd\.cli](#yasbd-cli)
+- 🅼 [yasbd\.exceptions](#yasbd-exceptions)
 - 🅼 [yasbd\.rules](#yasbd-rules)
+- 🅼 [yasbd\.rules\.ar](#yasbd-rules-ar)
 - 🅼 [yasbd\.rules\.base](#yasbd-rules-base)
+- 🅼 [yasbd\.rules\.de](#yasbd-rules-de)
 - 🅼 [yasbd\.rules\.en](#yasbd-rules-en)
 - 🅼 [yasbd\.rules\.es](#yasbd-rules-es)
 - 🅼 [yasbd\.rules\.fr](#yasbd-rules-fr)
 - 🅼 [yasbd\.rules\.ht](#yasbd-rules-ht)
 - 🅼 [yasbd\.rules\.ja](#yasbd-rules-ja)
+- 🅼 [yasbd\.rules\.pt](#yasbd-rules-pt)
+- 🅼 [yasbd\.rules\.ru](#yasbd-rules-ru)
+- 🅼 [yasbd\.rules\.zh](#yasbd-rules-zh)
 - 🅼 [yasbd\.utils](#yasbd-utils)
 - 🅼 [yasbd\.utils\.cleaner](#yasbd-utils-cleaner)
 - 🅼 [yasbd\.utils\.cleaner\_stub](#yasbd-utils-cleaner_stub)
@@ -28,6 +35,11 @@
 
 - 🅼 [`BoundaryDetector`](#yasbd-BoundaryDetector)
 - 🅼 [`ParagraphEOF`](#yasbd-ParagraphEOF)
+- 🅼 [`InvalidInputError`](#yasbd-InvalidInputError)
+- 🅼 [`UnsupportedLanguageError`](#yasbd-UnsupportedLanguageError)
+- 🅼 [`YasbdError`](#yasbd-YasbdError)
+- 🅼 [`get_supported_langs`](#yasbd-get_supported_langs)
+- 🅼 [`__version__`](#yasbd-__version__)
 <a name="yasbd-boundary_detector"></a>
 ## 🅼 yasbd\.boundary\_detector
 
@@ -102,27 +114,129 @@ Split text into sentences\.
 
 **Parameters:**
 
-- **source**: Plain text string or \`\`TextIOBase\`\` stream \(e\.g\., \`\`StringIO\`\`, opened file\)\.
+- **source**: Plain text string or \`\`TextIOBase\`\` stream
+\(e\.g\., \`\`StringIO\`\`, opened file\)\.
 - **preserve_whitespace**: If \`\`False\`\` \(default\), strip leading and
 trailing whitespace from each sentence\.
+<a name="yasbd-cli"></a>
+## 🅼 yasbd\.cli
+
+- **Functions:**
+  - 🅵 [segment](#yasbd-cli-segment)
+  - 🅵 [detect](#yasbd-cli-detect)
+  - 🅵 [clean](#yasbd-cli-clean)
+  - 🅵 [langs](#yasbd-cli-langs)
+  - 🅵 [main](#yasbd-cli-main)
+
+### Functions
+
+<a name="yasbd-cli-segment"></a>
+### 🅵 yasbd\.cli\.segment
+
+```python
+def segment(text: Optional[str] = None, file: Optional[str] = None, destination: Optional[str] = None, lang: str = 'en', preserve_whitespace: bool = False, verbose: bool = False):
+```
+
+Split text into sentences\.
+<a name="yasbd-cli-detect"></a>
+### 🅵 yasbd\.cli\.detect
+
+```python
+def detect(text: Optional[str] = None, file: Optional[str] = None, destination: Optional[str] = None, lang: str = 'en', relative: bool = False, verbose: bool = False):
+```
+
+Detect sentence boundary offsets \(character positions\)\.
+<a name="yasbd-cli-clean"></a>
+### 🅵 yasbd\.cli\.clean
+
+```python
+def clean(text: Optional[str] = None, file: Optional[str] = None, destination: Optional[str] = None, steps_to_skip: Optional[str] = None, verbose: bool = False):
+```
+
+Clean and normalize noisy text paragraphs\.
+<a name="yasbd-cli-langs"></a>
+### 🅵 yasbd\.cli\.langs
+
+```python
+def langs():
+```
+
+List supported language codes\.
+<a name="yasbd-cli-main"></a>
+### 🅵 yasbd\.cli\.main
+
+```python
+def main():
+```
+<a name="yasbd-exceptions"></a>
+## 🅼 yasbd\.exceptions
+
+- **Classes:**
+  - 🅲 [YasbdError](#yasbd-exceptions-YasbdError)
+  - 🅲 [UnsupportedLanguageError](#yasbd-exceptions-UnsupportedLanguageError)
+  - 🅲 [InvalidInputError](#yasbd-exceptions-InvalidInputError)
+
+### Classes
+
+<a name="yasbd-exceptions-YasbdError"></a>
+### 🅲 yasbd\.exceptions\.YasbdError
+
+```python
+class YasbdError(Exception):
+```
+
+Base exception for all yasbd errors\.
+<a name="yasbd-exceptions-UnsupportedLanguageError"></a>
+### 🅲 yasbd\.exceptions\.UnsupportedLanguageError
+
+```python
+class UnsupportedLanguageError(YasbdError, ValueError):
+```
+
+Raised when an unsupported language code is provided\.
+<a name="yasbd-exceptions-InvalidInputError"></a>
+### 🅲 yasbd\.exceptions\.InvalidInputError
+
+```python
+class InvalidInputError(YasbdError, TypeError):
+```
+
+Raised when invalid input\(s\) are encountered\.
 <a name="yasbd-rules"></a>
 ## 🅼 yasbd\.rules
+
+- **Functions:**
+  - 🅵 [get\_supported\_langs](#yasbd-rules-get_supported_langs)
+
+### Functions
+
+<a name="yasbd-rules-get_supported_langs"></a>
+### 🅵 yasbd\.rules\.get\_supported\_langs
+
+```python
+def get_supported_langs() -> list[str]:
+```
+
+Discover and cache supported language codes from the rules directory\.
+<a name="yasbd-rules-ar"></a>
+## 🅼 yasbd\.rules\.ar
+
+- **Classes:**
+  - 🅲 [ArRules](#yasbd-rules-ar-ArRules)
+
+### Classes
+
+<a name="yasbd-rules-ar-ArRules"></a>
+### 🅲 yasbd\.rules\.ar\.ArRules
+
+```python
+class ArRules(Rules):
+```
 <a name="yasbd-rules-base"></a>
 ## 🅼 yasbd\.rules\.base
 
-- **Constants:**
-  - 🆅 [FULLWIDTH\_GEOPOLITICAL\_ABBRVS](#yasbd-rules-base-FULLWIDTH_GEOPOLITICAL_ABBRVS)
 - **Classes:**
   - 🅲 [Rules](#yasbd-rules-base-Rules)
-
-### Constants
-
-<a name="yasbd-rules-base-FULLWIDTH_GEOPOLITICAL_ABBRVS"></a>
-### 🆅 yasbd\.rules\.base\.FULLWIDTH\_GEOPOLITICAL\_ABBRVS
-
-```python
-FULLWIDTH_GEOPOLITICAL_ABBRVS = {'Ｕ．Ｓ', 'Ｕ．Ｓ．Ａ', 'Ｕ．Ｋ', 'Ｅ．Ｕ', 'Ｕ．Ｎ', 'Ｕ．Ｓ．Ｓ．Ｒ', 'Ｕ．Ａ．Ｅ', 'Ｐ．Ｒ．Ｃ', 'Ｒ．Ｏ．Ｋ', 'ＥＥ．ＵＵ', 'ＦＦ．ＡＡ', 'ＲＲ．ＨＨ', 'ＣＣ．ＡＡ'}
-```
 
 ### Classes
 
@@ -170,6 +284,20 @@ inside quote and parenthesis spans\.
 **Returns:**
 
 - Sorted list of character offsets at which sentences end\.
+<a name="yasbd-rules-de"></a>
+## 🅼 yasbd\.rules\.de
+
+- **Classes:**
+  - 🅲 [DeRules](#yasbd-rules-de-DeRules)
+
+### Classes
+
+<a name="yasbd-rules-de-DeRules"></a>
+### 🅲 yasbd\.rules\.de\.DeRules
+
+```python
+class DeRules(Rules):
+```
 <a name="yasbd-rules-en"></a>
 ## 🅼 yasbd\.rules\.en
 
@@ -240,6 +368,48 @@ class HtRules(Rules):
 ```python
 class JaRules(Rules):
 ```
+<a name="yasbd-rules-pt"></a>
+## 🅼 yasbd\.rules\.pt
+
+- **Classes:**
+  - 🅲 [PtRules](#yasbd-rules-pt-PtRules)
+
+### Classes
+
+<a name="yasbd-rules-pt-PtRules"></a>
+### 🅲 yasbd\.rules\.pt\.PtRules
+
+```python
+class PtRules(Rules):
+```
+<a name="yasbd-rules-ru"></a>
+## 🅼 yasbd\.rules\.ru
+
+- **Classes:**
+  - 🅲 [RuRules](#yasbd-rules-ru-RuRules)
+
+### Classes
+
+<a name="yasbd-rules-ru-RuRules"></a>
+### 🅲 yasbd\.rules\.ru\.RuRules
+
+```python
+class RuRules(Rules):
+```
+<a name="yasbd-rules-zh"></a>
+## 🅼 yasbd\.rules\.zh
+
+- **Classes:**
+  - 🅲 [ZhRules](#yasbd-rules-zh-ZhRules)
+
+### Classes
+
+<a name="yasbd-rules-zh-ZhRules"></a>
+### 🅲 yasbd\.rules\.zh\.ZhRules
+
+```python
+class ZhRules(Rules):
+```
 <a name="yasbd-utils"></a>
 ## 🅼 yasbd\.utils
 <a name="yasbd-utils-cleaner"></a>
@@ -257,6 +427,7 @@ class JaRules(Rules):
   - 🆅 [NEWLINE\_FOLLOWED\_BY\_PERIOD\_FINDER](#yasbd-utils-cleaner-NEWLINE_FOLLOWED_BY_PERIOD_FINDER)
   - 🆅 [NO\_SPACE\_BETWEEN\_SENTENCES\_FINDER](#yasbd-utils-cleaner-NO_SPACE_BETWEEN_SENTENCES_FINDER)
   - 🆅 [CONSECUTIVE\_FORWARD\_SLASH\_FINDER](#yasbd-utils-cleaner-CONSECUTIVE_FORWARD_SLASH_FINDER)
+  - 🆅 [CLEANING\_PIPELINE](#yasbd-utils-cleaner-CLEANING_PIPELINE)
 - **Classes:**
   - 🅲 [StreamCleaner](#yasbd-utils-cleaner-StreamCleaner)
 
@@ -328,6 +499,12 @@ NO_SPACE_BETWEEN_SENTENCES_FINDER = re.compile('(?<=\\w\\.)(?=[A-Z][a-z])')
 ```python
 CONSECUTIVE_FORWARD_SLASH_FINDER = re.compile('\\/{3}')
 ```
+<a name="yasbd-utils-cleaner-CLEANING_PIPELINE"></a>
+### 🆅 yasbd\.utils\.cleaner\.CLEANING\_PIPELINE
+
+```python
+CLEANING_PIPELINE = {'fix_mojibake': ftfy.fix_text, 'fix_ocr_text': _clean_ocr_text, 'unwrap_htmls': lambda t: t if '<' not in t else HTML_TAGS_FINDER.sub('', t), 'normalize_slashes': lambda t: t if '///' not in t else CONSECUTIVE_FORWARD_SLASH_FINDER.sub('', t), 'normalize_spaces': lambda t: t if ' ' not in t else MULTIPLE_SPACES_FINDER.sub(' ', t)}
+```
 
 ### Classes
 
@@ -342,20 +519,27 @@ Normalize and clean noisy text by applying \`\`ftfy\`\`, HTML sanitization,
 
 and various regex cleanup rules across paragraphs\.
 
-Implements the iterator protocol\. Yields cleaned paragraph strings\.
-
-**Parameters:**
-
-- **source**: Plain string or iterable of pre-paragraphed strings\.
-
 **Functions:**
 
 <a name="yasbd-utils-cleaner-StreamCleaner-__init__"></a>
 #### 🅵 yasbd\.utils\.cleaner\.StreamCleaner\.\_\_init\_\_
 
 ```python
-def __init__(self, source: str | TextIOBase) -> None:
+def __init__(self, source: str | TextIOBase, steps_to_skip: Collection[str] | None = None) -> None:
 ```
+
+Implements the iterator protocol\. Yields cleaned paragraph strings\.
+
+**Parameters:**
+
+- **source**: Plain text string or open text stream \(e\.g\., \`\`StringIO\`\`\)\.
+- **steps_to_skip**: A collection of steps to ignore\. All steps will run if not provided\.
+choices are:
+- fix\_mojibake
+- fix\_ocr\_text
+- unwrap\_htmls
+- normalize\_slashes
+- normalize\_spaces
 <a name="yasbd-utils-cleaner-StreamCleaner-__iter__"></a>
 #### 🅵 yasbd\.utils\.cleaner\.StreamCleaner\.\_\_iter\_\_
 
@@ -394,8 +578,6 @@ This class provides no functionality\.
 
 - **Functions:**
   - 🅵 [validate\_input](#yasbd-utils-input_validator-validate_input)
-- **Classes:**
-  - 🅲 [InvalidInputError](#yasbd-utils-input_validator-InvalidInputError)
 
 ### Functions
 
@@ -408,18 +590,8 @@ def validate_input(fn):
 
 A decorator that validates function inputs and outputs
 
-A wrapper around Pydantic's \`validate\_call\` that catches\`ValidationError\` and re-raises it as a more user-friendly \`InvalidInputError\`\.
-
-### Classes
-
-<a name="yasbd-utils-input_validator-InvalidInputError"></a>
-### 🅲 yasbd\.utils\.input\_validator\.InvalidInputError
-
-```python
-class InvalidInputError(Exception):
-```
-
-Raised when invalid input\(s\) are encountered\.
+A wrapper around Pydantic's \`validate\_call\` that catches \`ValidationError\`
+and re-raises it as a more user-friendly \`InvalidInputError\`\.
 <a name="yasbd-utils-paragraph_stream"></a>
 ## 🅼 yasbd\.utils\.paragraph\_stream
 
