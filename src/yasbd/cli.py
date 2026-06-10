@@ -1,7 +1,10 @@
 import json
 import os
+import shlex
 import stat
+import subprocess
 import sys
+from collections.abc import Callable
 from pathlib import Path
 from typing import Optional
 
@@ -56,6 +59,50 @@ def _stdin_is_pipe() -> bool:
 def _stdout_is_pipe() -> bool:
     """Check if stdout is a pipe (redirected to another process)."""
     return stat.S_ISFIFO(os.fstat(1).st_mode)
+
+
+def _create_external_cleaner(
+    command_str: str, timeout: int | None = None
+) -> Callable[[str], str]:
+    """Create a cleaner function from a shell command string.
+
+    The command receives text on stdin and must output cleaned text on stdout.
+
+    Args:
+        command_str: Shell command to execute (e.g., ``"sed 's/foo/bar/g'"``).
+        timeout: Optional timeout in seconds for each call.
+
+    Returns:
+        A callable that accepts a string and returns the cleaned string.
+
+    Example:
+        >>> cleaner = _create_external_cleaner("tr 'a-z' 'A-Z'")
+        >>> cleaner("hello")
+        'HELLO'
+    """
+    command_list = shlex.split(command_str)
+
+    def external_cleaner(text: str) -> str:
+        try:
+            process = subprocess.run(
+                command_list,
+                shell=False,
+                input=text,
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+                check=True,
+            )
+            return process.stdout
+
+        except subprocess.TimeoutExpired:
+            print(f"Cleaner command timed out after {timeout}s", file=sys.stderr)
+            sys.exit(1)
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing cleaner command: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    return external_cleaner
 
 
 def _resolve_input(text: Optional[str], file: Optional[str]) -> str:
@@ -147,7 +194,7 @@ def _output(items, destination: Optional[str], *, label: str):
     preserve_whitespace=Arg(
         "--preserve-whitespace", help="Preserve original whitespace in output."
     ),
-    verbose=Arg("--verbose", help="Enable verbose logging."),
+    verbose=Arg("--verbose", "-v", help="Enable verbose logging."),
 )
 def segment(
     text: Optional[str] = None,
@@ -178,7 +225,7 @@ def segment(
     destination=Arg("--destination", "-d", help="Write boundary offsets to a file."),
     lang=Arg("--lang", "-l", help="Language code (e.g., 'en', 'fr', 'de')."),
     relative=Arg("--relative", help="Yield paragraph-relative offsets."),
-    verbose=Arg("--verbose", help="Enable verbose logging."),
+    verbose=Arg("--verbose", "-v", help="Enable verbose logging."),
 )
 def detect(
     text: Optional[str] = None,
@@ -211,13 +258,18 @@ def detect(
     steps_to_skip=Arg(
         "--steps-to-skip", "--skip", help="Comma-separated cleaning steps to skip."
     ),
-    verbose=Arg("--verbose", help="Enable verbose logging."),
+    extra_step=Arg(
+        "--extra-step", "-e",
+        help="External shell command to run as an extra cleaning step (repeatable).",
+    ),
+    verbose=Arg("--verbose", "-v", help="Enable verbose logging."),
 )
 def clean(
     text: Optional[str] = None,
     file: Optional[str] = None,
     destination: Optional[str] = None,
     steps_to_skip: Optional[str] = None,
+    extra_step: Optional[list[str]] = None,
     verbose: bool = False,
 ):
     """Clean and normalize noisy text paragraphs.
@@ -225,15 +277,26 @@ def clean(
     Applies ftfy mojibake fixing, OCR cleanup, HTML tag stripping,
     slash normalization, and whitespace normalization.
     Use --skip to omit specific steps (comma-separated).
+    Use --extra-step to run external shell commands as extra cleaning steps.
     """
     input_text = _resolve_input(text, file)
 
     skip = {s.strip() for s in steps_to_skip.split(",")} if steps_to_skip else None
 
+    extra_steps = None
+    if extra_step:
+        extra_steps = [_create_external_cleaner(cmd) for cmd in extra_step]
+
     # lazy import to avoid pulling in ftfy et al. for other commands
     from yasbd.utils.cleaner import StreamCleaner
 
-    _output(StreamCleaner(input_text, steps_to_skip=skip), destination, label="paragraph(s)")
+    _output(
+        StreamCleaner(
+            input_text, steps_to_skip=skip, extra_steps=extra_steps, verbose=verbose
+        ),
+        destination,
+        label="paragraph(s)",
+    )
 
 
 @cli.command("langs")
