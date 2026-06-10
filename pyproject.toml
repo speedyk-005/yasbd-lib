@@ -99,6 +99,7 @@ select = ["E", "F", "I", "W", "B"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401", "F403", "I001"]
+"tests/test_data/*" = ["E501"]
 
 [tool.ruff.format]
 exclude = [".git", ".venv", "build", "dist", "tests/test_data/*", "*/EN_GOLDEN_DATA.py"]
