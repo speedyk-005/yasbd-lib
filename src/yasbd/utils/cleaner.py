@@ -1,10 +1,11 @@
 import re
-from collections.abc import Collection, Iterator
+from collections.abc import Callable, Collection, Iterator
 from io import TextIOBase
 
 import ftfy
 import regex as re2  # For complex patterns
 
+from yasbd.exceptions import CleanStepError
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
 from yasbd.utils.paragraph_stream import ParagraphStream
@@ -130,7 +131,10 @@ class StreamCleaner(StreamCleanerStub):
 
     @validate_input
     def __init__(
-        self, source: str | TextIOBase, steps_to_skip: Collection[str] | None = None
+        self,
+        source: str | TextIOBase,
+        steps_to_skip: Collection[str] | None = None,
+        extra_steps: Collection[Callable[[str], str]] | None = None,
     ) -> None:
         """Implements the iterator protocol. Yields cleaned paragraph strings.
 
@@ -143,6 +147,8 @@ class StreamCleaner(StreamCleanerStub):
                     - unwrap_htmls
                     - normalize_slashes
                     - normalize_spaces
+            extra_steps: Optional user-defined cleaning functions, run after built-in steps.
+                Each function must accept and return ``str``.
         """
         if isinstance(source, (str, TextIOBase)):
             source = ParagraphStream(source, skip_empty_lines=True)
@@ -154,6 +160,8 @@ class StreamCleaner(StreamCleanerStub):
                 f"Invalid step(s) to skip: {', '.join(sorted(invalid_steps))}. "
                 f"Valid steps are: {', '.join(CLEANING_PIPELINE.keys())}"
             )
+
+        self.extra_steps = list(extra_steps or ())
 
     def __iter__(self) -> Iterator[str]:
         return self
@@ -168,6 +176,21 @@ class StreamCleaner(StreamCleanerStub):
             for step in CLEANING_PIPELINE:
                 if step not in self.steps_to_skip:
                     cleaned_text = CLEANING_PIPELINE[step](cleaned_text)
+
+            for step in self.extra_steps:
+                try:
+                    result = step(cleaned_text)
+                except Exception as exc:
+                    raise CleanStepError(
+                        f"extra step {getattr(step, '__name__', step)!r} "
+                        f"raised {type(exc).__name__} (see above for details)"
+                    ) from exc
+                if not isinstance(result, str):
+                    raise CleanStepError(
+                        f"extra step {getattr(step, '__name__', step)!r} "
+                        f"returned {type(result).__name__}, expected str"
+                    )
+                cleaned_text = result
             return cleaned_text
 
         raise StopIteration
