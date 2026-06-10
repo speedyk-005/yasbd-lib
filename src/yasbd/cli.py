@@ -15,6 +15,38 @@ cli = Radicli(
     "Split text into sentences with multilingual support.",
 )
 
+_YELLOW = "\033[93m"
+_CYAN = "\033[96m"
+_RESET = "\033[0m"
+
+# fmt: off
+_LOGO_YA = [
+    "╦ ╦ ╔═╗",
+    "╚╦╝ ╠═╣",
+    " ╩  ╩ ╩"
+]
+_LOGO_SBD = [
+    " ╔═╗ ╔╗  ╔╦╗",
+    " ╚═╗ ╠╩╗  ║║",
+    " ╚═╝ ╚═╝ ═╩╝"
+]
+# fmt: on
+
+
+def _logo_colored() -> str:
+    """Return the logo with ANSI color, plain when piped."""
+    if _stdout_is_pipe():
+        return "\n".join(a + b for a, b in zip(_LOGO_YA, _LOGO_SBD, strict=True))
+    lines = [
+        f"{_YELLOW}{y}{_CYAN}{s}{_RESET}" for y, s in zip(_LOGO_YA, _LOGO_SBD, strict=True)
+    ]
+    return "\n".join(lines)
+
+
+def _version() -> str:
+    """Return the colored logo + version string for --version output."""
+    return f"{_logo_colored()}   v{__version__}"
+
 
 def _stdin_is_pipe() -> bool:
     """Check if stdin is a pipe or redirected file (not a TTY)."""
@@ -85,8 +117,8 @@ def _output(items, destination: Optional[str], *, label: str):
     '{"no": 1, "text": "A."}\\n{"no": 2, "text": "B."}\\n{"no": 3, "text": "C."}\\n'
     >>> os.unlink(tmp.name)
     """
-    count = 0
     if destination:
+        count = 0
         with open(destination, "w", encoding="utf-8") as f:
             for i, item in enumerate(items, 1):
                 f.write(_to_json(i, item) + "\n")
@@ -125,7 +157,11 @@ def segment(
     preserve_whitespace: bool = False,
     verbose: bool = False,
 ):
-    """Split text into sentences."""
+    """Split text into sentences.
+
+    Reads from a positional string, --file, or stdin pipe.
+    Writes enumerated sentences to stdout or JSONL to --destination.
+    """
     input_text = _resolve_input(text, file)
     detector = BoundaryDetector(lang=lang, preserve_quote_and_paren=True, verbose=verbose)
     _output(
@@ -152,7 +188,12 @@ def detect(
     relative: bool = False,
     verbose: bool = False,
 ):
-    """Detect sentence boundary offsets (character positions)."""
+    """Detect sentence boundary offsets (character positions).
+
+    Reads from a positional string, --file, or stdin pipe.
+    Writes boundary offsets to stdout or JSONL to --destination.
+    Use --relative for per-paragraph offsets (ParagraphEOF marks gaps).
+    """
     input_text = _resolve_input(text, file)
     detector = BoundaryDetector(lang=lang, preserve_quote_and_paren=True, verbose=verbose)
     _output(
@@ -179,7 +220,12 @@ def clean(
     steps_to_skip: Optional[str] = None,
     verbose: bool = False,
 ):
-    """Clean and normalize noisy text paragraphs."""
+    """Clean and normalize noisy text paragraphs.
+
+    Applies ftfy mojibake fixing, OCR cleanup, HTML tag stripping,
+    slash normalization, and whitespace normalization.
+    Use --skip to omit specific steps (comma-separated).
+    """
     input_text = _resolve_input(text, file)
 
     skip = set(s.strip() for s in steps_to_skip.split(",")) if steps_to_skip else None
@@ -197,9 +243,12 @@ def langs():
 
 
 def main():
+    """CLI entry point. Handles --version, --help, and dispatches to radicli."""
     if "--version" in sys.argv or "-v" in sys.argv:
-        print(f"yasbd v{__version__}")
+        print(_version())
         sys.exit(0)
+    if "--help" in sys.argv or "-h" in sys.argv or len(sys.argv) == 1:
+        print(_logo_colored(), end="\n\n")
     cli.run()
 
 
