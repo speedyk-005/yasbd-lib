@@ -186,16 +186,15 @@ class StreamCleaner(StreamCleanerStub):
             for step in self.extra_steps:
                 try:
                     result = step(cleaned_text)
+                    assert isinstance(result, str), (
+                        f"extra step {getattr(step, '__name__', step)!r} "
+                        f"returned {type(result).__name__}, expected str"
+                    )
                 except Exception as exc:
                     raise CleanStepError(
                         f"extra step {getattr(step, '__name__', step)!r} "
                         f"raised {type(exc).__name__} (see above for details)"
                     ) from exc
-                if not isinstance(result, str):
-                    raise CleanStepError(
-                        f"extra step {getattr(step, '__name__', step)!r} "
-                        f"returned {type(result).__name__}, expected str"
-                    )
                 cleaned_text = result
             return cleaned_text
 
