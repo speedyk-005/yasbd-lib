@@ -76,7 +76,9 @@ def _output(items, destination: Optional[str], *, label: str):
     file=Arg("--file", "-f", help="Read input from a text file."),
     destination=Arg("--destination", "-d", help="Write output to a file."),
     lang=Arg("--lang", "-l", help="Language code (e.g., 'en', 'fr', 'de')."),
-    preserve_whitespace=Arg("--preserve-whitespace", help="Preserve original whitespace in output."),
+    preserve_whitespace=Arg(
+        "--preserve-whitespace", help="Preserve original whitespace in output."
+    ),
     verbose=Arg("--verbose", help="Enable verbose logging."),
 )
 def segment(
@@ -129,7 +131,9 @@ def detect(
     text=Arg(help="Text to clean. Use --file to read from a file instead."),
     file=Arg("--file", "-f", help="Read input from a text file."),
     destination=Arg("--destination", "-d", help="Write cleaned text to a file."),
-    steps_to_skip=Arg("--steps-to-skip", "--skip", help="Comma-separated cleaning steps to skip."),
+    steps_to_skip=Arg(
+        "--steps-to-skip", "--skip", help="Comma-separated cleaning steps to skip."
+    ),
     verbose=Arg("--verbose", help="Enable verbose logging."),
 )
 def clean(
@@ -147,11 +151,7 @@ def clean(
     # lazy import to avoid pulling in ftfy et al. for other commands
     from yasbd.utils.cleaner import StreamCleaner
 
-    _output(
-        StreamCleaner(input_text, steps_to_skip=skip),
-        destination,
-        label="paragraph(s)"
-    )
+    _output(StreamCleaner(input_text, steps_to_skip=skip), destination, label="paragraph(s)")
 
 
 @cli.command("langs")
