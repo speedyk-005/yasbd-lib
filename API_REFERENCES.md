@@ -99,7 +99,7 @@ Initialize the segmenter.
 def lang() -> str
 ```
 
-ISO language code of the active rule set.
+ISO language code of the active rule set. This property is settable at runtime via `detector.lang = 'xx'` to switch the active language rules dynamically.
 
 <a id="yasbd.boundary_detector.BoundaryDetector.detect"></a>
 
