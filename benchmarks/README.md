@@ -27,11 +27,11 @@ Aggregate score across all 92 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOL
 |---|---|
 | **yasbd** | 91/92 (98.9%) |
 | pysbd | 77/92 (83.7%) |
+| sentencex | 76/92 (82.6%) |
+| blingfire | 75/92 (81.5%) |
 | sentsplit | 61/92 (66.3%) |
 | sentence-splitter | 60/92 (65.2%) |
 | nupunkt | 59/92 (64.1%) |
-| sentencex | 56/92 (60.9%) |
-| blingfire | 0/92 (0.0%) |
 
 yasbd achieves 91/92 (98.9%). The only failing case is the `Ave.` abbreviation followed by a capitalized new sentence — a known limitation of rule-based abbreviation suppression. The test suite has been expanded from 85 to 92 cases with additional academic citation patterns.
 
