@@ -1,3 +1,5 @@
+import os
+import stat
 import sys
 from pathlib import Path
 from typing import Optional
@@ -13,12 +15,24 @@ cli = Radicli(
 )
 
 
+def _stdin_is_pipe() -> bool:
+    """Check if stdin is a pipe or redirected file (not a TTY)."""
+    return not stat.S_ISCHR(os.fstat(0).st_mode)
+
+
+def _stdout_is_pipe() -> bool:
+    """Check if stdout is a pipe (redirected to another process)."""
+    return stat.S_ISFIFO(os.fstat(1).st_mode)
+
+
 def _resolve_input(text: Optional[str], file: Optional[str]) -> str:
-    """Resolve input text from a positional string or --file option. Mutually exclusive."""
+    """Resolve input text from a positional string, --file option, or stdin pipe."""
     if text and file:
         print("Error: provide text argument or --file, not both.", file=sys.stderr)
         sys.exit(1)
     if not text and not file:
+        if _stdin_is_pipe():
+            return sys.stdin.read()
         print("Error: provide text argument or --file.", file=sys.stderr)
         sys.exit(1)
     return text or Path(file).read_text(encoding="utf-8")
@@ -42,6 +56,9 @@ def _output(items, destination: Optional[str], *, label: str):
             f"Wrote {count} {label} to {destination} separated by ' | '",
             file=sys.stderr,
         )
+    elif _stdout_is_pipe():
+        for item in items:
+            print(item)
     else:
         for i, item in enumerate(items, 1):
             print(f"[{i}] {item!r}")
