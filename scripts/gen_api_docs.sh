@@ -24,5 +24,5 @@ done
 
 export PYTHONPATH="$REPO_DIR/src"
 OUT="$REPO_DIR/API_REFERENCES.md"
-pydoc-markdown "${ARGS[@]}" --render-toc > "$OUT" 2>/dev/null
+pydoc-markdown "${ARGS[@]}" --render-toc > "$OUT"
 echo "Done. Wrote $OUT ($(wc -l < "$OUT") lines)"
