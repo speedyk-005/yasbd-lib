@@ -69,15 +69,15 @@ def _resolve_input(text: Optional[str], file: Optional[str]) -> str:
     Traceback (most recent call last):
     SystemExit
     """
-    if text and file:
+    if text is not None and file is not None:
         print("Error: provide text argument or --file, not both.", file=sys.stderr)
         sys.exit(1)
-    if not text and not file:
+    if text is None and file is None:
         if _stdin_is_pipe():
             return sys.stdin.read()
         print("Error: provide text argument or --file.", file=sys.stderr)
         sys.exit(1)
-    return text or Path(file).read_text(encoding="utf-8")
+    return text if text is not None else Path(file).read_text(encoding="utf-8")
 
 
 def _to_json(no: int, item) -> str:
@@ -244,10 +244,10 @@ def langs():
 
 def main():
     """CLI entry point. Handles --version, --help, and dispatches to radicli."""
-    if "--version" in sys.argv or "-v" in sys.argv:
+    if len(sys.argv) > 1 and sys.argv[1] in ("--version", "-v"):
         print(_version())
         sys.exit(0)
-    if "--help" in sys.argv or "-h" in sys.argv or len(sys.argv) == 1:
+    if len(sys.argv) == 1 or (len(sys.argv) > 1 and sys.argv[1] in ("--help", "-h")):
         print(_logo_colored(), end="\n\n")
     cli.run()
 
