@@ -4,12 +4,11 @@ from importlib import import_module
 from io import TextIOBase
 from itertools import tee
 
-from loguru import logger
-
 from yasbd.exceptions import UnsupportedLanguageError
 from yasbd.rules import get_supported_langs
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
+from yasbd.utils.logger import log_info
 from yasbd.utils.paragraph_stream import ParagraphStream
 
 # Signals transition between paragraphs in relative mode
@@ -37,13 +36,13 @@ class BoundaryDetector:
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
         self.lang = lang.lower()
-        if self.verbose:  # pragma: no cover
-            logger.info(
-                "Initialized with lang={!r}, preserve_quote_and_paren={}, verbose={}",
-                self._lang,
-                self.preserve_quote_and_paren,
-                self.verbose,
-            )
+        log_info(
+            self.verbose,
+            "Initialized with lang={!r}, preserve_quote_and_paren={}, verbose={}",
+            self._lang,
+            self.preserve_quote_and_paren,
+            self.verbose,
+        )
 
     @property
     def lang(self) -> str:
@@ -59,13 +58,11 @@ class BoundaryDetector:
 
         self._load_rule(lang)
         self._lang = lang
-        if self.verbose:  # pragma: no cover
-            logger.info("Language switched from {} to {}", old_lang, self._lang)
+        log_info(self.verbose, "Language switched from {} to {}", old_lang, self._lang)
 
     def _load_rule(self, lang: str) -> None:
         """Dynamically import and instantiate the rule module for *lang*."""
-        if self.verbose:  # pragma: no cover
-            logger.info("Trying to load rule module for {}", lang)
+        log_info(self.verbose, "Trying to load rule module for {}", lang)
 
         try:
             rule_module = import_module(f"yasbd.rules.{lang}")
@@ -125,8 +122,12 @@ class BoundaryDetector:
             Integer boundary offsets or ``ParagraphEOF`` sentinels.
         """
 
-        if self.verbose:  # pragma: no cover
-            logger.info("Called with type={}, relative={}", type(source).__name__, relative)
+        log_info(
+            self.verbose,
+            "Called with type={}, relative={}",
+            type(source).__name__,
+            relative,
+        )
 
         para_iter = (
             ParagraphStream(source) if isinstance(source, (str, TextIOBase)) else source
@@ -168,8 +169,7 @@ class BoundaryDetector:
         Yields:
             Individual sentences as strings.
         """
-        if self.verbose:  # pragma: no cover
-            logger.info("Called with preserve_whitespace={}", preserve_whitespace)
+        log_info(self.verbose, "Called with preserve_whitespace={}", preserve_whitespace)
 
         para_iter = (
             ParagraphStream(source, skip_empty_lines=not preserve_whitespace)
