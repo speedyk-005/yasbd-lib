@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`CleanStepError`**: Raised when an extra step fails or returns non-string.
 - **CLI short flags**: `-w` for `--preserve-whitespace`, `-r` for `--relative`.
 - **Custom exception classes**: `YasbdError` (base), `UnsupportedLanguageError`, and `InvalidInputError` with ValueError/TypeError mixins.
+- **Flat utils imports** ([#84](https://github.com/speedyk-005/yasbd-lib/pull/84)): Utils submodules now importable at package root via `__path__` extension — `from yasbd.cleaner import StreamCleaner` as an alternative to `from yasbd.utils.cleaner import StreamCleaner`.
 - **Radicli-based CLI** ([#79](https://github.com/speedyk-005/yasbd-lib/pull/79)): `segment`, `detect`, `clean`, and `langs` subcommands with auto-stdin detection, JSONL output, and ~3.3x faster startup vs typer.
 
 ### Fixed

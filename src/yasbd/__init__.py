@@ -1,4 +1,5 @@
 from importlib.metadata import PackageNotFoundError, version
+from pathlib import Path
 
 from yasbd.boundary_detector import BoundaryDetector
 from yasbd.boundary_detector import ParagraphEOF
@@ -12,6 +13,14 @@ try:
     __version__ = version("yasbd-lib")
 except PackageNotFoundError:
     __version__ = "unknown"
+
+# Expose utils submodules at package root level so both
+#   from yasbd.utils.cleaner import StreamCleaner   (legacy)
+#   from yasbd.cleaner import StreamCleaner          (flat)
+# work without changing the physical file layout.
+_utils_path = str(Path(__file__).parent / "utils")
+if _utils_path not in __path__:
+    __path__.append(_utils_path)
 
 __all__ = [
     "BoundaryDetector",

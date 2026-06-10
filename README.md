@@ -263,7 +263,7 @@ print(res)
 > [!TIP]
 > **ParagraphStream** — yasbd uses [`ParagraphStream`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.utils.paragraph_stream.ParagraphStream) internally to split text into paragraph blocks. You can import it directly if you need paragraph-level processing in your own code:
 > ```python
-> from yasbd.utils.paragraph_stream import ParagraphStream
+> from yasbd.utils.paragraph_stream import ParagraphStream  # or yasbd.paragraph_stream
 >
 > for para in ParagraphStream(text):  # or an opened file
 >     print(para)  # each paragraph block
@@ -277,7 +277,7 @@ StreamCleaner accepts either a string or an open text stream and yields cleaned 
 You can pass a "StreamCleaner" instance directly to "detect()" or "segment()" to clean text as it is processed.
 
 ```python
-from yasbd.utils.cleaner import StreamCleaner
+from yasbd.utils.cleaner import StreamCleaner  # or yasbd.cleaner
 
 cleaner = StreamCleaner(
     "Hello  world.   This is  messy.",
@@ -290,7 +290,7 @@ list(cleaner)
 "StreamCleaner" implements the iterator protocol and yields cleaned paragraphs one at a time. It can consume plain strings, open text files, and other text streams.
 
 ```python
-from yasbd.utils.cleaner import StreamCleaner
+from yasbd.utils.cleaner import StreamCleaner  # or yasbd.cleaner
 
 with open("document.txt", encoding="utf-8") as f:
     for paragraph in StreamCleaner(f):
@@ -412,7 +412,7 @@ Migrating from pysbd? Swap the import and keep your pipeline:
 
 ```python
 # Before: from pysbd import Segmenter
-from yasbd.utils.pysbd_adapter import Segmenter
+from yasbd.utils.pysbd_adapter import Segmenter  # or yasbd.pysbd_adapter
 
 seg = Segmenter(language="ja")
 res = seg.segment('田中さんは「準備は完了しました」そう言って部屋を出た。Ｕ．Ｓ．Ａ．の経済政策は非常に複雑です。')
