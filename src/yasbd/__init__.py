@@ -1,4 +1,3 @@
-# ruff: noqa: I001
 from yasbd.boundary_detector import BoundaryDetector
 from yasbd.boundary_detector import ParagraphEOF
 from yasbd.exceptions import InvalidInputError
