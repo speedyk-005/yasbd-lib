@@ -119,10 +119,10 @@ def test_rule_cache_lru(en_detector):
     r3 = en_detector._get_rule("en")
     assert r1 is r3, "switching back to cached lang should reuse cached rule"
 
-    # LRU eviction after 6 distinct langs
+    # LRU eviction: load 5 more languages (cache capacity is 5)
     for lang in ["de", "es", "ht", "ar", "ja"]:
         en_detector._get_rule(lang)
-    # 'en' was used first, then pushed out by 6 newer entries
+    # 'en' was the first loaded, then pushed out by 5 newer entries
     r_en = en_detector._get_rule("en")
     assert r_en is not r1, "en should have been evicted after 6 other langs"
     assert type(r_en) is type(r1), "freshly loaded en rule should exist"  # type: ignore[unreachable]
