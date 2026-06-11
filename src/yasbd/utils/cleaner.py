@@ -67,8 +67,8 @@ HTML_TAGS_FINDER = re.compile(
 
 # -- Regex ported from pysbd --
 
-# https://regex101.com/r/0dTHBO/3/substitution
-NEWLINE_IN_MIDDLE_OF_WORD_FINDER = re2.compile(r"(?<=\b[a-zA-Z]{1,2})\n")
+# https://regex101.com/r/0dTHBO/4/substitution
+NEWLINE_BETWEEN_WORD_CHARS = re2.compile(r"(?<=\w)\n(?=\w)")
 
 # https://regex101.com/r/VMfP98/3/substitution
 NEWLINE_FOLLOWED_BY_PERIOD_FINDER = re.compile(r"\n(?=\.(?=\s))")
@@ -82,7 +82,7 @@ CONSECUTIVE_FORWARD_SLASH_FINDER = re.compile(r"\/{3}")
 
 def _clean_ocr_text(text: str) -> str:
     cleaned_text = text.replace("''", '"')
-    cleaned_text = NEWLINE_IN_MIDDLE_OF_WORD_FINDER.sub("", cleaned_text)
+    cleaned_text = NEWLINE_BETWEEN_WORD_CHARS.sub("", cleaned_text)
     cleaned_text = NEWLINE_FOLLOWED_BY_PERIOD_FINDER.sub("", cleaned_text)
     cleaned_text = HEADING_OR_LIST_FINDER.sub(" ", cleaned_text)
     cleaned_text = NO_SPACE_BETWEEN_SENTENCES_FINDER.sub(" ", cleaned_text)
