@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from collections.abc import Generator, Iterable
 from io import TextIOBase
-from itertools import tee
+from itertools import tee, chain
 
 from yasbd.rules import load_rule
 from yasbd.utils.cleaner_stub import StreamCleanerStub
@@ -125,15 +125,21 @@ class BoundaryDetector:
         )
 
         offset = 0
-        is_first_pos = True
         rule = self._get_rule(self._lang)
-        for para in para_iter:
-            is_space = para.isspace()
-            if relative and (not is_first_pos or is_space):
+
+        # Handle first para differently
+        is_first_para = True
+        first_para = next(para_iter, "")
+        if relative and first_para.isspace():
+            yield ParagraphEOF
+
+        for para in chain([first_para], para_iter):
+            if para.isspace():
+                continue
+
+            if relative and not is_first_para:
                 yield ParagraphEOF
-                if is_space:
-                    continue
-            is_first_pos = False
+            is_first_para = False
 
             boundaries = rule.apply(para.rstrip(), self.preserve_quote_and_paren)
 
