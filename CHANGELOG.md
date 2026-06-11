@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.5.0] - Unreleased
+
+### Added
+- **Automatic language detection** ([#86](https://github.com/speedyk-005/yasbd-lib/pull/86)): `BoundaryDetector(lang="auto")` detects language from text on first paragraph via py3langid. Logs warning on confidence < 0.8.
+- **`classify_language` utility**([#86](https://github.com/speedyk-005/yasbd-lib/pull/86)): Wraps py3langid with softmax normalization and preference for supported languages.
+
+### Changed
+- **Internal refactors** ([#86](https://github.com/speedyk-005/yasbd-lib/pull/86)):
+  - Cached up to 5 rule objects, evicting least recently used on overflow.
+  - Moved `load_rule` cause rule loading belongs to the rules package, not the detector.
+  - Restructured `detect()` loop with first paragraph peeked before loop, uses `chain()` to rejoin — cleaner separation of EOF logic from content processing.
+
 ## [0.4.0] - 2026-06-10
 
 ### Added
