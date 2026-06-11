@@ -5,6 +5,7 @@ from itertools import tee, chain
 
 from yasbd.rules import load_rule
 from yasbd.utils.cleaner_stub import StreamCleanerStub
+from yasbd.utils.language_classifier import classify_language
 from yasbd.utils.input_validator import validate_input
 from yasbd.utils.logger import log_info
 from yasbd.utils.paragraph_stream import ParagraphStream
@@ -18,7 +19,7 @@ class BoundaryDetector:
     @validate_input
     def __init__(
         self,
-        lang: str = "en",
+        lang: str = "auto",
         *,
         preserve_quote_and_paren: bool = True,
         verbose: bool = False,
@@ -26,7 +27,8 @@ class BoundaryDetector:
         """Initialize the segmenter.
 
         Args:
-            lang: Two chars ISO language code (e.g. en, fr, ...).
+            lang: Two chars ISO language code (e.g. en, fr, ...) or "auto"
+                to detect language from text.
             preserve_quote_and_paren: Do not split on terminators inside
                 quoted or parenthesised text.
             verbose: Enable verbose logging.
@@ -55,12 +57,31 @@ class BoundaryDetector:
         if lang == old_lang:
             return
 
+        if lang == "auto":
+            self._lang = "auto"
+            log_info(self.verbose, "Language set to auto-detection")
+            return
+
         self._get_rule(lang)  # warm cache
         self._lang = lang
         log_info(self.verbose, "Language switched from {} to {}", old_lang, self._lang)
 
-    def _get_rule(self, lang: str) -> object:
-        """Return the rule object for *lang*, using a 5-entry LRU cache."""
+    def _get_rule(self, lang: str, snippet: str = "") -> object:
+        """Return the rule object for *lang*, using a 5-entry LRU cache.
+
+        When *lang* is ``"auto"``, language is detected from *snippet*
+        using :func:`classify_language`.
+        """
+        if lang == "auto":
+            lang, confidence = classify_language(snippet)
+            if confidence < 0.8:
+                log_info(
+                    self.verbose,
+                    "Low confidence ({:.2f}) for detected lang {!r} in auto mode",
+                    confidence,
+                    lang,
+                )
+
         if lang in self._rule_cache:
             self._rule_cache.move_to_end(lang)
             return self._rule_cache[lang]
@@ -75,8 +96,10 @@ class BoundaryDetector:
         para_iter: Iterable[str],
     ) -> Generator[tuple[int, int], None, None]:
         """Yield per-paragraph sentence spans."""
-        rule = self._get_rule(self._lang)
-        for para in para_iter:
+        first_para = next(para_iter, "")
+        rule = self._get_rule(self._lang, first_para)
+
+        for para in chain([first_para], para_iter):
             if not para or para.isspace():
                 boundaries = [0, len(para)]
             else:
@@ -112,7 +135,6 @@ class BoundaryDetector:
         Yields:
             Integer boundary offsets or ``ParagraphEOF`` sentinels.
         """
-
         log_info(
             self.verbose,
             "Called with type={}, relative={}",
@@ -125,13 +147,13 @@ class BoundaryDetector:
         )
 
         offset = 0
-        rule = self._get_rule(self._lang)
-
         # Handle first para differently
         is_first_para = True
         first_para = next(para_iter, "")
         if relative and first_para.isspace():
             yield ParagraphEOF
+   
+        rule = self._get_rule(self._lang, first_para)
 
         for para in chain([first_para], para_iter):
             if para.isspace():
