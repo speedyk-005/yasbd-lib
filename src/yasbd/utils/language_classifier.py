@@ -38,7 +38,7 @@ def classify_language(text: str) -> tuple[str, float]:
             - The predicted ISO 639-1 language code.
             - A confidence score between 0.0 and 1.0.
 
-    Exemples:
+    Examples:
         >>> language, confidence = classify_language("kiyès ?")
         >>> language
         'ht'
