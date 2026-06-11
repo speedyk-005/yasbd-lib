@@ -4,6 +4,7 @@ from importlib import import_module
 from pathlib import Path
 
 from yasbd.exceptions import UnsupportedLanguageError
+from yasbd.rules.base import Rules
 
 
 @cache
@@ -19,7 +20,7 @@ def get_supported_langs() -> list[str]:
     return sorted(langs)
 
 
-def load_rule(lang: str):
+def load_rule(lang: str) -> Rules:
     """Import and instantiate the rule module for *lang*.
 
     Returns:
