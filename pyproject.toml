@@ -36,6 +36,7 @@ dependencies = [
   "ftfy>=6.2.0,<7.0",
   "pydantic>=2.11.0,<3.0",
   "retrie>=0.3.0,<1.0",
+  "py3langid>=0.2.2,<1.0",
   "radicli>=0.0.25,<1.0",
 ]
 

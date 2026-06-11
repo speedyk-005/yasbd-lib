@@ -42,7 +42,7 @@ class Segmenter:
     @validate_input
     def __init__(
         self,
-        language: str = "en",
+        language: str = "en",  # Match pysbd default
         clean: bool = False,
         doc_type: str | None = None,
         char_span: bool = False,

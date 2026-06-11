@@ -181,11 +181,11 @@ from yasbd.boundary_detector import BoundaryDetector
 # Or from yasbd import BoundaryDetector
 
 # Basic setup
-detector = BoundaryDetector(lang="en")
+detector = BoundaryDetector()
 
 # With all options (so far.)
 detector = BoundaryDetector(
-	# ISO 639 code (e.g., en, fr, es, ...). Defaults to `en`.
+	# ISO 639 code (e.g., en, fr, es, ...). Defaults to "auto".
 	# https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
     lang="fr",
 
@@ -205,6 +205,12 @@ detector.lang = "es"
 ```
 
 The rule module loads lazily on first access. Switching mid-stream reimports the module and rebinds the pattern cache. Zero config, no restarts needed.
+
+> [!TIP]
+> **Auto-detect**
+>
+> Keep lang="auto" if you want the system to figure out the language for you.
+> I wouldn’t lean on it too hard tho — it’s a bit slower, and short phrases can throw it off sometimes.
 
 ### Core Methods
 The two primary APIs are detect() and segment().
@@ -431,7 +437,7 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/bl
 - [x] Drop-in pysbd adapter (same API, no pipeline changes)
 - [x] StreamCleaner for OCR'd and noisy text
 - [x] CLI tool
-- [ ] Automatic language detection with caching (#74)
+- [x] Automatic language detection with caching (#74)
 - [ ] spaCy v3 pipeline component factory (#28)
 - [ ] 22+ language targets (#20)
 - [ ] REST API for remote boundary detection *(stretch)*
