@@ -59,7 +59,7 @@ def classify_language(text: str) -> tuple[str, float]:
     ]
 
     if not candidates:
-        candidates = ranks
+        candidates = ranks  # pragma: no cover
 
     # -- Compute a numerically stable softmax. --
     max_score = max(score for _, score in candidates)
@@ -74,7 +74,7 @@ def classify_language(text: str) -> tuple[str, float]:
     return language, round(confidence, 2)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     texts = [
         "Hello, how are you?",
         "¿Cómo estás?",
