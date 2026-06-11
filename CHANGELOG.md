@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Cached up to 5 rule objects, evicting least recently used on overflow.
   - Moved `load_rule` because rule loading belongs to the rules package, not the detector.
   - Restructured `detect()` loop with first paragraph peeked before loop, uses `chain()` to rejoin — cleaner separation of EOF logic from content processing.
+- **`NEWLINE_IN_MIDDLE_OF_WORD_FINDER` renamed to `NEWLINE_BETWEEN_WORD_CHARS`** and expanded pattern from `(?<=\b[a-zA-Z]{1,2})\n` to `(?<=\w)\n(?=\w)` to join mid-word newlines at any word-character boundary.
 
 ## [0.4.0] - 2026-06-10
 
