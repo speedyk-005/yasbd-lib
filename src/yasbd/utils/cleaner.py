@@ -68,7 +68,7 @@ HTML_TAGS_FINDER = re.compile(
 # -- Regex ported from pysbd --
 
 # https://regex101.com/r/0dTHBO/3/substitution
-NEWLINE_IN_MIDDLE_OF_WORD_FINDER = re2.compile(r"(?<=\b[a-zA-Z]{1,2})\n")
+NEWLINE_IN_MIDDLE_OF_WORD_FINDER = re2.compile(r"(?<=\w)\n(?=\w)")
 
 # https://regex101.com/r/VMfP98/3/substitution
 NEWLINE_FOLLOWED_BY_PERIOD_FINDER = re.compile(r"\n(?=\.(?=\s))")
