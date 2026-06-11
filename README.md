@@ -181,13 +181,13 @@ from yasbd.boundary_detector import BoundaryDetector
 # Or from yasbd import BoundaryDetector
 
 # Basic setup
-detector = BoundaryDetector(lang="en")
+detector = BoundaryDetector()
 
 # With all options (so far.)
 detector = BoundaryDetector(
-	# ISO 639 code (e.g., en, fr, es, ...). Defaults to `en`.
+	# ISO 639 code (e.g., en, fr, es, ...). Defaults to "auto".
 	# https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
-    lang="fr",  # Default to "auto"
+    lang="fr",
 
     # Don't split inside them. (It won't protect block quotes) Defaults to `True`.
     # https://en.wikipedia.org/wiki/Block_quotation
