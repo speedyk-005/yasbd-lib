@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from collections.abc import Generator, Iterable
 from io import TextIOBase
 from itertools import tee
@@ -32,6 +33,7 @@ class BoundaryDetector:
         """
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
+        self._rule_cache: OrderedDict[str, object] = OrderedDict()
         self.lang = lang.lower()
         log_info(
             self.verbose,
@@ -53,25 +55,32 @@ class BoundaryDetector:
         if lang == old_lang:
             return
 
-        self._load_rule(lang)
+        self._get_rule(lang)  # warm cache
         self._lang = lang
         log_info(self.verbose, "Language switched from {} to {}", old_lang, self._lang)
 
-    def _load_rule(self, lang: str) -> None:
-        """Dynamically import and instantiate the rule module for *lang*."""
-        log_info(self.verbose, "Trying to load rule module for {}", lang)
-        self._rule = load_rule(lang)
+    def _get_rule(self, lang: str) -> object:
+        """Return the rule object for *lang*, using a 5-entry LRU cache."""
+        if lang in self._rule_cache:
+            self._rule_cache.move_to_end(lang)
+            return self._rule_cache[lang]
+        rule = load_rule(lang)
+        self._rule_cache[lang] = rule
+        if len(self._rule_cache) > 5:
+            self._rule_cache.popitem(last=False)
+        return rule
 
     def _detect_relative_spans(
         self,
         para_iter: Iterable[str],
     ) -> Generator[tuple[int, int], None, None]:
         """Yield per-paragraph sentence spans."""
+        rule = self._get_rule(self._lang)
         for para in para_iter:
             if not para or para.isspace():
                 boundaries = [0, len(para)]
             else:
-                boundaries = self._rule.apply(para, self.preserve_quote_and_paren)
+                boundaries = rule.apply(para, self.preserve_quote_and_paren)
 
             for i in range(len(boundaries) - 1):
                 start = boundaries[i]
@@ -117,6 +126,7 @@ class BoundaryDetector:
 
         offset = 0
         is_first_pos = True
+        rule = self._get_rule(self._lang)
         for para in para_iter:
             is_space = para.isspace()
             if relative and (not is_first_pos or is_space):
@@ -125,7 +135,7 @@ class BoundaryDetector:
                     continue
             is_first_pos = False
 
-            boundaries = self._rule.apply(para.rstrip(), self.preserve_quote_and_paren)
+            boundaries = rule.apply(para.rstrip(), self.preserve_quote_and_paren)
 
             for pos in boundaries[1:]:
                 yield offset + pos if not relative else pos
