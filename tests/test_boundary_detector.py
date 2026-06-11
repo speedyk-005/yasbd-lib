@@ -102,3 +102,27 @@ def test_detect_paragraph_eof_sentinel(en_detector):
     # Non-relative = no sentinels,
     result = list(en_detector.detect("First.\n\nSecond.", relative=False))
     assert result == [6, 15]
+
+
+def test_rule_cache_lru(en_detector):
+    """test that rule objects are cached (max 5) and reused on lang switch."""
+    # Same lang = same cached object
+    r1 = en_detector._get_rule("en")
+    r2 = en_detector._get_rule("en")
+    assert r1 is r2, "same lang should return cached rule"
+
+    # Different lang = different object
+    r_fr = en_detector._get_rule("fr")
+    assert r1 is not r_fr, "different lang should return different rule object"
+
+    # Switch back = cached
+    r3 = en_detector._get_rule("en")
+    assert r1 is r3, "switching back to cached lang should reuse cached rule"
+
+    # LRU eviction: load 5 more languages (cache capacity is 5)
+    for lang in ["de", "es", "ht", "ar", "ja"]:
+        en_detector._get_rule(lang)
+    # 'en' was the first loaded, then pushed out by 5 newer entries
+    r_en = en_detector._get_rule("en")
+    assert r_en is not r1, "en should have been evicted after 6 other langs"
+    assert type(r_en) is type(r1), "freshly loaded en rule should exist"  # type: ignore[unreachable]

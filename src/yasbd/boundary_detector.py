@@ -1,13 +1,12 @@
-import difflib
+from collections import OrderedDict
 from collections.abc import Generator, Iterable
-from importlib import import_module
 from io import TextIOBase
-from itertools import tee
+from itertools import chain, tee
 
-from yasbd.exceptions import UnsupportedLanguageError
-from yasbd.rules import get_supported_langs
+from yasbd.rules import load_rule
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
+from yasbd.utils.language_classifier import classify_language
 from yasbd.utils.logger import log_info
 from yasbd.utils.paragraph_stream import ParagraphStream
 
@@ -20,7 +19,7 @@ class BoundaryDetector:
     @validate_input
     def __init__(
         self,
-        lang: str = "en",
+        lang: str = "auto",
         *,
         preserve_quote_and_paren: bool = True,
         verbose: bool = False,
@@ -28,13 +27,15 @@ class BoundaryDetector:
         """Initialize the segmenter.
 
         Args:
-            lang: Two chars ISO language code (e.g. en, fr, ...).
+            lang: Two chars ISO language code (e.g., 'en', 'fr', ...).
+                Defaults to 'auto'
             preserve_quote_and_paren: Do not split on terminators inside
                 quoted or parenthesised text.
             verbose: Enable verbose logging.
         """
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
+        self._rule_cache: OrderedDict[str, object] = OrderedDict()
         self.lang = lang.lower()
         log_info(
             self.verbose,
@@ -56,40 +57,53 @@ class BoundaryDetector:
         if lang == old_lang:
             return
 
-        self._load_rule(lang)
+        if lang == "auto":
+            self._lang = "auto"
+            log_info(self.verbose, "Language set to auto-detection")
+            return
+
+        self._get_rule(lang)  # warm cache
         self._lang = lang
         log_info(self.verbose, "Language switched from {} to {}", old_lang, self._lang)
 
-    def _load_rule(self, lang: str) -> None:
-        """Dynamically import and instantiate the rule module for *lang*."""
-        log_info(self.verbose, "Trying to load rule module for {}", lang)
+    def _get_rule(self, lang: str, snippet: str = "") -> object:
+        """Return the rule object for *lang*, using a 5-entry LRU cache.
 
-        try:
-            rule_module = import_module(f"yasbd.rules.{lang}")
-        except ModuleNotFoundError as e:
-            if lang not in str(e):
-                raise
-            supported = get_supported_langs()
-            msg = (
-                f"Unsupported language: {lang!r}\n\n"
-                f"Supported language codes:\n  {', '.join(supported)}"
-            )
-            if close := difflib.get_close_matches(lang, supported, n=3, cutoff=0.5):
-                msg += f"\n\n💡 Did you mean:\n  {', '.join(close)}"
-            raise UnsupportedLanguageError(msg) from None
+        When *lang* is ``"auto"``, language is detected from *snippet*
+        using :func:`classify_language`.
+        """
+        if lang == "auto":
+            lang, confidence = classify_language(snippet)
+            if confidence < 0.8:
+                log_info(
+                    self.verbose,
+                    "Low confidence ({:.2f}) for detected lang {!r} in auto mode",
+                    confidence,
+                    lang,
+                )
 
-        self._rule = getattr(rule_module, f"{lang.capitalize()}Rules")()
+        if lang in self._rule_cache:
+            self._rule_cache.move_to_end(lang)
+            return self._rule_cache[lang]
+        rule = load_rule(lang)
+        self._rule_cache[lang] = rule
+        if len(self._rule_cache) > 5:
+            self._rule_cache.popitem(last=False)
+        return rule
 
     def _detect_relative_spans(
         self,
         para_iter: Iterable[str],
     ) -> Generator[tuple[int, int], None, None]:
         """Yield per-paragraph sentence spans."""
-        for para in para_iter:
+        first_para = next(para_iter, "")
+        rule = self._get_rule(self._lang, first_para)
+
+        for para in chain([first_para], para_iter):
             if not para or para.isspace():
                 boundaries = [0, len(para)]
             else:
-                boundaries = self._rule.apply(para, self.preserve_quote_and_paren)
+                boundaries = rule.apply(para, self.preserve_quote_and_paren)
 
             for i in range(len(boundaries) - 1):
                 start = boundaries[i]
@@ -121,7 +135,6 @@ class BoundaryDetector:
         Yields:
             Integer boundary offsets or ``ParagraphEOF`` sentinels.
         """
-
         log_info(
             self.verbose,
             "Called with type={}, relative={}",
@@ -134,16 +147,23 @@ class BoundaryDetector:
         )
 
         offset = 0
-        is_first_pos = True
-        for para in para_iter:
-            is_space = para.isspace()
-            if relative and (not is_first_pos or is_space):
-                yield ParagraphEOF
-                if is_space:
-                    continue
-            is_first_pos = False
+        # Handle first para differently
+        is_first_para = True
+        first_para = next(para_iter, "")
+        if relative and first_para.isspace():
+            yield ParagraphEOF
 
-            boundaries = self._rule.apply(para.rstrip(), self.preserve_quote_and_paren)
+        rule = self._get_rule(self._lang, first_para)
+
+        for para in chain([first_para], para_iter):
+            if para.isspace():
+                continue
+
+            if relative and not is_first_para:
+                yield ParagraphEOF
+            is_first_para = False
+
+            boundaries = rule.apply(para.rstrip(), self.preserve_quote_and_paren)
 
             for pos in boundaries[1:]:
                 yield offset + pos if not relative else pos
