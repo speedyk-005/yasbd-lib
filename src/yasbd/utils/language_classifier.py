@@ -5,7 +5,6 @@ import py3langid as langid
 
 from yasbd.rules import get_supported_langs
 
-
 PREFERRED = get_supported_langs()
 TOP_K = 5
 
@@ -56,21 +55,15 @@ def classify_language(text: str) -> tuple[str, float]:
     candidates = [
         (language, score)
         for language, score in ranks[:TOP_K]
-        if (
-            language in PREFERRED
-            and top_score - score <= MAX_GAP
-        )
+        if (language in PREFERRED and top_score - score <= MAX_GAP)
     ]
 
     if not candidates:
-        candidates = ranks 
+        candidates = ranks
 
     # -- Compute a numerically stable softmax. --
     max_score = max(score for _, score in candidates)
-    total = sum(
-        math.exp(score - max_score)
-        for _, score in candidates
-    )
+    total = sum(math.exp(score - max_score) for _, score in candidates)
 
     language, score = max(
         candidates,
@@ -85,7 +78,6 @@ if __name__ == "__main__":
     texts = [
         "Hello, how are you?",
         "¿Cómo estás?",
-        "Bonjour, comment allez-vous?",
         "Guten Tag!",
         "Привет!",
         "مرحبا",
