@@ -27,8 +27,8 @@ class BoundaryDetector:
         """Initialize the segmenter.
 
         Args:
-            lang: Two chars ISO language code (e.g. en, fr, ...) or "auto"
-                to detect language from text.
+            lang: Two chars ISO language code (e.g., 'en', 'fr', ...).
+                Defaults to 'auto'
             preserve_quote_and_paren: Do not split on terminators inside
                 quoted or parenthesised text.
             verbose: Enable verbose logging.
