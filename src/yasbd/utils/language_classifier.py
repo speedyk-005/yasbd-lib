@@ -25,8 +25,8 @@ def classify_language(text: str) -> tuple[str, float]:
         2. Look for preferred languages within the top ``TOP_K`` results.
         3. Only consider preferred languages whose score is within
            ``MAX_GAP`` of the top prediction.
-        4. If no suitable preferred language is found, fall back to the
-           model's top prediction.
+        4. If no suitable preferred language is found, fall back to all
+           ranked candidates.
         5. Compute a normalized confidence score using a softmax over the
            selected candidates.
 
@@ -84,6 +84,7 @@ if __name__ == "__main__":
         "こんにちは",
         "你好",
         "kiyès ?",
+        "",
     ]
     for text in texts:
         lang, conf = classify_language(text)
