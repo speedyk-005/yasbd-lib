@@ -105,9 +105,9 @@ def _validate_type(value, expected_type, name=None):
 
     # Fast path: plain types (most common case)
     if isinstance(expected_type, type):
-        if isinstance(value, expected_type):
-            return value
-        _raise_error(name, value, expected_type)
+        if not isinstance(value, expected_type):
+            _raise_error(name, value, expected_type)
+        return value
 
     # Handle None type
     if expected_type is None or expected_type is type(None):
