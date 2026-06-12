@@ -45,7 +45,7 @@ def _raise_error(name, value, expected_type):
         f"Expected {getattr(expected_type, '__name__', repr(expected_type))}.\n"
         f"  Found: (input={_trunc_repr(value)}, type={type(value).__name__})"
     )
-    raise ex.with_traceback(sys._getframe().f_back.f_trace)
+    raise ex
 
 
 def _type_matches(value, expected_type) -> bool:
@@ -124,14 +124,16 @@ def _validate_type(value, expected_type, name=None):
     if origin is typing.Union or origin is UnionType:
         args = typing.get_args(expected_type)
         for t in args:
-            if _type_matches(value, t):
-                return value
+            try:
+                return _validate_type(value, t, name=name)
+            except InvalidInputError:
+                pass
         ex = InvalidInputError(
             f"🧩 Oops! Invalid type for '{name}'.\n"
             f"Expected one of: {', '.join(getattr(a, '__name__', repr(a)) for a in args)}.\n"
             f"  Found: (input={_trunc_repr(value)}, type={type(value).__name__})"
         )
-        raise ex.with_traceback(sys._getframe().f_back.f_trace)
+        raise ex
 
     # Handle Iterator types (Iterator[X])
     if origin is Iterator or (isinstance(origin, type) and issubclass(origin, Iterator)):
