@@ -62,9 +62,6 @@ def _validate_type(value, expected_type, name=None):
     """
     Validate a value against an expected type at runtime.
 
-    Returns the value itself on success, or raises InvalidInputError
-    with a clear message.
-
     Args:
         value: The object to validate.
         expected_type: The type to validate against. Supports simple types,
@@ -102,11 +99,10 @@ def _validate_type(value, expected_type, name=None):
         Traceback (most recent call last):
         ...
         InvalidInputError: 🧩 Oops! Invalid type for '42'...
-        >>> _validate_type("hi", int)  # doctest: +IGNORE_EXCEPTION_DETAIL
-        Traceback (most recent call last):
-        ...
-        InvalidInputError: 🧩 Oops! Invalid type for '...'...
     """
+    if name is None:
+        name = repr(value)
+
     # Fast path: plain types (most common case)
     if isinstance(expected_type, type):
         if isinstance(value, expected_type):
@@ -119,8 +115,7 @@ def _validate_type(value, expected_type, name=None):
             _raise_error(name, value, expected_type)
         return value
 
-    if name is None:
-        name = repr(value)
+     # -- Handle complex type --
 
     origin = typing.get_origin(expected_type) or expected_type
 
@@ -132,12 +127,11 @@ def _validate_type(value, expected_type, name=None):
                 return _validate_type(value, t, name=name)
             except InvalidInputError:
                 pass
-        ex = InvalidInputError(
+        raise InvalidInputError(
             f"🧩 Oops! Invalid type for '{name}'.\n"
             f"Expected one of: {', '.join(getattr(a, '__name__', repr(a)) for a in args)}.\n"
             f"  Found: (input={_trunc_repr(value)}, type={type(value).__name__})"
         )
-        raise ex
 
     # Handle Iterator types (Iterator[X])
     if origin is Iterator or (isinstance(origin, type) and issubclass(origin, Iterator)):
@@ -167,8 +161,9 @@ def validate_input(fx):
 
     hints = typing.get_type_hints(fx)
     ret_type = hints.pop("return", None)
-    if not hints and ret_type is None:
 
+    if not hints and ret_type is None:
+        # Skip validation
         @wraps(fx)
         def wrapper(*args, **kwargs):
             return fx(*args, **kwargs)
@@ -212,8 +207,10 @@ def validate_input(fx):
 
         try:
             result = fx(*args, **kwargs)
-        except TypeError:
-            raise
+        except TypeError as e:
+            if isinstance(e, InvalidInputError):
+                raise
+            raise InvalidInputError(f"🧩 Oops! {e}") from None
 
         # Validate return type (skip if unannotated)
         if ret_type is not None:
