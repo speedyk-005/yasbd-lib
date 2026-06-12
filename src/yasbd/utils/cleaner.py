@@ -5,7 +5,7 @@ from io import TextIOBase
 import ftfy
 import regex as re2  # For complex patterns
 
-from yasbd.exceptions import CleanStepError
+from yasbd.exceptions import CleanStepError, InvalidInputError
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
 from yasbd.utils.logger import log_info
@@ -127,7 +127,7 @@ class StreamCleaner(StreamCleanerStub):
         >>> StreamCleaner("Hello world", steps_to_skip=["nothing"])
         Traceback (most recent call last):
         ...
-        ValueError: Invalid step(s) to skip: ...
+        yasbd.exceptions.InvalidInputError: 🧩 Oops! Unknown step(s): 'nothing'...
         >>> list(StreamCleaner("Hello™ world", extra_steps=[lambda t: t.replace("™", "")]))
         ['Hello world']
         >>> list(StreamCleaner("hello", extra_steps=[lambda t: 1/0]))
@@ -167,9 +167,9 @@ class StreamCleaner(StreamCleanerStub):
         self.verbose = verbose
 
         if invalid_steps := self.steps_to_skip - set(CLEANING_PIPELINE):
-            raise ValueError(
-                f"Invalid step(s) to skip: {', '.join(sorted(invalid_steps))}. "
-                f"Valid steps are: {', '.join(CLEANING_PIPELINE.keys())}"
+            raise InvalidInputError(
+                f"🧩 Oops! Unknown step(s): {', '.join(repr(s) for s in sorted(invalid_steps))}. "
+                f"Valid steps: {', '.join(CLEANING_PIPELINE.keys())}."
             )
 
         self.extra_steps = list(extra_steps or ())
