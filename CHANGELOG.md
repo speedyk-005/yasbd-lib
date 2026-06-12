@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Automatic language detection** ([#86](https://github.com/speedyk-005/yasbd-lib/pull/86)): `BoundaryDetector(lang="auto")` detects language from text on first paragraph via py3langid. Logs warning on confidence < 0.8.
 - **`classify_language` utility** ([#86](https://github.com/speedyk-005/yasbd-lib/pull/86)): Wraps py3langid with softmax normalization and preference for supported languages.
+- **Amharic (am) language support** ([#90](https://github.com/speedyk-005/yasbd-lib/pull/90)).
 
 ### Changed
 - **Refactor input validation to remove Pydantic dependency**:
