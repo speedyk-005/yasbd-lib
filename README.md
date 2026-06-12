@@ -135,17 +135,6 @@ The simplest way to get started is with pip:
 pip install yasbd-lib -U
 ```
 
-> [!TIP]
-> **Termux (Android)**
->
-> No Rust toolchain? Install pydantic-core pre-built wheels first, then retry:
->
-> ```bash
-> pip install typing-extensions
-> pip install pydantic-core --index-url https://termux-user-repository.github.io/pypi/
-> pip install "pydantic>=2.12.4,<2.13"
-> ```
-
 That's it! Blade is armed.
 
 ### The From-Source Way
