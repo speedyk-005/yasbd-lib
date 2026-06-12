@@ -156,7 +156,7 @@ def validate_input(fx):
 
     hints = typing.get_type_hints(fx)
     ret_type = hints.pop('return', None)
-    if not hints:
+    if not hints and ret_type is None:
         @wraps(fx)
         def wrapper(*args, **kwargs):
             return fx(*args, **kwargs)
