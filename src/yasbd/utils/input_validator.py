@@ -192,12 +192,11 @@ def validate_input(fx):
     kwonly_start = pos_param_count
     kwonly_names = list(fx.__code__.co_varnames[kwonly_start : kwonly_start + kwonly_count])
 
-    is_method = fx.__qualname__ != fx.__name__
     pos_checks = []
     kw_checks = []
     for i, name in enumerate(pos_param_names):
         if name in hints:
-            if i == 0 and is_method:
+            if i == 0 and name in {"self", "cls"}:
                 continue
             pos_checks.append((i, name, hints[name]))
 
