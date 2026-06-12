@@ -1,15 +1,15 @@
+import collections.abc
 import typing
-import sys
+from collections.abc import Iterator
 from functools import wraps
 from types import UnionType
-import collections.abc
-from collections.abc import Iterator
 
 from yasbd.exceptions import InvalidInputError
 
 
 class IteratorValidator:
     """Lazy iterator instance validator."""
+
     def __init__(self, target, expected_item_type, name=None):
         if not isinstance(target, (collections.abc.Iterable, collections.abc.Iterator)):
             raise TypeError(f"Cannot create IteratorValidator from {type(target).__name__}")
@@ -155,11 +155,13 @@ def validate_input(fx):
     """Decorator to validate type hints at runtime."""
 
     hints = typing.get_type_hints(fx)
-    ret_type = hints.pop('return', None)
+    ret_type = hints.pop("return", None)
     if not hints and ret_type is None:
+
         @wraps(fx)
         def wrapper(*args, **kwargs):
             return fx(*args, **kwargs)
+
         return wrapper
 
     # Pre-compute positional param indices (skip self)
@@ -167,13 +169,13 @@ def validate_input(fx):
     pos_param_names = fx.__code__.co_varnames[:pos_param_count]
     kwonly_count = fx.__code__.co_kwonlyargcount
     kwonly_start = pos_param_count
-    kwonly_names = list(fx.__code__.co_varnames[kwonly_start:kwonly_start + kwonly_count])
+    kwonly_names = list(fx.__code__.co_varnames[kwonly_start : kwonly_start + kwonly_count])
 
     pos_checks = []
     kw_checks = []
     for i, name in enumerate(pos_param_names):
         if name in hints:
-            if i == 0 and name == 'self':
+            if i == 0 and name == "self":
                 continue
             pos_checks.append((i, name, hints[name]))
 
