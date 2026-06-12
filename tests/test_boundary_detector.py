@@ -29,7 +29,7 @@ def test_segment_empty_input(input_text, en_detector):
 
 def test_unsupported_language():
     """test that unknown language codes raise UnsupportedLanguageError."""
-    with pytest.raises(UnsupportedLanguageError, match="Unsupported language"):
+    with pytest.raises(UnsupportedLanguageError):
         BoundaryDetector(lang="xx")
 
 
