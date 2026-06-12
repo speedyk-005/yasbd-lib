@@ -5,7 +5,7 @@ from io import TextIOBase
 import ftfy
 import regex as re2  # For complex patterns
 
-from yasbd.exceptions import CleanStepError
+from yasbd.exceptions import CleanStepError, InvalidInputError
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
 from yasbd.utils.logger import log_info
@@ -167,9 +167,9 @@ class StreamCleaner(StreamCleanerStub):
         self.verbose = verbose
 
         if invalid_steps := self.steps_to_skip - set(CLEANING_PIPELINE):
-            raise ValueError(
-                f"Invalid step(s) to skip: {', '.join(sorted(invalid_steps))}. "
-                f"Valid steps are: {', '.join(CLEANING_PIPELINE.keys())}"
+            raise InvalidInputError(
+                f"🧩 Oops! Unknown step(s): {', '.join(repr(s) for s in sorted(invalid_steps))}.\n"
+                f"Valid steps are: {', '.join(CLEANING_PIPELINE.keys())}."
             )
 
         self.extra_steps = list(extra_steps or ())

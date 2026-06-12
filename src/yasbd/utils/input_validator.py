@@ -41,8 +41,8 @@ def _raise_error(name, value, expected_type):
     if name is None:
         name = repr(value)
     ex = InvalidInputError(
-        f"({name}) must be {getattr(expected_type, '__name__', repr(expected_type))}, "
-        f"got {type(value).__name__}.\n"
+        f"🧩 Oops! Invalid type for '{name}'.\n"
+        f"Expected {getattr(expected_type, '__name__', repr(expected_type))}.\n"
         f"  Found: (input={_trunc_repr(value)}, type={type(value).__name__})"
     )
     raise ex.with_traceback(sys._getframe().f_back.f_trace)
@@ -127,7 +127,8 @@ def _validate_type(value, expected_type, name=None):
             if _type_matches(value, t):
                 return value
         ex = InvalidInputError(
-            f"({name}) doesn't match any of: {', '.join(getattr(a, '__name__', repr(a)) for a in args)}.\n"
+            f"🧩 Oops! Invalid type for '{name}'.\n"
+            f"Expected one of: {', '.join(getattr(a, '__name__', repr(a)) for a in args)}.\n"
             f"  Found: (input={_trunc_repr(value)}, type={type(value).__name__})"
         )
         raise ex.with_traceback(sys._getframe().f_back.f_trace)
