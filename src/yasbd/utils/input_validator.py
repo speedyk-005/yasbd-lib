@@ -76,8 +76,8 @@ def _validate_type(value, expected_type, name=None):
         InvalidInputError: If the value does not match expected_type.
 
     Limitations:
-        - Nested container subtypes (list[int] ignores the inner type,
-          only checks it's a list)
+        - Homogeneous containers only (validates against first type arg):
+          dict[str, int] validates keys as str; tuple[str, int] treats all items as str
         - TypedDict, dataclasses, attrs, or any structured object shapes
         - Callable signatures
         - Forward references (strings)
@@ -115,7 +115,7 @@ def _validate_type(value, expected_type, name=None):
             _raise_error(name, value, expected_type)
         return value
 
-     # -- Handle complex type --
+    # -- Handle complex type --
 
     origin = typing.get_origin(expected_type) or expected_type
 
@@ -142,6 +142,21 @@ def _validate_type(value, expected_type, name=None):
         if isinstance(value, collections.abc.Iterator):
             return IteratorValidator(value, item_type, name=name)
         _raise_error(name, value, expected_type)
+
+    # Handle container generics (list[T], set[T], tuple[T, ...], etc.)
+    if (
+        typing.get_args(expected_type)
+        and isinstance(origin, type)
+        and origin not in (str, bytes, dict)
+        and isinstance(value, collections.abc.Iterable)
+    ):
+        if not isinstance(value, origin):
+            _raise_error(name, value, expected_type)
+        args = typing.get_args(expected_type)
+        item_type = args[0]
+        return type(value)(
+            _validate_type(item, item_type, f"{name}[{i}]") for i, item in enumerate(value)
+        )
 
     # Handle simple types via origin
     if isinstance(value, origin):
