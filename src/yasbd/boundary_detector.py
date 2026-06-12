@@ -1,3 +1,4 @@
+import warnings
 from collections import OrderedDict
 from collections.abc import Generator, Iterable
 from io import TextIOBase
@@ -36,6 +37,14 @@ class BoundaryDetector:
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
         self._rule_cache: OrderedDict[str, object] = OrderedDict()
+        if lang == "auto":
+            warnings.warn(
+                "Auto-detect works, but explicit is faster and more reliable, "
+                "especially with short texts. "
+                "Consider setting `lang` explicit  if you know it.",
+                UserWarning,
+                stacklevel=5,
+            )
         self.lang = lang.lower()
         log_info(
             self.verbose,
