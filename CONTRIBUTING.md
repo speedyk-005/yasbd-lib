@@ -35,19 +35,6 @@ uv pip install -e ".[dev]"      # Standard calibration suite
 uv pip install -e ".[dev-all]"  # Full stress-test configuration
 ```
 
-> [!WARNING]
-> #### Field Operations: Termux (Android)
-> Handheld diagnostic terminals running Termux do not ship with a Rust compiler by default. Without it, the pydantic-core assembly will fail to compile (especially on Python 3.13).
->
-> To bypass this compilation error, inject pre-built wheels directly into the path before mounting the main package:
->
-> ```bash
-> uv pip install typing-extensions
-> uv pip install pydantic-core --index-url https://termux-user-repository.github.io/pypi/
-> uv pip install "pydantic>=2.12.4,<2.13"
-> uv pip install -e ".[dev-all]"
-> ```
-
 ## Making Modifications
 
 Do not make adjustments directly to the main production line. Work on an isolated branch.
