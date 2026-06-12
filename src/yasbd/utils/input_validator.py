@@ -1,73 +1,205 @@
-import reprlib
+import typing
+import sys
 from functools import wraps
-
-from pydantic import ConfigDict, ValidationError, validate_call
+from types import UnionType
+import collections.abc
+from collections.abc import Iterator
 
 from yasbd.exceptions import InvalidInputError
 
 
-def _pretty_errors(error: ValidationError) -> str:
-    """Formats Pydantic validation errors into a human-readable string.
+class IteratorValidator:
+    """Lazy iterator instance validator."""
+    def __init__(self, target, expected_item_type, name=None):
+        if not isinstance(target, (collections.abc.Iterable, collections.abc.Iterator)):
+            raise TypeError(f"Cannot create IteratorValidator from {type(target).__name__}")
 
-    Exemple:
-    >>> from pydantic import ValidationError
-    >>> err = ValidationError.from_exception_data(
-    ...     "TestModel",
-    ...     [{"type": "int_parsing", "loc": ("x",),
-    ...      "msg": "Input should be a valid integer", "input": "not_an_int"}]
-    ... )
-    >>> print(_pretty_errors(err))
-    ...
-    1 validation error for TestModel.
-    1) (x) Input should be a valid integer, unable to parse string as an integer.
-      Found: (input='not_an_int', type=str)
-    ...
+        self.target_iterator = iter(target)
+        self.expected_item_type = expected_item_type
+        self._index = 0
+        self._name = name or "iterator"
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        item = next(self.target_iterator)
+        _validate_type(item, self.expected_item_type, f"{self._name}[{self._index}]")
+        self._index += 1
+        return item
+
+
+def _trunc_repr(value):
+    """Truncate string values to 120 chars for readable error messages."""
+    if isinstance(value, str) and len(value) >= 120:
+        return value[:120] + "..."
+    return repr(value)
+
+
+def _raise_error(name, value, expected_type):
+    """Raise InvalidInputError with formatted message."""
+    if name is None:
+        name = repr(value)
+    ex = InvalidInputError(
+        f"({name}) must be {getattr(expected_type, '__name__', repr(expected_type))}, "
+        f"got {type(value).__name__}.\n"
+        f"  Found: (input={_trunc_repr(value)}, type={type(value).__name__})"
+    )
+    raise ex.with_traceback(sys._getframe().f_back.f_trace)
+
+
+def _type_matches(value, expected_type) -> bool:
+    """Check if value matches expected_type without raising."""
+    # Fast path: plain classes
+    if isinstance(expected_type, type):
+        return isinstance(value, expected_type)
+
+    # None
+    if expected_type is None or expected_type is type(None):
+        return value is None
+
+    origin = typing.get_origin(expected_type) or expected_type
+
+    # Union
+    if origin is typing.Union or origin is UnionType:
+        return any(_type_matches(value, t) for t in typing.get_args(expected_type))
+
+    # Iterator
+    if origin is Iterator or (isinstance(origin, type) and issubclass(origin, Iterator)):
+        return isinstance(value, (IteratorValidator, collections.abc.Iterator))
+
+    # Generic alias with a class origin
+    if isinstance(origin, type):
+        return isinstance(value, origin)
+
+    return isinstance(value, expected_type)
+
+
+def _validate_type(value, expected_type, name=None):
     """
-    sub = getattr(error, "subtitle", "") or error.title
-    lines = [f"{error.error_count()} validation error for {sub}."]
-    for ind, err in enumerate(error.errors(), start=1):
-        msg = err["msg"]
+    Validate a value against an expected type at runtime.
 
-        loc = err.get("loc", [])
-        formatted_loc = ""
-        if len(loc) >= 1:
-            formatted_loc = str(loc[0]) + "".join(f"[{step!r}]" for step in loc[1:])
-            formatted_loc = f"({formatted_loc})" if formatted_loc else ""
+    Returns the value itself on success, or raises InvalidInputError
+    with a clear message.
 
-        input_value = err["input"]
-        input_type = type(input_value).__name__
+    Args:
+        value: The object to validate.
+        expected_type: The type to validate against. Supports simple types,
+            unions (int | str), Iterator[X], and None.
+        name: Optional display name for the value in error messages.
+            Defaults to repr(value).
 
-        # Use reprlib for auto-truncation on non-strings (faster for lists/dicts/nested)
-        if not isinstance(input_value, str):
-            input_value = reprlib.repr(input_value)
-        else:
-            input_value = input_value if len(input_value) < 500 else input_value[:500] + "..."
+    Returns:
+        The value itself, unchanged, on success.
 
-        lines.append(
-            (
-                f"{ind}) {formatted_loc} {msg}.\n"
-                f"  Found: (input={input_value!r}, type={input_type})"
-            )
+    Raises:
+        InvalidInputError: If the value does not match expected_type.
+
+    Limitations:
+        - Nested container subtypes (list[int] ignores the inner type,
+          only checks it's a list)
+        - TypedDict, dataclasses, attrs, or any structured object shapes
+        - Callable signatures
+        - Forward references (strings)
+        - Type variables / generics
+    """
+    # Fast path: plain types (most common case)
+    if isinstance(expected_type, type):
+        if isinstance(value, expected_type):
+            return value
+        _raise_error(name, value, expected_type)
+
+    # Handle None type
+    if expected_type is None or expected_type is type(None):
+        if value is not None:
+            _raise_error(name, value, expected_type)
+        return value
+
+    if name is None:
+        name = repr(value)
+
+    origin = typing.get_origin(expected_type) or expected_type
+
+    # Handle Union types (X | Y or Union[X, Y])
+    if origin is typing.Union or origin is UnionType:
+        args = typing.get_args(expected_type)
+        for t in args:
+            if _type_matches(value, t):
+                return value
+        ex = InvalidInputError(
+            f"({name}) doesn't match any of: {', '.join(getattr(a, '__name__', repr(a)) for a in args)}.\n"
+            f"  Found: (input={_trunc_repr(value)}, type={type(value).__name__})"
         )
+        raise ex.with_traceback(sys._getframe().f_back.f_trace)
 
-    lines.append("  " + getattr(error, "hint", ""))
-    return "\n".join(lines)
+    # Handle Iterator types (Iterator[X])
+    if origin is Iterator or (isinstance(origin, type) and issubclass(origin, Iterator)):
+        args = typing.get_args(expected_type)
+        item_type = args[0] if args else object
+        if isinstance(value, IteratorValidator):
+            return value
+        if isinstance(value, collections.abc.Iterator):
+            return IteratorValidator(value, item_type, name=name)
+        _raise_error(name, value, expected_type)
+
+    # Handle simple types via origin
+    if isinstance(value, origin):
+        return value
+    _raise_error(name, value, expected_type)
 
 
-def validate_input(fn):
-    """
-    A decorator that validates function inputs and outputs
+def validate_input(fx):
+    """Decorator to validate type hints at runtime."""
 
-    A wrapper around Pydantic's `validate_call` that catches `ValidationError`
-    and re-raises it as a more user-friendly `InvalidInputError`.
-    """
-    validated_fn = validate_call(fn, config=ConfigDict(arbitrary_types_allowed=True))
+    hints = typing.get_type_hints(fx)
+    ret_type = hints.pop('return', None)
+    if not hints:
+        @wraps(fx)
+        def wrapper(*args, **kwargs):
+            return fx(*args, **kwargs)
+        return wrapper
 
-    @wraps(fn)
+    # Pre-compute positional param indices (skip self)
+    pos_param_count = fx.__code__.co_argcount
+    pos_param_names = fx.__code__.co_varnames[:pos_param_count]
+    kwonly_count = fx.__code__.co_kwonlyargcount
+    kwonly_start = pos_param_count
+    kwonly_names = list(fx.__code__.co_varnames[kwonly_start:kwonly_start + kwonly_count])
+
+    pos_checks = []
+    kw_checks = []
+    for i, name in enumerate(pos_param_names):
+        if name in hints:
+            if i == 0 and name == 'self':
+                continue
+            pos_checks.append((i, name, hints[name]))
+
+    for name in kwonly_names:
+        if name in hints:
+            kw_checks.append((name, hints[name]))
+
+    @wraps(fx)
     def wrapper(*args, **kwargs):
+        # Validate positional-or-keyword arguments
+        for idx, name, expected_type in pos_checks:
+            if idx < len(args):
+                _validate_type(args[idx], expected_type, name=name)
+            elif name in kwargs:
+                _validate_type(kwargs[name], expected_type, name=name)
+
+        # Validate keyword-only arguments
+        for name, expected_type in kw_checks:
+            if name in kwargs:
+                _validate_type(kwargs[name], expected_type, name=name)
+
         try:
-            return validated_fn(*args, **kwargs)
-        except ValidationError as e:
-            raise InvalidInputError(_pretty_errors(e)) from None
+            result = fx(*args, **kwargs)
+        except TypeError:
+            raise
+
+        # Validate return type (skip if unannotated)
+        if ret_type is not None:
+            _validate_type(result, ret_type, name=f"Return of {fx.__name__!r}")
+        return result
 
     return wrapper
