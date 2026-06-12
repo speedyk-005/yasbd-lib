@@ -13,7 +13,8 @@ from yasbd.utils.paragraph_stream import ParagraphStream
 
 # Signals transition between paragraphs in relative mode
 # during boundary detection
-ParagraphEOF = type("_ParagraphEOF", (), {"__repr__": lambda self: "ParagraphEOF"})()
+_ParagraphEOF = type("_ParagraphEOF", (), {"__repr__": lambda self: "ParagraphEOF"})
+ParagraphEOF = _ParagraphEOF()
 
 
 class BoundaryDetector:
@@ -125,7 +126,7 @@ class BoundaryDetector:
         source: str | TextIOBase | StreamCleanerStub,
         *,
         relative: bool = False,
-    ) -> Generator[int, None, None]:
+    ) -> Generator[int | _ParagraphEOF, None, None]:
         """Detect sentence boundaries in the source text.
 
         Args:

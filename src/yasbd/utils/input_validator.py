@@ -196,17 +196,19 @@ def validate_input(fx):
 
     @wraps(fx)
     def wrapper(*args, **kwargs):
+        args = list(args)
+
         # Validate positional-or-keyword arguments
         for idx, name, expected_type in pos_checks:
             if idx < len(args):
-                _validate_type(args[idx], expected_type, name=name)
+                args[idx] = _validate_type(args[idx], expected_type, name=name)
             elif name in kwargs:
-                _validate_type(kwargs[name], expected_type, name=name)
+                kwargs[name] = _validate_type(kwargs[name], expected_type, name=name)
 
         # Validate keyword-only arguments
         for name, expected_type in kw_checks:
             if name in kwargs:
-                _validate_type(kwargs[name], expected_type, name=name)
+                kwargs[name] = _validate_type(kwargs[name], expected_type, name=name)
 
         try:
             result = fx(*args, **kwargs)
@@ -215,7 +217,7 @@ def validate_input(fx):
 
         # Validate return type (skip if unannotated)
         if ret_type is not None:
-            _validate_type(result, ret_type, name=f"Return of {fx.__name__!r}")
+            result = _validate_type(result, ret_type, name=f"Return of {fx.__name__!r}")
         return result
 
     return wrapper
