@@ -361,7 +361,7 @@ yasbd langs
 
 # Split text into sentences
 yasbd segment "Dr. Smith works here. Is he there?"
-
+# [1] 'Dr. Smith works here.'
 # [2] 'Is he there?'
 
 # Detect boundary offsets
