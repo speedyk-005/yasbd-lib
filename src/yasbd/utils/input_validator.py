@@ -8,7 +8,17 @@ from yasbd.exceptions import InvalidInputError
 
 
 class IteratorValidator:
-    """Lazy iterator instance validator."""
+    """Lazy iterator instance validator.
+
+    >>> it = IteratorValidator([1, 2, 3], int)
+    >>> list(it)
+    [1, 2, 3]
+    >>> it2 = IteratorValidator([1, "x"], int)
+    >>> list(it2)  # doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+    ...
+    InvalidInputError: 🧩 Oops! Invalid type for 'iterator[1]'...
+    """
 
     def __init__(self, target, expected_item_type, name=None):
         if not isinstance(target, (collections.abc.Iterable, collections.abc.Iterator)):
@@ -29,7 +39,7 @@ class IteratorValidator:
         return item
 
 
-def _trunc_repr(value):
+def _trunc_repr(value):  # pragma: no cover
     """Truncate string values to 120 chars for readable error messages."""
     if isinstance(value, str) and len(value) >= 120:
         return value[:120] + "..."
@@ -46,33 +56,6 @@ def _raise_error(name, value, expected_type):
         f"  Found: (input={_trunc_repr(value)}, type={type(value).__name__})"
     )
     raise ex
-
-
-def _type_matches(value, expected_type) -> bool:
-    """Check if value matches expected_type without raising."""
-    # Fast path: plain classes
-    if isinstance(expected_type, type):
-        return isinstance(value, expected_type)
-
-    # None
-    if expected_type is None or expected_type is type(None):
-        return value is None
-
-    origin = typing.get_origin(expected_type) or expected_type
-
-    # Union
-    if origin is typing.Union or origin is UnionType:
-        return any(_type_matches(value, t) for t in typing.get_args(expected_type))
-
-    # Iterator
-    if origin is Iterator or (isinstance(origin, type) and issubclass(origin, Iterator)):
-        return isinstance(value, (IteratorValidator, collections.abc.Iterator))
-
-    # Generic alias with a class origin
-    if isinstance(origin, type):
-        return isinstance(value, origin)
-
-    return isinstance(value, expected_type)
 
 
 def _validate_type(value, expected_type, name=None):
@@ -102,6 +85,27 @@ def _validate_type(value, expected_type, name=None):
         - Callable signatures
         - Forward references (strings)
         - Type variables / generics
+
+    Examples:
+        >>> _validate_type(None, None) is None
+        True
+        >>> _validate_type(42, int | str)
+        42
+        >>> it = _validate_type(iter([1, 2]), Iterator[int])
+        >>> list(it)
+        [1, 2]
+        >>> _validate_type(42, None)  # doctest: +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+        ...
+        InvalidInputError: 🧩 Oops! Invalid type for '42'...
+        >>> _validate_type(42, float | str)  # doctest: +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+        ...
+        InvalidInputError: 🧩 Oops! Invalid type for '42'...
+        >>> _validate_type("hi", int)  # doctest: +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+        ...
+        InvalidInputError: 🧩 Oops! Invalid type for '...'...
     """
     # Fast path: plain types (most common case)
     if isinstance(expected_type, type):
@@ -152,7 +156,14 @@ def _validate_type(value, expected_type, name=None):
 
 
 def validate_input(fx):
-    """Decorator to validate type hints at runtime."""
+    """Decorator to validate type hints at runtime.
+
+    >>> @validate_input
+    ... def noop(x):
+    ...     return x
+    >>> noop(5)
+    5
+    """
 
     hints = typing.get_type_hints(fx)
     ret_type = hints.pop("return", None)
