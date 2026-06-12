@@ -3,7 +3,7 @@ from yasbd.rules.base import Rules
 
 # fmt: off
 class AmRules(Rules):
-    # Ethiopic terminators only, base . would split dotted abbreviations
+    # Ethiopic terminators only, base would split dotted abbreviations
     TERMINATORS = {"።", "፧", "!"}
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
