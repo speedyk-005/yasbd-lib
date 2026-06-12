@@ -36,11 +36,11 @@ def load_rule(lang: str) -> Rules:
             raise
         supported = get_supported_langs()
         msg = (
-            f"Unsupported language: {lang!r}\n\n"
-            f"Supported language codes:\n  {', '.join(supported)}"
+            f"My scissors can't cut through the fabric of {lang!r}.\n\n"
+            f"Supported:\n  {' · '.join(supported)}"
         )
         if close := difflib.get_close_matches(lang, supported, n=3, cutoff=0.5):
-            msg += f"\n\n💡 Did you mean:\n  {', '.join(close)}"
+            msg += f"\n\n💭 Perhaps you meant {' or '.join(repr(c) for c in close)}?"
         raise UnsupportedLanguageError(msg) from None
 
     return getattr(rule_module, f"{lang.capitalize()}Rules")()
