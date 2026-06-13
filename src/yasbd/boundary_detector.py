@@ -1,10 +1,10 @@
-import warnings
 from collections import OrderedDict
 from collections.abc import Generator, Iterable
 from io import TextIOBase
 from itertools import chain, tee
 
-from yasbd.rules import load_rule
+from yasbd.exceptions import InvalidInputError
+from yasbd.rules import get_supported_langs, load_rule
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
 from yasbd.utils.language_classifier import classify_language
@@ -20,7 +20,7 @@ class BoundaryDetector:
     @validate_input
     def __init__(
         self,
-        lang: str = "auto",
+        lang: str | None = None,
         *,
         preserve_quote_and_paren: bool = True,
         verbose: bool = False,
@@ -29,7 +29,9 @@ class BoundaryDetector:
 
         Args:
             lang: Two chars ISO language code (e.g., 'en', 'fr', ...).
-                Defaults to 'auto'
+                Use 'auto' for automatic language detection via py3langid.
+                Explicit is faster and more reliable; use auto if you don't
+                mind a slight decrease in both.
             preserve_quote_and_paren: Do not split on terminators inside
                 quoted or parenthesised text.
             verbose: Enable verbose logging.
@@ -37,15 +39,16 @@ class BoundaryDetector:
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
         self._rule_cache: OrderedDict[str, object] = OrderedDict()
-        if lang == "auto":
-            warnings.warn(
-                "Auto-detect works, but explicit is faster and more reliable, "
-                "especially with short texts. "
-                "Consider setting `lang` explicit  if you know it.",
-                UserWarning,
-                stacklevel=5,
+
+        if not lang:
+            raise InvalidInputError(
+                f"'lang' is required.\nOptions: {', '.join(get_supported_langs())}"
             )
         self.lang = lang.lower()
+
+        if self.lang == "auto":
+            classify_language("MOCK")  # prime py3langid model
+
         log_info(
             self.verbose,
             "Initialized with lang={!r}, preserve_quote_and_paren={}, verbose={}",

@@ -11,13 +11,13 @@ from yasbd.rules.base import Rules
 def get_supported_langs() -> list[str]:
     """Discover and cache supported language codes from the rules directory."""
     rules_dir = Path(__file__).parent
-    langs: list[str] = []
+    langs = []
     for f in rules_dir.iterdir():
         if f.stem in ("_template", "base", "__init__"):
             continue
         if f.suffix == ".py":
             langs.append(f.stem)
-    return sorted(langs)
+    return ["auto"] + sorted(langs)
 
 
 def load_rule(lang: str) -> Rules:
