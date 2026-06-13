@@ -196,7 +196,7 @@ GOLDEN_EN_RULES_TEST_CASES = [
         ["Did you remove num 2.", "Put it back."],
     ),
 
-    # Abbreviations
+    # Common abbreviations
     (
         "I need you to find 3 items, e.g. a hat, a coat, and a bag.",
         ["I need you to find 3 items, e.g. a hat, a coat, and a bag."],
@@ -210,8 +210,8 @@ GOLDEN_EN_RULES_TEST_CASES = [
         ["The temperature reached 37.5°C at 6 a.m. on Tue., Feb. 4."],
     ),
     (
-        "The proof is shown in eq. (7) and ex. IV",
-        ["The proof is shown in eq. (7) and ex. IV"],
+        "Our office is at 1600 Pennsylvania Ave. Hours are 9:00 a.m. to 5:00 p.m.",
+        ["Our office is at 1600 Pennsylvania Ave.", "Hours are 9:00 a.m. to 5:00 p.m."],
     ),
     (
         "I'll see you on Fri., Feb. 14th.",
@@ -223,10 +223,6 @@ GOLDEN_EN_RULES_TEST_CASES = [
             "The report was published in Dec.",
             "It was approved by Prof. Smith and Dr. Jones.",
         ],
-    ),
-    (
-        "See fig. 2 in vol. 3, ch. 4, pp. 18-22.",
-        ["See fig. 2 in vol. 3, ch. 4, pp. 18-22."],
     ),
     (
         "Mr. Smith lives on Hwy. 7 near Ave. Central.",
@@ -248,6 +244,43 @@ GOLDEN_EN_RULES_TEST_CASES = [
         ["Q. What is his name?", "A. His name is Alfred E. Sloan."],
     ),
     ("The meeting is at 9 a.m. Monday", ["The meeting is at 9 a.m. Monday"]),
+
+    # Academic citations
+    (
+        "The proof is shown in eq. (7) and ex. IV",
+        ["The proof is shown in eq. (7) and ex. IV"],
+    ),
+    (
+        "See fig. 2 in vol. 3, ch. 4, pp. 18-22.",
+        ["See fig. 2 in vol. 3, ch. 4, pp. 18-22."],
+    ),
+    (
+        "Smith et al. (2020) found significant results. The study was replicated.",
+        ["Smith et al. (2020) found significant results.", "The study was replicated."],
+    ),
+    (
+        "As shown in previous work (Smith, 2020; Jones, 2021), the trend continues.",
+        ["As shown in previous work (Smith, 2020; Jones, 2021), the trend continues."],
+    ),
+    (
+        '"The results were conclusive" (Smith, 2020, p. 15). Further analysis confirmed this.',
+        [
+            '"The results were conclusive" (Smith, 2020, p. 15).',
+            "Further analysis confirmed this.",
+        ],
+    ),
+    (
+        "As shown in pp. [55-60], the results are significant. This confirms our hypothesis.",
+        ["As shown in pp. [55-60], the results are significant.", "This confirms our hypothesis."],
+    ),
+    (
+        "See sec. [2.1] for details. The methodology is described there.",
+        ["See sec. [2.1] for details.", "The methodology is described there."],
+    ),
+    (
+        "Smith (2020) argued that [...] the trend was significant. Jones (2021) disagreed.",
+        ["Smith (2020) argued that [...] the trend was significant.", "Jones (2021) disagreed."],
+    ),
 
     # Contiguous terminators
     ("Hello ! ! ! !", ["Hello ! ! ! !"]),

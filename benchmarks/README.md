@@ -17,37 +17,46 @@ Not every library supports every language. We picked 5 languages that stress dif
 The format is simple: throw edge cases at each library. Does it split where it should not? Does it preserve abbreviations, quotes, URLs, and mixed-language text? Pass or fail, no stopwatch needed. Warm timings are recorded for reference but accuracy is the point.
 
 > [!NOTE]
-> All benchmarks run on an Acer Chromebook (Crostini) — Intel Celeron N4020 @ 1.10GHz, 2.7GB RAM. Results will be faster on modern hardware.
+> All benchmarks run on an Acer Chromebook (Crostini) — Intel Celeron N4020 @ 1.10GHz, 2.7GB RAM (except cold/warm speed, which was run on Termux/Android ARM64, 6 GB RAM). Results will be faster on modern hardware.
 
 ## EN Golden benchmark
 
-Aggregate score across all 85 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOLDEN_DATA.py) via [`run_golden.py`](run_golden.py). A modified and expanded version of [pysbd's official golden rule set](https://github.com/nipunsadvilkar/pySBD/blob/master/tests/lang/test_english.py): we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, and more.
+Aggregate score across all 92 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOLDEN_DATA.py) via [`run_golden.py`](run_golden.py). A modified and expanded version of [pysbd's official golden rule set](https://github.com/nipunsadvilkar/pySBD/blob/master/tests/lang/test_english.py): we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, academic citations, and more.
 
 | Library | Score |
 |---|---|
-| **yasbd** | 85/85 (100.0%) |
-| pysbd | 72/85 (84.7%) |
-| sentencex | 70/85 (82.4%) |
-| blingfire | 69/85 (81.2%) |
-| sentence-splitter | 56/85 (65.9%) |
-| sentsplit | 55/85 (64.7%) |
-| nupunkt | 53/85 (62.4%) |
+| **yasbd** | 91/92 (98.9%) |
+| pysbd | 77/92 (83.7%) |
+| sentencex | 76/92 (82.6%) |
+| blingfire | 75/92 (81.5%) |
+| sentsplit | 61/92 (66.3%) |
+| sentence-splitter | 60/92 (65.2%) |
+| nupunkt | 59/92 (64.1%) |
 
-yasbd achieves a perfect 85/85 score. The test suite was expanded to 85 cases with additional edge cases for contiguous terminators, exclamation-safe words, and mixed-script text.
+yasbd achieves 91/92 (98.9%). The only failing case is the `Ave.` abbreviation followed by a capitalized new sentence — a known limitation of rule-based abbreviation suppression. The test suite has been expanded from 85 to 92 cases with additional academic citation patterns.
 
 ## Cold vs Warm speed
 
-First call includes import + init + first segment. Subsequent calls are warm. Tested on the [Normal text](#normal-text) shown below.
+First call includes import + init + first segment. Subsequent calls are warm (averaged over 100 repetitions).
+
+<details>
+<summary>Warm speed benchmark text</summary>
+
+```txt
+Hello world. This is a test sentence for warm start. Is it working? Yes, it is. This is another sentence. And one more. We need enough text to make the segmentation meaningful. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+```
+
+</details>
 
 | Library | Cold (ms) | Warm (ms) | Notes |
 |---|---|---|---|---|
-| yasbd | 10.8 | 1.47 | Regex compiled on first use |
-| pysbd | 11.7 | 5.09 | Rule-based, lightweight |
-| sentencex | 14.6 | 0.07 | Rust bindings loaded on import |
-| blingfire | 201.1 | 0.09 | C++ FSM model loaded from disk |
-| sentence-splitter | 14.5 | 6.11 | Pure Python, no heavy deps |
-| sentsplit | 21.9 | 10.0 | CRF model loaded on init |
-| nupunkt | 9,701.0 | 3.66 | Loads full model into memory on init |
+| yasbd | 70.0 | 1.89 | Import + init on first use |
+| pysbd | 20.0 | 3.82 | Rule-based, lightweight |
+| sentencex | 5.4 | 0.03 | Rust bindings loaded on import |
+| blingfire | 93.5 | 0.04 | C++ FSM model loaded from disk |
+| sentence-splitter | 11.1 | 3.01 | Pure Python, no heavy deps |
+| sentsplit | 278.4 | 11.70 | CRF model loaded on init |
+| nupunkt | 4,856.0 | 0.43 | Loads full model into memory on init |
 
 <p align="center">
   <img src="bench.png" alt="SBD Benchmark Performance" width="800"/>
@@ -132,7 +141,7 @@ Dr. Anthony Fauci served as the director of the National Institute of Allergy an
 ```
 </details>
 
-All libraries returned 7/7 sentences. `Dr.`, `U.S.`, `$100 billion`, `nih.gov` handled correctly across the board. nupunkt is 378x slower than sentencex on this input but it gets the job done.
+All libraries returned 7/7 sentences. `Dr.`, `U.S.`, `$100 billion`, `nih.gov` handled correctly across the board.
 
 ### Complex academic text
 
@@ -263,7 +272,7 @@ Copyright © 2024 Example Corp. All rights reserved.
 | **1** | **yasbd** | 10 | 3.24 | **Top pick.** Correct boundaries. Dialog splits into 2 pieces (all others: 3+). URL intact. |
 | **2** | **pysbd** | 10 | 6.45 | **Correct sentence count.** Breaks URL at `?` — a real accuracy miss. |
 | **3** | **blingfire** | 11 | 0.11 | **Fast.** Dialog splits into 3 pieces. URL intact. |
-| **4** | **nupunkt** | 11 | 1.00 | **Same output as blingfire.** 11s cold start. |
+| **4** | **nupunkt** | 11 | 1.00 | **Same output as blingfire.** |
 | **5** | **sentencex** | 13 | 0.07 | **Fast but phantom sentences.** Counts empty paragraph breaks as sentences. |
 | **6** | **sentence-splitter** | 14 | 3.11 | **Phantom sentences from empty lines.** |
 | **7** | **sentsplit** | 16 | 18.90 | **Worst.** Phantom sentences, splits inside citations, dialog fragmented into 4 pieces. |
@@ -385,7 +394,7 @@ incl. the events of the s. XIX, was retransmitted.
 | Rank | Library | Sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
 | **1** | **yasbd** | **7** | 1.61 | **Top pick.** Joins all newlines, preserves `s. XIX` intact. |
-| **2** | **nupunkt** | **7** | 0.77 | **Same accuracy as yasbd.** But 11s cold start makes it impractical. |
+| **2** | **nupunkt** | **7** | 0.77 | **Same accuracy as yasbd.** |
 | **3** | **blingfire** | 7 | 0.08 | **Fast but flawed.** Merges first two sentences. Splits `s.` + `XIX`. |
 | **4** | **sentencex** | 8 | 0.03 | **Splits `incl.`** from the sentence. One extra boundary. |
 | **5** | **pysbd** | **16** | 3.46 | **Splits on every `\n`.** Text wrapping completely breaks it. |
@@ -655,7 +664,7 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
 | **1** | **yasbd** | 21 | 3.68 | **Top pick.** Cleanly segments the rapid-fire casual messages (e.g., separating `Hey!!!` from `how r u doing???`). Crucially, it doesn't get tricked by lowercase abbreviations (`dr.`, `a.m.`, `ref.`) or decimal versions (`v2.1`). |
-| **2** | **nupunkt** | 38 | 1.53 | **Highly Accurate, but Speed Liability.** Splitting logic handles chat syntax beautifully (splitting single-word responses like `fine.`, `nah.`, `idk.`). It gets slightly over-aggressive on double exclamation marks (`broh !`, `!`), and its **11+ second cold start** makes it completely unusable for production. |
+| **2** | **nupunkt** | 38 | 1.53 | **Highly Accurate, but Speed Liability.** Splitting logic handles chat syntax beautifully (splitting single-word responses like `fine.`, `nah.`, `idk.`). It gets slightly over-aggressive on double exclamation marks (`broh !`, `!`). |
 | **3** | **pysbd** | 33 | 11.27 | **Best Speed/Accuracy Balance.** Robust handling of lowercase single-word sentences. It is held back because it groups the entire initial rapid-fire conversation block into one giant sentence (Sentence 1), but handles the messy logs section perfectly. |
 | **4** | **sentencex** | 27 | 0.26 | **Fast but clunky.** Groups the initial rapid-fire messages into a single block. Acts inconsistently, splitting some single-word sentences while missing major sentence boundaries elsewhere. |
 | **5** | **sentsplit** | 18 | 16.91 | **Broken Syntax.** Aggressive token-matching struggles with multiple punctuation marks, creating fragmented artifacts with hanging question marks (`"? i'm good..."`). |
@@ -1175,6 +1184,14 @@ The meeting is at 2 p.m. Mwen pral vini.
 | — | **sentence-splitter** | — | — | **Does not support Haitian Creole.** |
 
 ---
+
+### Additional accuracy test
+
+  - [Russian — yasbd vs razdel](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4632783363)
+  - [Arabic — yasbd vs pysbd vs sentencex](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4634485157)
+  - [Chinese — yasbd vs pysbd vs sentencex vs sentsplit](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4637433142)
+  - [Portuguese — yasbd vs pysbd vs sentencex](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4639723570)
+  - [Amharic — yasbd vs pysbd vs sentencex vs nupunkt](https://github.com/speedyk-005/yasbd-lib/pull/91#issue-4653240174)
 
 ## Conclusion
 
