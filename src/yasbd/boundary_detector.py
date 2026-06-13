@@ -41,9 +41,9 @@ class BoundaryDetector:
         self._rule_cache: OrderedDict[str, object] = OrderedDict()
 
         if not lang:
-              raise InvalidInputError(
-                  f"'lang' is required.\nOptions: {', '.join(get_supported_langs())}"
-               )
+            raise InvalidInputError(
+                f"'lang' is required.\nOptions: {', '.join(get_supported_langs())}"
+            )
         self.lang = lang.lower()
 
         if lang == "auto":
