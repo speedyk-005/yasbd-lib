@@ -72,9 +72,9 @@ And multilingual quirks a naive splitter never saw coming.
 
 Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
-**Pass 1** — Naive boundary finder. Finds every position that could plausibly end a sentence: periods, question marks, exclamation points — anything followed by whitespace, uppercase, or a newline. Deliberately over-inclusive. Better to catch a false positive than miss a real boundary.
+**Pass 1** - Naive boundary finder. Finds every position that could plausibly end a sentence: periods, question marks, exclamation points - anything followed by whitespace, uppercase, or a newline. Deliberately over-inclusive. Better to catch a false positive than miss a real boundary.
 
-**Pass 2** — Cross-references 9+ mid-sentence patterns to surgically excise false positives:
+**Pass 2** - Cross-references 9+ mid-sentence patterns to surgically excise false positives:
 
 - Newline inside sentence
 - Title/initialism protection
@@ -182,11 +182,12 @@ from yasbd.boundary_detector import BoundaryDetector
 # Or from yasbd import BoundaryDetector
 
 # Basic setup
-detector = BoundaryDetector()
+detector = BoundaryDetector(lang="en")
 
 # With all options (so far.)
 detector = BoundaryDetector(
-	# ISO 639 code (e.g., en, fr, es, ...). Defaults to "auto".
+	# ISO 639 code (e.g., en, fr, es, ...). Required.
+	# Use "auto" for automatic detection.
 	# https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
     lang="fr",
 
@@ -210,8 +211,8 @@ The rule module loads lazily on first access. Switching mid-stream reimports the
 > [!TIP]
 > **Auto-detect**
 >
-> Keep lang="auto" if you want the system to figure out the language for you.
-> I wouldn’t lean on it too hard tho — it’s a bit slower, and short phrases can throw it off sometimes.
+> Pass `lang="auto"` if you want the system to figure out the language for you.
+> I wouldn't lean on it too hard tho — it's a bit slower, and short phrases can throw it off sometimes.
 
 ### Core Methods
 The two primary APIs are detect() and segment().
@@ -268,7 +269,7 @@ print(res)
 ```
 
 > [!TIP]
-> **ParagraphStream** — yasbd uses [`ParagraphStream`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.utils.paragraph_stream.ParagraphStream) internally to split text into paragraph blocks. You can import it directly if you need paragraph-level processing in your own code:
+> **ParagraphStream** - yasbd uses [`ParagraphStream`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.utils.paragraph_stream.ParagraphStream) internally to split text into paragraph blocks. You can import it directly if you need paragraph-level processing in your own code:
 > ```python
 > from yasbd.utils.paragraph_stream import ParagraphStream  # or yasbd.paragraph_stream
 >
@@ -330,7 +331,7 @@ cleaner = StreamCleaner(
 cleaner = StreamCleaner(
     text,
     extra_steps=[
-        lambda t: t.replace("™", ""),
+        lambda t: t.replace("TM", ""),
         lambda t: t.upper(),
     ],
 )
@@ -373,7 +374,7 @@ yasbd detect "Hello world. How are you?"
 yasbd segment --file document.txt
 yasbd segment --file input.txt --destination output.txt  # JSONL output
 
-# Pipe support — auto-detects, skips [N] enumeration
+# Pipe support - auto-detects, skips [N] enumeration
 echo "Hello. World." | yasbd segment | cat
 # Hello.
 # World.
@@ -422,9 +423,9 @@ Migrating from pysbd? Swap the import and keep your pipeline:
 from yasbd.utils.pysbd_adapter import Segmenter  # or yasbd.pysbd_adapter
 
 seg = Segmenter(language="ja")
-res = seg.segment('田中さんは「準備は完了しました」そう言って部屋を出た。Ｕ．Ｓ．Ａ．の経済政策は非常に複雑です。')
+res = seg.segment('田中さんは「準備は完了しました」そう言って部屋を出た。U.S.A.の経済政策は非常に複雑です。')
 print(res)
-# ['田中さんは「準備は完了しました」そう言って部屋を出た。', 'Ｕ．Ｓ．Ａ．の経済政策は非常に複雑です。']
+# ['田中さんは「準備は完了しました」そう言って部屋を出た。', 'U.S.A.の経済政策は非常に複雑です。']
 ```
 
 Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.utils.pysbd_adapter.Segmenter) class. Same [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.utils.pysbd_adapter.Segmenter.segment) method signature.
@@ -462,6 +463,6 @@ Interested in contributing? See the [**Contributing Guide**](https://github.com/
 
 ## 📜 Last note
 
-**yasbd** is maintained by [speedyk-005](https://github.com/speedyk-005). Licensed under [Mozilla Public License 2.0](https://github.com/speedyk-005/yasbd-lib/blob/main/LICENSE) — you can use it freely in commercial and private work.
+**yasbd** is maintained by [speedyk-005](https://github.com/speedyk-005). Licensed under [Mozilla Public License 2.0](https://github.com/speedyk-005/yasbd-lib/blob/main/LICENSE) - you can use it freely in commercial and private work.
 
 Star us on GitHub if you dig it. Tell your NLP pipeline we said hi. 🚀
