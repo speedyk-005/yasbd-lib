@@ -17,7 +17,7 @@ Not every library supports every language. We picked 5 languages that stress dif
 The format is simple: throw edge cases at each library. Does it split where it should not? Does it preserve abbreviations, quotes, URLs, and mixed-language text? Pass or fail, no stopwatch needed. Warm timings are recorded for reference but accuracy is the point.
 
 > [!NOTE]
-> All benchmarks run on an Acer Chromebook (Crostini) — Intel Celeron N4020 @ 1.10GHz, 2.7GB RAM. Results will be faster on modern hardware.
+> All benchmarks run on an Acer Chromebook (Crostini) — Intel Celeron N4020 @ 1.10GHz, 2.7GB RAM (except cold/warm speed, which was run on Termux/Android ARM64, 6 GB RAM). Results will be faster on modern hardware.
 
 ## EN Golden benchmark
 
@@ -37,7 +37,7 @@ yasbd achieves 91/92 (98.9%). The only failing case is the `Ave.` abbreviation f
 
 ## Cold vs Warm speed
 
-First call includes import + init + first segment. Subsequent calls are warm (averaged over 100 repetitions). Measured on Termux/Android (ARM64, 6 GB RAM).
+First call includes import + init + first segment. Subsequent calls are warm (averaged over 100 repetitions).
 
 <details>
 <summary>Warm speed benchmark text</summary>
