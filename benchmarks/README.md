@@ -42,7 +42,7 @@ First call includes import + init + first segment. Subsequent calls are warm (av
 <details>
 <summary>Warm speed benchmark text</summary>
 
-```
+```txt
 Hello world. This is a test sentence for warm start. Is it working? Yes, it is. This is another sentence. And one more. We need enough text to make the segmentation meaningful. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 ```
 
