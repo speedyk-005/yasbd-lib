@@ -430,7 +430,7 @@ print(res)
 # ['田中さんは「準備は完了しました」そう言って部屋を出た。', 'U.S.A.の経済政策は非常に複雑です。']
 ```
 
-Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.utils.pysbd_adapter.Segmenter) class. Same [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.utils.pysbd_adapter.Segmenter.segment) method signature.
+Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.utils.pysbd_adapter.Segmenter) class. Same [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.utils.pysbd_adapter.Segmenter.segment) method signature. Even the lovely `TextSpan` with `.sent`, `.start`, `.end` is included.
 
 ---
 
