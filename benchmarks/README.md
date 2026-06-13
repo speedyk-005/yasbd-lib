@@ -37,7 +37,7 @@ yasbd achieves 91/92 (98.9%). The only failing case is the `Ave.` abbreviation f
 
 ## Cold vs Warm speed
 
-First call includes import + init + first segment. Subsequent calls are warm (averaged over 1000 repetitions of the text below). Both measured on Google Colab/Google Compute Engine.
+First call includes import + init + first segment. Subsequent calls are warm (averaged over 100 repetitions). Measured on Termux/Android (ARM64, 6 GB RAM).
 
 <details>
 <summary>Warm speed benchmark text</summary>
@@ -50,13 +50,13 @@ Hello world. This is a test sentence for warm start. Is it working? Yes, it is. 
 
 | Library | Cold (ms) | Warm (ms) | Notes |
 |---|---|---|---|---|
-| yasbd | 304.6 | 0.001 | Regex compiled on first use |
-| pysbd | 35.4 | 3.442 | Rule-based, lightweight |
-| sentencex | 5.4 | 0.012 | Rust bindings loaded on import |
-| blingfire | 93.5 | 0.040 | C++ FSM model loaded from disk |
-| sentence-splitter | 11.1 | 3.007 | Pure Python, no heavy deps |
-| sentsplit | 278.4 | 5.965 | CRF model loaded on init |
-| nupunkt | 4,856.0 | 0.483 | Loads full model into memory on init |
+| yasbd | 70.0 | 1.89 | Import + init on first use |
+| pysbd | 20.0 | 3.82 | Rule-based, lightweight |
+| sentencex | 5.4 | 0.03 | Rust bindings loaded on import |
+| blingfire | 93.5 | 0.04 | C++ FSM model loaded from disk |
+| sentence-splitter | 11.1 | 3.01 | Pure Python, no heavy deps |
+| sentsplit | 278.4 | 11.70 | CRF model loaded on init |
+| nupunkt | 4,856.0 | 0.43 | Loads full model into memory on init |
 
 <p align="center">
   <img src="bench.png" alt="SBD Benchmark Performance" width="800"/>
