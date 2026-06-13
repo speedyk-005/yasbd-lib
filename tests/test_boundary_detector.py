@@ -5,7 +5,12 @@ import string
 import pytest
 
 from tests import ALL_TEST_DATA
-from yasbd import BoundaryDetector, ParagraphEOF, UnsupportedLanguageError
+from yasbd import (
+    BoundaryDetector,
+    InvalidInputError,
+    ParagraphEOF,
+    UnsupportedLanguageError,
+)
 
 
 @pytest.fixture(scope="module")
@@ -27,10 +32,18 @@ def test_segment_empty_input(input_text, en_detector):
     assert list(en_detector.segment(input_text)) == []
 
 
-def test_unsupported_language():
-    """test that unknown language codes raise UnsupportedLanguageError."""
-    with pytest.raises(UnsupportedLanguageError, match="Unsupported language"):
-        BoundaryDetector(lang="xx")
+@pytest.mark.parametrize(
+    "lang,exc,msg",
+    [
+        (None, InvalidInputError, "'lang' is required"),
+        ("", InvalidInputError, "'lang' is required"),
+        ("xx", UnsupportedLanguageError, "Unsupported language"),
+    ],
+)
+def test_invalid_lang(lang, exc, msg):
+    """test that invalid/missing language codes raise the expected error."""
+    with pytest.raises(exc, match=msg):
+        BoundaryDetector(lang=lang)
 
 
 def test_segment_different_input(en_detector):
