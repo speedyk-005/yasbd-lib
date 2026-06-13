@@ -46,7 +46,7 @@ class BoundaryDetector:
             )
         self.lang = lang.lower()
 
-        if lang == "auto":
+        if self.lang == "auto":
             classify_language("MOCK")  # prime py3langid model
 
         log_info(
