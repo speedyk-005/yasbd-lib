@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Amharic (am) language support** ([#91](https://github.com/speedyk-005/yasbd-lib/pull/91)).
 
 ### Changed
+- **Benchmarks expanded** ([#94](https://github.com/speedyk-005/yasbd-lib/pull/94)): EN golden data grew from 85 to 92 cases with academic citation patterns. Updated scores, refreshed cold/warm speed numbers, added per-language comparison links.
 - **Internal refactors** ([#86](https://github.com/speedyk-005/yasbd-lib/pull/86)):
   - Cached up to 5 rule objects, evicting least recently used on overflow.
   - Moved `load_rule` because rule loading belongs to the rules package, not the detector.
