@@ -120,6 +120,8 @@ On our [golden benchmark](https://github.com/speedyk-005/yasbd-lib/tree/main/ben
 
 Full results, terminal output, and a performance graph can be found in **[benchmarks/](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks)**
 
+**SPOILER**: Yasbd aced 'em all in accuracy while offering balanced speed.
+
 <img src="https://raw.githubusercontent.com/speedyk-005/yasbd-lib/main/benchmarks/bench.png" alt="SBD Benchmark Performance" width="800"/>
 
 ---
