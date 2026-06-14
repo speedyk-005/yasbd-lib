@@ -14,6 +14,24 @@ try:
 except PackageNotFoundError:
     __version__ = "unknown"
 
+
+def register_spacy_component():
+    """Register the yasbd spaCy pipeline component on demand.
+
+    Call this to add the ``yasbd`` component factory to spaCy's registry.
+    Requires spaCy v3+ to be installed.
+
+    Examples
+    --------
+    >>> import spacy
+    >>> from yasbd import register_spacy_component
+    >>> register_spacy_component()
+    >>> nlp = spacy.blank("en")
+    >>> nlp.add_pipe("yasbd", first=True, config={"lang": "en"})
+    """
+    from yasbd.utils.spacy_component import create_yasbd  # noqa: F401
+
+
 # Expose utils submodules at package root level so both
 #   from yasbd.utils.cleaner import StreamCleaner   (legacy)
 #   from yasbd.cleaner import StreamCleaner          (flat)
@@ -30,5 +48,6 @@ __all__ = [
     "UnsupportedLanguageError",
     "YasbdError",
     "get_supported_langs",
+    "register_spacy_component",
     "__version__",
 ]
