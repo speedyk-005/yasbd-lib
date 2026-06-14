@@ -444,7 +444,6 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/bl
 - [x] Automatic language detection with caching (#74)
 - [ ] spaCy v3 pipeline component factory (#28)
 - [ ] 22+ language targets (#20)
-- [ ] REST API for remote boundary detection *(stretch)*
 
 ---
 
