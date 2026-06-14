@@ -41,6 +41,7 @@
   - [CLI](#cli)
     - [About JSONL](#about-jsonl)
   - [Adapter](#adapter)
+  - [spaCy component](#spacy-component)
 - [🗺 Features & Roadmap](#-features--roadmap)
 - [🤝 Contributors](#-contributors)
 - [📜 Last note](#-last-note)
@@ -434,6 +435,35 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/bl
 
 ---
 
+### spaCy component
+
+Even your spaCy pipeline deserves smart scissors. Call `register_spacy_component()` once, then add `yasbd` to any pipeline:
+
+```python
+import spacy
+from yasbd import register_spacy_component
+
+register_spacy_component()  # requires spaCy v3+
+nlp = spacy.blank("en")
+nlp.add_pipe("yasbd", first=True, config={"lang": "en"})
+
+doc = nlp("Dr. Smith arrived. He was late.")
+for sent in doc.sents:
+    print(sent.text)
+# Dr. Smith arrived.
+# He was late.
+```
+
+Tweak the detector at runtime:
+
+```python
+pipe = nlp.get_pipe("yasbd")
+pipe.detector.lang = "fr"
+pipe.detector.verbose = True
+```
+
+---
+
 ## 🗺 Features & Roadmap
 
 - [x] Base segmenter
@@ -442,7 +472,7 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/bl
 - [x] StreamCleaner for OCR'd and noisy text
 - [x] CLI tool
 - [x] Automatic language detection with caching (#74)
-- [ ] spaCy v3 pipeline component factory (#28)
+- [x] spaCy v3 pipeline component factory (#28)
 - [ ] 22+ language targets (#20)
 
 ---
