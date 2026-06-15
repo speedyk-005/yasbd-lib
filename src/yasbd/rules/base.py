@@ -128,7 +128,7 @@ class Rules:
     }
 
     COMMON_SENT_STARTERS = set()
-    QUOTATIVE_PARTICLES = set()
+    POST_QUOTATIVE_PARTICLES = set()
     CASE_MARKERS = set()
     REPORTING_WORDS = set()
 
@@ -285,7 +285,7 @@ class Rules:
             )
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
                 \s*[\p{{Po}}\p{{Ll}}\p{{Pe}}]|
-                {_build_abbr_pattern(cls.QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}
+                {_build_abbr_pattern(cls.POST_QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}
             )
             """,
             re2.X,

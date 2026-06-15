@@ -28,7 +28,7 @@ class JaRules(Rules):
         "以前",
     }
 
-    QUOTATIVE_PARTICLES = {
+    POST_QUOTATIVE_PARTICLES = {
         # core quotation particles
         "と", "って", "などと",
 

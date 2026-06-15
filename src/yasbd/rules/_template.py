@@ -44,7 +44,7 @@ class LangRules(Rules):
     # -- Mostly useful for unicase or weakly-cased languages --
 
     # Quotative particles used after speech, thoughts, or labels.
-    QUOTATIVE_PARTICLES = {...}
+    POST_QUOTATIVE_PARTICLES = {...}
 
     # Verbs commonly used for dialogue attribution or reported speech.
     REPORTING_WORDS = {...}

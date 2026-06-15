@@ -48,7 +48,7 @@ class AmRules(Rules):
         "አዎ", "እልል",
     }
 
-    QUOTATIVE_PARTICLES = {
+    POST_QUOTATIVE_PARTICLES = {
         # Standalone Converb Quotatives ("Saying...", placed after a quote)
         "ብሎ", "ብላ", "ብለው", "ብዬ", "ብለን", "ብላችሁ",
 

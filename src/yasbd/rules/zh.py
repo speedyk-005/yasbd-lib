@@ -13,7 +13,7 @@ class ZhRules(Rules):
     }
 
     # Chinese has only one pure postnominal quotative particle
-    QUOTATIVE_PARTICLES = {"如是"}
+    POST_QUOTATIVE_PARTICLES = {"如是"}
 
     REPORTING_WORDS = {
         "说", "道", "喊", "问", "答", "回答", "称", "指出",

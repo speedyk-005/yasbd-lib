@@ -87,5 +87,5 @@ class RuRules(Rules):
 
     # Particles like "мол", "де", "дескать" exist in Russian but are rarely
     # used alongside quoted text, so they don't affect sentence boundaries.
-    QUOTATIVE_PARTICLES = set()
+    POST_QUOTATIVE_PARTICLES = set()
 # fmt: on
