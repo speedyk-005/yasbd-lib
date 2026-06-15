@@ -12,7 +12,7 @@ class ItRules(Rules):
         "prof.sa", "avv", "arch", "geom", "rag",
         "not", "comm", "cav", "on", "dep", "spett",
 
-        # Military ranks (Italian-specific)
+        # Military ranks
         "amm", "cap", "ten", "serg",
 
         # Academic
