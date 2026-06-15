@@ -91,7 +91,10 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 ## 🌐 Supported Languages
 
-11 languages supported today. Target is 22+.
+12 languages supported today. Target is 22+.
+
+<details>
+<summary>Click to see all supported languages</summary>
 
 |  | Code | Language |
 |--|------|----------|
@@ -102,10 +105,13 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇪🇸 | es   | Spanish |
 | 🇫🇷 | fr   | French |
 | 🇭🇹 | ht   | Haitian Creole |
+| 🇮🇹 | it   | Italian |
 | 🇯🇵 | ja   | Japanese |
 | 🇵🇹 | pt   | Portuguese |
 | 🇷🇺 | ru   | Russian |
 | 🇨🇳 | zh   | Chinese |
+
+</details>
 
 You can also get a list from `yasbd.get_supported_langs`.
 
@@ -360,7 +366,7 @@ anything into it, get sentences back.
 ```bash
 # List supported language codes
 yasbd langs
-# am, ar, de, en, es, fr, ht, ja, pt, ru, zh
+# am, ar, de, en, es, fr, ht, it, ja, pt, ru, zh
 
 # Split text into sentences
 yasbd segment "Dr. Smith works here. Is he there?"
