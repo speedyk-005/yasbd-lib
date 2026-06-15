@@ -33,7 +33,7 @@ Aggregate score across all 92 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOL
 | sentence-splitter | 60/92 (65.2%) |
 | nupunkt | 59/92 (64.1%) |
 
-yasbd achieves 91/92 (98.9%). The only failing case is the `Ave.` abbreviation followed by a capitalized new sentence — a known limitation of rule-based abbreviation suppression. The test suite has been expanded from 85 to 92 cases with additional academic citation patterns.
+yasbd achieves 91/92 (98.9%). The only failing case is the `Ave.` abbreviation followed by a capitalized new sentence — a known limitation of rule-based abbreviation suppression. 
 
 ## Cold vs Warm speed
 
