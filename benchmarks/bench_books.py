@@ -41,8 +41,6 @@ if __name__ == "__main__":
         table.add_column("Sentences", justify="right")
 
         for name, seg in sorted(segmenters.items()):
-            seg.lang = "en"
-
             try:
                 # Cold run
                 t0 = time.perf_counter()
