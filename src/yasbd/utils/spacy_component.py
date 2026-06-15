@@ -117,6 +117,7 @@ if __name__ == "__main__":  # pragma: no cover
     yasbd_pipe = nlp.get_pipe("yasbd")
     yasbd_pipe.detector.lang = "fr"
     yasbd_pipe.detector.verbose = True
+
     print("\nAfter mod:")
-    print(yasbd_pipe)
-    print(yasbd_pipe.lang)
+    print(yasbd_pipe.detector)
+    print(yasbd_pipe.detector.lang)
