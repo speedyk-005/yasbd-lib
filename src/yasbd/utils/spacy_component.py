@@ -74,6 +74,10 @@ def create_yasbd(
     verbose: bool,
 ):
     """Create a spaCy component powered by yasbd."""
+
+    if lang is None:
+        lang = nlp.lang
+
     return YasbdComponent(
         lang=lang,
         preserve_quote_and_paren=preserve_quote_and_paren,
