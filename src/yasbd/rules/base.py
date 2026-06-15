@@ -170,7 +170,7 @@ class Rules:
     @classmethod
     def _compile_regex_dynamically(cls):
         """Compile language-specific regex patterns."""
-        cls.TERMINATORS_PATTERN = "".join(cls.TERMINATORS)
+        cls.TERMINATORS_PATTERN = f"[{''.join(cls.TERMINATORS)}]"
         cls.DOTS_PATTERN = r"[.．]"
         cls.TITLE_ABBRVS_PATTERN = _build_abbr_pattern(cls.TITLE_ABBRVS)
         cls.DOTTED_GEOPOL_ABBRVS_PATTERN = _build_abbr_pattern(cls.DOTTED_GEOPOL_ABBRVS)
@@ -200,11 +200,11 @@ class Rules:
                  (?<=\n)(?!\n)|
 
                 # Split if left token is a unicase letter (Always)
-                (?<=\p{{Lo}}\s*[{cls.TERMINATORS_PATTERN}])|
+                (?<=\p{{Lo}}\s*{cls.TERMINATORS_PATTERN})|
 
                 # Split after any terminators followed by a a newline,
                 # common sentence starter, Space+Upper or unicase letter
-                (?<=[{cls.TERMINATORS_PATTERN}](?!\s*\p{{Emoji_Presentation}}))
+                (?<={cls.TERMINATORS_PATTERN}(?!\s*\p{{Emoji_Presentation}}))
                 (?=
                     \s*[\n\p{{Lo}}]|
                     \s+(?:[^\p{{Ll}}]|
@@ -212,7 +212,7 @@ class Rules:
                )|
 
                # Emoji after terminator + uppercase, or emoji + common starter
-               (?<=[{cls.TERMINATORS_PATTERN}]\s*\p{{Emoji_Presentation}}+)|
+               (?<={cls.TERMINATORS_PATTERN}\s*\p{{Emoji_Presentation}}+)|
                (?<=\s+\p{{Emoji_Presentation}})(?=\s*(?:{cls.COMMON_STARTERS_PATTERN})\b)|
 
                 # Split at transition between Latin letters separate by alien
@@ -220,7 +220,7 @@ class Rules:
             )
 
             # Not followed by another terminators (clusters)
-            (?!\s*+[{cls.TERMINATORS_PATTERN}])
+            (?!\s*+{cls.TERMINATORS_PATTERN})
             """, re2.X,
         )
 
@@ -280,7 +280,7 @@ class Rules:
         cls.QUOTE_AND_PAREN_END_FINDER = re2.compile(
             rf"""
             (?<=
-                [{cls.TERMINATORS_PATTERN}]   # A terminator
+                {cls.TERMINATORS_PATTERN}   # A terminator
                 (?:'\s|"|\s*[»‘”“\p{{Pf}}\p{{Pe}}])     # Closing quotes/parens
             )
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
