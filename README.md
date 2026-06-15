@@ -288,7 +288,8 @@ StreamCleaner accepts either a string or an open text stream and yields cleaned 
 You can pass a "StreamCleaner" instance directly to "detect()" or "segment()" to clean text as it is processed.
 
 ```python
-from yasbd.utils.cleaner import StreamCleaner  # or yasbd.cleaner
+from yasbd.utils.cleaner import StreamCleaner
+# Or from yasbd.cleaner import StreamCleaner
 
 cleaner = StreamCleaner(
     "Hello  world.   This is  messy.",
@@ -301,8 +302,6 @@ list(cleaner)
 "StreamCleaner" implements the iterator protocol and yields cleaned paragraphs one at a time. It can consume plain strings, open text files, and other text streams.
 
 ```python
-from yasbd.utils.cleaner import StreamCleaner  # or yasbd.cleaner
-
 with open("document.txt", encoding="utf-8") as f:
     for paragraph in StreamCleaner(f):
         print(paragraph)
@@ -423,7 +422,8 @@ Migrating from pysbd? Swap the import and keep your pipeline:
 
 ```python
 # Before: from pysbd import Segmenter
-from yasbd.utils.pysbd_adapter import Segmenter  # or yasbd.pysbd_adapter
+from yasbd.utils.pysbd_adapter import Segmenter
+# Or from yasbd.Pysbd_adapter import Segmenter
 
 seg = Segmenter(language="ja")
 res = seg.segment('田中さんは「準備は完了しました」そう言って部屋を出た。U.S.A.の経済政策は非常に複雑です。')
