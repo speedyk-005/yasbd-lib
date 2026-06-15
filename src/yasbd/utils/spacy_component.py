@@ -14,7 +14,6 @@ except ImportError:
         "spaCy is required for the yasbd spaCy component. Install it with: pip install spacy"
     ) from None
 
-__test__ = False  # skip doctest collection when spaCy is absent
 
 from yasbd.boundary_detector import BoundaryDetector
 
