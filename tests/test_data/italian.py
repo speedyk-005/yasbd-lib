@@ -26,8 +26,8 @@ TEST_DATA = [
     "La S.R.L. ha depositato il bilancio.",
 
     # Structural headings
-    "Capitolo 1. L'Inizio.| Era buio fuori. | Nulla si muoveva.",
-    "Parte II. Analisi.| Il sistema comincia qui. | L'inizializzazione segue.",
+    "Capitolo 1. L'Inizio.| Era buio fuori.| Nulla si muoveva.",
+    "Parte II. Analisi.| Il sistema comincia qui.| L'inizializzazione segue.",
     "Il rapporto è stato completato.| Articolo 3. Disposizioni finali.",
 
     # Parentheses and quotes

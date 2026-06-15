@@ -50,7 +50,7 @@ class ItRules(Rules):
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
         # Months
-        "gen", "febbr", "aprile", "mag", "giu",
+        "gen", "febbr", "apr", "mag", "giu",
         "lug", "ago", "sett", "ott", "dic",
 
         # Days
