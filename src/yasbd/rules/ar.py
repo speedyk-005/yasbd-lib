@@ -6,9 +6,6 @@ from yasbd.rules.base import Rules
 # fmt: off
 class ArRules(Rules):
 
-    # Arabic uses a reversed question mark (؟) alongside standard terminators.
-    TERMINATORS = Rules.TERMINATORS | {"؟"}
-
     TITLE_ABBRVS = {
         # Academic & Professional
         "أ", "د", "أ.د", "م", "أ.م", "د.م", "ط", "ص", "باحث",

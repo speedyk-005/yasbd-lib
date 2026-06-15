@@ -19,7 +19,10 @@ def _build_abbr_pattern(options: set[str]) -> str:
 
 # fmt: off
 class Rules:
-    TERMINATORS = {"。", "．", ".", "！", "!", "？", "?", "‼", "⁉", "⁈"}
+    TERMINATORS = {
+        "｡", "。", "．", ".", "！", "!", "？", "?", "‼", "⁉", "⁈", "։", "؟", "۔", "߹",
+        "।", "॥", "။", "።", "፧", "᠃", "᠉", "᙮", "꓿", "꧉",
+    }
 
     TITLE_ABBRVS = {
         # Standard Professional (Universal Latin roots)
