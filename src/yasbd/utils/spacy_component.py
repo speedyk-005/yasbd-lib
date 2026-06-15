@@ -2,7 +2,7 @@ try:  # pragma: no cover
     import spacy
     from spacy import __version__ as sp_ver
 
-    if spacy.__version__.split(".")[0] < "3":
+    if int(spacy.__version__.split(".")[0]) < 3:
         raise ImportError(
             f"spaCy v3+ is required. You have v{sp_ver}. Upgrade with: pip install -U spacy"
         ) from None
