@@ -21,7 +21,7 @@ def fetch_text(url: str) -> str:
     """Download text from URL and decode."""
     if (scheme := urlparse(url).scheme) not in ("http", "https"):
         raise ValueError(f"Unsupported URL scheme: {scheme}")
-    with urllib.request.urlopen(url) as resp:
+    with urllib.request.urlopen(url, timeout=30) as resp:
         return resp.read().decode("utf-8")
 
 
