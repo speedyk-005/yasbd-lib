@@ -75,7 +75,7 @@ def create_yasbd(
 ):
     """Create a spaCy component powered by yasbd."""
 
-    if lang is None:
+    if lang is None:  # pragma: no cover
         lang = nlp.lang
 
     return YasbdComponent(
