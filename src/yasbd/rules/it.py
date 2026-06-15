@@ -26,9 +26,8 @@ class ItRules(Rules):
     }
 
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
-        "cap", "capit", "par", "parag", "sez", "fasc",
-        "ed", "trad", "rif", "cit", "op.cit",
-        "n.s", "s.l", "s.d", "s.n.t",
+        "cap", "capit", "par", "parag", "sez", "fasc", "trad",
+        "rif", "cit", "op.cit", "artt", "n.s", "s.l", "s.d", "s.n.t",
     }
 
     SECTION_MARKERS = Rules.SECTION_MARKERS | {
