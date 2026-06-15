@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **spaCy v3+ pipeline component** ([#95](https://github.com/speedyk-005/yasbd-lib/pull/95)): Register yasbd as a native spaCy component, with lazy import guard and configurable via pipe.
+- **Italian (it) language support** ([#99](https://github.com/speedyk-005/yasbd-lib/pull/99)).
 - **Expanded base `TERMINATORS`** ([#96](https://github.com/speedyk-005/yasbd-lib/pull/96)): across major scripts (Armenian, Devanagari, Ethiopic, Mongolian, etc.) for better mixed-script support.
 
 ### Changed
