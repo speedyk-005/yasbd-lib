@@ -3,11 +3,11 @@
 import time
 import timeit
 import urllib.request
-
-from rich.console import Console
-from rich.table import Table
+from urllib.parse import urlparse
 
 from bench_utils import all_segmenters
+from rich.console import Console
+from rich.table import Table
 
 BOOKS = {
     "Alice in Wonderland": "https://github.com/kuemit/txt_book/raw/master/examples/alice_in_wonderland.txt",
@@ -19,6 +19,8 @@ console = Console()
 
 def fetch_text(url: str) -> str:
     """Download text from URL and decode."""
+    if (scheme := urlparse(url).scheme) not in ("http", "https"):
+        raise ValueError(f"Unsupported URL scheme: {scheme}")
     with urllib.request.urlopen(url) as resp:
         return resp.read().decode("utf-8")
 
