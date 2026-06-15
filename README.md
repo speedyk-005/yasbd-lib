@@ -439,6 +439,9 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/bl
 
 Even your spaCy pipeline deserves smart scissors. Call `register_spacy_component()` once, then add `yasbd` to any pipeline:
 
+> [!NOTE]
+> `spacy` is **not** a dependency of yasbd. Install it separately: `pip install spacy`
+
 ```python
 import spacy
 from yasbd import register_spacy_component
@@ -452,6 +455,22 @@ for sent in doc.sents:
     print(sent.text)
 # Dr. Smith arrived.
 # He was late.
+```
+
+> [!NOTE]
+> **Pipeline position matters.**
+> `first=True` ensures yasbd runs before the parser, so its sentence boundaries aren't overwritten. Adding it after the parser will have no effect on the final `doc.sents`.
+
+When `lang` is omitted from the config, it inherits the pipeline's language:
+
+```python
+nlp.add_pipe("yasbd", first=True)  # lang defaults to nlp.lang
+```
+
+Automatic language detection also works:
+
+```python
+nlp.add_pipe("yasbd", first=True, config={"lang": "auto"})
 ```
 
 Tweak the detector at runtime:
