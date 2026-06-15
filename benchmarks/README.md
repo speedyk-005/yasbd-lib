@@ -17,11 +17,13 @@ Not every library supports every language. We picked 5 languages that stress dif
 The format is simple: throw edge cases at each library. Does it split where it should not? Does it preserve abbreviations, quotes, URLs, and mixed-language text? Pass or fail, no stopwatch needed. Warm timings are recorded for reference but accuracy is the point.
 
 > [!NOTE]
-> All benchmarks run on an Acer Chromebook (Crostini) — Intel Celeron N4020 @ 1.10GHz, 2.7GB RAM (except cold/warm speed, which was run on Termux/Android ARM64, 6 GB RAM). Results will be faster on modern hardware.
+> All benchmarks run on an Acer Chromebook (Crostini) with Intel Celeron N4020 @ 1.10GHz, 2.7GB RAM,
+> except the book benchmarks which were run on Google Compute Engine (Python 3, 12.7 GB RAM).
+> Results will be faster on modern hardware.
 
 ## EN Golden benchmark
 
-Aggregate score across all 92 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOLDEN_DATA.py) via [`run_golden.py`](run_golden.py). A modified and expanded version of [pysbd's official golden rule set](https://github.com/nipunsadvilkar/pySBD/blob/master/tests/lang/test_english.py): we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, academic citations, and more.
+Aggregate score across all 92 English edge cases in [`EN_GOLDEN_DATA.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/EN_GOLDEN_DATA.py) via [`run_golden.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/run_golden.py). Adapted from The Golden Rules Set (TM-Town) via pysbd, then expanded and corrected: we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, academic citations, and more.
 
 | Library | Score |
 |---|---|
@@ -35,28 +37,33 @@ Aggregate score across all 92 English edge cases in [`EN_GOLDEN_DATA.py`](EN_GOL
 
 yasbd achieves 91/92 (98.9%). The only failing case is the `Ave.` abbreviation followed by a capitalized new sentence — a known limitation of rule-based abbreviation suppression. 
 
-## Cold vs Warm speed
+## Book benchmarks
 
-First call includes import + init + first segment. Subsequent calls are warm (averaged over 100 repetitions).
+Real-world performance on full-length books via [`bench_books.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/bench_books.py).
 
-<details>
-<summary>Warm speed benchmark text</summary>
+### Alice in Wonderland (148,208 chars)
 
-```txt
-Hello world. This is a test sentence for warm start. Is it working? Yes, it is. This is another sentence. And one more. We need enough text to make the segmentation meaningful. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-```
+| Library | Cold (ms) | Warm (ms) | Sentences |
+|---|---|---|---|
+| blingfire | 13.0 | 9.4 | 676 |
+| nupunkt | 38.9 | 38.3 | 1606 |
+| pysbd | 1532.9 | 1301.5 | 3378 |
+| sentence-splitter | 277.5 | 283.8 | 3960 |
+| sentencex | 5.2 | 4.6 | 2014 |
+| sentsplit | 1788.8 | 1753.8 | 4170 |
+| yasbd | 383.4 | 384.7 | 1738 |
 
-</details>
+### Adventures of Sherlock Holmes (593,911 chars)
 
-| Library | Cold (ms) | Warm (ms) | Notes |
-|---|---|---|---|---|
-| yasbd | 70.0 | 1.89 | Import + init on first use |
-| pysbd | 20.0 | 3.82 | Rule-based, lightweight |
-| sentencex | 5.4 | 0.03 | Rust bindings loaded on import |
-| blingfire | 93.5 | 0.04 | C++ FSM model loaded from disk |
-| sentence-splitter | 11.1 | 3.01 | Pure Python, no heavy deps |
-| sentsplit | 278.4 | 11.70 | CRF model loaded on init |
-| nupunkt | 4,856.0 | 0.43 | Loads full model into memory on init |
+| Library | Cold (ms) | Warm (ms) | Sentences |
+|---|---|---|---|
+| blingfire | 45.9 | 42.0 | 5185 |
+| nupunkt | 230.4 | 226.4 | 5110 |
+| pysbd | 13274.6 | 13261.7 | 14501 |
+| sentence-splitter | 9634.0 | 9548.0 | 16269 |
+| sentencex | 25.6 | 24.3 | 7141 |
+| sentsplit | 10697.4 | 6956.4 | 15961 |
+| yasbd | 2641.4 | 1644.1 | 6351 |
 
 <p align="center">
   <img src="bench.png" alt="SBD Benchmark Performance" width="800"/>
