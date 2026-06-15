@@ -2,9 +2,8 @@
 
 import time
 import timeit
-import urllib.request
-from urllib.parse import urlparse
 
+import requests
 from bench_utils import all_segmenters
 from rich.console import Console
 from rich.table import Table
@@ -19,10 +18,9 @@ console = Console()
 
 def fetch_text(url: str) -> str:
     """Download text from URL and decode."""
-    if (scheme := urlparse(url).scheme) not in ("http", "https"):
-        raise ValueError(f"Unsupported URL scheme: {scheme}")
-    with urllib.request.urlopen(url, timeout=30) as resp:
-        return resp.read().decode("utf-8")
+    resp = requests.get(url, timeout=30)
+    resp.raise_for_status()
+    return resp.text
 
 
 if __name__ == "__main__":
