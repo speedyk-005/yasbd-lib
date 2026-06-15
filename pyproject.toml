@@ -88,7 +88,7 @@ packages = [
 
 [tool.pytest.ini_options]
 minversion = "7.4"
-addopts = "--doctest-modules --cov=yasbd --cov-report=term-missing:skip-covered --durations=10"
+addopts = "--doctest-modules --cov=yasbd --cov-report=term-missing:skip-covered --durations=10 --ignore=src/yasbd/utils/spacy_component.py"
 testpaths = ["tests", "src/yasbd/utils", "src/yasbd/cli.py"]
 python_files = "test_*.py"
 

@@ -31,7 +31,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        uv pip install -e ".[dev]"
+        uv pip install -e ".[dev]" spacy
 
     - name: Test with Pytest
       run: |
