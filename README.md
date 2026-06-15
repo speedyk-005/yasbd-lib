@@ -127,7 +127,7 @@ On our [golden benchmark](https://github.com/speedyk-005/yasbd-lib/tree/main/ben
 
 Full results, terminal output, and a performance graph can be found in **[benchmarks/](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks)**
 
-**SPOILER**: Yasbd aced 'em all in accuracy while offering balanced speed.
+**SPOILER**: Yasbd aced 'em all in accuracy while offering balanced speed. On _Adventures of Sherlock Holmes_ (594k chars), yasbd is ~5× faster than pysbd (1.6s vs 13.3s warm) with far fewer false splits.
 
 <img src="https://raw.githubusercontent.com/speedyk-005/yasbd-lib/main/benchmarks/bench.png" alt="SBD Benchmark Performance" width="800"/>
 

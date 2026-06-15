@@ -1,5 +1,10 @@
-# Adapted from pysbd's test data. Some cases were removed or altered because
-# the test expectation didn't match reality:
+# Adapted from The Golden Rules Set, a sentence segmentation test suite
+# developed by the TM-Town dev team and used by Pragmatic Segmenter.
+# This version was inherited via pySBD and further modified.
+#
+# Some cases were removed or altered because the original expectations
+# did not match realistic modern usage:
+#
 #   - `⁃9. The first item ⁃10. The second item`: In professional
 #     typography, an item is bulleted or numbered, rarely both. Seeing `⁃9.`
 #     reads like the author couldn't decide which style to use.
