@@ -9,8 +9,8 @@ try:  # pragma: no cover
 
     from spacy.language import Language
     from spacy.tokens import Doc
-except ImportError:
-    raise ImportError(
+except ImportError:  # pragma: no cover
+    raise ImportError(  # pragma: no cover
         "spaCy is required for the yasbd spaCy component. Install it with: pip install spacy"
     ) from None
 
@@ -75,7 +75,7 @@ def create_yasbd(
 ):
     """Create a spaCy component powered by yasbd."""
 
-    if lang is None:  # pragma: no cover
+    if lang is None:
         lang = nlp.lang
 
     return YasbdComponent(

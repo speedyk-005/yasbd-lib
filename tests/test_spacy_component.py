@@ -15,6 +15,14 @@ def nlp():
     return nlp
 
 
+def test_lang_defaults_to_pipeline_lang():
+    """test that lang inherits from pipeline when not in config."""
+    nlp = spacy.blank("en")
+    nlp.add_pipe("yasbd", first=True)  # no config
+    pipe = nlp.get_pipe("yasbd")
+    assert pipe.detector.lang == "en"
+
+
 def test_empty_doc(nlp):
     """test that empty text produces no sentences."""
     doc = nlp("")
