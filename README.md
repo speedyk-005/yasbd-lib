@@ -479,6 +479,7 @@ Tweak the detector at runtime:
 pipe = nlp.get_pipe("yasbd")
 pipe.detector.lang = "fr"
 pipe.detector.verbose = True
+pipe.preserve_quote_and_paren = False
 ```
 
 ---
