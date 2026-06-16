@@ -53,7 +53,7 @@ class Rules:
 
         # Major International Organizations
         "N.A.T.O", "U.N.E.S.C.O", "W.H.O", "I.M.F", "W.T.O",
-        "O.P.E.C", "F.A.O", "I.A.E.A", "W.B",
+        "O.P.E.C", "F.A.O", "I.A.E.A", "W.B", "N.A.S.A",
 
         # Regional Organizations
         "A.U", "O.A.S", "A.S.E.A.N",
