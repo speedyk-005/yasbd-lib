@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.6.0] - Unreleased
+## [0.6.0] - 2026-06-15
 
 ### Added
 - **spaCy v3+ pipeline component** ([#95](https://github.com/speedyk-005/yasbd-lib/pull/95)): Register yasbd as a native spaCy component, with lazy import guard and configurable via pipe.
