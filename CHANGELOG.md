@@ -15,9 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Expanded base `TERMINATORS`** ([#96](https://github.com/speedyk-005/yasbd-lib/pull/96)): across major scripts (Armenian, Devanagari, Ethiopic, Mongolian, etc.) for better mixed-script support.
 - **Book benchmarking script** ([#97](https://github.com/speedyk-005/yasbd-lib/pull/97)): `bench_books.py` benchmarks all SBD libraries on full-length books (Alice in Wonderland, Sherlock Holmes) with cold/warm timings and sentence counts.
 - **Thai (th) language support** ([#100](https://github.com/speedyk-005/yasbd-lib/pull/100)): By far the hardest language to add — unicase, no word-boundary whitespace, punctuation used mainly in abbreviations, and discourse particles that required careful negative lookaheads to avoid double-splitting.
+- **Greek (el) language support** ([#101](https://github.com/speedyk-005/yasbd-lib/pull/101)).
 
 ### Changed
 - **`QUOTATIVE_PARTICLES` renamed to `POST_QUOTATIVE_PARTICLES`** across all language rules to clarify they appear after quoted speech.
+
+### Fixed
+- **Conflict with quote/paren removal** ([#100](https://github.com/speedyk-005/yasbd-lib/pull/100)): reordered base pipeline so `_post_process_boundaries` runs before quote/paren spans are stripped.
 
 ---
 
