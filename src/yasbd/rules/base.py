@@ -50,6 +50,16 @@ class Rules:
 
         # Asia / Middle East
         "U.A.E", "P.R.C", "R.O.K",
+
+        # Major International Organizations
+        "N.A.T.O", "U.N.E.S.C.O", "W.H.O", "I.M.F", "W.T.O",
+        "O.P.E.C", "F.A.O", "I.A.E.A", "W.B",
+
+        # Regional Organizations
+        "A.U", "O.A.S", "A.S.E.A.N",
+
+        # Other sovereign states
+        "D.P.R.K", "R.O.C", "R.S.A", "D.R.C",
     }
 
     REFERENCE_ABBRVS = {
