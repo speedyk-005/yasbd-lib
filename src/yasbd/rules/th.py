@@ -69,7 +69,7 @@ class ThRules(Rules):
         super()._compile_regex_dynamically()
 
         cls.MID_SENTENCE_FINDER_LST.append(
-            re.compile(r"(?<!\.)\.(?:\s?\.){3}")  # Ellipsis
+            re.compile(r"\.(?:\s?\.){2,}")  # Ellipsis (3+ dots with optional spaces)
         )
 
         cls.FINAL_PARTICLES_FINDER = re.compile(
