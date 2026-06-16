@@ -10,9 +10,9 @@ So you want to know how yasbd stacks up against the competition? Fair enough. He
 | nupunkt | Zero deps, legal-text optimized. Claims 91.1% precision at 10M chars/sec. ~12 langs. | [GitHub](https://github.com/alea-institute/nupunkt) / [pypi](https://pypi.org/project/nupunkt/) |
 | blingfire | Microsoft C++ FSM + Python bindings. Language agnostic. | [GitHub](https://github.com/microsoft/BlingFire) / [pypi](https://pypi.org/project/blingfire/) |
 | sentence-splitter | Heuristic algorithm from Europarl (Koehn/Schroeder). Archived 2025. | [GitHub](https://github.com/mediacloud/sentence-splitter) / [pypi](https://pypi.org/project/sentence-splitter/) |
-| yasbd | Pure Python, currently 5 langs. Pointer-based SBD with pysbd adapter. | *(this repo)* |
+| yasbd | Pure Python, 14 langs and growing. Pointer-based SBD with pysbd adapter. | *(this repo)* |
 
-Not every library supports every language. We picked 5 languages that stress different weaknesses: English (baseline), French and Spanish (compound abbreviations like `c.-à-d.` and `p. ej.`), Japanese (CJK punctuation and quote handling), and Haitian Creole (low-resource, yasbd-native).
+Not every library supports every language. We picked multiple languages that stress different weaknesses.
 
 The format is simple: throw edge cases at each library. Does it split where it should not? Does it preserve abbreviations, quotes, URLs, and mixed-language text? Pass or fail, no stopwatch needed. Warm timings are recorded for reference but accuracy is the point.
 
@@ -1051,6 +1051,128 @@ La conferencia sobre la historia de América, incl. los eventos ocurridos en el 
 | **5** | **sentsplit** | 9 | 12.60 | **Correct count but sloppy.** Leading whitespace, same split points as sentencex. |
 | **6** | **sentence-splitter** | 10 | 4.54 | **Splits `Srta.` and `Lic.`** into separate fragments. Same `Cía.`/`Asoc.` issue. |
 | **7** | **pysbd** | **15** | 4.47 | **Shreds `p. ej.`** into `p.` + `ej.`, plus splits `Cía.`, `Asoc.`, `s.` |
+
+### Greek
+
+Greek uses `;` as a question mark (ερωτηματικό) and `·` (άνω τελεία) as a mid-sentence separator. Abbreviations follow multi-dot patterns like `π.χ.` (e.g.), `κ.λπ.` (etc.), and `π.μ.` (a.m.). Only 4 of 7 libraries support `el`.
+
+```txt
+Ο Νίκος ξύπνησε στις 7:30 π.μ. και κοίταξε το κινητό του. Είχε τρία αναπάντητα μηνύματα από τη Μαρία. «Θα έρθεις σήμερα;» τον ρώτησε. Εκείνος δίστασε... Ήταν κουρασμένος, αλλά δεν ήθελε να ακυρώσει.
+
+Στις 10:15 π.μ. συναντήθηκαν στο κέντρο της πόλης. Ο κ. Παπαδόπουλος τους χαιρέτησε και είπε: «Μην αργήσετε στη συνάντηση των 11:00». Όλοι γέλασαν. Γιατί; Κανείς δεν ήξερε ακριβώς!
+
+Η θερμοκρασία ήταν 32,5 βαθμοί Κελσίου. Παρ' όλα αυτά, η Ελένη αποφάσισε να περπατήσει περίπου 2,5 χλμ. μέχρι το μουσείο. «Καλή ιδέα;» αναρωτήθηκε. Ίσως. Ίσως όχι.
+
+Το βράδυ κατέγραψε στο ημερολόγιό της: «Σήμερα ήταν παράξενη μέρα. Κουραστική. Όμορφη. Αξέχαστη.» Και μετά αποκοιμήθηκε.
+```
+
+<details>
+<summary>click to see output</summary>
+
+```txt
+  yasbd [el]:
+    1: 'Ο Νίκος ξύπνησε στις 7:30 π.μ. και κοίταξε το κινητό του.'
+    2: 'Είχε τρία αναπάντητα μηνύματα από τη Μαρία.'
+    3: '«Θα έρθεις σήμερα;» τον ρώτησε.'
+    4: 'Εκείνος δίστασε...'
+    5: 'Ήταν κουρασμένος, αλλά δεν ήθελε να ακυρώσει.'
+    6: 'Στις 10:15 π.μ. συναντήθηκαν στο κέντρο της πόλης.'
+    7: 'Ο κ. Παπαδόπουλος τους χαιρέτησε και είπε: «Μην αργήσετε στη συνάντηση των 11:00».'
+    8: 'Όλοι γέλασαν.'
+    9: 'Γιατί;'
+   10: 'Κανείς δεν ήξερε ακριβώς!'
+   11: 'Η θερμοκρασία ήταν 32,5 βαθμοί Κελσίου.'
+   12: "Παρ' όλα αυτά, η Ελένη αποφάσισε να περπατήσει περίπου 2,5 χλμ. μέχρι το μουσείο."
+   13: '«Καλή ιδέα;» αναρωτήθηκε.'
+   14: 'Ίσως.'
+   15: 'Ίσως όχι.'
+   16: 'Το βράδυ κατέγραψε στο ημερολόγιό της: «Σήμερα ήταν παράξενη μέρα. Κουραστική. Όμορφη. Αξέχαστη.»'
+   17: 'Και μετά αποκοιμήθηκε.'
+
+  pysbd [el]:
+    1: 'Ο Νίκος ξύπνησε στις 7:30 π.'
+    2: 'μ.'
+    3: 'και κοίταξε το κινητό του.'
+    4: 'Είχε τρία αναπάντητα μηνύματα από τη Μαρία.'
+    5: '«Θα έρθεις σήμερα;'
+    6: '» τον ρώτησε.'
+    7: 'Εκείνος δίστασε... Ήταν κουρασμένος, αλλά δεν ήθελε να ακυρώσει.'
+    8: 'Στις 10:15 π.'
+    9: 'μ.'
+   10: 'συναντήθηκαν στο κέντρο της πόλης.'
+   11: 'Ο κ.'
+   12: 'Παπαδόπουλος τους χαιρέτησε και είπε: «Μην αργήσετε στη συνάντηση των 11:00».'
+   13: 'Όλοι γέλασαν.'
+   14: 'Γιατί;'
+   15: 'Κανείς δεν ήξερε ακριβώς!'
+   16: 'Η θερμοκρασία ήταν 32,5 βαθμοί Κελσίου.'
+   17: "Παρ' όλα αυτά, η Ελένη αποφάσισε να περπατήσει περίπου 2,5 χλμ."
+   18: 'μέχρι το μουσείο.'
+   19: '«Καλή ιδέα;'
+   20: '» αναρωτήθηκε.'
+   21: 'Ίσως.'
+   22: 'Ίσως όχι.'
+   23: 'Το βράδυ κατέγραψε στο ημερολόγιό της: «Σήμερα ήταν παράξενη μέρα. Κουραστική. Όμορφη. Αξέχαστη.» Και μετά αποκοιμήθηκε.'
+
+  sentencex [el]:
+    1: 'Ο Νίκος ξύπνησε στις 7:30 π.μ. και κοίταξε το κινητό του.'
+    2: 'Είχε τρία αναπάντητα μηνύματα από τη Μαρία.'
+    3: '«Θα έρθεις σήμερα;»'
+    4: 'τον ρώτησε.'
+    5: 'Εκείνος δίστασε...'
+    6: 'Ήταν κουρασμένος, αλλά δεν ήθελε να ακυρώσει.'
+    7: ''
+    8: 'Στις 10:15 π.μ. συναντήθηκαν στο κέντρο της πόλης.'
+    9: 'Ο κ. Παπαδόπουλος τους χαιρέτησε και είπε: «Μην αργήσετε στη συνάντηση των 11:00».'
+   10: 'Όλοι γέλασαν.'
+   11: 'Γιατί;'
+   12: 'Κανείς δεν ήξερε ακριβώς!'
+   13: ''
+   14: 'Η θερμοκρασία ήταν 32,5 βαθμοί Κελσίου.'
+   15: "Παρ' όλα αυτά, η Ελένη αποφάσισε να περπατήσει περίπου 2,5 χλμ."
+   16: 'μέχρι το μουσείο.'
+   17: '«Καλή ιδέα;»'
+   18: 'αναρωτήθηκε.'
+   19: 'Ίσως.'
+   20: 'Ίσως όχι.'
+   21: ''
+   22: 'Το βράδυ κατέγραψε στο ημερολόγιό της: «Σήμερα ήταν παράξενη μέρα. Κουραστική. Όμορφη. Αξέχαστη.»'
+   23: 'Και μετά αποκοιμήθηκε.'
+
+  nupunkt [el]:
+    1: 'Ο Νίκος ξύπνησε στις 7:30 π.μ.'
+    2: 'και κοίταξε το κινητό του.'
+    3: 'Είχε τρία αναπάντητα μηνύματα από τη Μαρία.'
+    4: '«Θα έρθεις σήμερα;» τον ρώτησε.'
+    5: 'Εκείνος δίστασε...'
+    6: 'Ήταν κουρασμένος, αλλά δεν ήθελε να ακυρώσει.'
+    7: 'Στις 10:15 π.μ.'
+    8: 'συναντήθηκαν στο κέντρο της πόλης.'
+    9: 'Ο κ. Παπαδόπουλος τους χαιρέτησε και είπε: «Μην αργήσετε στη συνάντηση των 11:00».'
+   10: 'Όλοι γέλασαν.'
+   11: 'Γιατί; Κανείς δεν ήξερε ακριβώς!'
+   12: 'Η θερμοκρασία ήταν 32,5 βαθμοί Κελσίου.'
+   13: "Παρ' όλα αυτά, η Ελένη αποφάσισε να περπατήσει περίπου 2,5 χλμ."
+   14: 'μέχρι το μουσείο.'
+   15: '«Καλή ιδέα;» αναρωτήθηκε.'
+   16: 'Ίσως.'
+   17: 'Ίσως όχι.'
+   18: 'Το βράδυ κατέγραψε στο ημερολόγιό της: «Σήμερα ήταν παράξενη μέρα.'
+   19: 'Κουραστική.'
+   20: 'Όμορφη.'
+   21: 'Αξέχαστη.» Και μετά αποκοιμήθηκε.'
+```
+</details>
+
+| Rank | Library | N sents | Warm Time (ms) | The Verdict |
+| --- | --- | --- | --- | --- |
+| **1** | **yasbd** | **17** | 2.06 | **Top pick.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Single-word sentences split correctly. |
+| **2** | **nupunkt** | 21 | 0.77 | **Cold-start penalty.** Splits `π.μ.` and rips apart final quoted block. 4s cold start. |
+| **3** | **sentencex** | 23 | 0.07 | **Phantom empty sentences.** Splits quotes from attribution verbs, splits `χλμ.` |
+| **4** | **pysbd** | 23 | 2.72 | **Worst.** Splits abbreviations into fragments, breaks guillemets in half. |
+
+
+---
 
 ### Haitian Creole
 

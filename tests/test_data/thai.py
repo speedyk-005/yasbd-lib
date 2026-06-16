@@ -1,6 +1,4 @@
 ISO_CODE = "th"
-
-# fmt: off
 TEST_DATA = [
     # Basic sentences
     "สวัสดีครับ|สบายดีไหม|สบายดีขอบคุณ",

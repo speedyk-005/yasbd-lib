@@ -91,7 +91,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 ## 🌐 Supported Languages
 
-13 languages supported today. Target is 22+.
+14 languages supported today. Target is 22+.
 
 <details>
 <summary>Click to see all supported languages</summary>
@@ -101,6 +101,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇪🇹 | am   | Amharic |
 | 🇸🇦 | ar   | Arabic |
 | 🇩🇪 | de   | German |
+| 🇬🇷 | el   | Greek |
 | 🇬🇧 | en   | English |
 | 🇪🇸 | es   | Spanish |
 | 🇫🇷 | fr   | French |
@@ -120,7 +121,7 @@ You can also get a list from `yasbd.get_supported_langs`.
 
 ## 🏁 Benchmarks
 
-Tested against 6 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, sentence-splitter) across 5 languages and 7 edge cases: compound abbreviations, CJK quotes, newline wrapping, chat logs, URLs, decimals, and nested punctuation.
+Tested against 6 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, sentence-splitter) across multiple languages and 7 edge cases: compound abbreviations, CJK quotes, newline wrapping, chat logs, URLs, decimals, and nested punctuation.
 
 **TL;DR:** yasbd ranked #1 in accuracy across almost every test, while staying competitive on speed as pure Python. blingfire is faster but brittle. pysbd and sentencex shred French abbreviations.
 
