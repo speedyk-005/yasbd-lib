@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Book benchmarking script** ([#97](https://github.com/speedyk-005/yasbd-lib/pull/97)): `bench_books.py` benchmarks all SBD libraries on full-length books (Alice in Wonderland, Sherlock Holmes) with cold/warm timings and sentence counts.
 - **Thai (th) language support** ([#100](https://github.com/speedyk-005/yasbd-lib/pull/100)): By far the hardest language to add — unicase, no word-boundary whitespace, punctuation used mainly in abbreviations, and discourse particles that required careful negative lookaheads to avoid double-splitting.
 - **Greek (el) language support** ([#101](https://github.com/speedyk-005/yasbd-lib/pull/101)).
+- **Expanded base `DOTTED_GEOPOL_ABBRVS`** ([#102](https://github.com/speedyk-005/yasbd-lib/pull/102)): major international organizations (N.A.T.O., U.N.E.S.C.O., W.H.O., etc.), regional bodies (A.U., O.A.S., A.S.E.A.N.), and additional sovereign state abbreviations.
 
 ### Changed
 - **`QUOTATIVE_PARTICLES` renamed to `POST_QUOTATIVE_PARTICLES`** across all language rules to clarify they appear after quoted speech.
