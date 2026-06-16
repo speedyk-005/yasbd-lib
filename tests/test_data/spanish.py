@@ -51,7 +51,7 @@ TEST_DATA = [
     "Él dijo (No estoy listo.) durante la reunión.",
     "Él preguntó: ¿Estás listo?| Respondí que sí.",
     'Ella dijo: "No estoy segura."| Luego se fue.',
- 
+
     # Pronoun heuristic (Ud./Vd.)
     "Me dirijo a Ud. Marco, para saludarlo.",
     "Me dirijo a Ud.| Mañana le enviaré el paquete.",
