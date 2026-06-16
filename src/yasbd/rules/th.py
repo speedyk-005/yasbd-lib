@@ -21,18 +21,25 @@ class ThRules(Rules):
 
     COMMON_SENT_STARTERS = {
         # Discourse resets (temporal, sequencing, causal, contrast)
-        "เมื่อ", "เมื่อสมัย", "เมื่อก่อน", "เมื่อครั้ง",
-        "หลังจาก", "ต่อมา", "ภายหลัง", "ทันที", "สุดท้าย",
-        "จากนั้น", "ต่อจากนั้น", "แล้ว", "แล้วก็", "แล้วจึง",
+        "เมื่อสมัย", "ต่อมา", "ภายหลัง", "สุดท้าย",
+        "จากนั้น", "ต่อจากนั้น",
         "ดังนั้น", "เพราะฉะนั้น",
-        "อย่างไรก็ตาม", "แต่", "ทว่า", "ถึงอย่างนั้น",
+        "อย่างไรก็ตาม", "ทว่า", "ถึงอย่างนั้น",
 
         # Discourse framing & explanation
         "สรุป", "สรุปว่า", "กล่าวโดยสรุป", "สุดท้ายนี้",
-        "กล่าวคือ", "ตัวอย่างเช่น", "เพราะ",
+        "กล่าวคือ", "ตัวอย่างเช่น",
+
+        # Question words
+        "อะไร", "ใคร", "ที่ไหน", "เมื่อไร", "เมื่อไหร่",
+        "ทำไม", "อย่างไร", "เท่าไร", "เท่าไหร่", "กี่",
+
+        # Pronouns
+        "ผม", "เขา", "เธอ", "เรา", "คุณ", "มัน",
+        "ดิฉัน", "เค้า", "พวกเรา", "พวกเขา",
 
         # Post-discourse-particle clause starts
-        "ผม", "เจอ", "กำลัง",
+        "กำลัง",
     }
 
     REPORTING_VERBS = {
@@ -42,27 +49,39 @@ class ThRules(Rules):
 
     DISCOURSE_FINAL_PARTICLES = {
         # polite closure markers
-        "ครับ", "ค่ะ", "คะ", "ครับผม", "เจ้าค่ะ",
-        "จ้า", "จ๊ะ", "จ้ะ",
+        "ครับ", "นะครับ", "ค่ะ", "คะ", "นะคะ", "ครับผม", "เจ้าค่ะ",
+        "จ้า", "จ๊ะ", "จ้ะ", "จ๋า", "นะ", "ฮะ",
 
         # interrogative / clause-final question markers
-        "ไหม", "มั้ย", "หรือยัง", "รึเปล่า", "เหรอ",
-        "ป่าว", "ล่ะ",
+        "ไหม", "มั้ย", "หรือยัง", "หรือไม่", "รึเปล่า",
+        "เหรอ", "ป่าว", "ล่ะ",
+    }
+
+    STANDALONE_UTTERANCES = {
+        "อะไรนะ", "ห๊ะ", "เอ๊ะ", "อ้าว", "โอ๊ะ", "จริงเหรอ",
+        "ไม่น่าเชื่อ",
     }
 
     # fmt: on
     @classmethod
     def _compile_regex_dynamically(cls):
+        """Override base regex compilation to handle ellipsis and starters"""
         super()._compile_regex_dynamically()
 
-        cls.FINAL_PARTICLES_FINDER = re.compile(rf"""
-            {_build_abbr_pattern(cls.DISCOURSE_FINAL_PARTICLES)}
-            (?={cls.COMMON_STARTERS_PATTERN})
-            """, re.X
+        cls.MID_SENTENCE_FINDER_LST.append(
+            re.compile(r"(?<!\.)\.(?:\s?\.){3}")  # Ellipsis
+        )
+
+        cls.FINAL_PARTICLES_FINDER = re.compile(
+            rf"{_build_abbr_pattern(cls.DISCOURSE_FINAL_PARTICLES)}"
         )
 
         cls.SPACE_PLUS_STARTER_FINDER = re.compile(
-            rf"(?=\s{cls.COMMON_STARTERS_PATTERN})"
+            rf"(?!\.\s*)(?=\s{cls.COMMON_STARTERS_PATTERN})"
+        )
+
+        cls.UTTERANCE_FINDER = re.compile(
+            rf"(?={_build_abbr_pattern(cls.STANDALONE_UTTERANCES)})"
         )
 
     def _post_process_boundaries(
@@ -73,5 +92,6 @@ class ThRules(Rules):
             chain(
                 self.FINAL_PARTICLES_FINDER.finditer(text),
                 self.SPACE_PLUS_STARTER_FINDER.finditer(text),
+                self.UTTERANCE_FINDER.finditer(text),
             )
         )
