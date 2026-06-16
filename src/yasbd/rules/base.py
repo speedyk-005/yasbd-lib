@@ -388,12 +388,12 @@ class Rules:
             m.end() for pat in self.MID_SENTENCE_FINDER_LST
             for m in pat.finditer(text)
         )
+        self._post_process_boundaries(main_boundaries, text)
         self._remove_quote_and_paren_spans(
             main_boundaries, text, preserve_quote_and_paren
         )
         self._remove_toc_spans(main_boundaries, text)
         self._adjust_list_boundaries(main_boundaries, text)
-        self._post_process_boundaries(main_boundaries, text)
 
         main_boundaries.update({0, len(text)})
         return sorted(main_boundaries)

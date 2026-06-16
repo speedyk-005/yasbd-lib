@@ -109,6 +109,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇯🇵 | ja   | Japanese |
 | 🇵🇹 | pt   | Portuguese |
 | 🇷🇺 | ru   | Russian |
+| 🇹🇭 | th   | Thai |
 | 🇨🇳 | zh   | Chinese |
 
 </details>
@@ -366,7 +367,7 @@ anything into it, get sentences back.
 ```bash
 # List supported language codes
 yasbd langs
-# am, ar, de, en, es, fr, ht, it, ja, pt, ru, zh
+# am, ar, de, en, es, fr, ht, ...
 
 # Split text into sentences
 yasbd segment "Dr. Smith works here. Is he there?"
