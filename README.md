@@ -93,6 +93,9 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 12 languages supported today. Target is 22+.
 
+<details>
+<summary>Click to see all supported languages</summary>
+
 |  | Code | Language |
 |--|------|----------|
 | 🇪🇹 | am   | Amharic |
@@ -102,11 +105,14 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇪🇸 | es   | Spanish |
 | 🇫🇷 | fr   | French |
 | 🇭🇹 | ht   | Haitian Creole |
+| 🇮🇹 | it   | Italian |
 | 🇯🇵 | ja   | Japanese |
 | 🇵🇹 | pt   | Portuguese |
 | 🇷🇺 | ru   | Russian |
 | 🇹🇭 | th   | Thai |
 | 🇨🇳 | zh   | Chinese |
+
+</details>
 
 You can also get a list from `yasbd.get_supported_langs`.
 
