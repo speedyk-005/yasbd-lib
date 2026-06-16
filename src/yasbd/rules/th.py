@@ -73,7 +73,7 @@ class ThRules(Rules):
         )
 
         cls.FINAL_PARTICLES_FINDER = re.compile(
-            rf"{_build_abbr_pattern(cls.DISCOURSE_FINAL_PARTICLES)}"
+            rf"{_build_abbr_pattern(cls.DISCOURSE_FINAL_PARTICLES)}(?![\s]*[.?!;:๚๛])"
         )
 
         cls.SPACE_PLUS_STARTER_FINDER = re.compile(
