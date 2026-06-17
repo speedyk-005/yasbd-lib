@@ -57,11 +57,6 @@ class ThRules(Rules):
         "เหรอ", "ป่าว", "ล่ะ",
     }
 
-    STANDALONE_UTTERANCES = {
-        "อะไรนะ", "ห๊ะ", "เอ๊ะ", "อ้าว", "โอ๊ะ", "จริงเหรอ",
-        "ไม่น่าเชื่อ",
-    }
-
     # fmt: on
     @classmethod
     def _compile_regex_dynamically(cls):
@@ -80,10 +75,6 @@ class ThRules(Rules):
             rf"(?!\.\s*)(?=\s{cls.COMMON_STARTERS_PATTERN})"
         )
 
-        cls.UTTERANCE_FINDER = re.compile(
-            rf"(?={_build_abbr_pattern(cls.STANDALONE_UTTERANCES)})"
-        )
-
     def _post_process_boundaries(
         self, main_boundaries: set[int], text: str
     ) -> None:
@@ -92,6 +83,5 @@ class ThRules(Rules):
             chain(
                 self.FINAL_PARTICLES_FINDER.finditer(text),
                 self.SPACE_PLUS_STARTER_FINDER.finditer(text),
-                self.UTTERANCE_FINDER.finditer(text),
             )
         )

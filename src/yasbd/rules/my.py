@@ -1,5 +1,4 @@
 import re
-from itertools import chain
 
 from yasbd.rules.base import Rules, _build_abbr_pattern
 
@@ -63,11 +62,6 @@ class MyRules(Rules):
          "ခဲ့ပါသည်"
     }
 
-    STANDALONE_UTTERANCES = {
-        "ဟုတ်ကဲ့", "မဟုတ်ဘူး", "အော်", "ဟယ်",
-        "အားပါးပါး", "ဟင်", "ဗျာ",
-    }
-
     # fmt: on
     @classmethod
     def _compile_regex_dynamically(cls):
@@ -82,17 +76,9 @@ class MyRules(Rules):
             rf"{_build_abbr_pattern(cls.DISCOURSE_FINAL_PARTICLES)}(?![\s]*[.?!;:။။‎၏])"
         )
 
-        cls.UTTERANCE_FINDER = re.compile(
-            rf"(?={_build_abbr_pattern(cls.STANDALONE_UTTERANCES)})"
-        )
-
     def _post_process_boundaries(
         self, main_boundaries: set[int], text: str
     ) -> None:
         main_boundaries.update(
-            m.end() for m in
-            chain(
-                self.FINAL_PARTICLES_FINDER.finditer(text),
-                self.UTTERANCE_FINDER.finditer(text),
-            )
+            m.end() for m in self.FINAL_PARTICLES_FINDER.finditer(text)
         )
