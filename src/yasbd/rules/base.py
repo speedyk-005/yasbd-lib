@@ -146,7 +146,7 @@ class Rules:
     REPORTING_WORDS = set()
 
     # https://regex101.com/r/tI9Cmg/3
-    DOT_LIKE_PATTERN = r"[\.．。။।॥·•∙⋅]"
+    DOT_LIKE_PATTERN = r"[.．。။।॥·•∙⋅]"
     VERTICAL_LIST_START_FINDER = re2.compile(rf"""
         (?<=^\s*
             (?:
@@ -199,7 +199,7 @@ class Rules:
         cls.DOTTED_GEOPOL_ABBRVS_PATTERN = _build_abbr_pattern(cls.DOTTED_GEOPOL_ABBRVS)
         cls.COMMON_STARTERS_PATTERN = _build_abbr_pattern(cls.COMMON_SENT_STARTERS)
 
-        # https://regex101.com/r/qBSyU5/15
+        # https://regex101.com/r/qBSyU5/16
         # Handle flattened lists due to messy OCR.
         cls.HORIZONTAL_LIST_FINDER = re2.compile(
             rf"""
@@ -210,7 +210,7 @@ class Rules:
                 [-*+]|      #  Markdown style list
 
                 # Numbered/alphabetical list
-                (?:\d{{1,2}}|[a-eA-E])
+                (?:\d{{1,2}}|[a-eA-Eα-εΑ-Ε])
                 (?:{cls.DOT_LIKE_PATTERN}|\)){{1,2}}
             )
             (?=\s)  # Must followed by a space
