@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.7.0] - Unreleased
+
+### Fixed
+- **List marker detection for non-Latin scripts** ([#103](https://github.com/speedyk-005/yasbd-lib/pull/103)): expanded `VERTICAL_LIST_START_FINDER` and `HORIZONTAL_LIST_FINDER` to accept Burmese, Devanagari, and other dot-like characters (။, ।, ·, •, etc.).
+
+---
+
 ## [0.6.0] - 2026-06-15
 
 ### Added
@@ -23,7 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - **Conflict with quote/paren removal** ([#100](https://github.com/speedyk-005/yasbd-lib/pull/100)): reordered base pipeline so `_post_process_boundaries` runs before quote/paren spans are stripped.
-- **List marker detection for non-Latin scripts** ([#103](https://github.com/speedyk-005/yasbd-lib/pull/103)): expanded `VERTICAL_LIST_START_FINDER` and `HORIZONTAL_LIST_FINDER` to accept Burmese, Devanagari, and other dot-like characters (။, ।, ·, •, etc.).
 
 ---
 
