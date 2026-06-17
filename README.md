@@ -107,8 +107,8 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇫🇷 | fr   | French |
 | 🇭🇹 | ht   | Haitian Creole |
 | 🇮🇹 | it   | Italian |
-| 🇲🇲 | my   | Burmese |
 | 🇯🇵 | ja   | Japanese |
+| 🇲🇲 | my   | Burmese |
 | 🇵🇹 | pt   | Portuguese |
 | 🇷🇺 | ru   | Russian |
 | 🇹🇭 | th   | Thai |
@@ -369,7 +369,7 @@ anything into it, get sentences back.
 ```bash
 # List supported language codes
 yasbd langs
-# am, ar, de, el, en, es, ...
+# auto, am, ar, de, el, en, es, ...
 
 # Split text into sentences
 yasbd segment "Dr. Smith works here. Is he there?"
