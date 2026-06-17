@@ -145,8 +145,18 @@ class Rules:
     CASE_MARKERS = set()
     REPORTING_WORDS = set()
 
-    # https://regex101.com/r/tI9Cmg/2
-    VERTICAL_LIST_START_FINDER = re2.compile(r"(?<=^\s*(?:[\p{L}\p{N}]\.){1,3})(?=\s)")
+    # https://regex101.com/r/tI9Cmg/3
+    DOT_LIKE_PATTERN = r"[.．。။।॥·•∙⋅]"
+    VERTICAL_LIST_START_FINDER = re2.compile(rf"""
+        (?<=^\s*
+            (?:
+                [\p{{L}}\p{{N}}]
+                (?:{DOT_LIKE_PATTERN}|\))
+            ){{1,3}}
+        )
+        (?=\s)
+        """, re.X
+    )
 
     # https://regex101.com/r/JYdWZw/6
     QUOTE_AND_PAREN_FINDER = re2.compile(
@@ -189,16 +199,19 @@ class Rules:
         cls.DOTTED_GEOPOL_ABBRVS_PATTERN = _build_abbr_pattern(cls.DOTTED_GEOPOL_ABBRVS)
         cls.COMMON_STARTERS_PATTERN = _build_abbr_pattern(cls.COMMON_SENT_STARTERS)
 
-        # https://regex101.com/r/qBSyU5/15
+        # https://regex101.com/r/qBSyU5/16
         # Handle flattened lists due to messy OCR.
         cls.HORIZONTAL_LIST_FINDER = re2.compile(
-            r"""
+            rf"""
             # Must preceded by string or word boundary
             (?:^|(?<![A-Z]\w+)\s+)
             (?:[•◦]\s+)?   # Optional bullet point (e.g., • 9.)
             (?:
                 [-*+]|      #  Markdown style list
-                (?:\d{1,2}|[a-eA-E])[.)]{1,2}  # Numbered/alphabetical list
+
+                # Numbered/alphabetical list
+                (?:\d{{1,2}}|[a-eA-Eα-εΑ-Ε])
+                (?:{cls.DOT_LIKE_PATTERN}|\)){{1,2}}
             )
             (?=\s)  # Must followed by a space
             """,
