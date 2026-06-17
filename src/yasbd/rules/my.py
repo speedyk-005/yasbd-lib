@@ -1,0 +1,98 @@
+import re
+from itertools import chain
+
+from yasbd.rules.base import Rules, _build_abbr_pattern
+
+
+# fmt: off
+class MyRules(Rules):
+
+
+    # Burmese uses the section mark '။' as the primary terminator.
+    # Periods are dropped from the terminator set
+    # since they typically denote digits or abbreviations.
+    TERMINATORS = (Rules.TERMINATORS - {"."}) | {"။", "‎'၏"}
+
+    COMMON_SENT_STARTERS = {
+        # Temporal / Sequential
+        "ထို့နောက်", "ထို့ပြင်", "နောက်ဆုံး", "နောက်ပိုင်း",
+        "ယခု", "ယခင်က", "မကြာခင်က", "လွန်ခဲ့တဲ့",
+        "ထိုအချိန်က", "ထိုခေတ်က", "နောက်မှ", "နောက်ဆုံးတွင်",
+        "ထိုနောက်",
+
+        # Causal / Contrast
+        "သို့သော်", "သို့ပေမယ့်", "သို့ရာတွင်", "သို့သော်လည်း",
+        "ထို့ကြောင့်", "ဒါကြောင့်", "ဤသို့ဖြင့်", "မည်သို့ပင်ဆိုစေ",
+
+        # Discourse framing
+        "ဥပမာ", "ဥပမာအားဖြင့်", "အထူးသဖြင့်", "ခြုံငုံကြည့်လျှင်",
+        "နောက်ဆုံးအနေနဲ့", "ပထမဦးစွာ", "အကျဉ်းချုပ်အားဖြင့်",
+        "ချုပ်လိုက်ရရင်", "နိဂုံးချုပ်အနေနဲ့", "ဆိုလိုသည်မှာ",
+
+        # Question words
+        "ဘာ", "ဘယ်", "ဘယ်သူ", "ဘယ်ဟာ", "ဘယ်နေရာ",
+        "ဘယ်လို", "ဘာကြောင့်", "ဘယ်အချိန်", "မည်သူ",
+        "မည်သည့်", "မည်သို့", "ဘယ်ခါ", "ဘာဖြစ်လို့",
+        "ဘယ်လောက်", "ဘယ်နှစ်", "ဘယ်နှစ်ခု",
+
+        # Common pronouns / subjects (Formal + Informal)
+        "ငါ", "ကျွန်တော်", "ကျွန်မ", "သူ", "သူမ",
+        "သူတို့", "သင်", "မင်း", "ညည်း", "ငါတို့",
+        "ကျွန်ုပ်တို့",
+    }
+
+    REPORTING_VERBS = {
+        "ပြော", "ဆို", "မေး", "ဖြေ", "ရေး", "အော်", "တင်ပြ",
+        "သတင်းပို့", "တိုင်ကြား", "လျှောက်", "ကြေညာ",
+        "ရှင်းပြ", "ဖြေရှင်း", "ငြင်း", "သဘောတူ", "ဝန်ခံ",
+        "မှတ်", "ကြွေးကြော်",
+    }
+
+    POST_QUOTATIVE_PARTICLES = {
+        "ဟု",  "လို့",  "ဟူ၍",
+    }
+
+    DISCOURSE_FINAL_PARTICLES = {
+        # Declarative (high-confidence  sentence endings)
+        "ပါတယ်", "ပါသည်",
+
+        # Question sentence-final markers
+        "လား", "မလား", "ပါသလား", "သလား"
+
+        # Formal written completions
+         "ခဲ့ပါသည်"
+    }
+
+    STANDALONE_UTTERANCES = {
+        "ဟုတ်ကဲ့", "မဟုတ်ဘူး", "အော်", "ဟယ်",
+        "အားပါးပါး", "ဟင်", "ဗျာ",
+    }
+
+    # fmt: on
+    @classmethod
+    def _compile_regex_dynamically(cls):
+        """Override base regex compilation to handle ellipsis and starters"""
+        super()._compile_regex_dynamically()
+
+        cls.MID_SENTENCE_FINDER_LST.append(
+            re.compile(r"\.(?:\s?\.){2,}")  # Ellipsis (3+ dots with optional spaces)
+        )
+
+        cls.FINAL_PARTICLES_FINDER = re.compile(
+            rf"{_build_abbr_pattern(cls.DISCOURSE_FINAL_PARTICLES)}(?![\s]*[.?!;:။။‎၏])"
+        )
+
+        cls.UTTERANCE_FINDER = re.compile(
+            rf"(?={_build_abbr_pattern(cls.STANDALONE_UTTERANCES)})"
+        )
+
+    def _post_process_boundaries(
+        self, main_boundaries: set[int], text: str
+    ) -> None:
+        main_boundaries.update(
+            m.end() for m in
+            chain(
+                self.FINAL_PARTICLES_FINDER.finditer(text),
+                self.UTTERANCE_FINDER.finditer(text),
+            )
+        )
