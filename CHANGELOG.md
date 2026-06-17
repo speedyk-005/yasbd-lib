@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.7.0] - Unreleased
 
+### Added
+- **Burmese (my) language support** ([#104](https://github.com/speedyk-005/yasbd-lib/pull/104)).
+
 ### Fixed
 - **List marker detection for non-Latin scripts** ([#103](https://github.com/speedyk-005/yasbd-lib/pull/103)): expanded `VERTICAL_LIST_START_FINDER` and `HORIZONTAL_LIST_FINDER` to accept Burmese, Devanagari, and other dot-like characters (။, ।, ·, •, etc.).
 
