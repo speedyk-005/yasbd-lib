@@ -10,7 +10,7 @@ class MyRules(Rules):
     # Burmese uses the section mark '။' as the primary terminator.
     # Periods are dropped from the terminator set
     # since they typically denote digits or abbreviations.
-    TERMINATORS = (Rules.TERMINATORS - {"."}) | {"။", "‎'၏"}
+    TERMINATORS = (Rules.TERMINATORS - {"."}) | {"။", "၏"}
 
     COMMON_SENT_STARTERS = {
         # Temporal / Sequential
@@ -73,7 +73,7 @@ class MyRules(Rules):
         )
 
         cls.FINAL_PARTICLES_FINDER = re.compile(
-            rf"{_build_abbr_pattern(cls.DISCOURSE_FINAL_PARTICLES)}(?![\s]*[.?!;:။။‎၏])"
+            rf"{_build_abbr_pattern(cls.DISCOURSE_FINAL_PARTICLES)}(?!\s*[.?!;:။၏])"
         )
 
     def _post_process_boundaries(
