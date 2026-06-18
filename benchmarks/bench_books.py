@@ -1,4 +1,4 @@
-"""Benchmark all SBD libraries on full-length books."""
+"""Benchmark SBD libraries on full-length books."""
 
 import time
 import timeit
@@ -23,7 +23,8 @@ def fetch_text(url: str) -> str:
     return resp.text
 
 
-if __name__ == "__main__":
+def run_book_benchmark():
+    """Benchmark all segmenters on full book texts."""
     # Download all books first
     texts = {}
     for name, url in BOOKS.items():
@@ -42,19 +43,23 @@ if __name__ == "__main__":
 
         for name, seg in sorted(segmenters.items()):
             try:
-                # Cold run
+                # Cold run (first time, no cache)
                 t0 = time.perf_counter()
                 sents = seg.segment(text)
                 cold_ms = (time.perf_counter() - t0) * 1000
 
-                # Warm run
+                # Warm run (cached/optimized)
                 t = timeit.timeit(lambda s=seg, t=text: s.segment(t), number=5)
                 warm_ms = t / 5 * 1000
 
                 table.add_row(name, f"{cold_ms:.1f}", f"{warm_ms:.1f}", str(len(sents)))
             except Exception as e:
-                err = str(e).split(".")[0]  # first sentence of error
+                err = str(e).split(".")[0]  # First sentence of error
                 table.add_row(name, "ERR", "ERR", f"[{err}]")
 
         console.print(table)
         console.print()
+
+
+if __name__ == "__main__":
+    run_book_benchmark()
