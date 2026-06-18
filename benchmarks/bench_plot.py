@@ -94,23 +94,25 @@ def run_benchmark():
 
     # Plot results
     fig, ax = plt.subplots(figsize=(8, 5))
+    try:
+        for name, times in results.items():
+            color = COLORS.get(name, "black")
+            ax.fill_between(sizes, 0, times, color=color, alpha=0.08)
+            ax.plot(sizes, times, "o-", label=name, color=color, linewidth=2, markersize=5)
 
-    for name, times in results.items():
-        color = COLORS.get(name, "black")
-        ax.fill_between(sizes, 0, times, color=color, alpha=0.08)
-        ax.plot(sizes, times, "o-", label=name, color=color, linewidth=2, markersize=5)
+        ax.set_xlabel("Characters", fontsize=12)
+        ax.set_ylabel("ms / iteration", fontsize=12)
+        ax.set_title("Sentence Boundary Detection Performance", fontsize=13)
+        ax.legend(fontsize=9, loc="upper left")
+        ax.grid(linestyle="--", alpha=0.5)
+        ax.xaxis.set_major_formatter(lambda x, _: f"{x:,.0f}")
 
-    ax.set_xlabel("Characters", fontsize=12)
-    ax.set_ylabel("ms / iteration", fontsize=12)
-    ax.set_title("Sentence Boundary Detection Performance", fontsize=13)
-    ax.legend(fontsize=9, loc="upper left")
-    ax.grid(linestyle="--", alpha=0.5)
-    ax.xaxis.set_major_formatter(lambda x, _: f"{x:,.0f}")
-
-    plt.tight_layout()
-    output_path = Path("bench.png")
-    plt.savefig(output_path, dpi=150, bbox_inches="tight")
-    console.print(f"\n[green]Saved {output_path.name}[/green]")
+        plt.tight_layout()
+        output_path = Path("bench.png")
+        plt.savefig(output_path, dpi=150, bbox_inches="tight")
+        console.print(f"\n[green]Saved {output_path.name}[/green]")
+    finally:
+        plt.close(fig)
 
 
 if __name__ == "__main__":
