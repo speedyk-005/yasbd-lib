@@ -71,12 +71,8 @@ class MyRules(Rules):
     # fmt: on
     @classmethod
     def _compile_regex_dynamically(cls):
-        """Override base regex compilation to handle ellipsis and starters"""
+        """Override base regex compilation"""
         super()._compile_regex_dynamically()
-
-        cls.MID_SENTENCE_FINDER_LST.append(
-            re.compile(r"\.(?:\s?\.){2,}")  # Ellipsis (3+ dots with optional spaces)
-        )
 
         cls.FINAL_PARTICLES_FINDER = re.compile(
             rf"{_build_abbr_pattern(cls.DISCOURSE_FINAL_PARTICLES)}(?!\s*[.?!;:။၏])"
