@@ -12,6 +12,12 @@ class MyRules(Rules):
     # since they typically denote digits or abbreviations.
     TERMINATORS = (Rules.TERMINATORS - {"."}) | {"။", "၏"}
 
+    TITLE_ABBRVS = set()
+    DOTTED_GEOPOL_ABBRVS = set()
+    REFERENCE_ABBRVS = set()
+    SECTION_MARKERS = set()
+    DATE_ABBRVS = set()
+
     COMMON_SENT_STARTERS = {
         # Temporal / Sequential
         "ထို့နောက်", "ထို့ပြင်", "နောက်ဆုံး", "နောက်ပိုင်း",
