@@ -1,5 +1,4 @@
-#! /usr/bin/env python3
-"""Benchmark all SBD libraries across text sizes and plot."""
+"""Benchmark SBD libraries across text sizes and plot performance."""
 
 import timeit
 import warnings
@@ -10,10 +9,11 @@ from bench_utils import all_segmenters
 from rich.console import Console
 from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
 
-_console = Console()
 warnings.filterwarnings("ignore")
+console = Console()
 
-BASE = """\
+# Configuration
+BASE_TEXT = """\
 Dear Professor Johnson, I am writing to formally request an extension on the upcoming
 dissertation deadline. Pursuant to Section 4.3(a)(ii) of the university handbook
 (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour
@@ -38,43 +38,8 @@ MULTIPLIERS = [1, 5, 10, 20, 50, 100, 200]
 ITERS = 20
 LANG = "en"
 
-segs = all_segmenters(lang=LANG)
-
-sizes = []
-results = {name: [] for name in segs}
-
-total_steps = len(MULTIPLIERS) * len(segs) * 2  # warmup + timing per combo
-with Progress(
-    SpinnerColumn(),
-    TextColumn("[progress.description]{task.description}"),
-    BarColumn(),
-    console=_console,
-) as progress:
-    task = progress.add_task("Benchmarking...", total=total_steps)
-
-    for m in MULTIPLIERS:
-        text = BASE * m
-        nchars = len(text)
-        sizes.append(nchars)
-
-        for name, seg in segs.items():
-            seg.lang = LANG
-            progress.update(task, description=f"{m:3d}x ({nchars:>7,} chars) {name}")
-            seg.segment(text)  # warmup
-            progress.advance(task)
-            t = timeit.timeit(lambda s=seg, t=text: s.segment(t), number=ITERS)
-            progress.advance(task)
-            ms = t / ITERS * 1000
-            results[name].append(ms)
-
-        _console.print(
-            f"{m:3d}x ({nchars:>7,} chars): "
-            + "  ".join(f"{name}={results[name][-1]:.1f}ms" for name in segs)
-        )
-
-# ── Plotting the Entire Ecosystem with Shaded Bounds ──
-
-COLORS: dict[str, str] = {
+# Color scheme for libraries
+COLORS = {
     "yasbd": "#0891b2",
     "pysbd": "#dc2626",
     "sentencex": "#16a34a",
@@ -84,21 +49,69 @@ COLORS: dict[str, str] = {
     "sentence-splitter": "#6b7280",
 }
 
-fig, ax1 = plt.subplots(figsize=(8, 5))
 
-for name, times in results.items():
-    color = COLORS.get(name, "black")
-    ax1.fill_between(sizes, 0, times, color=color, alpha=0.08)
-    ax1.plot(sizes, times, "o-", label=name, color=color, linewidth=2, markersize=5)
+def run_benchmark():
+    """Benchmark all segmenters across increasing text sizes."""
+    segmenters = all_segmenters(lang=LANG)
+    sizes = []
+    results = {name: [] for name in segmenters}
 
-ax1.set_xlabel("Characters", fontsize=12)
-ax1.set_ylabel("ms / iter", fontsize=12)
-ax1.set_title("Absolute Time (warm)", fontsize=13)
-ax1.legend(fontsize=9, loc="upper left")
-ax1.grid(linestyle="--", alpha=0.5)
-ax1.xaxis.set_major_formatter(lambda x, _: f"{x:,.0f}")
+    total_steps = len(MULTIPLIERS) * len(segmenters) * 2
 
-plt.tight_layout()
-output_path = Path("bench.png")
-plt.savefig(output_path, dpi=150, bbox_inches="tight")
-print(f"\nSaved {output_path.name}")
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        console=console,
+    ) as progress:
+        task = progress.add_task("Benchmarking...", total=total_steps)
+
+        for multiplier in MULTIPLIERS:
+            text = BASE_TEXT * multiplier
+            char_count = len(text)
+            sizes.append(char_count)
+
+            for name, seg in segmenters.items():
+                seg.lang = LANG
+                progress.update(
+                    task, description=f"{multiplier:3d}x ({char_count:>7,} chars) {name}"
+                )
+
+                # Warmup
+                seg.segment(text)
+                progress.advance(task)
+
+                # Timing
+                elapsed = timeit.timeit(lambda s=seg, t=text: s.segment(t), number=ITERS)
+                progress.advance(task)
+
+                ms_per_iter = elapsed / ITERS * 1000
+                results[name].append(ms_per_iter)
+
+            # Print progress line
+            times = "  ".join(f"{name}={results[name][-1]:.1f}ms" for name in segmenters)
+            console.print(f"{multiplier:3d}x ({char_count:>7,} chars): {times}")
+
+    # Plot results
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    for name, times in results.items():
+        color = COLORS.get(name, "black")
+        ax.fill_between(sizes, 0, times, color=color, alpha=0.08)
+        ax.plot(sizes, times, "o-", label=name, color=color, linewidth=2, markersize=5)
+
+    ax.set_xlabel("Characters", fontsize=12)
+    ax.set_ylabel("ms / iteration", fontsize=12)
+    ax.set_title("Sentence Boundary Detection Performance", fontsize=13)
+    ax.legend(fontsize=9, loc="upper left")
+    ax.grid(linestyle="--", alpha=0.5)
+    ax.xaxis.set_major_formatter(lambda x, _: f"{x:,.0f}")
+
+    plt.tight_layout()
+    output_path = Path("bench.png")
+    plt.savefig(output_path, dpi=150, bbox_inches="tight")
+    console.print(f"\n[green]Saved {output_path.name}[/green]")
+
+
+if __name__ == "__main__":
+    run_benchmark()
