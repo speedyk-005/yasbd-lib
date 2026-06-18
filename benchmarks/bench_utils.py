@@ -45,10 +45,10 @@ class BaseSegmenter:
         try:
             result = self._segment(text)
         except Exception as e:
-            print(f"  {self.name} [{self.lang}]... ERROR")
+            console.print(f"  {self.name} [{self.lang}]... ERROR")
             raise e
         if verbose:
-            print(f"  {self.name} [{self.lang}]: {len(result)} sents")
+            console.print(f"  {self.name} [{self.lang}]: {len(result)} sents")
         return result
 
     def _segment(self, text: str) -> list[str]:
