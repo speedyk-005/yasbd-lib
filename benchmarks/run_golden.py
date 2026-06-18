@@ -7,6 +7,30 @@ from rich.table import Table
 console = Console()
 
 
+def _score_color(pct: float) -> str:
+    if pct > 80:
+        return "green"
+    if pct > 60:
+        return "yellow"
+    return "red"
+
+
+def _evaluate_segmenter(seg, cases):
+    passed = 0
+    total = len(cases)
+    failures = []
+    for input_text, expected in cases:
+        try:
+            result = [s.strip() for s in seg.segment(input_text)]
+        except Exception as e:
+            result = [f"<ERROR: {e}>"]
+        if result == expected:
+            passed += 1
+        else:
+            failures.append((input_text, expected, result))
+    return passed, total, failures
+
+
 def run_golden_tests():
     """
     Validate SBD libraries against golden test cases.
@@ -22,21 +46,7 @@ def run_golden_tests():
     segmenters = all_segmenters(lang="en")
 
     for name, seg in sorted(segmenters.items()):
-        passed = 0
-        total = len(GOLDEN_EN_RULES_TEST_CASES)
-        failures = []
-
-        for input_text, expected in GOLDEN_EN_RULES_TEST_CASES:
-            try:
-                result = [s.strip() for s in seg.segment(input_text)]
-            except Exception as e:
-                result = [f"<ERROR: {e}>"]
-
-            if result == expected:
-                passed += 1
-            else:
-                failures.append((input_text, expected, result))
-
+        passed, total, failures = _evaluate_segmenter(seg, GOLDEN_EN_RULES_TEST_CASES)
         pct = passed / total * 100
         report.append(
             {"name": name, "passed": passed, "total": total, "pct": pct, "failures": failures}
@@ -56,8 +66,7 @@ def run_golden_tests():
     table.add_column("Score", justify="right", style="bold")
 
     for r in sorted(report, key=lambda x: -x["pct"]):
-        # Color code: green for high accuracy, yellow for medium, red for low
-        color = "green" if r["pct"] > 80 else "yellow" if r["pct"] > 60 else "red"
+        color = _score_color(r["pct"])
         table.add_row(
             r["name"], f"{r['passed']:2d}/{r['total']}", f"[{color}]{r['pct']:5.1f}%[/{color}]"
         )
