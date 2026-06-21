@@ -163,7 +163,7 @@ def _output(items, destination: Optional[str], *, label: str):
     >>> _output(["A.", "B.", "C."], tmp.name, label="test")
     >>> os.path.getsize(tmp.name) > 0
     True
-    >>> Path(tmp.name).read_text()
+    >>> open(tmp.name).read()
     '{"no": 1, "text": "A."}\\n{"no": 2, "text": "B."}\\n{"no": 3, "text": "C."}\\n'
     >>> os.unlink(tmp.name)
     """
