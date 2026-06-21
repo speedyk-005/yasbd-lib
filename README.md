@@ -488,9 +488,9 @@ pipe.preserve_quote_and_paren = False
 - [x] Regex caching (compile once per language class)
 - [x] Drop-in pysbd adapter (same API, no pipeline changes)
 - [x] StreamCleaner for OCR'd and noisy text
-- [x] CLI tool
+- [x] CLI tool (#79)
 - [x] Automatic language detection with caching (#74)
-- [x] spaCy v3 pipeline component factory (#28)
+- [x] spaCy v3 pipeline component factory (#95)
 - [ ] 22+ language targets (#20)
 
 ---
