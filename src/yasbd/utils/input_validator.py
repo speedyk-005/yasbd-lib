@@ -1,12 +1,11 @@
+from collections.abc import Callable
 from functools import wraps
 from typing import TypeVar
-from collections.abc import Callable
 
 from beartype import beartype
 from beartype.roar import BeartypeCallHintViolation
 
 from yasbd.exceptions import InvalidInputError
-
 
 F = TypeVar("F", bound=Callable)
 
