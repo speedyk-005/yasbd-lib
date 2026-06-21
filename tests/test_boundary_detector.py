@@ -37,11 +37,10 @@ def test_segment_empty_input(input_text, en_detector):
     [
         (None, InvalidInputError, "'lang' is required"),
         ("", InvalidInputError, "'lang' is required"),
-        ("xx", UnsupportedLanguageError, "Unsupported language"),
+        ("xx", UnsupportedLanguageError, "doesn't fit any cutting profile"),
     ],
 )
 def test_invalid_lang(lang, exc, msg):
-    """test that invalid/missing language codes raise the expected error."""
     with pytest.raises(exc, match=msg):
         BoundaryDetector(lang=lang)
 
