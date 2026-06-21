@@ -37,6 +37,7 @@ dependencies = [
   "retrie>=0.3.0,<1.0",
   "py3langid>=0.2.2,<1.0",
   "radicli>=0.0.25,<1.0",
+  "beartype>=0.22.6,<1.0",
 ]
 
 [project.optional-dependencies]
