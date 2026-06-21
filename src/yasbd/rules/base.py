@@ -179,13 +179,24 @@ class Rules:
 
     _REGEX_CACHED = False
     # fmt: on
-    def __init__(self):
+    def __init__(self, never_split_after: list[str] | None = None):
         """Initialize rule instance with lazy-compiled regex patterns.
 
         Patterns are compiled once per class and cached via ``_REGEX_CACHED``.
         Subclasses can override data constants (abbreviation sets, terminators, etc.)
         and the classmethod ``_compile_regex_dynamically`` will pick them up.
+
+        Args:
+            never_split_after: Strings that should never be treated as sentence
+                boundaries when they appear at the end of a text segment.
         """
+        self._never_split_after = never_split_after
+        self.CUSTOM_MID_SENTENCE_FINDER = None
+        if never_split_after:
+            self.CUSTOM_MID_SENTENCE_FINDER = re.compile(
+                rf"(?i:{_build_abbr_pattern(set(never_split_after))})"
+            )
+
         if not type(self).__dict__.get("_REGEX_CACHED", False):
             self._compile_regex_dynamically()
             type(self)._REGEX_CACHED = True
@@ -412,6 +423,10 @@ class Rules:
             for m in pat.finditer(text)
         )
         self._post_process_boundaries(main_boundaries, text)
+        if self.CUSTOM_MID_SENTENCE_FINDER:
+            main_boundaries.difference_update(
+                m.end() for m in self.CUSTOM_MID_SENTENCE_FINDER.finditer(text)
+            )
         self._remove_quote_and_paren_spans(
             main_boundaries, text, preserve_quote_and_paren
         )

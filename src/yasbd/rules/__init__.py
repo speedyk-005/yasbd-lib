@@ -20,8 +20,16 @@ def get_supported_langs() -> list[str]:
     return ["auto"] + sorted(langs)
 
 
-def load_rule(lang: str) -> Rules:
+def load_rule(
+    lang: str,
+    never_split_after: list[str] | None = None
+) -> Rules:
     """Import and instantiate the rule module for *lang*.
+
+    Args:
+        lang: ISO language code.
+        never_split_after: Optional strings that should never be treated as
+            sentence boundaries.
 
     Returns:
         The instantiated rule object.
@@ -43,4 +51,5 @@ def load_rule(lang: str) -> Rules:
             msg += f"\n\n💭 Perhaps you meant {' or '.join(repr(c) for c in close)}?"
         raise UnsupportedLanguageError(msg) from None
 
-    return getattr(rule_module, f"{lang.capitalize()}Rules")()
+    rule_cls = getattr(rule_module, f"{lang.capitalize()}Rules")
+    return rule_cls(never_split_after)

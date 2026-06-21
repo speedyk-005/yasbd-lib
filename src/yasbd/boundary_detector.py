@@ -24,6 +24,7 @@ class BoundaryDetector:
         *,
         preserve_quote_and_paren: bool = True,
         verbose: bool = False,
+        never_split_after: list[str] | None = None,
     ):
         """Initialize the segmenter.
 
@@ -34,10 +35,13 @@ class BoundaryDetector:
                 mind a slight decrease in both.
             preserve_quote_and_paren: Do not split on terminators inside
                 quoted or parenthesised text.
+            never_split_after: Optional strings that should never be treated
+                as sentence boundaries.
             verbose: Enable verbose logging.
         """
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
+        self._never_split_after = never_split_after
         self._rule_cache: OrderedDict[str, object] = OrderedDict()
 
         if not lang:
@@ -78,6 +82,11 @@ class BoundaryDetector:
         self._lang = lang
         log_info(self.verbose, "Language switched from {} to {}", old_lang, self._lang)
 
+    @property
+    def never_split_after(self) -> list[str] | None:
+        """Strings that should never be treated as sentence boundaries."""
+        return self._never_split_after
+
     def _get_rule(self, lang: str, snippet: str = "") -> object:
         """Return the rule object for *lang*, using a 5-entry LRU cache.
 
@@ -97,7 +106,7 @@ class BoundaryDetector:
         if lang in self._rule_cache:
             self._rule_cache.move_to_end(lang)
             return self._rule_cache[lang]
-        rule = load_rule(lang)
+        rule = load_rule(lang, self._never_split_after)
         self._rule_cache[lang] = rule
         if len(self._rule_cache) > 5:
             self._rule_cache.popitem(last=False)
