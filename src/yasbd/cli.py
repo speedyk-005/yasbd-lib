@@ -5,7 +5,7 @@ import stat
 import subprocess
 import sys
 from collections.abc import Callable
-from pathlib import Path
+from io import TextIOBase
 from typing import Optional
 
 from radicli import Arg, Radicli
@@ -105,13 +105,14 @@ def _create_external_cleaner(
     return external_cleaner
 
 
-def _resolve_input(text: Optional[str], file: Optional[str]) -> str:
-    """Resolve input text from a positional string, --file option, or stdin pipe.
+def _resolve_input(text: Optional[str], file: Optional[str]) -> str | TextIOBase:
+    """Resolve input as text string or opened file handle.
+
+    Returns a string for positional/pipe input, or an opened file object
+    for --file (zero-copy, passed directly to BoundaryDetector).
 
     >>> _resolve_input("Hello.", None)
     'Hello.'
-    >>> _resolve_input(None, "pyproject.toml").startswith("[project]")
-    True
     >>> _resolve_input("hi", "f.txt")  # doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     SystemExit
@@ -121,10 +122,12 @@ def _resolve_input(text: Optional[str], file: Optional[str]) -> str:
         sys.exit(1)
     if text is None and file is None:
         if _stdin_is_pipe():
-            return sys.stdin.read()
+            return sys.stdin
         print("Error: provide text argument or --file.", file=sys.stderr)
         sys.exit(1)
-    return text if text is not None else Path(file).read_text(encoding="utf-8")
+    if file is not None:
+        return open(file, encoding="utf-8")  # noqa: SIM115 — caller owns the handle
+    return text  # type: ignore[return-value]
 
 
 def _to_json(no: int, item) -> str:
