@@ -210,7 +210,7 @@ class Rules:
                 [-*+]|      #  Markdown style list
 
                 # Numbered/alphabetical list
-                (?:\d{{1,2}}|[a-eA-Eα-εΑ-Ε])
+                (?:\d{{1,2}}|[a-eA-Eα-εΑ-Εа-еА-Е])
                 (?:{cls.DOT_LIKE_PATTERN}|\)){{1,2}}
             )
             (?=\s)  # Must followed by a space
