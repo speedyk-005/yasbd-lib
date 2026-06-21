@@ -1,9 +1,8 @@
 from collections.abc import Iterator
 from io import StringIO, TextIOBase
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from yasbd.utils.cleaner import StreamCleaner
+from yasbd.utils.cleaner_stub import StreamCleanerStub
+from yasbd.utils.input_validator import validate_input
 
 
 class ParagraphStream:
@@ -22,9 +21,10 @@ class ParagraphStream:
         ['Hello\\n', 'World']
     """
 
+    @validate_input
     def __init__(
         self,
-        source: "str | TextIOBase | StreamCleaner",
+        source: str | TextIOBase | StreamCleanerStub,
         skip_empty_lines: bool = False,
     ) -> None:
         """Initialize ParagraphStream.
