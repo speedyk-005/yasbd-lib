@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Burmese (my) language support** ([#104](https://github.com/speedyk-005/yasbd-lib/pull/104)).
+- **Hindi (hi) language support** ([#108](https://github.com/speedyk-005/yasbd-lib/pull/108)).
 
 ### Changed
 - **CLI zero-copy file input** ([#107](https://github.com/speedyk-005/yasbd-lib/pull/107)): `--file` and stdin pipe now pass file handles directly to the detector instead of reading the entire file into memory first.

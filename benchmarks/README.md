@@ -1316,11 +1316,12 @@ The meeting is at 2 p.m. Mwen pral vini.
 
 ### Additional accuracy test
 
-  - [Russian — yasbd vs razdel](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4632783363)
+  - [Amharic — yasbd vs pysbd vs sentencex vs nupunkt](https://github.com/speedyk-005/yasbd-lib/pull/91#issue-4653240174)
   - [Arabic — yasbd vs pysbd vs sentencex](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4634485157)
   - [Chinese — yasbd vs pysbd vs sentencex vs sentsplit](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4637433142)
+  - [Hindi — yasbd vs pysbd vs sentencex vs nupunkt vs indicnlp](https://github.com/speedyk-005/yasbd-lib/pull/109#issue-4719976898)
   - [Portuguese — yasbd vs pysbd vs sentencex](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4639723570)
-  - [Amharic — yasbd vs pysbd vs sentencex vs nupunkt](https://github.com/speedyk-005/yasbd-lib/pull/91#issue-4653240174)
+  - [Russian — yasbd vs razdel](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4632783363)
   - [Thai — yasbd vs Sentencex vs nupunkt vs PyThaiNLP](https://github.com/speedyk-005/yasbd-lib/pull/100#issue-4676465427)
 
 ## Conclusion
