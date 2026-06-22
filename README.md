@@ -220,6 +220,12 @@ The two primary APIs are detect() and segment().
 
 Both methods accept plain strings, open text streams (TextIOBase), or a StreamCleaner instance. Inputs are processed lazily as a stream of paragraphs, allowing large documents to be handled without loading everything into memory at once.
 
+> [!WARNING]
+> When passing an open file handle, it gets wrapped in a ``ParagraphStream``
+> that closes the handle on garbage collection. If you need deterministic
+> cleanup, call ``.close()`` on the handle after the generator is exhausted,
+> or use a ``with`` block.
+
 - `detect()` yields sentence boundary offsets.
 - `segment()` yields sentence strings.
 
