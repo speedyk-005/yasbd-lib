@@ -498,6 +498,7 @@ pipe.preserve_quote_and_paren = False
 - [x] Automatic language detection with caching (#74)
 - [x] spaCy v3 pipeline component factory (#95)
 - [ ] 22+ language targets (#20)
+- [ ] Support for external language packs (module-based plugins)
 
 ---
 
