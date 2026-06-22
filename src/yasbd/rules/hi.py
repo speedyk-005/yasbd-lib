@@ -34,21 +34,21 @@ class HiRules(Rules):
 
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         # Publishing, Citations, Layout, and Document Structures
-        "पृ", "चि", "भा", "सं", "अनु", "अध", "पैरा", "क्र", "उदा", "टि", "कृ",
+        "पृ", "चि", "भा", "अनु", "अध", "पैरा", "क्र", "उदा", "टि", "कृ",
         "अध्या", "परि", "पु", "पन्", "स्त", "सा", "संपा", "अनुवा", "प्रका",
         "सार", "विव", "ता", "तुल", "सू", "सूच",
 
         # Legal, Structural, and Cross-References
         "ध", "धारा", "उ.ध", "उपदफ़ा", "नि", "नियम",
-        "आदे", "या", "याचि", "प्रक", "मु", "मुक", "ब",
+        "आदे", "या", "याचि", "प्रक", "मुक", "ब",
     }
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
         # Structural Connections, Document Locators
-        "बनाम", "उदा", "तुल", "वि.द्र", "पु.श्च", "अनु", "क्र", "स्था",
+        "बनाम", "वि.द्र", "पु.श्च", "स्था",
 
         # Address
-        "चौ", "मा", "जि"
+        "चौ", "जि"
     }
 
     COMMON_SENT_STARTERS = {
