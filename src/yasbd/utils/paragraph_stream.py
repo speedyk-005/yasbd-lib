@@ -48,6 +48,7 @@ class ParagraphStream:
         return self
 
     def _flush_eof(self) -> str:
+        """Flush remaining buffer content or raise StopIteration at EOF."""
         if self._buffer:
             paragraph = "".join(self._buffer)
             self._buffer = []
@@ -95,6 +96,14 @@ class ParagraphStream:
                 continue
 
             self._buffer.append(line)
+
+    def close(self) -> None:
+        """Close the underlying source stream if applicable."""
+        if hasattr(self, "_lines") and hasattr(self._lines, "close"):
+            self._lines.close()
+
+    def __del__(self) -> None:
+        self.close()
 
 
 if __name__ == "__main__":  # pragma: no cover

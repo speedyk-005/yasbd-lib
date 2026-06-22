@@ -13,11 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Burmese (my) language support** ([#104](https://github.com/speedyk-005/yasbd-lib/pull/104)).
 
 ### Changed
+- **CLI zero-copy file input** ([#107](https://github.com/speedyk-005/yasbd-lib/pull/107)): `--file` and stdin pipe now pass file handles directly to the detector instead of reading the entire file into memory first.
 - **Refactored benchmark scripts** ([#105](https://github.com/speedyk-005/yasbd-lib/pull/105)): wrapped all benchmark scripts in `run_*` functions with `if __name__ == "__main__"` guards, migrated to `rich` console output, and cleaned up `bench_utils.py` (removed unused `langs` attributes, added docstrings, renamed `_console` for consistency).
 - **Thai & Burmese ellipsis regex removal**: removed redundant `MID_SENTENCE_FINDER_LST` ellipsis pattern since `.` is not a sentence terminator in either language.
 - **Input validation refactor** ([#106](https://github.com/speedyk-005/yasbd-lib/pull/106)): Replaced Pydantic's `validate_call` with beartype.
 
 ### Fixed
+- **ParagraphStream auto-cleanup** ([#107](https://github.com/speedyk-005/yasbd-lib/pull/107)): added ``__del__`` and ``close()`` to ``ParagraphStream`` so opened file handles are closed on garbage collection.
 - **List marker detection for non-Latin scripts** ([#103](https://github.com/speedyk-005/yasbd-lib/pull/103)): expanded `VERTICAL_LIST_START_FINDER` and `HORIZONTAL_LIST_FINDER` to accept Burmese, Devanagari, and other dot-like characters (။, ।, ·, •, etc.).
 - **Thai & Burmese UTTERANCE_FINDER removal** ([#104](https://github.com/speedyk-005/yasbd-lib/pull/104)): removed `UTTERANCE_FINDER` and `STANDALONE_UTTERANCES` set from both `th.py` and `my.py` to prevent false sentence boundaries after discourse particles.
 
