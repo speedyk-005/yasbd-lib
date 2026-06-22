@@ -80,9 +80,6 @@ uv pip install -e ".[dev]"
 
 # Generate API_REFERENCES.md from docstrings
 bash scripts/gen_api_docs.sh
-
-# Generate/update README TOC (GitHub-compatible)
-npx doctoc --github README.md
 ```
 
 ## Quality Guidelines

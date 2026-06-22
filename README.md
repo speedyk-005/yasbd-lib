@@ -19,9 +19,8 @@
 
 ---
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+<details>
+<summary>📑 Table of Contents (Click me!)</summary>
 
 - [🎬 Manifesto](#-manifesto)
   - [✂ Why do I need a pair of "smart scissors" for text?](#-why-do-i-need-a-pair-of-smart-scissors-for-text)
@@ -46,7 +45,7 @@
 - [🤝 Contributors](#-contributors)
 - [📜 Last note](#-last-note)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+</details>
 
 ---
 
