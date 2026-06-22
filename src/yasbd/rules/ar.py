@@ -79,6 +79,7 @@ class ArRules(Rules):
         "أوضح", "يوضح", "أوضحت", "موضح", "موضحا",
     }
 
+    # fmt: on
     @classmethod
     def _compile_regex_dynamically(cls):
         """Override base regex compilation to handle ellipsis protection."""
@@ -87,4 +88,3 @@ class ArRules(Rules):
             # Never split after ellipsis (ASCII, Unicode, full-width)
             re.compile(rf"{cls.DOTS_PATTERN}{{3,}}|\u2026")
         )
-# fmt: on

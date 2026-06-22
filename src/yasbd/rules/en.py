@@ -111,11 +111,10 @@ class EnRules(Rules):
            """, re.X
         )
 
+    # fmt: on
     def _post_process_boundaries(
         self, main_boundaries: set[int], text: str
     ) -> None:
         main_boundaries.update(
             m.end() for m in self.ENDING_STREET_ABBRVS_FINDER.finditer(text)
         )
-
-# fmt: on

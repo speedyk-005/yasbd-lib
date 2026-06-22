@@ -77,6 +77,7 @@ class EsRules(Rules):
         "Dónde", "Porqué", "Porque",
     }
 
+    # fmt: on
     @classmethod
     def _compile_regex_dynamically(cls):
         """Override base regex compilation to fix pronouns abbrvs behavior."""
@@ -94,5 +95,3 @@ class EsRules(Rules):
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
             """, re2.X)
         )
-
-# fmt: on

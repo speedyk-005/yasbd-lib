@@ -36,6 +36,7 @@ class JaRules(Rules):
         "ように", "らしいと", "そうだと",
     }
 
+    # fmt: on
     @classmethod
     def _compile_regex_dynamically(cls):
         """Override base regex compilation to fix geopolitical split when used as adj"""
@@ -45,5 +46,3 @@ class JaRules(Rules):
             # Full-width geopolitical abbreviations
             re.compile(r"(?:[\uFF21-\uFF3A\uFF41-\uFF5A\uFF10-\uFF19]．){1,5}")
         )
-
-# fmt: on

@@ -20,6 +20,7 @@ class ZhRules(Rules):
         "表示", "认为", "坦言", "强调", "写道", "报道", "解释", "反驳"
     }
 
+    # fmt: on
     @classmethod
     def _compile_regex_dynamically(cls):
         """Override base regex compilation to fix geopolitical split when used as adj"""
@@ -29,5 +30,3 @@ class ZhRules(Rules):
             # Full-width geopolitical abbreviations
             re.compile(r"(?:[\uFF21-\uFF3A\uFF41-\uFF5A\uFF10-\uFF19]．){1,5}")
         )
-
-# fmt: on
