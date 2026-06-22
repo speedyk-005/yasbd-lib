@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.7.0] - Unreleased
+## [0.7.0] - 2026-06-22
 
 ### Added
 - **Burmese (my) language support** ([#104](https://github.com/speedyk-005/yasbd-lib/pull/104)).
