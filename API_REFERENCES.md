@@ -1,6 +1,7 @@
 # Table of Contents
 
 * [yasbd](#yasbd)
+  * [register\_spacy\_component](#yasbd.register_spacy_component)
 * [yasbd.boundary\_detector](#yasbd.boundary_detector)
   * [BoundaryDetector](#yasbd.boundary_detector.BoundaryDetector)
     * [\_\_init\_\_](#yasbd.boundary_detector.BoundaryDetector.__init__)
@@ -20,19 +21,25 @@
   * [CleanStepError](#yasbd.exceptions.CleanStepError)
 * [yasbd.rules](#yasbd.rules)
   * [get\_supported\_langs](#yasbd.rules.get_supported_langs)
+  * [load\_rule](#yasbd.rules.load_rule)
+* [yasbd.rules.am](#yasbd.rules.am)
 * [yasbd.rules.ar](#yasbd.rules.ar)
 * [yasbd.rules.base](#yasbd.rules.base)
   * [Rules](#yasbd.rules.base.Rules)
     * [\_\_init\_\_](#yasbd.rules.base.Rules.__init__)
     * [apply](#yasbd.rules.base.Rules.apply)
 * [yasbd.rules.de](#yasbd.rules.de)
+* [yasbd.rules.el](#yasbd.rules.el)
 * [yasbd.rules.en](#yasbd.rules.en)
 * [yasbd.rules.es](#yasbd.rules.es)
 * [yasbd.rules.fr](#yasbd.rules.fr)
 * [yasbd.rules.ht](#yasbd.rules.ht)
+* [yasbd.rules.it](#yasbd.rules.it)
 * [yasbd.rules.ja](#yasbd.rules.ja)
+* [yasbd.rules.my](#yasbd.rules.my)
 * [yasbd.rules.pt](#yasbd.rules.pt)
 * [yasbd.rules.ru](#yasbd.rules.ru)
+* [yasbd.rules.th](#yasbd.rules.th)
 * [yasbd.rules.zh](#yasbd.rules.zh)
 * [yasbd.utils](#yasbd.utils)
 * [yasbd.utils.cleaner](#yasbd.utils.cleaner)
@@ -40,22 +47,50 @@
     * [\_\_init\_\_](#yasbd.utils.cleaner.StreamCleaner.__init__)
 * [yasbd.utils.input\_validator](#yasbd.utils.input_validator)
   * [validate\_input](#yasbd.utils.input_validator.validate_input)
+* [yasbd.utils.language\_classifier](#yasbd.utils.language_classifier)
+  * [classify\_language](#yasbd.utils.language_classifier.classify_language)
 * [yasbd.utils.logger](#yasbd.utils.logger)
   * [log\_info](#yasbd.utils.logger.log_info)
 * [yasbd.utils.paragraph\_stream](#yasbd.utils.paragraph_stream)
   * [ParagraphStream](#yasbd.utils.paragraph_stream.ParagraphStream)
     * [\_\_init\_\_](#yasbd.utils.paragraph_stream.ParagraphStream.__init__)
     * [\_\_next\_\_](#yasbd.utils.paragraph_stream.ParagraphStream.__next__)
+    * [close](#yasbd.utils.paragraph_stream.ParagraphStream.close)
 * [yasbd.utils.pysbd\_adapter](#yasbd.utils.pysbd_adapter)
   * [TextSpan](#yasbd.utils.pysbd_adapter.TextSpan)
   * [Segmenter](#yasbd.utils.pysbd_adapter.Segmenter)
     * [\_\_init\_\_](#yasbd.utils.pysbd_adapter.Segmenter.__init__)
     * [sentences\_with\_char\_spans](#yasbd.utils.pysbd_adapter.Segmenter.sentences_with_char_spans)
     * [segment](#yasbd.utils.pysbd_adapter.Segmenter.segment)
+* [yasbd.utils.spacy\_component](#yasbd.utils.spacy_component)
+  * [YasbdComponent](#yasbd.utils.spacy_component.YasbdComponent)
+    * [\_\_call\_\_](#yasbd.utils.spacy_component.YasbdComponent.__call__)
+  * [create\_yasbd](#yasbd.utils.spacy_component.create_yasbd)
 
 <a id="yasbd"></a>
 
 # yasbd
+
+<a id="yasbd.register_spacy_component"></a>
+
+#### register\_spacy\_component
+
+```python
+def register_spacy_component()
+```
+
+Register the yasbd spaCy pipeline component on demand.
+
+Call this to add the ``yasbd`` component factory to spaCy's registry.
+Requires spaCy v3+ to be installed.
+
+Examples
+--------
+>>> import spacy
+>>> from yasbd import register_spacy_component
+>>> register_spacy_component()
+>>> nlp = spacy.blank("en")
+>>> nlp.add_pipe("yasbd", first=True, config={"lang": "en"})
 
 <a id="yasbd.boundary_detector"></a>
 
@@ -75,7 +110,7 @@ class BoundaryDetector()
 
 ```python
 @validate_input
-def __init__(lang: str = "en",
+def __init__(lang: str | None = None,
              *,
              preserve_quote_and_paren: bool = True,
              verbose: bool = False)
@@ -85,7 +120,10 @@ Initialize the segmenter.
 
 **Arguments**:
 
-- `lang` - Two chars ISO language code (e.g. en, fr, ...).
+- `lang` - Two chars ISO language code (e.g., 'en', 'fr', ...).
+  Use 'auto' for automatic language detection via py3langid.
+  Explicit is faster and more reliable; use auto if you don't
+  mind a slight decrease in both.
 - `preserve_quote_and_paren` - Do not split on terminators inside
   quoted or parenthesised text.
 - `verbose` - Enable verbose logging.
@@ -99,7 +137,7 @@ Initialize the segmenter.
 def lang() -> str
 ```
 
-ISO language code of the active rule set. This property is settable at runtime via `detector.lang = 'xx'` to switch the active language rules dynamically.
+ISO language code of the active rule set.
 
 <a id="yasbd.boundary_detector.BoundaryDetector.detect"></a>
 
@@ -344,6 +382,29 @@ def get_supported_langs() -> list[str]
 
 Discover and cache supported language codes from the rules directory.
 
+<a id="yasbd.rules.load_rule"></a>
+
+#### load\_rule
+
+```python
+def load_rule(lang: str) -> Rules
+```
+
+Import and instantiate the rule module for *lang*.
+
+**Returns**:
+
+  The instantiated rule object.
+  
+
+**Raises**:
+
+- `UnsupportedLanguageError` - If no rule module exists for *lang*.
+
+<a id="yasbd.rules.am"></a>
+
+# yasbd.rules.am
+
 <a id="yasbd.rules.ar"></a>
 
 # yasbd.rules.ar
@@ -404,6 +465,10 @@ quote/paren spans, list markers).
 
 # yasbd.rules.de
 
+<a id="yasbd.rules.el"></a>
+
+# yasbd.rules.el
+
 <a id="yasbd.rules.en"></a>
 
 # yasbd.rules.en
@@ -420,9 +485,17 @@ quote/paren spans, list markers).
 
 # yasbd.rules.ht
 
+<a id="yasbd.rules.it"></a>
+
+# yasbd.rules.it
+
 <a id="yasbd.rules.ja"></a>
 
 # yasbd.rules.ja
+
+<a id="yasbd.rules.my"></a>
+
+# yasbd.rules.my
 
 <a id="yasbd.rules.pt"></a>
 
@@ -431,6 +504,10 @@ quote/paren spans, list markers).
 <a id="yasbd.rules.ru"></a>
 
 # yasbd.rules.ru
+
+<a id="yasbd.rules.th"></a>
+
+# yasbd.rules.th
 
 <a id="yasbd.rules.zh"></a>
 
@@ -476,7 +553,7 @@ and various regex cleanup rules across paragraphs.
   >>> StreamCleaner("Hello world", steps_to_skip=["nothing"])
   Traceback (most recent call last):
   ...
-- `ValueError` - Invalid step(s) to skip: ...
+- `yasbd.exceptions.InvalidInputError` - 🧩 Oops! Unknown step(s): 'nothing'...
   >>> list(StreamCleaner("Hello™ world", extra_steps=[lambda t: t.replace("™", "")]))
   ['Hello world']
   >>> list(StreamCleaner("hello", extra_steps=[lambda t: 1/0]))
@@ -522,13 +599,63 @@ Implements the iterator protocol. Yields cleaned paragraph strings.
 #### validate\_input
 
 ```python
-def validate_input(fn)
+def validate_input(fn: F) -> F
 ```
 
-A decorator that validates function inputs and outputs
+Validate function arguments and return values using beartype.
 
-A wrapper around Pydantic's `validate_call` that catches `ValidationError`
-and re-raises it as a more user-friendly `InvalidInputError`.
+<a id="yasbd.utils.language_classifier"></a>
+
+# yasbd.utils.language\_classifier
+
+<a id="yasbd.utils.language_classifier.classify_language"></a>
+
+#### classify\_language
+
+```python
+@lru_cache(maxsize=12)
+def classify_language(text: str) -> tuple[str, float]
+```
+
+Classify text with a preference for expected languages.
+
+This function avoids the explicit ``py3langid.LanguageIdentifier`` initialization
+and its associated cold-start cost by relying on this convenience API.
+
+The algorithm works as follows:
+1. Obtain the ranked language predictions.
+2. Look for preferred languages within the top ``TOP_K`` results.
+3. Only consider preferred languages whose score is within
+``MAX_GAP`` of the top prediction.
+4. If no suitable preferred language is found, fall back to all
+ranked candidates.
+5. Compute a normalized confidence score using a softmax over the
+selected candidates.
+
+**Arguments**:
+
+- `text` - The text to classify.
+  
+
+**Returns**:
+
+  A tuple containing:
+  - The predicted ISO 639-1 language code.
+  - A confidence score between 0.0 and 1.0.
+  
+
+**Examples**:
+
+  >>> language, confidence = classify_language("kiyès ?")
+  >>> language
+  'ht'
+  >>> 0.0 <= confidence <= 1.0
+  True
+  
+
+**Raises**:
+
+- `ValueError` - If the detector returns no language scores.
 
 <a id="yasbd.utils.logger"></a>
 
@@ -591,7 +718,8 @@ retaining state across calls and yielding reconstructed paragraph blocks.
 #### \_\_init\_\_
 
 ```python
-def __init__(source: "str | TextIOBase | StreamCleaner",
+@validate_input
+def __init__(source: str | TextIOBase | StreamCleanerStub,
              skip_empty_lines: bool = False) -> None
 ```
 
@@ -622,6 +750,16 @@ Yields paragraphs reconstructed as strings, preserving original line endings.
 **Raises**:
 
 - `StopIteration` - When there are no more paragraphs to return.
+
+<a id="yasbd.utils.paragraph_stream.ParagraphStream.close"></a>
+
+#### close
+
+```python
+def close() -> None
+```
+
+Close the underlying source stream if applicable.
 
 <a id="yasbd.utils.pysbd_adapter"></a>
 
@@ -705,4 +843,47 @@ Segments *text* into sentences.
 
   A list of sentences (strings) by default, or a list of TextSpan
   objects if ``char_span`` was set to ``True``.
+
+<a id="yasbd.utils.spacy_component"></a>
+
+# yasbd.utils.spacy\_component
+
+<a id="yasbd.utils.spacy_component.YasbdComponent"></a>
+
+## YasbdComponent Objects
+
+```python
+class YasbdComponent()
+```
+
+A pipeline component for spaCy.
+
+<a id="yasbd.utils.spacy_component.YasbdComponent.__call__"></a>
+
+#### \_\_call\_\_
+
+```python
+def __call__(doc: Doc) -> Doc
+```
+
+Assign sentence sent_ends using yasbd.
+
+<a id="yasbd.utils.spacy_component.create_yasbd"></a>
+
+#### create\_yasbd
+
+```python
+@Language.factory(
+    "yasbd",
+    default_config={
+        "lang": None,
+        "preserve_quote_and_paren": True,
+        "verbose": False,
+    },
+)
+def create_yasbd(nlp: Language, name: str, lang: str | None,
+                 preserve_quote_and_paren: bool, verbose: bool)
+```
+
+Create a spaCy component powered by yasbd.
 
