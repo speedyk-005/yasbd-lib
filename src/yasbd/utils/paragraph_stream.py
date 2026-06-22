@@ -47,6 +47,14 @@ class ParagraphStream:
     def __iter__(self) -> Iterator[str]:
         return self
 
+    def close(self) -> None:
+        """Close the underlying source stream if applicable."""
+        if hasattr(self._lines, "close"):
+            self._lines.close()
+
+    def __del__(self) -> None:
+        self.close()
+
     def _flush_eof(self) -> str:
         if self._buffer:
             paragraph = "".join(self._buffer)
