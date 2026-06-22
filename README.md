@@ -20,7 +20,7 @@
 ---
 
 <details>
-<summary>📑 Table of Contents</summary>
+<summary>📑 Table of Contents (Click me!)</summary>
 
 - [🎬 Manifesto](#-manifesto)
   - [✂ Why do I need a pair of "smart scissors" for text?](#-why-do-i-need-a-pair-of-smart-scissors-for-text)
