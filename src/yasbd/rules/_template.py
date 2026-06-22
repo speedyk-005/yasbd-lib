@@ -49,6 +49,7 @@ class LangRules(Rules):
     # Verbs commonly used for dialogue attribution or reported speech.
     REPORTING_WORDS = {...}
 
+    # fmt: on
     def _post_process_boundaries(
         self, main_boundaries: set[int], text: str
     ) -> None:
@@ -56,4 +57,3 @@ class LangRules(Rules):
         passes cannot catch. Override and mutate ``main_boundaries``.
         """
         pass
-# fmt: on

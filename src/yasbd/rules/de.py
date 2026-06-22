@@ -97,6 +97,7 @@ class DeRules(Rules):
         "samstag", "sonntag",
      }
 
+    # fmt: on
     @classmethod
     def _compile_regex_dynamically(cls):
         """Override base regex compilation to handle ellipsis, ord num and time"""
@@ -137,4 +138,3 @@ class DeRules(Rules):
         main_boundaries.update(
             m.end() for m in self.ENDING_STREET_ABBRVS_FINDER.finditer(text)
         )
-# fmt: on
