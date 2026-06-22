@@ -108,8 +108,8 @@ def _create_external_cleaner(
 def _resolve_input(text: Optional[str], file: Optional[str]) -> str | TextIOBase:
     """Resolve input as text string or opened file handle.
 
-    Returns a string for positional/pipe input, or an opened file object
-    for --file (zero-copy, passed directly to BoundaryDetector).
+    Returns a string for positional text argument, or an opened file object
+    for --file/pipe (zero-copy, passed directly to BoundaryDetector).
 
     >>> _resolve_input("Hello.", None)
     'Hello.'
