@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.8.0] - Unreleased
+
+### Added
+- **Korean (ko) language support** ([#113](https://github.com/speedyk-005/yasbd-lib/pull/113)).
+
+---
+
 ## [0.7.0] - 2026-06-22
 
 ### Added
