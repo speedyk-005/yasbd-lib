@@ -495,6 +495,7 @@ Need support for a language that isn't built in? Plug in your own lang pack. A l
 
 ```python
 from yasbd.rules import register_lang_packs
+# Or from yasbd import register_lang_packs
 
 register_lang_packs(["my_yasbd_pack"])
 ```
@@ -503,6 +504,7 @@ To reset the registry at runtime:
 
 ```python
 from yasbd.rules import clear_lang_packs
+# Or from yasbd import clear_lang_packs
 
 clear_lang_packs()
 ```
