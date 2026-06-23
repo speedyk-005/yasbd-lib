@@ -55,13 +55,15 @@ def register_plugins(names: list[str]) -> None:
 
         for profile in profiles:
             try:
+                assert issubclass(profile, Rules), "Must inherit from yasbd.rules.Rules"
                 instance = profile()
                 _handshake_profile(instance)
                 lang_code = profile.__name__.removesuffix("Rules").lower()
                 _PLUGIN_REGISTRY[lang_code] = profile
             except Exception as e:
                 raise PluginError(
-                    f"Validation failed for {profile.__name__!r} in plugin {name!r}."
+                    f"Validation failed for {profile.__name__!r} in plugin {name!r}.\n"
+                    f"Details: {str(e)}"
                 ) from e
 
 

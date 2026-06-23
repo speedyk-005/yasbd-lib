@@ -40,6 +40,18 @@ def test_no_profiles():
         register_plugins(["_test_plugin_noprofiles"])
 
 
+def test_non_rules_profile():
+    """Test that register_plugins rejects a non-Rules subclass in PROFILES."""
+
+    class NotRules:
+        def apply(self, text, preserve_quote_and_paren):
+            return [len(text)]
+
+    _make_fake_plugin("_test_plugin_notrules", profiles=[NotRules])
+    with pytest.raises(PluginError, match="Validation failed for 'NotRules'"):
+        register_plugins(["_test_plugin_notrules"])
+
+
 def test_register_and_load():
     """Test that register_plugins stores a profile and load_rule returns an instance."""
 
