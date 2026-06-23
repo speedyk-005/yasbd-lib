@@ -1,12 +1,11 @@
 import difflib
-import re
 from functools import cache
 from importlib import import_module
 from pathlib import Path
 
 from beartype.door import die_if_unbearable
 
-from yasbd.exceptions import LangPackError, UnsupportedLanguageError, YasbdError
+from yasbd.exceptions import LangPackError, UnsupportedLanguageError
 from yasbd.rules.base import Rules
 
 # Language packs loaded via register_lang_packs() register their profiles here.
