@@ -23,16 +23,13 @@ def _validate_profile(profile: type, name: str) -> None:
             f"Profile {profile.__name__!r} in module {name!r} does not inherit from Rules."
         )
 
-    try:
-        instance = profile()
-        result = instance.apply("Hello world.", preserve_quote_and_paren=True)
-        if not isinstance(result, list) or not all(isinstance(i, int) for i in result):
-            raise TypeError(
-                f"Handshake failed for {profile.__name__!r}: "
-                f"apply() returned {type(result).__name__}, expected list[int]"
-            )
-    except Exception as e:
-        raise RuntimeError(f"Handshake failed for {profile.__name__!r}: {e}") from e
+    instance = profile()
+    result = instance.apply("Hello world.", preserve_quote_and_paren=True)
+    if not isinstance(result, list) or not all(isinstance(i, int) for i in result):
+        raise TypeError(
+            f"Handshake failed for {profile.__name__!r}: "
+            f"apply() returned {type(result).__name__}, expected list[int]"
+        )
 
 
 @validate_input
@@ -76,7 +73,7 @@ def register_lang_packs(names: list[str]) -> None:
                 _validate_profile(profile, name)
                 lang_code = profile.__name__.removesuffix("Rules").lower()
                 _LANG_PACK_REGISTRY[lang_code] = profile
-            except Exception as e:
+            except (TypeError, RuntimeError) as e:
                 raise LangPackError(
                     f"Validation failed for {profile.__name__!r} in module {name!r}.\n"
                     f"Details: {str(e)}"
