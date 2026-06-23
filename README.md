@@ -507,6 +507,9 @@ from yasbd.rules import clear_lang_packs
 clear_lang_packs()
 ```
 
+> [!CAUTION]
+> **Security**: `register_lang_packs()` imports arbitrary Python modules by name. Only load lang packs from sources you trust — an untrusted module can execute arbitrary code at import time.
+
 Want to build a lang pack? Start with the [language template](https://github.com/speedyk-005/yasbd-lib/blob/main/src/yasbd/rules/_template.py).
 
 ---

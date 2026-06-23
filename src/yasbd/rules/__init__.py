@@ -29,6 +29,11 @@ def register_lang_packs(names: list[str]) -> None:
     Each module must expose a ``PROFILES`` list of ``Rules`` subclasses.
     All validated profiles are stored in ``_LANG_PACK_REGISTRY``.
 
+    Caution:
+        This function imports arbitrary Python modules by name. Only load lang
+        packs from sources you trust — an untrusted module can execute
+        arbitrary code at import time.
+
     Args:
         names: Module names resolvable from the Python path
             (e.g. ``["yasbd_indic", "yasbd_legal"]``).
