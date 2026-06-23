@@ -19,6 +19,8 @@
   * [UnsupportedLanguageError](#yasbd.exceptions.UnsupportedLanguageError)
   * [InvalidInputError](#yasbd.exceptions.InvalidInputError)
   * [CleanStepError](#yasbd.exceptions.CleanStepError)
+* [yasbd.normalize](#yasbd.normalize)
+  * [normalize\_lang](#yasbd.normalize.normalize_lang)
 * [yasbd.rules](#yasbd.rules)
   * [get\_supported\_langs](#yasbd.rules.get_supported_langs)
   * [load\_rule](#yasbd.rules.load_rule)
@@ -33,6 +35,7 @@
 * [yasbd.rules.en](#yasbd.rules.en)
 * [yasbd.rules.es](#yasbd.rules.es)
 * [yasbd.rules.fr](#yasbd.rules.fr)
+* [yasbd.rules.hi](#yasbd.rules.hi)
 * [yasbd.rules.ht](#yasbd.rules.ht)
 * [yasbd.rules.it](#yasbd.rules.it)
 * [yasbd.rules.ja](#yasbd.rules.ja)
@@ -367,6 +370,39 @@ class CleanStepError(YasbdError, TypeError)
 
 Raised when a StreamCleaner extra step fails (non-callable or non-str return).
 
+<a id="yasbd.normalize"></a>
+
+# yasbd.normalize
+
+<a id="yasbd.normalize.normalize_lang"></a>
+
+#### normalize\_lang
+
+```python
+@validate_input
+def normalize_lang(lang_code: str) -> str
+```
+
+Normalize a language tag to an ISO-639-1 language code.
+
+The helper is explicit and opt-in. It does not alter the core
+``BoundaryDetector`` language handling.
+
+**Arguments**:
+
+- `lang_code` - A language code or tag, such as ``"EN"``, ``"en-US"``,
+  or ``"en-Latn"``.
+
+**Returns**:
+
+  A two-letter ISO-639-1 language code.
+
+**Raises**:
+
+- `InvalidInputError` - If the optional normalization dependency is missing,
+  the tag cannot be parsed, or the tag does not resolve to a
+  two-letter ISO-639-1 language code.
+
 <a id="yasbd.rules"></a>
 
 # yasbd.rules
@@ -480,6 +516,10 @@ quote/paren spans, list markers).
 <a id="yasbd.rules.fr"></a>
 
 # yasbd.rules.fr
+
+<a id="yasbd.rules.hi"></a>
+
+# yasbd.rules.hi
 
 <a id="yasbd.rules.ht"></a>
 

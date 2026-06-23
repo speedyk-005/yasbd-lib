@@ -47,7 +47,12 @@ dev = [
   "pre-commit>=4.4.0",
   "pydoc-markdown>=4.8.0,<5.0",
   "ruff>=0.14.14",
-] 
+  "langcodes>=3.5.0,<4.0",
+]
+
+norm = [
+  "langcodes>=3.5.0,<4.0",
+]
 
 bench = [
   "pysbd",
