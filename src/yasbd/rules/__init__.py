@@ -75,12 +75,12 @@ def get_supported_langs() -> list[str]:
     plus the language pack versions.
     """
     rules_dir = Path(__file__).parent
-    langs = list(_LANG_PACK_REGISTRY.keys())
+    langs = set(_LANG_PACK_REGISTRY.keys())
     for f in rules_dir.iterdir():
         if f.stem in ("_template", "base", "__init__"):
             continue
         if f.suffix == ".py":
-            langs.append(f.stem)
+            langs.add(f.stem)
     return ["auto"] + sorted(langs)
 
 
