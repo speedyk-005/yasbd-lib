@@ -4,6 +4,8 @@ from functools import cache
 from importlib import import_module
 from pathlib import Path
 
+from beartype.door import die_if_unbearable
+
 from yasbd.exceptions import LangPackError, UnsupportedLanguageError, YasbdError
 from yasbd.rules.base import Rules
 
@@ -15,10 +17,12 @@ _LANG_PACK_REGISTRY: dict[str, type[Rules]] = {}
 def _handshake_profile(profile: Rules) -> None:
     """Smoke-test the profile by running ``apply()`` on mock text.
 
-    Ensures the profile doesn't crash on basic input before registration.
+    Ensures the profile doesn't crash on basic input and that
+    ``apply()`` returns a list of integers before registration.
     """
     try:
-        profile.apply("Hello world.", preserve_quote_and_paren=True)
+        result = profile.apply("Hello world.", preserve_quote_and_paren=True)
+        die_if_unbearable(result, list[int])
     except Exception as e:
         raise LangPackError(f"Handshake failed for {type(profile).__name__!r}: {e}") from e
 

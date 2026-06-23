@@ -52,6 +52,18 @@ def test_non_rules_profile():
         register_lang_packs(["_test_lang_pack_notrules"])
 
 
+def test_handshake_wrong_return():
+    """Test that register_lang_packs rejects a profile returning non-list[int]."""
+
+    class WrongReturn(Rules):
+        def apply(self, text, preserve_quote_and_paren):
+            return "not a list"
+
+    _make_fake_lang_pack("_test_lang_pack_wrong_return", profiles=[WrongReturn])
+    with pytest.raises(LangPackError, match="Handshake failed"):
+        register_lang_packs(["_test_lang_pack_wrong_return"])
+
+
 def test_register_and_load():
     """Test that register_lang_packs stores a profile and load_rule returns an instance."""
 
