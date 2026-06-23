@@ -79,6 +79,8 @@ def register_lang_packs(names: list[str]) -> None:
                     f"Details: {str(e)}"
                 ) from e
 
+    get_supported_langs.cache_clear()
+
 
 def clear_lang_packs() -> None:
     """Remove all registered language packs from the registry."""
