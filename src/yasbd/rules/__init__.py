@@ -4,7 +4,7 @@ from functools import cache
 from importlib import import_module
 from pathlib import Path
 
-from yasbd.exceptions import UnsupportedLanguageError, YasbdError
+from yasbd.exceptions import PluginError, UnsupportedLanguageError, YasbdError
 from yasbd.rules.base import Rules
 
 # Plugins loaded via register_plugins() register their Profiles here.
@@ -20,7 +20,7 @@ def _handshake_profile(profile: Rules) -> None:
     try:
         profile.apply("Hello world.", preserve_quote_and_paren=True)
     except Exception as e:
-        raise YasbdError(f"Handshake failed for {type(profile).__name__!r}: {e}") from e
+        raise PluginError(f"Handshake failed for {type(profile).__name__!r}: {e}") from e
 
 
 def register_plugins(names: list[str]) -> None:
@@ -40,7 +40,7 @@ def register_plugins(names: list[str]) -> None:
         try:
             mod = import_module(name)
         except ImportError as e:
-            raise YasbdError(
+            raise PluginError(
                 f"Plugin module {name!r} could not be imported. "
                 "Make sure it is installed and on the Python path.\n"
                 f"💡 Try: pip install {name}"
@@ -48,7 +48,7 @@ def register_plugins(names: list[str]) -> None:
 
         profiles = getattr(mod, "PROFILES", None)
         if profiles is None:
-            raise YasbdError(f"Plugin module {name!r} has no PROFILES list.")
+            raise PluginError(f"Plugin module {name!r} has no PROFILES list.")
 
         for profile in profiles:
             try:
@@ -57,7 +57,7 @@ def register_plugins(names: list[str]) -> None:
                 lang_code = profile.__name__.removesuffix("Rules").lower()
                 _PLUGIN_REGISTRY[lang_code] = profile
             except Exception as e:
-                raise YasbdError(
+                raise PluginError(
                     f"Validation failed for {profile.__name__!r} in plugin {name!r}."
                 ) from e
 

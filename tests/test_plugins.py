@@ -3,7 +3,7 @@ import types
 
 import pytest
 
-from yasbd.exceptions import YasbdError
+from yasbd.exceptions import PluginError
 from yasbd.rules import _PLUGIN_REGISTRY, load_rule, register_plugins
 from yasbd.rules.base import Rules
 
@@ -29,14 +29,14 @@ def _cleanup():
 
 def test_import_error():
     """Test that register_plugins raises error for an unresolvable module."""
-    with pytest.raises(YasbdError, match="could not be imported"):
+    with pytest.raises(PluginError, match="could not be imported"):
         register_plugins(["_test_plugin_nonexistent"])
 
 
 def test_no_profiles():
     """Test that register_plugins raises error when a module has no PROFILES."""
     _make_fake_plugin("_test_plugin_noprofiles")
-    with pytest.raises(YasbdError, match="has no PROFILES list"):
+    with pytest.raises(PluginError, match="has no PROFILES list"):
         register_plugins(["_test_plugin_noprofiles"])
 
 
