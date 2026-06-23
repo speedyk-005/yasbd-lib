@@ -5,6 +5,7 @@ from pathlib import Path
 
 from yasbd.exceptions import LangPackError, UnsupportedLanguageError
 from yasbd.rules.base import Rules
+from yasbd.utils.input_validator import validate_input
 
 # Language packs loaded via register_lang_packs() register their profiles here.
 # Maps language code (e.g. "hi") to the Rules subclass.
@@ -34,6 +35,7 @@ def _validate_profile(profile: type, name: str) -> None:
         raise RuntimeError(f"Handshake failed for {profile.__name__!r}: {e}") from e
 
 
+@validate_input
 def register_lang_packs(names: list[str]) -> None:
     """Import and validate external language pack modules.
 
