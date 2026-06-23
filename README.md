@@ -41,6 +41,7 @@
     - [About JSONL](#about-jsonl)
   - [Adapter](#adapter)
   - [spaCy component](#spacy-component)
+- [🔌 Plugins](#-plugins)
 - [🗺 Features & Roadmap](#-features--roadmap)
 - [🤝 Contributors](#-contributors)
 - [📜 Last note](#-last-note)
@@ -488,6 +489,20 @@ pipe.preserve_quote_and_paren = False
 
 ---
 
+## 🔌 Plugins
+
+External language packs can be plugged in via the plugin system. A plugin is a Python module that exposes a `PROFILES` list of `Rules` subclasses.
+
+```python
+from yasbd.rules import register_plugins
+
+register_plugins(["my_yasbd_pack"])
+```
+
+Each profile class must inherit from `Rules`. Need a quick start? Use the [language template](https://github.com/speedyk-005/yasbd-lib/blob/main/src/yasbd/rules/_template.py).
+
+---
+
 ## 🗺 Features & Roadmap
 
 - [x] Base segmenter
@@ -497,8 +512,8 @@ pipe.preserve_quote_and_paren = False
 - [x] CLI tool (#79)
 - [x] Automatic language detection with caching (#74)
 - [x] spaCy v3 pipeline component factory (#95)
+- [x] Support for external language packs (module-based plugins) ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111))
 - [ ] 22+ language targets (#20)
-- [ ] Support for external language packs (module-based plugins)
 
 ---
 
