@@ -8,7 +8,7 @@ class KoRules(Rules):
 
 
     NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {
-        "하이큐!","러브라이브", "뱅드림",
+        "하이큐!", "러브라이브", "뱅드림",
     }
 
     COMMON_SENT_STARTERS = {
@@ -28,13 +28,13 @@ class KoRules(Rules):
     }
 
     POST_QUOTATIVE_PARTICLES = {
-        # Direct Speech Particles (Sitting directly outside the closing quote)
-        "라고", "이라고", "하고", "며", "라며", "이라며", "고",
-
+        # Direct Speech Particles
+        "라고", "이라고", "하고", "며", "라며", "이라며", "고", 
+        
         # Polite speech/Polite reporting forms
         "라고요", "고요",
-
-        # Clausal extensions (When the quote links into an active clause)
+        
+        # Clausal extensions
         "하며", "하면서", "라고는", "고는",
     }
 
