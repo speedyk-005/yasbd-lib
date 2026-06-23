@@ -84,10 +84,10 @@ def clear_lang_packs() -> None:
 
 @cache
 def get_supported_langs() -> list[str]:
-    """Discover and cache supported language codes
+    """Discover and cache supported language codes.
 
-    It returns a list containing the rules from the rules directory
-    plus the language pack versions.
+    Returns a sorted list of ``auto`` plus all language codes from
+    the built-in rules directory and any registered language packs.
     """
     rules_dir = Path(__file__).parent
     langs = set(_LANG_PACK_REGISTRY.keys())
