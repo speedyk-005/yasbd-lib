@@ -48,7 +48,10 @@ def register_plugins(names: list[str]) -> None:
 
         profiles = getattr(mod, "PROFILES", None)
         if profiles is None:
-            raise PluginError(f"Plugin module {name!r} has no PROFILES list.")
+            raise PluginError(
+                f"Plugin module {name!r} has no PROFILES list. "
+                "Each plugin module must expose a PROFILES list of Rules subclasses."
+            )
 
         for profile in profiles:
             try:
