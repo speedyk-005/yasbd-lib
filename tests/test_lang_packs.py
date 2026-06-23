@@ -4,7 +4,7 @@ import types
 import pytest
 
 from yasbd.exceptions import LangPackError
-from yasbd.rules import _LANG_PACK_REGISTRY, load_rule, register_lang_packs
+from yasbd.rules import _LANG_PACK_REGISTRY, clear_lang_packs, load_rule, register_lang_packs
 from yasbd.rules.base import Rules
 
 
@@ -24,7 +24,7 @@ def _cleanup():
     for name in list(sys.modules):
         if name.startswith("_test_lang_pack_"):
             del sys.modules[name]
-    _LANG_PACK_REGISTRY.clear()
+    clear_lang_packs()
 
 
 def test_import_error():
@@ -76,3 +76,16 @@ def test_lang_pack_takes_precedence():
     register_lang_packs(["_test_lang_pack_override"])
     instance = load_rule("en")
     assert isinstance(instance, EnRules), "Lang pack did not override built-in EnRules"
+
+
+def test_clear_lang_packs():
+    """Test that clear_lang_packs empties the registry."""
+
+    class FakeRules(Rules):
+        pass
+
+    _make_fake_lang_pack("_test_lang_pack_clear", profiles=[FakeRules])
+    register_lang_packs(["_test_lang_pack_clear"])
+    assert "fake" in _LANG_PACK_REGISTRY
+    clear_lang_packs()
+    assert "fake" not in _LANG_PACK_REGISTRY, "Registry was not cleared"

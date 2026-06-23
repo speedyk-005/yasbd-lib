@@ -499,7 +499,13 @@ from yasbd.rules import register_lang_packs
 register_lang_packs(["my_yasbd_pack"])
 ```
 
-Each profile class must inherit from `Rules`.
+To reset the registry at runtime:
+
+```python
+from yasbd.rules import clear_lang_packs
+
+clear_lang_packs()
+```
 
 Want to build a lang pack? Start with the [language template](https://github.com/speedyk-005/yasbd-lib/blob/main/src/yasbd/rules/_template.py).
 
