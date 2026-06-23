@@ -29,11 +29,11 @@ class KoRules(Rules):
 
     POST_QUOTATIVE_PARTICLES = {
         # Direct Speech Particles
-        "라고", "이라고", "하고", "며", "라며", "이라며", "고", 
-        
+        "라고", "이라고", "하고", "며", "라며", "이라며", "고",
+
         # Polite speech/Polite reporting forms
         "라고요", "고요",
-        
+
         # Clausal extensions
         "하며", "하면서", "라고는", "고는",
     }
