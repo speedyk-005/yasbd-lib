@@ -199,17 +199,20 @@ class StreamCleaner(StreamCleanerStub):
                 log_info(
                     self.verbose, "Applying extra step: {}", getattr(step, "__name__", step)
                 )
+
                 try:
                     result = step(cleaned_text)
-                    assert isinstance(result, str), (
-                        f"extra step {getattr(step, '__name__', step)!r} "
-                        f"returned {type(result).__name__}, expected str"
-                    )
                 except Exception as e:
                     raise CleanStepError(
                         f"extra step {getattr(step, '__name__', step)!r} raised an error.\n"
                         f"Details: {str(e)}"
                     ) from e
+
+                if not isinstance(result, str):
+                    raise CleanStepError(
+                        f"extra step {getattr(step, '__name__', step)!r} "
+                        f"returned {type(result).__name__}, expected str"
+                    )
                 cleaned_text = result
             return cleaned_text
 

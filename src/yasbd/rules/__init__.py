@@ -3,8 +3,6 @@ from functools import cache
 from importlib import import_module
 from pathlib import Path
 
-from beartype.door import die_if_unbearable
-
 from yasbd.exceptions import LangPackError, UnsupportedLanguageError
 from yasbd.rules.base import Rules
 
@@ -13,17 +11,27 @@ from yasbd.rules.base import Rules
 _LANG_PACK_REGISTRY: dict[str, type[Rules]] = {}
 
 
-def _handshake_profile(profile: Rules) -> None:
-    """Smoke-test the profile by running ``apply()`` on mock text.
+def _validate_profile(profile: type, name: str) -> None:
+    """Validate a Rules subclass and smoke-test it.
 
-    Ensures the profile doesn't crash on basic input and that
-    ``apply()`` returns a list of integers before registration.
+    Checks that the profile inherits from ``Rules``, can be instantiated,
+    and that ``apply()`` returns a list of integers without crashing.
     """
+    if not issubclass(profile, Rules):
+        raise TypeError(
+            f"Profile {profile.__name__!r} in module {name!r} does not inherit from Rules."
+        )
+
     try:
-        result = profile.apply("Hello world.", preserve_quote_and_paren=True)
-        die_if_unbearable(result, list[int])
+        instance = profile()
+        result = instance.apply("Hello world.", preserve_quote_and_paren=True)
+        if not isinstance(result, list) or not all(isinstance(i, int) for i in result):
+            raise TypeError(
+                f"Handshake failed for {profile.__name__!r}: "
+                f"apply() returned {type(result).__name__}, expected list[int]"
+            )
     except Exception as e:
-        raise LangPackError(f"Handshake failed for {type(profile).__name__!r}: {e}") from e
+        raise RuntimeError(f"Handshake failed for {profile.__name__!r}: {e}") from e
 
 
 def register_lang_packs(names: list[str]) -> None:
@@ -63,9 +71,7 @@ def register_lang_packs(names: list[str]) -> None:
 
         for profile in profiles:
             try:
-                assert issubclass(profile, Rules), "Must inherit from yasbd.rules.Rules"
-                instance = profile()
-                _handshake_profile(instance)
+                _validate_profile(profile, name)
                 lang_code = profile.__name__.removesuffix("Rules").lower()
                 _LANG_PACK_REGISTRY[lang_code] = profile
             except Exception as e:
