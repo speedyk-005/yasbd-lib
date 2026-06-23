@@ -11,8 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Plugin system** ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111)): `register_plugins()` with handshake validation and plugin registry.
-- **`PluginError` exception class** ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111)): raised when a plugin module fails validation or handshake.
+- **Language pack system** ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111)): `register_lang_packs()` with handshake validation and lang pack registry.
+- **`LangPackError` exception class** ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111)): raised when a language pack module fails validation or handshake.
 
 ## [0.7.0] - 2026-06-22
 

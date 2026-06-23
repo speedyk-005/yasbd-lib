@@ -10,8 +10,8 @@ class InvalidInputError(YasbdError, TypeError):
     """Raised when invalid input(s) are encountered."""
 
 
-class PluginError(YasbdError):
-    """Raised when a plugin module fails validation or handshake."""
+class LangPackError(YasbdError):
+    """Raised when a language pack module fails validation or handshake."""
 
 
 class CleanStepError(YasbdError, TypeError):

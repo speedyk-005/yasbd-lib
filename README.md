@@ -41,7 +41,7 @@
     - [About JSONL](#about-jsonl)
   - [Adapter](#adapter)
   - [spaCy component](#spacy-component)
-- [🔌 Plugins](#-plugins)
+- [🔌 Lang Packs](#-lang-packs)
 - [🗺 Features & Roadmap](#-features--roadmap)
 - [🤝 Contributors](#-contributors)
 - [📜 Last note](#-last-note)
@@ -489,17 +489,19 @@ pipe.preserve_quote_and_paren = False
 
 ---
 
-## 🔌 Plugins
+## 🔌 Lang Packs
 
-External language packs can be plugged in via the plugin system. A plugin is a Python module that exposes a `PROFILES` list of `Rules` subclasses.
+Need support for a language that isn't built in? Plug in your own lang pack. A lang pack is simply a Python module that exposes a `PROFILES` list of `Rules` subclasses.
 
 ```python
-from yasbd.rules import register_plugins
+from yasbd.rules import register_lang_packs
 
-register_plugins(["my_yasbd_pack"])
+register_lang_packs(["my_yasbd_pack"])
 ```
 
-Each profile class must inherit from `Rules`. Need a quick start? Use the [language template](https://github.com/speedyk-005/yasbd-lib/blob/main/src/yasbd/rules/_template.py).
+Each profile class must inherit from `Rules`.
+
+Want to build a lang pack? Start with the [language template](https://github.com/speedyk-005/yasbd-lib/blob/main/src/yasbd/rules/_template.py).
 
 ---
 
@@ -512,7 +514,7 @@ Each profile class must inherit from `Rules`. Need a quick start? Use the [langu
 - [x] CLI tool (#79)
 - [x] Automatic language detection with caching (#74)
 - [x] spaCy v3 pipeline component factory (#95)
-- [x] Support for external language packs (module-based plugins) ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111))
+- [x] Support for external language packs (module-based lang packs) ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111))
 - [ ] 22+ language targets (#20)
 
 ---

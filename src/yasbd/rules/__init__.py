@@ -4,12 +4,12 @@ from functools import cache
 from importlib import import_module
 from pathlib import Path
 
-from yasbd.exceptions import PluginError, UnsupportedLanguageError, YasbdError
+from yasbd.exceptions import LangPackError, UnsupportedLanguageError, YasbdError
 from yasbd.rules.base import Rules
 
-# Plugins loaded via register_plugins() register their Profiles here.
+# Language packs loaded via register_lang_packs() register their profiles here.
 # Maps language code (e.g. "hi") to the Rules subclass.
-_PLUGIN_REGISTRY: dict[str, type[Rules]] = {}
+_LANG_PACK_REGISTRY: dict[str, type[Rules]] = {}
 
 
 def _handshake_profile(profile: Rules) -> None:
@@ -20,37 +20,37 @@ def _handshake_profile(profile: Rules) -> None:
     try:
         profile.apply("Hello world.", preserve_quote_and_paren=True)
     except Exception as e:
-        raise PluginError(f"Handshake failed for {type(profile).__name__!r}: {e}") from e
+        raise LangPackError(f"Handshake failed for {type(profile).__name__!r}: {e}") from e
 
 
-def register_plugins(names: list[str]) -> None:
-    """Import and validate external language plugin modules.
+def register_lang_packs(names: list[str]) -> None:
+    """Import and validate external language pack modules.
 
     Each module must expose a ``PROFILES`` list of ``Rules`` subclasses.
-    All validated profiles are stored in ``_PLUGIN_REGISTRY``.
+    All validated profiles are stored in ``_LANG_PACK_REGISTRY``.
 
     Args:
         names: Module names resolvable from the Python path
             (e.g. ``["yasbd_indic", "yasbd_legal"]``).
 
     Raises:
-        YasbdError: If a plugin module cannot be imported.
+        LangPackError: If a language pack module cannot be imported.
     """
     for name in names:
         try:
             mod = import_module(name)
         except ImportError as e:
-            raise PluginError(
-                f"Plugin module {name!r} could not be imported. "
+            raise LangPackError(
+                f"Language pack module {name!r} could not be imported. "
                 "Make sure it is installed and on the Python path.\n"
                 f"💡 Try: pip install {name}"
             ) from e
 
         profiles = getattr(mod, "PROFILES", None)
         if profiles is None:
-            raise PluginError(
-                f"Plugin module {name!r} has no PROFILES list. "
-                "Each plugin module must expose a PROFILES list of Rules subclasses."
+            raise LangPackError(
+                f"Language pack module {name!r} has no PROFILES list. "
+                "Each language pack module must expose a PROFILES list of Rules subclasses."
             )
 
         for profile in profiles:
@@ -59,10 +59,10 @@ def register_plugins(names: list[str]) -> None:
                 instance = profile()
                 _handshake_profile(instance)
                 lang_code = profile.__name__.removesuffix("Rules").lower()
-                _PLUGIN_REGISTRY[lang_code] = profile
+                _LANG_PACK_REGISTRY[lang_code] = profile
             except Exception as e:
-                raise PluginError(
-                    f"Validation failed for {profile.__name__!r} in plugin {name!r}.\n"
+                raise LangPackError(
+                    f"Validation failed for {profile.__name__!r} in module {name!r}.\n"
                     f"Details: {str(e)}"
                 ) from e
 
@@ -72,10 +72,10 @@ def get_supported_langs() -> list[str]:
     """Discover and cache supported language codes
 
     It returns a list containing the rules from the rules directory
-    plus the plugins versions.
+    plus the language pack versions.
     """
     rules_dir = Path(__file__).parent
-    langs = list(_PLUGIN_REGISTRY.keys())
+    langs = list(_LANG_PACK_REGISTRY.keys())
     for f in rules_dir.iterdir():
         if f.stem in ("_template", "base", "__init__"):
             continue
@@ -87,7 +87,7 @@ def get_supported_langs() -> list[str]:
 def load_rule(lang: str) -> Rules:
     """Import and instantiate the rule module for *lang*.
 
-    Checks the plugin registry first; falls back to the built-in rules directory.
+    Checks the language pack registry first; falls back to the built-in rules directory.
 
     Returns:
         The instantiated rule object.
@@ -95,7 +95,7 @@ def load_rule(lang: str) -> Rules:
     Raises:
         UnsupportedLanguageError: If no rule module exists for *lang*.
     """
-    if profile_cls := _PLUGIN_REGISTRY.get(lang):
+    if profile_cls := _LANG_PACK_REGISTRY.get(lang):
         return profile_cls()
 
     try:
