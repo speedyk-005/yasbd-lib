@@ -1,11 +1,9 @@
+from importlib.metadata import PackageNotFoundError, version
+
 from yasbd.exceptions import InvalidInputError
 from yasbd.utils.input_validator import validate_input
 
-from importlib.metadata import version, PackageNotFoundError
-
 try:  # pragma
-    import langcodes
-
     langcodes_ver = version("langcodes")
 
     if int(langcodes_ver.split(".")[0]) < 3:
