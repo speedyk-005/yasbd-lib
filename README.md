@@ -149,12 +149,6 @@ The simplest way to get started is with pip:
 pip install yasbd-lib -U
 ```
 
-Optionally, install the `[norm]` extra for language tag normalization:
-
-```bash
-pip install "yasbd-lib[norm]"
-```
-
 That's it! Blade is armed.
 
 ### The From-Source Way
@@ -218,19 +212,7 @@ detector = BoundaryDetector(
 > normalize_lang("en-US")  # "en"
 > normalize_lang("pt-BR")  # "pt"
 > ```
-> Requires the `[norm]` extra: `pip install "yasbd-lib[norm]"`
-
-> [!TIP]
-> **Language tag normalization:**
->
-> Normalize any language tag to its ISO-639-1 two-letter code.
->
-> ```python
-> from yasbd.utils.language_normalizer import normalize_lang
-> normalize_lang("en-US")  # "en"
-> normalize_lang("pt-BR")  # "pt"
-> ```
-> Requires the `[norm]` extra: `pip install "yasbd-lib[norm]"`
+> Requires the `langcodes` v3+ to be installed. Install it separately: `pip install langcodes -U`
 
 Switching languages at runtime is a property set:
 
@@ -475,7 +457,7 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/bl
 Even your spaCy pipeline deserves smart scissors. Call `register_spacy_component()` once, then add `yasbd` to any pipeline:
 
 > [!NOTE]
-> `spacy` is **not** a dependency of yasbd. Install it separately: `pip install spacy`
+> `spacy` is **not** a dependency of yasbd. Install it separately: `pip install spacy -U`
 
 ```python
 import spacy

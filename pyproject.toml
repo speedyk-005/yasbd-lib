@@ -49,10 +49,6 @@ dev = [
   "ruff>=0.14.14",
 ]
 
-norm = [
-  "langcodes>=3.5.0,<4.0",
-]
-
 bench = [
   "pysbd",
   "sentencex",

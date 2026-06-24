@@ -1,6 +1,27 @@
 from yasbd.exceptions import InvalidInputError
 from yasbd.utils.input_validator import validate_input
 
+from importlib.metadata import version, PackageNotFoundError
+
+try:  # pragma
+    import langcodes
+
+    langcodes_ver = version("langcodes")
+
+    if int(langcodes_ver.split(".")[0]) < 3:
+        raise ImportError(
+            f"langcodes v3+ is required. You have v{langcodes_ver}. "
+            "Upgrade with: pip install -U langcodes"
+        )
+
+    from langcodes import Language, LanguageTagError
+
+except PackageNotFoundError:  # pragma: no cover
+    raise ImportError(
+        "langcodes is required for language code normalization. "
+        "Install it with: pip install langcodes"
+    ) from None
+
 
 @validate_input
 def normalize_lang(lang_code: str) -> str:
@@ -46,14 +67,6 @@ def normalize_lang(lang_code: str) -> str:
     """
     if not lang_code.strip():
         return ""
-
-    try:
-        from langcodes import Language, LanguageTagError
-    except ImportError:  # pragma: no cover
-        raise ImportError(
-            "normalize_lang(...) requires the 'norm' extra. "
-            "Install with 'pip install yasbd-lib[norm]'"
-        ) from None
 
     try:
         normalized = Language.get(lang_code).language

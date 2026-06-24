@@ -31,7 +31,11 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 Install the development package with the necessary testing rigs using uv pip.
 
 ```bash
-uv pip install -e ".[dev,norm]"  # Standard calibration suite
+uv pip install -e ".[dev]"
+
+# Optional: only needed for some components
+pip install spacy -U
+pip install langcodes -U
 ```
 
 ## Making Modifications
