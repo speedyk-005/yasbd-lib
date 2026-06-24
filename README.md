@@ -149,6 +149,12 @@ The simplest way to get started is with pip:
 pip install yasbd-lib -U
 ```
 
+Optionally, install the `[norm]` extra for language tag normalization:
+
+```bash
+pip install "yasbd-lib[norm]"
+```
+
 That's it! Blade is armed.
 
 ### The From-Source Way
@@ -201,6 +207,18 @@ detector = BoundaryDetector(
     verbose=True,
 )
 ```
+
+> [!TIP]
+> **Language tag normalization:**
+>
+> Normalize any language tag to its ISO-639-1 two-letter code.
+>
+> ```python
+> from yasbd.utils.language_normalizer import normalize_lang
+> normalize_lang("en-US")  # "en"
+> normalize_lang("pt-BR")  # "pt"
+> ```
+> Requires the `[norm]` extra: `pip install "yasbd-lib[norm]"`
 
 > [!TIP]
 > **Language tag normalization:**
@@ -525,6 +543,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@JheanLL](https://github.com/JheanLL)** | Trie prototype design & Spanish rule contributions |
 | **[@Jah-yee](https://github.com/Jah-yee)** | Community contributor |
 | **[@Rajesh270712](https://github.com/Rajesh270712)** | Base + English rule contributions |
+| **[@sanmaxdev](https://github.com/sanmaxdev)** | Language tag normalization helper |
 
 Interested in contributing? See the [**Contributing Guide**](https://github.com/speedyk-005/yasbd-lib/blob/main/CONTRIBUTING.md) to get started!
 

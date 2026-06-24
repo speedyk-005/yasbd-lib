@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Korean (ko) language support** ([#113](https://github.com/speedyk-005/yasbd-lib/pull/113)).
+- **Language tag normalization helper** ([#112](https://github.com/speedyk-005/yasbd-lib/pull/112)): Added `normalize_lang()` via the optional `[norm]` extra.
 
 ---
 

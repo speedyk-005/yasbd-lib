@@ -31,8 +31,7 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 Install the development package with the necessary testing rigs using uv pip.
 
 ```bash
-uv pip install -e ".[dev]"      # Standard calibration suite
-uv pip install -e ".[dev-all]"  # Full stress-test configuration
+uv pip install -e ".[dev,norm]"  # Standard calibration suite
 ```
 
 ## Making Modifications

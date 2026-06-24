@@ -19,8 +19,6 @@
   * [UnsupportedLanguageError](#yasbd.exceptions.UnsupportedLanguageError)
   * [InvalidInputError](#yasbd.exceptions.InvalidInputError)
   * [CleanStepError](#yasbd.exceptions.CleanStepError)
-* [yasbd.normalize](#yasbd.normalize)
-  * [normalize\_lang](#yasbd.normalize.normalize_lang)
 * [yasbd.rules](#yasbd.rules)
   * [get\_supported\_langs](#yasbd.rules.get_supported_langs)
   * [load\_rule](#yasbd.rules.load_rule)
@@ -39,6 +37,7 @@
 * [yasbd.rules.ht](#yasbd.rules.ht)
 * [yasbd.rules.it](#yasbd.rules.it)
 * [yasbd.rules.ja](#yasbd.rules.ja)
+* [yasbd.rules.ko](#yasbd.rules.ko)
 * [yasbd.rules.my](#yasbd.rules.my)
 * [yasbd.rules.pt](#yasbd.rules.pt)
 * [yasbd.rules.ru](#yasbd.rules.ru)
@@ -50,6 +49,8 @@
     * [\_\_init\_\_](#yasbd.utils.cleaner.StreamCleaner.__init__)
 * [yasbd.utils.input\_validator](#yasbd.utils.input_validator)
   * [validate\_input](#yasbd.utils.input_validator.validate_input)
+* [yasbd.utils.lang\_normalizer](#yasbd.utils.lang_normalizer)
+  * [normalize\_lang](#yasbd.utils.lang_normalizer.normalize_lang)
 * [yasbd.utils.language\_classifier](#yasbd.utils.language_classifier)
   * [classify\_language](#yasbd.utils.language_classifier.classify_language)
 * [yasbd.utils.language\_normalizer](#yasbd.utils.language_normalizer)
@@ -372,39 +373,6 @@ class CleanStepError(YasbdError, TypeError)
 
 Raised when a StreamCleaner extra step fails (non-callable or non-str return).
 
-<a id="yasbd.normalize"></a>
-
-# yasbd.normalize
-
-<a id="yasbd.normalize.normalize_lang"></a>
-
-#### normalize\_lang
-
-```python
-@validate_input
-def normalize_lang(lang_code: str) -> str
-```
-
-Normalize a language tag to an ISO-639-1 language code.
-
-The helper is explicit and opt-in. It does not alter the core
-``BoundaryDetector`` language handling.
-
-**Arguments**:
-
-- `lang_code` - A language code or tag, such as ``"EN"``, ``"en-US"``,
-  or ``"en-Latn"``.
-
-**Returns**:
-
-  A two-letter ISO-639-1 language code.
-
-**Raises**:
-
-- `InvalidInputError` - If the optional normalization dependency is missing,
-  the tag cannot be parsed, or the tag does not resolve to a
-  two-letter ISO-639-1 language code.
-
 <a id="yasbd.rules"></a>
 
 # yasbd.rules
@@ -535,6 +503,10 @@ quote/paren spans, list markers).
 
 # yasbd.rules.ja
 
+<a id="yasbd.rules.ko"></a>
+
+# yasbd.rules.ko
+
 <a id="yasbd.rules.my"></a>
 
 # yasbd.rules.my
@@ -645,6 +617,66 @@ def validate_input(fn: F) -> F
 ```
 
 Validate function arguments and return values using beartype.
+
+<a id="yasbd.utils.lang_normalizer"></a>
+
+# yasbd.utils.lang\_normalizer
+
+<a id="yasbd.utils.lang_normalizer.normalize_lang"></a>
+
+#### normalize\_lang
+
+```python
+@validate_input
+def normalize_lang(lang_code: str) -> str
+```
+
+Normalize a language tag to an ISO-639-1 language code.
+
+The helper is explicit and opt-in. It does not alter the core
+``BoundaryDetector`` language handling.
+
+**Examples**:
+
+  
+  >>> normalize_lang("EN")
+  'en'
+  >>> normalize_lang("en-US")
+  'en'
+  >>> normalize_lang("en-Latn")
+  'en'
+  >>> normalize_lang("pt-BR")
+  'pt'
+  >>> normalize_lang("")
+  ''
+  >>> normalize_lang("   ")
+  ''
+  >>> normalize_lang("not-a-language-code")
+  Traceback (most recent call last):
+  ...
+- `yasbd.exceptions.InvalidInputError` - 'not-a-language-code' can't be normalized to a two chars ISO-639-1 language code
+  >>> normalize_lang("akk")
+  Traceback (most recent call last):
+  ...
+- `yasbd.exceptions.InvalidInputError` - 'akk' can't be normalized to a two chars ISO-639-1 language code
+  
+
+**Arguments**:
+
+- `lang_code` - A language code or tag, such as ``"EN"``, ``"en-US"``,
+  or ``"en-Latn"``.
+  
+
+**Returns**:
+
+  A two-letter ISO-639-1 language code, or an empty string if empty input.
+  
+
+**Raises**:
+
+- `ImportError` - If the optional ``langcodes`` dependency is missing.
+- `InvalidInputError` - If the tag cannot be parsed or does not resolve to a
+  two-letter ISO-639-1 language code.
 
 <a id="yasbd.utils.language_classifier"></a>
 
