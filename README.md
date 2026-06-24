@@ -209,7 +209,7 @@ detector = BoundaryDetector(
 > Normalize any language tag to its ISO-639-1 two-letter code.
 >
 > ```python
-> from yasbd.utils.language_normalizer import normalize_lang
+> from yasbd.utils.lang_code_normalizer import normalize_lang
 > normalize_lang("en-US")  # "en"
 > normalize_lang("pt-BR")  # "pt"
 > ```
