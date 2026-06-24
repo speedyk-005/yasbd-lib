@@ -77,7 +77,7 @@ class NlRules(Rules):
         "Wiens", "Wier",
 
         # Adverbs and Connectors
-        "Echter", "Bovendien", "Desandanks", "Daarom", "Daardoor", "Dus",
+        "Echter", "Bovendien", "Desondanks", "Daarom", "Daardoor", "Dus",
         "Desalniettemin", "Niettemin", "Intussen", "Inmiddels", "Tevens",
         "Verder", "Tenslotte", "Uiteindelijk", "Vervolgens", "Voorlopig",
         "Overigens", "Trouwens", "Anderzijds", "Enerzijds", "Immers",
