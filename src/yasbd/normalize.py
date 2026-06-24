@@ -22,23 +22,25 @@ def normalize_lang(lang_code: str) -> str:
             two-letter ISO-639-1 language code.
     """
     if not lang_code.strip():
-        raise InvalidInputError("'lang_code' is required")
+        return ""
 
     try:
-        from langcodes import LanguageTagError, standardize_tag
-    except ImportError as exc:  # pragma: no cover
-        raise InvalidInputError(
-            "normalize_lang() requires the 'norm' extra: pip install yasbd-lib[norm]"
-        ) from exc
+        from langcodes import Language, LanguageTagError
+    except ImportError as e:  # pragma: no cover
+        raise ImportError(
+            "normalize_lang(...) requires the 'norm' extra. "
+            "Install with 'pip install yasbd-lib[norm]'"
+        ) from None
 
     try:
-        language = standardize_tag(lang_code).split("-", maxsplit=1)[0]
-    except (LanguageTagError, ValueError) as exc:
-        raise InvalidInputError(str(exc)) from None
+        # Language auto normalize to ISO-639-1
+        return Language.get(lang_code).language
+    except LanguageTagError as e:
+        raise InvalidInputError(str(e)) from None
 
-    if len(language) != 2 or not language.isalpha():
+    if len(norm_lang) != 2 or not language.isalpha():
         raise InvalidInputError(
-            f"{lang_code!r} does not normalize to an ISO-639-1 language code"
+            f"{lang_code!r} can't be normalized to a two chars ISO-639-1 language code"
         )
 
-    return language.lower()
+    return norm_lang
