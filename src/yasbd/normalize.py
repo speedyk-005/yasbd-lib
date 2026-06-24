@@ -26,7 +26,7 @@ def normalize_lang(lang_code: str) -> str:
 
     try:
         from langcodes import LanguageTagError, standardize_tag
-    except ImportError as exc:
+    except ImportError as exc:  # pragma: no cover
         raise InvalidInputError(
             "normalize_lang() requires the 'norm' extra: pip install yasbd-lib[norm]"
         ) from exc
