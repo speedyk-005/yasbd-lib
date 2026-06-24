@@ -10,6 +10,10 @@ class DeRules(Rules):
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         "dr.h.c", "di", "dipl", "dipl.-Ing", "mag", "ba", "ma", "bsc", "msc",
         "h", "hr", "hnr", "hll", "frl", "min", "pfr", "ass", "​projektass",
+
+        # Military Ranks
+        "gen", "lt", "maj", "oberstlt", "kpt", "kptlt", "fkpt", "kkpt",
+        "stabsgefr", "uoff", "stabsfw",
     }
 
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
@@ -110,7 +114,7 @@ class DeRules(Rules):
 
             # Ordinal numbers
             # https://learngerman.dw.com/en/ordinal-numbers/l-57731450/gr-60885529
-            re.compile(r"\s\d+\."),
+            re.compile(r"\s\d{1,3}\."),
 
             # Multi-part abbreviations with spaces (like "d. h.", "z. B.", "i. d. R.")
             re.compile(r"\b[a-zA-Z]\.(?!\s+\w{2,})"),

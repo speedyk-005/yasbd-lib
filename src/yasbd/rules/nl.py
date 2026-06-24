@@ -120,7 +120,7 @@ class NlRules(Rules):
 
             # Ordinal numbers
             # https://learngerman.dw.com/en/ordinal-numbers/l-57731450/gr-60885529
-            re.compile(r"\s\d+\."),
+            re.compile(r"\s\d{1,3}\."),
 
             # Number/Time abbreviations followed by a date token (e.g., 9 a.m. Monday)
             re.compile(rf"""

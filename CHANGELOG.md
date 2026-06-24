@@ -12,9 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Korean (ko) language support** ([#113](https://github.com/speedyk-005/yasbd-lib/pull/113)).
 - **Dutch (nl) language support** ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)).
+- **German military rank titles**: Added to `TITLE_ABBRVS` ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)).
 
 ### Fixed
 - **German `DATE_ABBRVS`**: Removed "mai" — it's a full word, not an abbreviation.
+- **ORDINAL regex (de, nl)**: Changed `\d+` to `\d{1,3}` to avoid false sentence breaks after 3+ digit numbers ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)).
 
 ---
 
