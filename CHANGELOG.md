@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Korean (ko) language support** ([#113](https://github.com/speedyk-005/yasbd-lib/pull/113)).
 
+### Fixed
+- **German `DATE_ABBRVS`**: Removed "mai" — it's a full word, not an abbreviation.
+
 ---
 
 ## [0.7.0] - 2026-06-22
