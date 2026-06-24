@@ -202,6 +202,18 @@ detector = BoundaryDetector(
 )
 ```
 
+> [!TIP]
+> **Language tag normalization:**
+>
+> Normalize any language tag to its ISO-639-1 two-letter code.
+>
+> ```python
+> from yasbd.utils.language_normalizer import normalize_lang
+> normalize_lang("en-US")  # "en"
+> normalize_lang("pt-BR")  # "pt"
+> ```
+> Requires the `[norm]` extra: `pip install "yasbd-lib[norm]"`
+
 Switching languages at runtime is a property set:
 
 ```python
