@@ -37,4 +37,4 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          EXCLUDE: "*.md,*.txt,package-lock.json,*.yml,*.yaml"
+          EXCLUDE: "*.txt,package-lock.json,API_REFERENCES.md,LICENSE"
