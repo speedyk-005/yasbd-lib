@@ -18,8 +18,11 @@
   * [YasbdError](#yasbd.exceptions.YasbdError)
   * [UnsupportedLanguageError](#yasbd.exceptions.UnsupportedLanguageError)
   * [InvalidInputError](#yasbd.exceptions.InvalidInputError)
+  * [LangPackError](#yasbd.exceptions.LangPackError)
   * [CleanStepError](#yasbd.exceptions.CleanStepError)
 * [yasbd.rules](#yasbd.rules)
+  * [register\_lang\_packs](#yasbd.rules.register_lang_packs)
+  * [clear\_lang\_packs](#yasbd.rules.clear_lang_packs)
   * [get\_supported\_langs](#yasbd.rules.get_supported_langs)
   * [load\_rule](#yasbd.rules.load_rule)
 * [yasbd.rules.am](#yasbd.rules.am)
@@ -39,6 +42,7 @@
 * [yasbd.rules.ja](#yasbd.rules.ja)
 * [yasbd.rules.ko](#yasbd.rules.ko)
 * [yasbd.rules.my](#yasbd.rules.my)
+* [yasbd.rules.nl](#yasbd.rules.nl)
 * [yasbd.rules.pt](#yasbd.rules.pt)
 * [yasbd.rules.ru](#yasbd.rules.ru)
 * [yasbd.rules.th](#yasbd.rules.th)
@@ -361,6 +365,16 @@ class InvalidInputError(YasbdError, TypeError)
 
 Raised when invalid input(s) are encountered.
 
+<a id="yasbd.exceptions.LangPackError"></a>
+
+## LangPackError Objects
+
+```python
+class LangPackError(YasbdError)
+```
+
+Raised when a language pack module fails validation or handshake.
+
 <a id="yasbd.exceptions.CleanStepError"></a>
 
 ## CleanStepError Objects
@@ -375,6 +389,45 @@ Raised when a StreamCleaner extra step fails (non-callable or non-str return).
 
 # yasbd.rules
 
+<a id="yasbd.rules.register_lang_packs"></a>
+
+#### register\_lang\_packs
+
+```python
+@validate_input
+def register_lang_packs(names: list[str]) -> None
+```
+
+Import and validate external language pack modules.
+
+Each module must expose a ``PROFILES`` list of ``Rules`` subclasses.
+All validated profiles are stored in ``_LANG_PACK_REGISTRY``.
+
+Caution:
+This function imports arbitrary Python modules by name. Only load lang
+packs from sources you trust — an untrusted module can execute
+arbitrary code at import time.
+
+**Arguments**:
+
+- `names` - Module names resolvable from the Python path
+  (e.g. ``["yasbd_indic", "yasbd_legal"]``).
+  
+
+**Raises**:
+
+- `LangPackError` - If a language pack module cannot be imported.
+
+<a id="yasbd.rules.clear_lang_packs"></a>
+
+#### clear\_lang\_packs
+
+```python
+def clear_lang_packs() -> None
+```
+
+Remove all registered language packs and reset the supported-languages cache.
+
 <a id="yasbd.rules.get_supported_langs"></a>
 
 #### get\_supported\_langs
@@ -384,17 +437,22 @@ Raised when a StreamCleaner extra step fails (non-callable or non-str return).
 def get_supported_langs() -> list[str]
 ```
 
-Discover and cache supported language codes from the rules directory.
+Discover and cache supported language codes.
+
+Returns a sorted list of ``auto`` plus all language codes from
+the built-in rules directory and any registered language packs.
 
 <a id="yasbd.rules.load_rule"></a>
 
 #### load\_rule
 
 ```python
-def load_rule(lang: str) -> Rules
+def load_rule(lang: str, verbose: bool = False) -> Rules
 ```
 
 Import and instantiate the rule module for *lang*.
+
+Checks the language pack registry first; falls back to the built-in rules directory.
 
 **Returns**:
 
@@ -509,6 +567,10 @@ quote/paren spans, list markers).
 
 # yasbd.rules.my
 
+<a id="yasbd.rules.nl"></a>
+
+# yasbd.rules.nl
+
 <a id="yasbd.rules.pt"></a>
 
 # yasbd.rules.pt
@@ -571,7 +633,8 @@ and various regex cleanup rules across paragraphs.
   >>> list(StreamCleaner("hello", extra_steps=[lambda t: 1/0]))
   Traceback (most recent call last):
   ...
-- `yasbd.exceptions.CleanStepError` - extra step '<lambda>' raised ZeroDivisionError (see above for details)
+- `yasbd.exceptions.CleanStepError` - extra step '<lambda>' raised an error.
+- `Details` - division by zero
 
 <a id="yasbd.utils.cleaner.StreamCleaner.__init__"></a>
 
