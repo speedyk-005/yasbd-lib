@@ -4,12 +4,13 @@ from importlib import import_module
 from pathlib import Path
 
 from yasbd.exceptions import LangPackError, UnsupportedLanguageError
+from yasbd.utils.logger import log_info
 from yasbd.rules.base import Rules
 from yasbd.utils.input_validator import validate_input
 
 # Language packs loaded via register_lang_packs() register their profiles here.
-# Maps language code (e.g. "hi") to the Rules subclass.
-_LANG_PACK_REGISTRY: dict[str, type[Rules]] = {}
+# Maps language code to (pack name, Rules subclass).
+_LANG_PACK_REGISTRY = {}
 
 
 def _validate_profile(profile: type, name: str) -> None:
@@ -72,7 +73,7 @@ def register_lang_packs(names: list[str]) -> None:
             try:
                 _validate_profile(profile, name)
                 lang_code = profile.__name__.removesuffix("Rules").lower()
-                _LANG_PACK_REGISTRY[lang_code] = profile
+                _LANG_PACK_REGISTRY[lang_code] = (name, profile)
             except (TypeError, RuntimeError) as e:
                 raise LangPackError(
                     f"Validation failed for {profile.__name__!r} in module {name!r}.\n"
@@ -105,7 +106,7 @@ def get_supported_langs() -> list[str]:
     return ["auto"] + sorted(langs)
 
 
-def load_rule(lang: str) -> Rules:
+def load_rule(lang: str, verbose: bool = False) -> Rules:
     """Import and instantiate the rule module for *lang*.
 
     Checks the language pack registry first; falls back to the built-in rules directory.
@@ -116,8 +117,12 @@ def load_rule(lang: str) -> Rules:
     Raises:
         UnsupportedLanguageError: If no rule module exists for *lang*.
     """
-    if profile_cls := _LANG_PACK_REGISTRY.get(lang):
-        return profile_cls()
+    if profile_data := _LANG_PACK_REGISTRY.get(lang):
+        name, cls = profile_data
+        log_info(
+            verbose, "{} ({}) is loaded successfully", lang, name
+         )
+        return cls()
 
     try:
         rule_module = import_module(f"yasbd.rules.{lang}")
@@ -133,4 +138,7 @@ def load_rule(lang: str) -> Rules:
             msg += f"\n\n💭 Perhaps you meant {' or '.join(repr(c) for c in close)}?"
         raise UnsupportedLanguageError(msg) from None
 
+    log_info(
+        verbose, "{} (built-in) is loaded successfully", lang
+     )
     return getattr(rule_module, f"{lang.capitalize()}Rules")()

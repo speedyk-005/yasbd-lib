@@ -73,7 +73,7 @@ def test_register_and_load():
     _make_fake_lang_pack("_test_lang_pack_load", profiles=[FakeRules])
     register_lang_packs(["_test_lang_pack_load"])
     assert "fake" in _LANG_PACK_REGISTRY, "Profile not registered"
-    assert _LANG_PACK_REGISTRY["fake"] is FakeRules, "Wrong class in registry"
+    assert _LANG_PACK_REGISTRY["fake"][1] is FakeRules, "Wrong class in registry"
     instance = load_rule("fake")
     assert isinstance(instance, FakeRules), "load_rule returned wrong type"
 
