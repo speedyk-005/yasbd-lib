@@ -33,9 +33,11 @@
 * [yasbd.rules.en](#yasbd.rules.en)
 * [yasbd.rules.es](#yasbd.rules.es)
 * [yasbd.rules.fr](#yasbd.rules.fr)
+* [yasbd.rules.hi](#yasbd.rules.hi)
 * [yasbd.rules.ht](#yasbd.rules.ht)
 * [yasbd.rules.it](#yasbd.rules.it)
 * [yasbd.rules.ja](#yasbd.rules.ja)
+* [yasbd.rules.ko](#yasbd.rules.ko)
 * [yasbd.rules.my](#yasbd.rules.my)
 * [yasbd.rules.pt](#yasbd.rules.pt)
 * [yasbd.rules.ru](#yasbd.rules.ru)
@@ -47,6 +49,8 @@
     * [\_\_init\_\_](#yasbd.utils.cleaner.StreamCleaner.__init__)
 * [yasbd.utils.input\_validator](#yasbd.utils.input_validator)
   * [validate\_input](#yasbd.utils.input_validator.validate_input)
+* [yasbd.utils.lang\_code\_normalizer](#yasbd.utils.lang_code_normalizer)
+  * [normalize\_lang](#yasbd.utils.lang_code_normalizer.normalize_lang)
 * [yasbd.utils.language\_classifier](#yasbd.utils.language_classifier)
   * [classify\_language](#yasbd.utils.language_classifier.classify_language)
 * [yasbd.utils.logger](#yasbd.utils.logger)
@@ -481,6 +485,10 @@ quote/paren spans, list markers).
 
 # yasbd.rules.fr
 
+<a id="yasbd.rules.hi"></a>
+
+# yasbd.rules.hi
+
 <a id="yasbd.rules.ht"></a>
 
 # yasbd.rules.ht
@@ -492,6 +500,10 @@ quote/paren spans, list markers).
 <a id="yasbd.rules.ja"></a>
 
 # yasbd.rules.ja
+
+<a id="yasbd.rules.ko"></a>
+
+# yasbd.rules.ko
 
 <a id="yasbd.rules.my"></a>
 
@@ -603,6 +615,66 @@ def validate_input(fn: F) -> F
 ```
 
 Validate function arguments and return values using beartype.
+
+<a id="yasbd.utils.lang_code_normalizer"></a>
+
+# yasbd.utils.lang\_code\_normalizer
+
+<a id="yasbd.utils.lang_code_normalizer.normalize_lang"></a>
+
+#### normalize\_lang
+
+```python
+@validate_input
+def normalize_lang(lang_code: str) -> str
+```
+
+Normalize a language tag to an ISO-639-1 language code.
+
+The helper is explicit and opt-in. It does not alter the core
+``BoundaryDetector`` language handling.
+
+**Examples**:
+
+  
+  >>> normalize_lang("EN")
+  'en'
+  >>> normalize_lang("en-US")
+  'en'
+  >>> normalize_lang("en-Latn")
+  'en'
+  >>> normalize_lang("pt-BR")
+  'pt'
+  >>> normalize_lang("")
+  ''
+  >>> normalize_lang("   ")
+  ''
+  >>> normalize_lang("not-a-language-code")  # doctest: +ELLIPSIS
+  Traceback (most recent call last):
+  ...
+- `yasbd.exceptions.InvalidInputError` - ...
+  >>> normalize_lang("akk")  # doctest: +ELLIPSIS
+  Traceback (most recent call last):
+  ...
+- `yasbd.exceptions.InvalidInputError` - ...
+  
+
+**Arguments**:
+
+- `lang_code` - A language code or tag, such as ``"EN"``, ``"en-US"``,
+  or ``"en-Latn"``.
+  
+
+**Returns**:
+
+  A two-letter ISO-639-1 language code, or an empty string if empty input.
+  
+
+**Raises**:
+
+- `ImportError` - If the optional ``langcodes`` dependency is missing.
+- `InvalidInputError` - If the tag cannot be parsed or does not resolve to a
+  two-letter ISO-639-1 language code.
 
 <a id="yasbd.utils.language_classifier"></a>
 
