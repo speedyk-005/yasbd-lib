@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.8.0] - Unreleased
 
 ### Added
+
+- **Language pack system** ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111)): `register_lang_packs()` with handshake validation and lang pack registry.
+- **`LangPackError` exception class** ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111)): raised when a language pack module fails validation or handshake.
 - **Korean (ko) language support** ([#113](https://github.com/speedyk-005/yasbd-lib/pull/113)).
 - **Dutch (nl) language support** ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)).
 - **German military rank titles**: Added to `TITLE_ABBRVS` ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)).
