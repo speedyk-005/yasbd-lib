@@ -119,9 +119,7 @@ def load_rule(lang: str, verbose: bool = False) -> Rules:
     """
     if profile_data := _LANG_PACK_REGISTRY.get(lang):
         name, cls = profile_data
-        log_info(
-            verbose, "{} ({}) is loaded successfully", lang, name
-         )
+        log_info(verbose, "{} ({}) is loaded successfully", lang, name)
         return cls()
 
     try:
@@ -138,7 +136,5 @@ def load_rule(lang: str, verbose: bool = False) -> Rules:
             msg += f"\n\n💭 Perhaps you meant {' or '.join(repr(c) for c in close)}?"
         raise UnsupportedLanguageError(msg) from None
 
-    log_info(
-        verbose, "{} (built-in) is loaded successfully", lang
-     )
+    log_info(verbose, "{} (built-in) is loaded successfully", lang)
     return getattr(rule_module, f"{lang.capitalize()}Rules")()
