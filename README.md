@@ -552,7 +552,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 |------|------|
 | **[@speedyk-005](https://github.com/speedyk-005)** | Maintainer & Creator |
 | **[@JheanLL](https://github.com/JheanLL)** | Trie prototype design & Spanish rule contributions |
-| **[@Jah-yee](https://github.com/Jah-yee)** | Community contributor |
+| **[@Jah-yee](https://github.com/Jah-yee)** | Reference abbreviation bracketed citation fix |
 | **[@Rajesh270712](https://github.com/Rajesh270712)** | Base + English rule contributions |
 | **[@sanmaxdev](https://github.com/sanmaxdev)** | Language tag normalization helper |
 
