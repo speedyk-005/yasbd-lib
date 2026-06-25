@@ -1,10 +1,9 @@
-import re
-
-from yasbd.rules.base import Rules, _build_abbr_pattern
+from yasbd.rules.base import Rules
+from yasbd.rules.de import DeRules
 
 
 # fmt: off
-class NlRules(Rules):
+class NlRules(DeRules):
 
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
@@ -108,40 +107,3 @@ class NlRules(Rules):
      }
 
     # fmt: on
-    @classmethod
-    def _compile_regex_dynamically(cls):
-        """Override base regex compilation to handle ellipsis, ord num and time"""
-        super()._compile_regex_dynamically()
-
-        cls.MID_SENTENCE_FINDER_LST.extend([
-            # Spaced three-dot ellipsis mid-thought (e.g., ". . . she didn't")
-            # Consecutive dots "..." or "...." still create sentence boundaries.
-            re.compile(r"(?<!\.)\.(?:\s\.){2}"),
-
-            # Ordinal numbers
-            # https://learngerman.dw.com/en/ordinal-numbers/l-57731450/gr-60885529
-            re.compile(r"\s\d{1,3}\."),
-
-            # Number/Time abbreviations followed by a date token (e.g., 9 a.m. Monday)
-            re.compile(rf"""
-                (?:\d\.|(?:(?<=\d)|\b)(?i:[ap]\.m\.))
-                (?=
-                    \s+(?i:{_build_abbr_pattern(cls.DATE_ABBRVS | cls.DATE_WORDS)})
-                    (?:\.|\s|$)
-                )
-            """, re.X),
-        ])
-
-        # Street abbrv followed by a common starters
-        cls.ENDING_STREET_ABBRVS_FINDER = re.compile(rf"""
-            (?:\b(?i:{_build_abbr_pattern(cls.STREET_ABBRVS)})\.)
-            (?=\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
-           """, re.X
-        )
-
-    def _post_process_boundaries(
-        self, main_boundaries: set[int], text: str
-    ) -> None:
-        main_boundaries.update(
-            m.end() for m in self.ENDING_STREET_ABBRVS_FINDER.finditer(text)
-        )
