@@ -46,7 +46,7 @@ class DeRules(Rules):
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
         # Months
-        "mär", "mai", "okt", "dez",
+        "mär", "okt", "dez",
 
         # Days
         "mo", "di", "mi", "do", "fr", "sa", "so",
