@@ -34,7 +34,7 @@ class Rules:
 
         # Military (NATO/International Standardized Ranks)
         "adm", "brig", "capt", "cmdr", "comdr", "commr", "col", "cpl", "gen", "lt",
-        "maj", "sgt", "pvt",
+        "maj", "sgt", "serg", "pvt", "kapt",
 
         # Political/Administrative (Common in Western bureaucracy)
         "gov", "rep", "sen", "pres", "sec", "min", "mgr", "asst", "det", "surg",
