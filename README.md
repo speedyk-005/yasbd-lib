@@ -203,6 +203,18 @@ detector = BoundaryDetector(
 )
 ```
 
+> [!TIP]
+> **Language tag normalization:**
+>
+> Normalize any language tag to its ISO-639-1 two-letter code.
+>
+> ```python
+> from yasbd.utils.lang_code_normalizer import normalize_lang
+> normalize_lang("en-US")  # "en"
+> normalize_lang("pt-BR")  # "pt"
+> ```
+> Requires the `langcodes` v3+ to be installed. Install it separately: `pip install langcodes -U`
+
 Switching languages at runtime is a property set:
 
 ```python
@@ -446,7 +458,7 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/bl
 Even your spaCy pipeline deserves smart scissors. Call `register_spacy_component()` once, then add `yasbd` to any pipeline:
 
 > [!NOTE]
-> `spacy` is **not** a dependency of yasbd. Install it separately: `pip install spacy`
+> `spacy` is **not** a dependency of yasbd. Install it separately: `pip install spacy -U`
 
 ```python
 import spacy
@@ -541,6 +553,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@JheanLL](https://github.com/JheanLL)** | Trie prototype design & Spanish rule contributions |
 | **[@Jah-yee](https://github.com/Jah-yee)** | Community contributor |
 | **[@Rajesh270712](https://github.com/Rajesh270712)** | Base + English rule contributions |
+| **[@sanmaxdev](https://github.com/sanmaxdev)** | Language tag normalization helper |
 
 Interested in contributing? See the [**Contributing Guide**](https://github.com/speedyk-005/yasbd-lib/blob/main/CONTRIBUTING.md) to get started!
 
