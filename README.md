@@ -41,6 +41,7 @@
     - [About JSONL](#about-jsonl)
   - [Adapter](#adapter)
   - [spaCy component](#spacy-component)
+- [🔌 Lang Packs](#-lang-packs)
 - [🗺 Features & Roadmap](#-features--roadmap)
 - [🤝 Contributors](#-contributors)
 - [📜 Last note](#-last-note)
@@ -489,6 +490,33 @@ pipe.preserve_quote_and_paren = False
 
 ---
 
+## 🔌 Lang Packs
+
+Need support for a language that isn't built in? Plug in your own lang pack. A lang pack is simply a Python module that exposes a `PROFILES` list of `Rules` subclasses.
+
+```python
+from yasbd.rules import register_lang_packs
+# Or from yasbd import register_lang_packs
+
+register_lang_packs(["my_yasbd_pack"])
+```
+
+To reset the registry at runtime:
+
+```python
+from yasbd.rules import clear_lang_packs
+# Or from yasbd import clear_lang_packs
+
+clear_lang_packs()
+```
+
+> [!CAUTION]
+> **Security**: `register_lang_packs()` imports arbitrary Python modules by name. Only load lang packs from sources you trust — an untrusted module can execute arbitrary code at import time.
+
+Want to build a lang pack? Start with the [language template](https://github.com/speedyk-005/yasbd-lib/blob/main/src/yasbd/rules/_template.py).
+
+---
+
 ## 🗺 Features & Roadmap
 
 - [x] Base segmenter
@@ -498,8 +526,8 @@ pipe.preserve_quote_and_paren = False
 - [x] CLI tool (#79)
 - [x] Automatic language detection with caching (#74)
 - [x] spaCy v3 pipeline component factory (#95)
+- [x] Support for external language packs (module-based lang packs) ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111))
 - [ ] 22+ language targets (#20)
-- [ ] Support for external language packs (module-based plugins)
 
 ---
 

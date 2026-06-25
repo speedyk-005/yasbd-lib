@@ -10,6 +10,14 @@ class LangRules(Rules):
     ``fr.py``), rename the class to ``<Lang>Rules`` (e.g.
     ``FrRules``) and override only the sets your language needs,
     (please, not all of them). Then remove the others.
+
+    Important:
+        The class name must end with ``"Rules"``.
+        The language code is derived by removing the suffix
+        and lowercasing: ``FrRules`` => ``"fr"``.
+        Use the ISO 639-1 two-letter code whenever
+        a standard code exists. This is the value you pass to
+        ``BoundaryDetector(lang="...")``.
     """
 
     # Extra sentence terminators used by the language.
