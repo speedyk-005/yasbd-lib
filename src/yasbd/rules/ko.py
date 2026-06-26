@@ -1,10 +1,8 @@
-import re
-
-from yasbd.rules.base import Rules
+from yasbd.rules.base import CJKV, Rules
 
 
 # fmt: off
-class KoRules(Rules):
+class KoRules(CJKV, Rules):
 
 
     NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {
@@ -37,14 +35,4 @@ class KoRules(Rules):
         # Clausal extensions
         "하며", "하면서", "라고는", "고는",
     }
-
-    # fmt: on
-    @classmethod
-    def _compile_regex_dynamically(cls):
-        """Override base regex compilation to fix geopolitical split when used as adj"""
-        super()._compile_regex_dynamically()
-
-        cls.MID_SENTENCE_FINDER_LST.append(
-            # Full-width geopolitical abbreviations
-            re.compile(r"(?:[\uFF21-\uFF3A\uFF41-\uFF5A\uFF10-\uFF19]．){1,5}")
-        )
+# fmt: on

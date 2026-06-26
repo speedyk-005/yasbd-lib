@@ -17,6 +17,20 @@ def _build_abbr_pattern(options: set[str]) -> str:
     return trie.add(*options).pattern()
 
 
+class CJKV:
+    """Mixin for CJKV languages sharing full-width geopolitical abbreviation patterns."""
+
+    @classmethod
+    def _compile_regex_dynamically(cls):
+        """Override base regex compilation to fix geopolitical split when used as adj"""
+        super()._compile_regex_dynamically()
+
+        cls.MID_SENTENCE_FINDER_LST.append(
+            # Full-width geopolitical abbreviations
+            re.compile(r"(?:[\uFF21-\uFF3A\uFF41-\uFF5A\uFF10-\uFF19]．){1,5}")
+        )
+
+
 # fmt: off
 class Rules:
     TERMINATORS = {
