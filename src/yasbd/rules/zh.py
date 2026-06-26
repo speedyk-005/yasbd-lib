@@ -1,10 +1,8 @@
-import re
-
-from yasbd.rules.base import Rules
+from yasbd.rules.base import CJKV, Rules
 
 
 # fmt: off
-class ZhRules(Rules):
+class ZhRules(CJKV, Rules):
 
 
     NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {
@@ -19,14 +17,4 @@ class ZhRules(Rules):
         "说", "道", "喊", "问", "答", "回答", "称", "指出",
         "表示", "认为", "坦言", "强调", "写道", "报道", "解释", "反驳"
     }
-
-    # fmt: on
-    @classmethod
-    def _compile_regex_dynamically(cls):
-        """Override base regex compilation to fix geopolitical split when used as adj"""
-        super()._compile_regex_dynamically()
-
-        cls.MID_SENTENCE_FINDER_LST.append(
-            # Full-width geopolitical abbreviations
-            re.compile(r"(?:[\uFF21-\uFF3A\uFF41-\uFF5A\uFF10-\uFF19]．){1,5}")
-        )
+# fmt: on
