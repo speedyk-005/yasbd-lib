@@ -47,7 +47,7 @@ class NlRules(DeRules):
        "ebd", "dwz", "bijv", "evtl", "incl", "excl", "zgn", "ca",
 
         # Business/Commercial
-        "tel", "fax", "attn",
+        "fax",
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {

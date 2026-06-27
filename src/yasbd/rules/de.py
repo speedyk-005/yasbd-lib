@@ -45,7 +45,7 @@ class DeRules(Rules):
        "zzgl", "bspw", "insb", "ca", "bsp",
 
         # Business/Commercial
-        "fa", "tel", "fax",
+        "fa", "fax",
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {

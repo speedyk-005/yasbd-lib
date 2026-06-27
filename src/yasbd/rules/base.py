@@ -130,12 +130,12 @@ class Rules:
         # Notes & postscript markers
         "n.b", "p.s", "p.p.s", "sci", "scill", "s.vloc",
 
-        # Others
-        "approx", "est", "intl", "misc", "mt", "dist",
-
         # Streets
         "ave", "blvd", "blv", "ct", "ln", "pl", "rd", "sq", "st", "wy",
         "rte", "rt", "jct", "riv", "pen",
+
+        # Others
+        "approx", "est", "intl", "misc", "mt", "dist", "tel",
     }
 
     NAMES_WITH_EXCLAMATION = {
