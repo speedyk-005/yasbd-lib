@@ -42,10 +42,10 @@ class DeRules(Rules):
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
         # Bridge / Logical connectors
         "bzw", "evtl", "ggf", "ggfs", "inkl", "sog",
-        "zzgl", "bspw", "insb", "ca", "bsp", "fa",
+        "zzgl", "bspw", "insb", "ca", "bsp",
 
         # Business/Commercial
-        "tel", "fax",
+        "fa", "tel", "fax",
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
