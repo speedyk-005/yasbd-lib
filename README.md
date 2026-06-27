@@ -91,13 +91,14 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 ## 🌐 Supported Languages
 
-18 languages supported today. Target is 22+.
+19 languages supported today. Target is 22+.
 
 <details>
 <summary>Click to see all supported languages</summary>
 
 |  | Code | Language |
 |--|------|----------|
+| 🇿🇦 | af   | Afrikaans |
 | 🇪🇹 | am   | Amharic |
 | 🇸🇦 | ar   | Arabic |
 | 🇩🇪 | de   | German |
@@ -379,7 +380,7 @@ anything into it, get sentences back.
 ```bash
 # List supported language codes
 yasbd langs
-# auto, am, ar, de, el, en, es, ...
+# auto, af, am, ar, de, el, en, es, ...
 
 # Split text into sentences
 yasbd segment "Dr. Smith works here. Is he there?"
