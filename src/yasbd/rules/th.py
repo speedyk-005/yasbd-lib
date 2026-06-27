@@ -50,7 +50,7 @@ class ThRules(Rules):
     DISCOURSE_FINAL_PARTICLES = {
         # polite closure markers
         "ครับ", "นะครับ", "ค่ะ", "คะ", "นะคะ", "ครับผม", "เจ้าค่ะ",
-        "จ้า", "จ๊ะ", "จ้ะ", "จ๋า", "นะ", "ฮะ",
+        "จ้า", "จ๊ะ", "จ้ะ", "ฮะ",
 
         # interrogative / clause-final question markers
         "ไหม", "มั้ย", "หรือยัง", "หรือไม่", "รึเปล่า",
