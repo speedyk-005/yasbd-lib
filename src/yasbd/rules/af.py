@@ -17,7 +17,7 @@ class AfRules(NlRules):
         "bl", "a.w", "bg", "samest", "uitg", "byl", "red", "hers",
 
         # Unique Afrikaans legal and cross-referencing markers
-        "kol", "vg", "verg", "hfst", "afb", "blz"
+        "kol", "vg", "verg", "hfst"
     }
 
     SECTION_MARKERS = NlRules.SECTION_MARKERS | {
