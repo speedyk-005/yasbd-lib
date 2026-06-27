@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`LangPackError` exception class** ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111)): raised when a language pack module fails validation or handshake.
 - **Korean (ko) language support** ([#113](https://github.com/speedyk-005/yasbd-lib/pull/113)).
 - **Dutch (nl) language support** ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)).
-- **German military rank titles**: Added to `TITLE_ABBRVS` ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)).
+- **German military rank titles** ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)): Added to `TITLE_ABBRVS`.
 
 ### Changed
 
@@ -24,9 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - **German `DATE_ABBRVS`**: Removed "mai" — it's a full word, not an abbreviation.
-- **ORDINAL regex (de, nl)**: Changed `\d+` to `\d{1,3}` to avoid false sentence breaks after 3+ digit numbers ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)).
+- **ORDINAL regex (de, nl)** ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)): Changed `\d+` to `\d{1,3}` to avoid false sentence breaks after 3+ digit numbers.
 - **Language tag normalization helper** ([#112](https://github.com/speedyk-005/yasbd-lib/pull/112)).
 - **Thai discourse final particles**: Removed false positives `นะ` and `จ๋า` from `DISCOURSE_FINAL_PARTICLES`.
+- **Burmese and Thai reporting words** ([#118](https://github.com/speedyk-005/yasbd-lib/pull/118)): Corrected attribute name from `REPORTING_VERBS` to `REPORTING_WORDS` — without this, the rules had no effect.
 
 ---
 
