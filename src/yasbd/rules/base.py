@@ -156,7 +156,6 @@ class Rules:
 
     COMMON_SENT_STARTERS = set()
     POST_QUOTATIVE_PARTICLES = set()
-    CASE_MARKERS = set()
     REPORTING_WORDS = set()
 
     # https://regex101.com/r/tI9Cmg/3
