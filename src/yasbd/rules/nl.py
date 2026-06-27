@@ -6,19 +6,19 @@ from yasbd.rules.de import DeRules
 class NlRules(DeRules):
 
 
-    TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
+    TITLE_ABBRVS = Rules.TITLE_ABBRVS | {  # Note: Inherit from DeRules, not base Rules!
         # Academic and Professional Titles
-        "dr", "drs", "prof", "mr", "ir", "ing", "lic", "bc",
+        "dr", "drs", "prof", "mr", "ir", "lic", "bc", "bacc", "not",
 
         # Bachelor / Master Degrees
         "ba", "ma", "bsc", "msc",
 
         # Social Honorifics and Clergy
-        "dhr", "mevr", "mw", "ds",
+        "dhr", "mnr", "mevr", "mw", "ds", "arts",
 
         # Military Ranks
-        "gen", "lt-gen", "maj-gen", "briga", "kol", "lt-kol", "maj",
-        "kapt", "lt", "elnt", "tlnt", "serg", "korp",
+        "gen", "lt-gen", "maj-gen", "bgen", "kol", "lt-kol", "maj",
+        "kapt", "lt", "elnt", "tlnt", "serg", "korp", "adj",
     }
 
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
