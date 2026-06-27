@@ -97,10 +97,13 @@ class BoundaryDetector:
         if lang in self._rule_cache:
             self._rule_cache.move_to_end(lang)
             return self._rule_cache[lang]
+
         rule = load_rule(lang, self.verbose)
         self._rule_cache[lang] = rule
+
         if len(self._rule_cache) > 5:
             self._rule_cache.popitem(last=False)
+
         return rule
 
     def _detect_relative_spans(
@@ -108,7 +111,7 @@ class BoundaryDetector:
         para_iter: Iterable[str],
     ) -> Generator[tuple[int, int], None, None]:
         """Yield per-paragraph sentence spans."""
-        first_para = next(para_iter, "")
+        first_para = next(para_iter, "")  # Needed for auto
         rule = self._get_rule(self._lang, first_para)
 
         for para in chain([first_para], para_iter):
@@ -117,10 +120,7 @@ class BoundaryDetector:
             else:
                 boundaries = rule.apply(para, self.preserve_quote_and_paren)
 
-            for i in range(len(boundaries) - 1):
-                start = boundaries[i]
-                end = boundaries[i + 1]
-                yield (start, end)
+            yield from ((boundaries[i], boundaries[i + 1]) for i in range(len(boundaries) - 1))
 
     @validate_input
     def detect(
@@ -159,6 +159,7 @@ class BoundaryDetector:
         )
 
         offset = 0
+
         # Handle first para differently
         is_first_para = True
         first_para = next(para_iter, "")
@@ -212,6 +213,9 @@ class BoundaryDetector:
         input_for_detection, input_for_slicing = tee(para_iter)
         curr_para = None
         for start, end in self._detect_relative_spans(input_for_detection):
+            # start == 0 signals the first sentence span of a new paragraph.
+            # At that signal we advance input_for_slicing to get the paragraph
+            # text to slice from (both iterators advance in lockstep).
             if start == 0:
                 curr_para = next(input_for_slicing, None)
 
@@ -220,7 +224,6 @@ class BoundaryDetector:
 
             sent = curr_para[start:end]
             if not preserve_whitespace:
-                sent = sent.strip()
-                if not sent:
+                if not (sent := sent.strip()):
                     continue
             yield sent
