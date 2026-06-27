@@ -555,6 +555,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@Jah-yee](https://github.com/Jah-yee)** | Reference abbreviation bracketed citation fix |
 | **[@Rajesh270712](https://github.com/Rajesh270712)** | Base + English rule contributions |
 | **[@sanmaxdev](https://github.com/sanmaxdev)** | Language tag normalization helper |
+| **[@hongquan](https://github.com/hongquan)** | `py.typed` marker for PEP 561 compliance |
 
 Interested in contributing? See the [**Contributing Guide**](https://github.com/speedyk-005/yasbd-lib/blob/main/CONTRIBUTING.md) to get started!
 
