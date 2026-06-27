@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`LangPackError` exception class** ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111)): raised when a language pack module fails validation or handshake.
 - **Korean (ko) language support** ([#113](https://github.com/speedyk-005/yasbd-lib/pull/113)).
 - **Dutch (nl) language support** ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)).
-- **Afrikaans (af) language support** ([#119](https://github.com/speedyk-005/yasbd-lib/pull/119)).
+- **Afrikaans (af) language support** ([#120](https://github.com/speedyk-005/yasbd-lib/pull/120)).
 - **German military rank titles** ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)): Added to `TITLE_ABBRVS`.
 
 ### Changed
