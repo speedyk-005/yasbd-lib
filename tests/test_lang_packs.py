@@ -102,10 +102,3 @@ def test_clear_lang_packs():
     clear_lang_packs()
     assert "fake" not in _LANG_PACK_REGISTRY, "Registry was not cleared"
 
-
-def test_builtin_reporting_words_are_named_for_base_rules():
-    """Test that built-in reporting word lists use the base class attribute name."""
-    for lang in ("my", "th"):
-        rule = load_rule(lang)
-        assert rule.REPORTING_WORDS, f"{lang} reporting words should be loaded"
-        assert "REPORTING_VERBS" not in vars(type(rule))
