@@ -6,7 +6,7 @@ from yasbd.rules.de import DeRules
 class NlRules(DeRules):
 
 
-    TITLE_ABBRVS = Rules.TITLE_ABBRVS | {  # Note: Inherit from DeRules, not base Rules!
+    TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Academic and Professional Titles
         "dr", "drs", "prof", "mr", "ir", "lic", "bc", "bacc", "not",
 
