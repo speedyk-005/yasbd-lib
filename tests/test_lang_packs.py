@@ -101,3 +101,4 @@ def test_clear_lang_packs():
     assert "fake" in _LANG_PACK_REGISTRY
     clear_lang_packs()
     assert "fake" not in _LANG_PACK_REGISTRY, "Registry was not cleared"
+
