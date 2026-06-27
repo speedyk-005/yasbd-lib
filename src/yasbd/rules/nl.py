@@ -40,14 +40,8 @@ class NlRules(DeRules):
         "Samenvatting", "Conclusie", "Register",
     }
 
-    # Multi-part lowercase spaced/dotted abbreviations like "e. g." or "i. e."
-    # are caught dynamically later by the cls.MID_SENTENCE_FINDER_LST regex rule.
-    INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
-       # Bridge / Logical connectors
-       "ebd", "dwz", "bijv", "evtl", "incl", "excl", "zgn", "ca",
-
-        # Business/Commercial
-        "tel", "fax", "attn",
+    INLINE_ONLY_ABBRVS = DeRules.INLINE_ONLY_ABBRVS | {
+        "d.w.z", "bijv", "e.v.t.l", "incl", "excl", "z.g.n", "ca",
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
