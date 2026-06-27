@@ -1,4 +1,3 @@
-from yasbd.rules.base import Rules
 from yasbd.rules.nl import NlRules
 
 
