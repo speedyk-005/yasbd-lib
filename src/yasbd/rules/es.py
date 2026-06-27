@@ -1,4 +1,4 @@
-import regex as re2
+import regex as re
 
 from yasbd.rules.base import Rules, _build_abbr_pattern
 
@@ -90,8 +90,8 @@ class EsRules(Rules):
         pronoun_abbrvs_pattern = _build_abbr_pattern({"ud", "uds", "vd", "vds"})
 
         cls.MID_SENTENCE_FINDER_LST.append(
-            re2.compile(rf"""
+            re.compile(rf"""
                 \b(?i:{pronoun_abbrvs_pattern})\.
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
-            """, re2.X)
+            """, re.X)
         )
