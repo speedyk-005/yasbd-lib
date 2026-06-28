@@ -8,7 +8,7 @@ class NlRules(DeRules):
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Academic and Professional Titles
-        "dr", "drs", "prof", "mr", "ir", "lic", "bc", "bacc", "not",
+        "drs", "ir", "lic", "bc", "bacc", "not",
 
         # Bachelor / Master Degrees
         "ba", "ma", "bsc", "msc",
@@ -17,8 +17,8 @@ class NlRules(DeRules):
         "dhr", "mnr", "mevr", "mw", "ds", "arts",
 
         # Military Ranks
-        "gen", "lt-gen", "maj-gen", "bgen", "kol", "lt-kol", "maj",
-        "kapt", "lt", "elnt", "tlnt", "serg", "korp", "adj",
+        "lt-gen", "maj-gen", "bgen", "kol", "lt-kol",
+        "kapt", "lt", "elnt", "tlnt", "korp", "adj",
     }
 
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
@@ -80,9 +80,6 @@ class NlRules(DeRules):
         # Time / Sequence Anchors
         "Later", "Vroeger", "Daarna", "Vandaag", "Gisteren", "Morgen",
         "Eerst", "Toen", "Nu", "Soms", "Vaak", "Altijd", "Nooit",
-
-        # Common Noun Starters
-        "Mensen", "Miljoen",
     }
 
     STREET_ABBRVS = {
@@ -100,4 +97,4 @@ class NlRules(DeRules):
         "zaterdag", "zondag",
      }
 
-    # fmt: on
+# fmt: on
