@@ -1,4 +1,4 @@
-import regex as re2
+import regex as re
 
 from yasbd.rules.base import Rules, _build_abbr_pattern
 
@@ -87,11 +87,9 @@ class EsRules(Rules):
         # Ud./Uds./Vd./Vds. heuristic
         # Don't split if the next word is NOT a common starter (assumes it's a proper name).
         # Resolves the ambiguity "Ud. Marco" vs "Ud. Mañana".
-        pronoun_abbrvs_pattern = _build_abbr_pattern({"ud", "uds", "vd", "vds"})
-
         cls.MID_SENTENCE_FINDER_LST.append(
-            re2.compile(rf"""
-                \b(?i:{pronoun_abbrvs_pattern})\.
+            re.compile(rf"""
+                \b(?i:{_build_abbr_pattern({"ud", "uds", "vd", "vds"})})\.
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
-            """, re2.X)
+            """, re.X)
         )

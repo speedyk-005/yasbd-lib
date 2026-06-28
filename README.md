@@ -91,15 +91,17 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 ## 🌐 Supported Languages
 
-18 languages supported today. Target is 22+.
+22 languages supported today. Target is 22+.
 
 <details>
 <summary>Click to see all supported languages</summary>
 
 |  | Code | Language |
 |--|------|----------|
+| 🇿🇦 | af   | Afrikaans |
 | 🇪🇹 | am   | Amharic |
 | 🇸🇦 | ar   | Arabic |
+| 🇩🇰 | da   | Danish |
 | 🇩🇪 | de   | German |
 | 🇬🇷 | el   | Greek |
 | 🇬🇧 | en   | English |
@@ -114,6 +116,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇲🇲 | my   | Burmese |
 | 🇵🇹 | pt   | Portuguese |
 | 🇷🇺 | ru   | Russian |
+| 🇸🇪 | sv   | Swedish |
 | 🇹🇭 | th   | Thai |
 | 🇺🇦 | uk   | Ukrainian |
 | 🇨🇳 | zh   | Chinese |
@@ -380,7 +383,7 @@ anything into it, get sentences back.
 ```bash
 # List supported language codes
 yasbd langs
-# auto, am, ar, de, el, en, es, ...
+# auto, af, am, ar, de, el, en, es, ...
 
 # Split text into sentences
 yasbd segment "Dr. Smith works here. Is he there?"
@@ -529,6 +532,13 @@ clear_lang_packs()
 
 Want to build a lang pack? Start with the [language template](https://github.com/speedyk-005/yasbd-lib/blob/main/src/yasbd/rules/_template.py).
 
+### Official Lang Packs
+
+| Package | Languages | Description |
+|---------|-----------|-------------|
+| [`yasbd-auxlang`](https://github.com/speedyk-005/yasbd-auxlang) | `eo`, `ia`, `ie`, `io` | Esperanto, Interlingua, Interlingue, Ido — constructed auxiliary languages |
+| [`yasbd-xx`](https://github.com/speedyk-005/yasbd-xx) | `xx` | Experimental multi-language profile for mixed-text segmentation without language constraints |
+
 ---
 
 ## 🗺 Features & Roadmap
@@ -537,11 +547,11 @@ Want to build a lang pack? Start with the [language template](https://github.com
 - [x] Regex caching (compile once per language class)
 - [x] Drop-in pysbd adapter (same API, no pipeline changes)
 - [x] StreamCleaner for OCR'd and noisy text
-- [x] CLI tool (#79)
-- [x] Automatic language detection with caching (#74)
-- [x] spaCy v3 pipeline component factory (#95)
+- [x] CLI tool ([#79](https://github.com/speedyk-005/yasbd-lib/pull/79))
+- [x] Automatic language detection with caching ([#74](https://github.com/speedyk-005/yasbd-lib/pull/74))
+- [x] spaCy v3 pipeline component factory ([#95](https://github.com/speedyk-005/yasbd-lib/pull/95))
 - [x] Support for external language packs (module-based lang packs) ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111))
-- [ ] 22+ language targets (#20)
+- [ ] 22+ language targets ([#20](https://github.com/speedyk-005/yasbd-lib/issues/20))
 
 ---
 

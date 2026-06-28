@@ -14,23 +14,18 @@ _LANG_PACK_REGISTRY = {}
 
 
 def _validate_profile(profile: type, name: str) -> None:
-    """Validate a Rules subclass and smoke-test it.
+    """Validate a Rules subclass.
 
-    Checks that the profile inherits from ``Rules``, can be instantiated,
-    and that ``apply()`` returns a list of integers without crashing.
+    Checks that the profile inherits from ``Rules`` and does not override
+    ``apply()``.
     """
     if not issubclass(profile, Rules):
         raise TypeError(
             f"Profile {profile.__name__!r} in module {name!r} does not inherit from Rules."
         )
 
-    instance = profile()
-    result = instance.apply("Hello world.", preserve_quote_and_paren=True)
-    if not isinstance(result, list) or not all(isinstance(i, int) for i in result):
-        raise TypeError(
-            f"Handshake failed for {profile.__name__!r}: "
-            f"apply() returned {type(result).__name__}, expected list[int]"
-        )
+    if profile.apply is not Rules.apply:
+        raise TypeError(f"Profile {profile.__name__!r} must not override apply().")
 
 
 @validate_input

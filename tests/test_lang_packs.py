@@ -52,15 +52,15 @@ def test_non_rules_profile():
         register_lang_packs(["_test_lang_pack_notrules"])
 
 
-def test_handshake_wrong_return():
-    """Test that register_lang_packs rejects a profile returning non-list[int]."""
+def test_handshake_override_apply():
+    """Test that register_lang_packs rejects a profile overriding apply()."""
 
     class WrongReturn(Rules):
         def apply(self, text, preserve_quote_and_paren):
             return "not a list"
 
     _make_fake_lang_pack("_test_lang_pack_wrong_return", profiles=[WrongReturn])
-    with pytest.raises(LangPackError, match="Handshake failed"):
+    with pytest.raises(LangPackError, match="must not override apply"):
         register_lang_packs(["_test_lang_pack_wrong_return"])
 
 
