@@ -115,6 +115,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇵🇹 | pt   | Portuguese |
 | 🇷🇺 | ru   | Russian |
 | 🇹🇭 | th   | Thai |
+| 🇺🇦 | uk   | Ukrainian |
 | 🇨🇳 | zh   | Chinese |
 
 </details>
