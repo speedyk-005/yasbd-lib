@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Korean (ko) language support** ([#113](https://github.com/speedyk-005/yasbd-lib/pull/113)).
 - **Dutch (nl) language support** ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)).
 - **German military rank titles** ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)): Added to `TITLE_ABBRVS`.
+- **Swedish (sv) language support** ([#121](https://github.com/speedyk-005/yasbd-lib/pull/121)).
+- **Danish (da) language support** ([#121](https://github.com/speedyk-005/yasbd-lib/pull/121)).
 
 ### Changed
 

@@ -91,7 +91,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 ## 🌐 Supported Languages
 
-18 languages supported today. Target is 22+.
+20 languages supported today. Target is 22+.
 
 <details>
 <summary>Click to see all supported languages</summary>
@@ -100,6 +100,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 |--|------|----------|
 | 🇪🇹 | am   | Amharic |
 | 🇸🇦 | ar   | Arabic |
+| 🇩🇰 | da   | Danish |
 | 🇩🇪 | de   | German |
 | 🇬🇷 | el   | Greek |
 | 🇬🇧 | en   | English |
@@ -114,6 +115,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇲🇲 | my   | Burmese |
 | 🇵🇹 | pt   | Portuguese |
 | 🇷🇺 | ru   | Russian |
+| 🇸🇪 | sv   | Swedish |
 | 🇹🇭 | th   | Thai |
 | 🇨🇳 | zh   | Chinese |
 
@@ -379,7 +381,7 @@ anything into it, get sentences back.
 ```bash
 # List supported language codes
 yasbd langs
-# auto, am, ar, de, el, en, es, ...
+# auto, am, ar, da, de, el, en, es, ...
 
 # Split text into sentences
 yasbd segment "Dr. Smith works here. Is he there?"
