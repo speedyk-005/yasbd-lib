@@ -11,12 +11,12 @@ class UkRules(RuRules):
     }
 
     REFERENCE_ABBRVS = RuRules.REFERENCE_ABBRVS | {
-        "перекл", "автореф", "анот", "передм",
-        "покажч", "реф", "рец", "уклад", "часоп",
+        "перекл", "передм", "вид", "покажч",
+        "уклад", "часоп", "розд", "дод",
     }
 
     SECTION_MARKERS = RuRules.SECTION_MARKERS | {
-        "Розділ", "Додаток", "Вступ", "Висновок",
+        "Розділ", "Частина", "Додаток", "Вступ", "Висновок",
     }
 
     INLINE_ONLY_ABBRVS = RuRules.INLINE_ONLY_ABBRVS | {
@@ -27,7 +27,11 @@ class UkRules(RuRules):
         "вул", "буд", "просп", "пров",
     }
 
-    DATE_ABBRVS = RuRules.DATE_ABBRVS | {"кві", "нд",}
+    DATE_ABBRVS = RuRules.DATE_ABBRVS | {
+        "січ", "лют", "бер", "кві", "тра", "чер", "лип",
+        "сер", "вер", "жов", "лис", "гру","нд",
+    }
+
     COMMON_SENT_STARTERS = RuRules.COMMON_SENT_STARTERS | {
         "Вона", "Воно", "Вони", "Навіщо", "Отже",
         "Проте", "Потім", "Нарешті", "Спочатку",
