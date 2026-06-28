@@ -535,8 +535,8 @@ Want to build a lang pack? Start with the [language template](https://github.com
 
 | Package | Languages | Description |
 |---------|-----------|-------------|
-| [`yasbd-auxlang`](https://pypi.org/project/yasbd-auxlang) | `eo`, `ia`, `ie`, `io` | Esperanto, Interlingua, Interlingue, Ido — constructed auxiliary languages |
-| [`yasbd-xx`](https://pypi.org/project/yasbd-xx) | `xx` | Experimental multi-language profile for mixed-text segmentation without language constraints |
+| [`yasbd-auxlang`](https://github.com/speedyk-005/yasbd-auxlang) | `eo`, `ia`, `ie`, `io` | Esperanto, Interlingua, Interlingue, Ido — constructed auxiliary languages |
+| [`yasbd-xx`](https://github.com/speedyk-005/yasbd-xx) | `xx` | Experimental multi-language profile for mixed-text segmentation without language constraints |
 
 ---
 
