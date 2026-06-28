@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Malayalam (ml) language support** ([#124](https://github.com/speedyk-005/yasbd-lib/pull/124)).
 - **Ukrainian (uk) language support** ([#122](https://github.com/speedyk-005/yasbd-lib/pull/122)).
 
+### Fixed
+
+- **CLI error handling**: catch `UnsupportedLanguageError` in `main()` for a clean error message instead of a Python traceback.
+
 ---
 
 ## [0.8.0] - 2026-06-28

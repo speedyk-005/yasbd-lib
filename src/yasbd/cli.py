@@ -11,7 +11,13 @@ from typing import Optional
 
 from radicli import Arg, Radicli
 
-from yasbd import BoundaryDetector, ParagraphEOF, __version__, get_supported_langs
+from yasbd import (
+    BoundaryDetector,
+    ParagraphEOF,
+    UnsupportedLanguageError,
+    __version__,
+    get_supported_langs,
+)
 
 cli = Radicli(
     prog="yasbd",
@@ -97,10 +103,10 @@ def _create_external_cleaner(
             return process.stdout.removesuffix("\n")
 
         except subprocess.TimeoutExpired:
-            print(f"Cleaner command timed out after {timeout}s", file=sys.stderr)
+            print(f"Error: cleaner command timed out after {timeout}s", file=sys.stderr)
             sys.exit(1)
         except subprocess.CalledProcessError as e:
-            print(f"Error executing cleaner command: {e}", file=sys.stderr)
+            print(f"Error: cleaner command: {e}", file=sys.stderr)
             sys.exit(1)
 
     return external_cleaner
@@ -328,7 +334,11 @@ def main():
         sys.exit(0)
     if len(sys.argv) == 1 or (len(sys.argv) > 1 and sys.argv[1] in ("--help", "-h")):
         print(_logo_colored(), end="\n\n")
-    cli.run()
+    try:
+        cli.run()
+    except UnsupportedLanguageError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        raise SystemExit(2) from None
 
 
 if __name__ == "__main__":
