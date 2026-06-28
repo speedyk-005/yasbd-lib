@@ -35,7 +35,7 @@ class SvRules(DeRules):
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
-        "mars", "maj", "mån", "tis", "ons",
+        "mån", "tis", "ons",
         "tors", "fre", "lör", "sön",
     }
 
