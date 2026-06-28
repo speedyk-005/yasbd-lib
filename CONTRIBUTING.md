@@ -74,6 +74,14 @@ Our code surfaces must be perfectly smooth. Before pushing, sand down the rough 
 uv run ruff format && uv run ruff check --fix
 ```
 
+Pre-commit hooks are available to automate this. Install them with:
+
+```bash
+pre-commit install
+```
+
+This runs `ruff` on every commit so you never forget.
+
 ### Build Documentation
 
 If you changed any docstrings or public interfaces, regenerate the docs:
