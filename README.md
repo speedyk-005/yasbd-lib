@@ -98,6 +98,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 |  | Code | Language |
 |--|------|----------|
+| 🇿🇦 | af   | Afrikaans |
 | 🇪🇹 | am   | Amharic |
 | 🇸🇦 | ar   | Arabic |
 | 🇩🇰 | da   | Danish |
@@ -381,7 +382,7 @@ anything into it, get sentences back.
 ```bash
 # List supported language codes
 yasbd langs
-# auto, am, ar, da, de, el, en, es, ...
+# auto, af, am, ar, de, el, en, es, ...
 
 # Split text into sentences
 yasbd segment "Dr. Smith works here. Is he there?"

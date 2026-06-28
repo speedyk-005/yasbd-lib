@@ -40,9 +40,9 @@ class DeRules(Rules):
     # are removed from this literal set. They are caught dynamically later
     # in the pipeline by the cls.MID_SENTENCE_FINDER_LST regex rule.
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
-       # Bridge / Logical connectors
-       "bzw", "evtl", "ggf", "ggfs", "inkl", "lt", "sog",
-       "zzgl", "bspw", "insb", "ca", "bsp",
+        # Bridge / Logical connectors
+        "bzw", "evtl", "ggf", "ggfs", "inkl", "sog",
+        "zzgl", "bspw", "insb", "ca", "bsp",
 
         # Business/Commercial
         "fa", "tel", "fax",
