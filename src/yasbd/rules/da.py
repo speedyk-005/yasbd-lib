@@ -25,6 +25,10 @@ class DaRules(SvRules):
         "fre", "lør", "søn",
     }
 
+    INLINE_ONLY_ABBRVS = SvRules.INLINE_ONLY_ABBRVS | {
+        "f.eks", "vedr",
+    }
+
     COMMON_SENT_STARTERS = SvRules.COMMON_SENT_STARTERS | {
         # Connectors (sentence-initial discourse markers)
         "Dog", "Alligevel", "Samtidig",

@@ -29,9 +29,9 @@ class SvRules(DeRules):
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
         "bl.a", "dvs", "d.v.s", "jf", "jvf", "pga", "ifm", "ca",
-        "f.eks", "m.m", "m.fl", "o.l", "osv", "o.s.v", "m.a.o",
+        "t.ex", "m.m", "m.fl", "o.l", "osv", "o.s.v", "m.a.o",
         "fr.o.m", "t.o.m", "p.g.a", "inkl", "ekskl", "evt",
-        "hhv", "vedr", "kl",
+        "hhv", "kl",
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
