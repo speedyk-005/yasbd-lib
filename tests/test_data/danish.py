@@ -19,7 +19,7 @@ TEST_DATA = [
     "Han bor i U.S.A. i 20 år.| Nu bor han i E.U.",
     "Mødet er aflyst pga. sygdom.",
     "Han sagde bl.a. at det var vigtigt.",
- 
+
     # Quoted speech
     'Hun vender sig mod ham: "Det er vidunderligt."| Hun rækker ham bogen.',
     '"Er det okay?", spurgte hun.',
