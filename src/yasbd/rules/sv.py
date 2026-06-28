@@ -5,19 +5,20 @@ from yasbd.rules.de import DeRules
 # fmt: off
 class SvRules(DeRules):
 
+
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
-        # Swedish honorifics
-        "hr", "h", "fru", "fr", "frk",
+        # Social
+        "doc", "h", "hr", "fr", "frk",
 
         # Academic and Professional
-        "dr", "prof", "mag", "fil", "tekn", "med", "docent",
-        "civil", "civ", "dipl", "ekon", "jur", "teol", "filosofie",
+        "mag", "fil", "tekn", "med", "civ",
+        "dipl", "ekon", "jur", "teol",
     }
 
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
-        # Bibliographical and Document References
-        "s", "anm", "ang", "bil", "fig", "kap", "tab", "avd",
-        "uppl", "omg", "utg", "red", "sammanst", "hft", "förf",
+        "s", "sid", "anm", "ang", "bil", "kap", "forts",
+        "förf", "avd", "uppl", "utg", "red",  "hft",
+        "sammanst",
     }
 
     SECTION_MARKERS = Rules.SECTION_MARKERS | {
@@ -27,36 +28,40 @@ class SvRules(DeRules):
     }
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
-        # Common Swedish inline abbreviations
-        "bl.a", "dvs", "m.m", "t.ex", "ev", "ca", "e.Kr", "f.Kr",
-        "m.a.o", "m.fl", "s.a.s", "s.k", "o.s.v", "osv",
-        "fr.o.m", "t.o.m", "inkl", "exkl", "jfr", "jämf",
-
-        # Correspondence
-        "ang", "ref", "p.m", "bif",
+        "bl.a", "dvs", "d.v.s", "jf", "jvf", "pga", "ifm", "ca",
+        "f.eks", "m.m", "m.fl", "o.l", "osv", "o.s.v", "m.a.o",
+        "fr.o.m", "t.o.m", "p.g.a", "inkl", "ekskl", "evt",
+        "hhv", "vedr", "kl",
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
-        # Swedish months
-        "jan", "febr", "feb", "mars", "april", "maj", "juni", "juli",
-        "aug", "sept", "sep", "okt", "nov", "dec",
-
-        # Swedish days
-        "mån", "tis", "ons", "tors", "fre", "lör", "sön",
+        "mars", "maj", "mån", "tis", "ons",
+        "tors", "fre", "lör", "sön",
     }
 
     COMMON_SENT_STARTERS = {
-        # Common Swedish sentence starters
+        # Articles
         "Det", "En", "Ett", "Den",
+
+        # Pronouns
         "Jag", "Du", "Han", "Hon", "Vi", "Ni", "De", "Man",
         "Detta", "Denna", "Det här", "Det där",
-        "Vem", "Vad", "Var", "När", "Hur", "Varför", "Vilken", "Vilket",
+
+        # Question words
+        "Vem", "Vad", "Var", "När", "Hur", "Varför",
+        "Vilken", "Vilket",
+
+        # Adverbs and Connectors
         "Men", "Och", "Eller", "Ty", "Så", "Då",
-        "Därför", "Ändå", "Emellertid", "Dessutom", "Därmed", "Vidare",
-        "Slutligen", "Först", "Sedan", "Därefter", "Tidigare", "Senare",
-        "Idag", "Igår", "Imorgon", "Nu",
-        "Ytterligare", "Annars", "Nämligen", "Faktiskt", "Självklart",
+        "Därför", "Ändå", "Emellertid", "Dessutom",
+        "Därmed", "Vidare", "Slutligen", "Först",
+        "Sedan", "Därefter", "Tidigare", "Senare",
+        "Idag", "Igår", "Imorgon", "Nu", "Ytterligare",
+        "Annars", "Nämligen", "Faktiskt", "Självklart",
     }
+
+    STREET_ABBRVS = {"str", "st", "pl", "g", "v"}
+    INLINE_ONLY_ABBRVS |= STREET_ABBRVS
 
     DATE_WORDS = {
         # Swedish months
