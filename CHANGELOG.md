@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.8.0] - Unreleased
+## [0.9.0] - Unreleased
+
+### Added
+
+- **Ukrainian (uk) language support** ([#122](https://github.com/speedyk-005/yasbd-lib/pull/122)).
+
+---
+
+## [0.8.0] - 2026-06-28
 
 ### Added
 
@@ -17,7 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Korean (ko) language support** ([#113](https://github.com/speedyk-005/yasbd-lib/pull/113)).
 - **Dutch (nl) language support** ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)).
 - **German military rank titles** ([#114](https://github.com/speedyk-005/yasbd-lib/pull/114)): Added to `TITLE_ABBRVS`.
-- **Ukrainian (uk) language support** ([#122](https://github.com/speedyk-005/yasbd-lib/pull/122)).
 
 ### Changed
 
