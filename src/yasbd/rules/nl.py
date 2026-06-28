@@ -8,17 +8,17 @@ class NlRules(DeRules):
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Academic and Professional Titles
-        "dr", "drs", "prof", "mr", "ir", "ing", "lic", "bc",
+        "drs", "ir", "lic", "bc", "bacc", "not",
 
         # Bachelor / Master Degrees
         "ba", "ma", "bsc", "msc",
 
         # Social Honorifics and Clergy
-        "dhr", "mevr", "mw", "ds",
+        "dhr", "mnr", "mevr", "mw", "ds", "arts",
 
         # Military Ranks
-        "gen", "lt-gen", "maj-gen", "briga", "kol", "lt-kol", "maj",
-        "kapt", "lt", "elnt", "tlnt", "serg", "korp",
+        "lt-gen", "maj-gen", "bgen", "kol", "lt-kol",
+        "kapt", "lt", "elnt", "tlnt", "korp", "adj",
     }
 
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
@@ -40,14 +40,8 @@ class NlRules(DeRules):
         "Samenvatting", "Conclusie", "Register",
     }
 
-    # Multi-part lowercase spaced/dotted abbreviations like "e. g." or "i. e."
-    # are caught dynamically later by the cls.MID_SENTENCE_FINDER_LST regex rule.
-    INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
-       # Bridge / Logical connectors
-       "ebd", "dwz", "bijv", "evtl", "incl", "excl", "zgn", "ca",
-
-        # Business/Commercial
-        "fax",
+    INLINE_ONLY_ABBRVS = DeRules.INLINE_ONLY_ABBRVS | {
+        "d.w.z", "bijv", "e.v.t.l", "incl", "excl", "z.g.n", "ca",
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
@@ -86,9 +80,6 @@ class NlRules(DeRules):
         # Time / Sequence Anchors
         "Later", "Vroeger", "Daarna", "Vandaag", "Gisteren", "Morgen",
         "Eerst", "Toen", "Nu", "Soms", "Vaak", "Altijd", "Nooit",
-
-        # Common Noun Starters
-        "Mensen", "Miljoen",
     }
 
     STREET_ABBRVS = {
@@ -106,4 +97,4 @@ class NlRules(DeRules):
         "zaterdag", "zondag",
      }
 
-    # fmt: on
+# fmt: on
