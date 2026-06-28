@@ -546,11 +546,11 @@ Want to build a lang pack? Start with the [language template](https://github.com
 - [x] Regex caching (compile once per language class)
 - [x] Drop-in pysbd adapter (same API, no pipeline changes)
 - [x] StreamCleaner for OCR'd and noisy text
-- [x] CLI tool (#79)
-- [x] Automatic language detection with caching (#74)
-- [x] spaCy v3 pipeline component factory (#95)
+- [x] CLI tool ([#79](https://github.com/speedyk-005/yasbd-lib/pull/79))
+- [x] Automatic language detection with caching ([#74](https://github.com/speedyk-005/yasbd-lib/pull/74))
+- [x] spaCy v3 pipeline component factory ([#95](https://github.com/speedyk-005/yasbd-lib/pull/95))
 - [x] Support for external language packs (module-based lang packs) ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111))
-- [ ] 22+ language targets (#20)
+- [ ] 22+ language targets ([#20](https://github.com/speedyk-005/yasbd-lib/issues/20))
 
 ---
 
