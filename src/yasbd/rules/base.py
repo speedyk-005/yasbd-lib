@@ -130,12 +130,12 @@ class Rules:
         # Notes & postscript markers
         "n.b", "p.s", "p.p.s", "sci", "scill", "s.vloc",
 
-        # Others
-        "approx", "est", "intl", "misc", "mt", "dist",
-
         # Streets
         "ave", "blvd", "blv", "ct", "ln", "pl", "rd", "sq", "st", "wy",
         "rte", "rt", "jct", "riv", "pen",
+
+        # Others
+        "approx", "est", "intl", "misc", "mt", "dist", "tel",
     }
 
     NAMES_WITH_EXCLAMATION = {
@@ -156,7 +156,6 @@ class Rules:
 
     COMMON_SENT_STARTERS = set()
     POST_QUOTATIVE_PARTICLES = set()
-    CASE_MARKERS = set()
     REPORTING_WORDS = set()
 
     # https://regex101.com/r/tI9Cmg/3
