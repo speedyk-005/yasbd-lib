@@ -42,7 +42,6 @@
   - [Adapter](#adapter)
   - [spaCy component](#spacy-component)
 - [🔌 Lang Packs](#-lang-packs)
-- [🗺 Features & Roadmap](#-features--roadmap)
 - [🤝 Contributors](#-contributors)
 - [📜 Last note](#-last-note)
 
@@ -541,18 +540,6 @@ Want to build a lang pack? Start with the [language template](https://github.com
 | [`yasbd-xx`](https://github.com/speedyk-005/yasbd-xx) | `xx` | Experimental multi-language profile for mixed-text segmentation without language constraints |
 
 ---
-
-## 🗺 Features & Roadmap
-
-- [x] Base segmenter
-- [x] Regex caching (compile once per language class)
-- [x] Drop-in pysbd adapter (same API, no pipeline changes)
-- [x] StreamCleaner for OCR'd and noisy text
-- [x] CLI tool ([#79](https://github.com/speedyk-005/yasbd-lib/pull/79))
-- [x] Automatic language detection with caching ([#74](https://github.com/speedyk-005/yasbd-lib/pull/74))
-- [x] spaCy v3 pipeline component factory ([#95](https://github.com/speedyk-005/yasbd-lib/pull/95))
-- [x] Support for external language packs (module-based lang packs) ([#111](https://github.com/speedyk-005/yasbd-lib/pull/111))
-- [ ] 22+ language targets ([#20](https://github.com/speedyk-005/yasbd-lib/issues/20))
 
 ---
 
