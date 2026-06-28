@@ -224,6 +224,7 @@ class BoundaryDetector:
 
             sent = curr_para[start:end]
             if not preserve_whitespace:
-                if not (sent := sent.strip()):
+                sent = sent.strip()
+                if not sent:
                     continue
             yield sent
