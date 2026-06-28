@@ -91,7 +91,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 ## 🌐 Supported Languages
 
-21 languages supported today. Target is 22+.
+22 languages supported today. Target is 22+.
 
 <details>
 <summary>Click to see all supported languages</summary>
@@ -118,6 +118,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇷🇺 | ru   | Russian |
 | 🇸🇪 | sv   | Swedish |
 | 🇹🇭 | th   | Thai |
+| 🇺🇦 | uk   | Ukrainian |
 | 🇨🇳 | zh   | Chinese |
 
 </details>
