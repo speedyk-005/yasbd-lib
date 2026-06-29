@@ -90,7 +90,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 ## 🌐 Supported Languages
 
-24 languages supported.
+25 languages supported.
 
 <details>
 <summary>Click to see all supported languages</summary>
@@ -103,20 +103,21 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇩🇰 | da   | Danish |
 | 🇩🇪 | de   | German |
 | 🇬🇷 | el   | Greek |
-| 🇮🇷 | fa   | Persian |
 | 🇬🇧 | en   | English |
 | 🇪🇸 | es   | Spanish |
+| 🇮🇷 | fa   | Persian |
 | 🇫🇷 | fr   | French |
-| 🇭🇹 | ht   | Haitian Creole |
 | 🇮🇳 | hi   | Hindi |
+| 🇭🇹 | ht   | Haitian Creole |
 | 🇮🇹 | it   | Italian |
 | 🇯🇵 | ja   | Japanese |
 | 🇰🇷 | ko   | Korean |
 | 🇮🇳 | ml   | Malayalam |
-| 🇳🇱 | nl   | Dutch |
 | 🇲🇲 | my   | Burmese |
+| 🇳🇱 | nl   | Dutch |
 | 🇵🇹 | pt   | Portuguese |
 | 🇷🇺 | ru   | Russian |
+| 🇸🇰 | sk   | Slovak |
 | 🇸🇪 | sv   | Swedish |
 | 🇹🇭 | th   | Thai |
 | 🇺🇦 | uk   | Ukrainian |

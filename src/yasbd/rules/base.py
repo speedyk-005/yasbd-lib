@@ -144,7 +144,7 @@ class Rules:
         "I Can't Believe It's Not Butter", "Pop", "FreshDirect", "Boost",
 
         # Gaming, Media, Animation, & Entertainment
-        "Mamma Mia", "Jeopardy", "Oklahoma", "Oliver", "Shindig",
+        "Fun Radio", "Mamma Mia", "Jeopardy", "Oklahoma", "Oliver", "Shindig",
         "Hailey's On It", "Airplane", "Osu", "VSPO", "bam", "go", "wham",
 
        # Geopolitical Quirks / Municipalities
