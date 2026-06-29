@@ -30,10 +30,6 @@ class SkRules(Rules):
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
-        # Months
-        "máj", "jún", "júl",
-
-        # Days
         "ne", "po", "ut", "st", "št", "pi", "so",
     }
 
