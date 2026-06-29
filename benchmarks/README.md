@@ -10,7 +10,7 @@ So you want to know how yasbd stacks up against the competition? Fair enough. He
 | nupunkt | Zero deps, legal-text optimized. Claims 91.1% precision at 10M chars/sec. ~12 langs. | [GitHub](https://github.com/alea-institute/nupunkt) / [pypi](https://pypi.org/project/nupunkt/) |
 | blingfire | Microsoft C++ FSM + Python bindings. Language agnostic. | [GitHub](https://github.com/microsoft/BlingFire) / [pypi](https://pypi.org/project/blingfire/) |
 | sentence-splitter | Heuristic algorithm from Europarl (Koehn/Schroeder). Archived 2025. | [GitHub](https://github.com/mediacloud/sentence-splitter) / [pypi](https://pypi.org/project/sentence-splitter/) |
-| yasbd | Pure Python, 23 langs and growing. Pointer-based SBD with pysbd adapter. | *(this repo)* |
+| yasbd | Pure Python, 24 langs and growing. Pointer-based SBD with pysbd adapter. | *(this repo)* |
 
 Not every library supports every language. We picked multiple languages that stress different weaknesses.
 
