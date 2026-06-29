@@ -31,6 +31,10 @@ TEST_DATA = [
     'Otočila sa k nemu: "Je to krásne." povedala.',
     "Povedal (Prišiel som včera.) počas stretnutia.",
 
+    # Names with exclamation
+    "Yahoo! Server je dole.",
+    "Celý deň počúval Fun Radio! počas práce.",
+
     # Ellipsis
     "Myslel... ale nič nepovedal.",
     "List bol takmer hotový... ale zrazu vypadol prúd.",
