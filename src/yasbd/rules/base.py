@@ -142,6 +142,7 @@ class Rules:
         # Tech, Corporate Entities, & Major Consumer Brands
         "Yahoo", "Yum", "Chips Ahoy", "Kahoot", "JOOP", "Walla",
         "I Can't Believe It's Not Butter", "Pop", "FreshDirect", "Boost",
+        "Fun Radio",
 
         # Gaming, Media, Animation, & Entertainment
         "Mamma Mia", "Jeopardy", "Oklahoma", "Oliver", "Shindig",
