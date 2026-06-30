@@ -1,8 +1,8 @@
-from yasbd.rules.base import CJKV, Rules
+from yasbd.rules.base import CJK, Rules
 
 
 # fmt: off
-class ZhRules(CJKV, Rules):
+class ZhRules(CJK, Rules):
 
 
     NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {

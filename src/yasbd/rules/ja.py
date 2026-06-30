@@ -1,8 +1,8 @@
-from yasbd.rules.base import CJKV, Rules
+from yasbd.rules.base import CJK, Rules
 
 
 # fmt: off
-class JaRules(CJKV, Rules):
+class JaRules(CJK, Rules):
 
 
     NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {

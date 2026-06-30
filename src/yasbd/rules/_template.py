@@ -33,7 +33,7 @@ class LangRules(Rules):
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {...}
 
     # Structural headings (e.g., Section, Chapter, etc.).
-    # Not too useful for CJKV languages style
+    # Not too useful for CJK languages style
     SECTION_MARKERS = Rules.SECTION_MARKERS | {...}
 
     # Common inline abbreviations that should not end a sentence (e.g., Blvd., etc.).
