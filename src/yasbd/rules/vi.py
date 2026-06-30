@@ -13,7 +13,7 @@ class ViRules(Rules):
         "ThS.BS", "PGS.TS", "GS.TS", "TH.S",
 
         # Technical and Political Honorifics
-        "KTS", "đ/c", "Đ/c"
+        "KTS", "đ/c", "Đ/c", "p.v",
     }
 
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
@@ -27,10 +27,6 @@ class ViRules(Rules):
     SECTION_MARKERS = Rules.SECTION_MARKERS | {
         "Phần", "Chương", "Mục", "Điều", "Khoản", "Điểm",
         "Phụ lục", "Lời mở đầu"
-    }
-
-    INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
-        "v.v", "t.l", "t.m", "p.v"
     }
 
     COMMON_SENT_STARTERS = Rules.COMMON_SENT_STARTERS | {
