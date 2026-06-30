@@ -10,7 +10,7 @@ So you want to know how yasbd stacks up against the competition? Fair enough. He
 | nupunkt | Zero deps, legal-text optimized. Claims 91.1% precision at 10M chars/sec. ~12 langs. | [GitHub](https://github.com/alea-institute/nupunkt) / [pypi](https://pypi.org/project/nupunkt/) |
 | blingfire | Microsoft C++ FSM + Python bindings. Language agnostic. | [GitHub](https://github.com/microsoft/BlingFire) / [pypi](https://pypi.org/project/blingfire/) |
 | sentence-splitter | Heuristic algorithm from Europarl (Koehn/Schroeder). Archived 2025. | [GitHub](https://github.com/mediacloud/sentence-splitter) / [pypi](https://pypi.org/project/sentence-splitter/) |
-| yasbd | Pure Python, 25 langs and growing. Pointer-based SBD with pysbd adapter. | *(this repo)* |
+| yasbd | Pure Python, 26 langs and growing. Pointer-based SBD with pysbd adapter. | *(this repo)* |
 
 Not every library supports every language. We picked multiple languages that stress different weaknesses.
 
@@ -1323,6 +1323,7 @@ The meeting is at 2 p.m. Mwen pral vini.
   - [Portuguese — yasbd vs pysbd vs sentencex](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4639723570)
   - [Russian — yasbd vs razdel](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4632783363)
   - [Thai — yasbd vs Sentencex vs nupunkt vs PyThaiNLP](https://github.com/speedyk-005/yasbd-lib/pull/100#issue-4676465427)
+  - [Vietnamese — yasbd vs sentencex vs nupunkt](https://github.com/speedyk-005/yasbd-lib/pull/131#issue-4779574782)
 
 ## Conclusion
 

@@ -12,9 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Slovak (sk) language support** ([#129](https://github.com/speedyk-005/yasbd-lib/pull/129)).
+- **Vietnamese (vi) language support** ([#131](https://github.com/speedyk-005/yasbd-lib/pull/131)).
 - **Persian (fa) language support** ([#128](https://github.com/speedyk-005/yasbd-lib/pull/128)).
 - **Malayalam (ml) language support** ([#124](https://github.com/speedyk-005/yasbd-lib/pull/124)).
 - **Ukrainian (uk) language support** ([#122](https://github.com/speedyk-005/yasbd-lib/pull/122)).
+
+### Changed
+
+- **CJKV mixin renamed to CJK** ([#131](https://github.com/speedyk-005/yasbd-lib/pull/131)): Vietnamese uses Latin script, not CJK ideographs.
 
 ### Fixed
 

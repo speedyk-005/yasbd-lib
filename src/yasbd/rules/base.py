@@ -17,8 +17,8 @@ def _build_abbr_pattern(options: set[str]) -> str:
     return trie.add(*options).pattern()
 
 
-class CJKV:
-    """Mixin for CJKV languages sharing full-width geopolitical abbreviation patterns."""
+class CJK:
+    """Mixin for CJK languages sharing full-width geopolitical abbreviation patterns."""
 
     @classmethod
     def _compile_regex_dynamically(cls):
