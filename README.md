@@ -26,6 +26,7 @@
   - [✂ Why do I need a pair of "smart scissors" for text?](#-why-do-i-need-a-pair-of-smart-scissors-for-text)
   - [🔪 Are these shears just a rusty regex loop spray-painted in carbon fiber?](#-are-these-shears-just-a-rusty-regex-loop-spray-painted-in-carbon-fiber)
 - [🌐 Supported Languages](#-supported-languages)
+  - [How Language Profiles Are Built](#how-language-profiles-are-built)
 - [🏁 Benchmarks](#-benchmarks)
 - [📦 Installation](#-installation)
   - [The Quick & Easy Way](#the-quick--easy-way)
@@ -127,6 +128,12 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 </details>
 
 You can also get a list from `yasbd.get_supported_langs`.
+
+### How Language Profiles Are Built
+
+Each language profile (`IdRules`, `ViRules`, etc.) is research-backed, not guessed. Sources include AI/LLM assistance, spaCy sentencizer tokenizer exceptions, pysbd abbreviations, other SBD libraries, web research (Wikipedia, style guides), and real text corpora.
+
+Candidate abbreviations are collected from all sources, classified by type (`TITLE_ABBRVS`, `REFERENCE_ABBRVS`, etc.), deduplicated against the base `Rules` class, validated with test sentences, and checked against the full test suite to prevent regressions.
 
 ---
 
