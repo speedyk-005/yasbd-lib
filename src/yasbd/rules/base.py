@@ -297,7 +297,7 @@ class Rules:
                     (?<=[.\s])
                     \p{{Lu}}|\b\p{{Lo}}
                 )\.
-                (?<!(?i:{cls.DOTTED_GEOPOL_ABBRVS_PATTERN}|p\.m|a\.m){cls.DOTS_PATTERN})
+                (?<!(?i:{cls.DOTTED_GEOPOL_ABBRVS_PATTERN}|p\.m|a\.m|N|S|E|W){cls.DOTS_PATTERN})
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                 """, re2.X
             ),

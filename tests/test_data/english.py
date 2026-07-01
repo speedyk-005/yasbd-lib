@@ -49,6 +49,10 @@ TEST_DATA = [
     "The store opens at 8 p.m. December.",
     "The meeting is at 2 p.m.| Martin called.",
     "The meeting is at 10 a.m.| Monday's agenda was postponed.",
+    # cardinal directions as sentence terminators (fix for #133)
+    "Server A was located at 40.7128° N, 74.0060° W.| Server B was located at 34.0522° N, 118.2437° W.",
+    "The wind blew from the N.| It was cold.",
+    "Head E. on Main St.| Turn N. at the light.",
 
     # structural headings (fix for #36)
     "Chapter 1. The Beginning.| It was dark and quiet in the room. | Nothing moved.",
