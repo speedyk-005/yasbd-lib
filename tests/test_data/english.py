@@ -115,6 +115,10 @@ TEST_DATA = [
     "Done. 🎉| Amazing result.",
     "The alternative is to put it before the full stop 👉.| So cool, right?",
 
+    # Coordinate directions (fix for #134)
+    "Server A at 40.7128° N, 74.0060° W.| Server B at 34.0522° S, 118.2437° E.",
+    "N. Scott Momaday is a writer.| He won the Pulitzer.",
+
     # Mixed language
     "我喜欢AI。|It is useful",
     "The meeting is at 2 p.m.| 请别迟到。",

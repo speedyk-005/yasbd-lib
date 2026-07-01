@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **CLI error handling**: catch `UnsupportedLanguageError` in `main()` for a clean error message instead of a Python traceback.
+- **Coordinate direction abbreviations** ([#134](https://github.com/speedyk-005/yasbd-lib/pull/134)): N., S., E., W. after digits/degree signs now terminate sentences (e.g., "40.7128° N."). Initials like "N. Scott Momaday" are preserved.
 
 ---
 

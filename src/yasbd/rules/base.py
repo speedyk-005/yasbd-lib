@@ -291,16 +291,15 @@ class Rules:
             re.compile(r"\.(?=[ºª])"),
 
             # Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
-            # excluding geopolitical ones not followed by a common starters
+            # excluding coordinate directions or geopolitical ones not followed
+            # by a common starters
             re2.compile(rf"""
                 (?:
-                    # Preserve single-letter initials, but let coordinate directions
-                    # after digits or degree signs terminate sentences.
-                    (?<![\d°]\s)(?<=[.\s])(?i:[nsew])|
-                    (?<=[.\s])(?! (?i:[nsew])\. )\p{{Lu}}|
+                    (?<=\.)\p{{Lu}}|
+                    (?<=\s)\p{{Lu}}(?<![\d°]\s+[NSWE])|
                     \b\p{{Lo}}
                 )\.
-                (?<!(?i:{cls.DOTTED_GEOPOL_ABBRVS_PATTERN}|p\.m|a\.m){cls.DOTS_PATTERN})
+                (?<!(?i:{cls.DOTTED_GEOPOL_ABBRVS_PATTERN}|[pa]\.m){cls.DOTS_PATTERN})
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                 """, re2.X
             ),
