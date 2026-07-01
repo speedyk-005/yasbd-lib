@@ -56,6 +56,19 @@ def test_segment_different_input(en_detector):
     assert result_stream == ["Hello world.", "How are you?", "I'm fine."]
 
 
+def test_segment_coordinate_direction_sentence_end(en_detector):
+    """test that coordinate direction abbreviations can terminate sentences."""
+    text = (
+        "Server A was located at 40.7128° N, 74.0060° W. "
+        "Server B was located at 34.0522° S, 118.2437° E."
+    )
+
+    assert list(en_detector.segment(text)) == [
+        "Server A was located at 40.7128° N, 74.0060° W.",
+        "Server B was located at 34.0522° S, 118.2437° E.",
+    ]
+
+
 @pytest.mark.parametrize("lang,test_data", ALL_TEST_DATA.items())
 def test_segment_multiple_langs(subtests, lang, test_data):
     """test that each language's test data passes."""

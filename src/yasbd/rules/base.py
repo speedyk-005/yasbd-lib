@@ -294,8 +294,11 @@ class Rules:
             # excluding geopolitical ones not followed by a common starters
             re2.compile(rf"""
                 (?:
-                    (?<=[.\s])
-                    \p{{Lu}}|\b\p{{Lo}}
+                    # Preserve single-letter initials, but let coordinate directions
+                    # after digits or degree signs terminate sentences.
+                    (?<![\d°]\s)(?<=[.\s])(?i:[nsew])|
+                    (?<=[.\s])(?! (?i:[nsew])\. )\p{{Lu}}|
+                    \b\p{{Lo}}
                 )\.
                 (?<!(?i:{cls.DOTTED_GEOPOL_ABBRVS_PATTERN}|p\.m|a\.m){cls.DOTS_PATTERN})
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
