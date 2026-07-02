@@ -576,4 +576,4 @@ Interested in contributing? See the [**Contributing Guide**](https://github.com/
 
 **yasbd** is maintained by [speedyk-005](https://github.com/speedyk-005). Licensed under [Mozilla Public License 2.0](https://github.com/speedyk-005/yasbd-lib/blob/main/LICENSE) - you can use it freely in commercial and private work.
 
-Star us on GitHub if you dig it. Tell your NLP pipeline we said hi. 🚀
+If you find this project helpful, please consider giving it a ⭐!
