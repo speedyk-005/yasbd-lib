@@ -91,7 +91,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 ## 🌐 Supported Languages
 
-27 languages supported.
+28 languages supported.
 
 <details>
 <summary>Click to see all supported languages</summary>
@@ -115,6 +115,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇯🇵 | ja   | Japanese |
 | 🇰🇷 | ko   | Korean |
 | 🇮🇳 | ml   | Malayalam |
+| 🇮🇳 | mr   | Marathi |
 | 🇲🇲 | my   | Burmese |
 | 🇳🇱 | nl   | Dutch |
 | 🇵🇹 | pt   | Portuguese |
