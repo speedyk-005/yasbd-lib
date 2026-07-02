@@ -575,6 +575,6 @@ Interested in contributing? See the [**Contributing Guide**](https://github.com/
 
 ## 📜 Last note
 
-**yasbd** is maintained by [speedyk-005](https://github.com/speedyk-005). Licensed under [Mozilla Public License 2.0](https://github.com/speedyk-005/yasbd-lib/blob/main/LICENSE) - you can use it freely in commercial and private work.
+**yasbd** is maintained by [speedyk-005](https://github.com/speedyk-005). Licensed under [Mozilla Public License 2.0](https://github.com/speedyk-005/yasbd-lib/blob/main/LICENSE)
 
 If you find this project helpful, please consider giving it a ⭐!
