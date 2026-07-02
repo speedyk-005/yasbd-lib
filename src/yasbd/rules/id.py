@@ -42,7 +42,7 @@ class IdRules(Rules):
         "a.n", "u.b", "d.a",
 
         # Structural & Positional Inline Connectors
-        "a.l", "a.s", "b.d", "s.d", "u.p", "t.t", "d.h", "y.b.m",
+        "a.l", "a.s", "s.d", "u.p", "t.t", "d.h", "y.b.m",
 
         # Street/Address Abbreviations
         "Kp", "Jl", "Gg",
