@@ -6,9 +6,9 @@ class IdRules(Rules):
 
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
-        # Academic, Professional, and Noble Honorifics (Prenominal Only)
+        # Academic, Professional, and Noble Honorifics
         "Ir", "Drs", "Dra", "Pdt", "H", "Hj",
-        "Sdr", "Sdri", "Bpk", "Ibu", "Kp",
+        "Sdr", "Sdri", "Bpk", "Ibu",
 
         # Formal Correspondence Openings & Name Truncations
         "Yth", "Moh",
@@ -43,6 +43,9 @@ class IdRules(Rules):
 
         # Structural & Positional Inline Connectors
         "a.l", "a.s", "b.d", "s.d", "u.p", "t.t", "d.h", "y.b.m",
+
+        # Street/Address Abbreviations
+        "Kp", "Jl", "Gg",
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
