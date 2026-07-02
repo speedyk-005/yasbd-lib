@@ -1,4 +1,3 @@
-from yasbd.rules.base import Rules
 from yasbd.rules.hi import HiRules
 
 
@@ -15,18 +14,12 @@ class MrRules(HiRules):
         "म.रा", "भा.रा",
     }
 
-    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
-        # Specific document / editorial shorthand
-        "मुखपृ", "संद", "पान", "पृ", "संपा", "परि", "अध्य",
-
-        # Legal / administrative Marathi usage
-        "कलम", "उपकलम", "आदेश", "अधिनियम", "परिपत्रक", "मुक",
-
-        # Structural / indexing / academic shorthand
-        "प्रकरण", "सू",
+    REFERENCE_ABBRVS = HiRules.REFERENCE_ABBRVS | {
+        "मुखपृ", "संद", "पान", "अध्य", "प्रकरण", "कलम",
+        "उपकलम", "आदेश", "अधिनियम", "परिपत्रक",
     }
 
-    INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
+    INLINE_ONLY_ABBRVS = HiRules.INLINE_ONLY_ABBRVS | {
         "बनाम", "जि",
     }
 
