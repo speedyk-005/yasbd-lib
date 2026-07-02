@@ -56,7 +56,7 @@
 
 ###  ✂ Why do I need a pair of "smart scissors" for text?
 
-Running `re.split(r'\.\s+[A-Z]')` and praying. This blunt tool instantly shears titles like `Mr. Smith` or French corporate markers like `Sté. Générale` in half, scattering semantic fragments across the pipeline.
+Running `re.split(r'(?<=[.!?])(?=\s+[A-Z])')` and praying. This blunt tool instantly shears titles like `Mr. Smith` or French corporate markers like `Sté. Générale` in half, scattering semantic fragments across the pipeline.
 
 Punctuation is the most overloaded glyph set in text. A period alone does six jobs and only one is "sentence end." Generic split-on-punctuation fails on:
 
