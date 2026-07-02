@@ -26,6 +26,7 @@
   - [✂ Why do I need a pair of "smart scissors" for text?](#-why-do-i-need-a-pair-of-smart-scissors-for-text)
   - [🔪 Are these shears just a rusty regex loop spray-painted in carbon fiber?](#-are-these-shears-just-a-rusty-regex-loop-spray-painted-in-carbon-fiber)
 - [🌐 Supported Languages](#-supported-languages)
+  - [How Language Profiles Are Built](#how-language-profiles-are-built)
 - [🏁 Benchmarks](#-benchmarks)
 - [📦 Installation](#-installation)
   - [The Quick & Easy Way](#the-quick--easy-way)
@@ -55,7 +56,7 @@
 
 ###  ✂ Why do I need a pair of "smart scissors" for text?
 
-Running `re.split(r'\.\s+[A-Z]')` and praying. This blunt tool instantly shears titles like `Mr. Smith` or French corporate markers like `Sté. Générale` in half, scattering semantic fragments across the pipeline.
+Running `re.split(r'(?<=[.!?])(?=\s+[A-Z])')` and praying. This blunt tool instantly shears titles like `Mr. Smith` or French corporate markers like `Sté. Générale` in half, scattering semantic fragments across the pipeline.
 
 Punctuation is the most overloaded glyph set in text. A period alone does six jobs and only one is "sentence end." Generic split-on-punctuation fails on:
 
@@ -128,6 +129,12 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 </details>
 
 You can also get a list from `yasbd.get_supported_langs`.
+
+### How Language Profiles Are Built
+
+Each language profile (`IdRules`, `ViRules`, etc.) is research-backed, not guessed. Sources include AI/LLM assistance, spaCy sentencizer tokenizer exceptions, pysbd abbreviations, other SBD libraries, web research (Wikipedia, style guides), and real text corpora.
+
+Candidate abbreviations are collected from all sources, classified by type (`TITLE_ABBRVS`, `REFERENCE_ABBRVS`, etc.), deduplicated against the base `Rules` class, validated with test sentences, and checked against the full test suite to prevent regressions.
 
 ---
 
@@ -570,4 +577,4 @@ Interested in contributing? See the [**Contributing Guide**](https://github.com/
 
 **yasbd** is maintained by [speedyk-005](https://github.com/speedyk-005). Licensed under [Mozilla Public License 2.0](https://github.com/speedyk-005/yasbd-lib/blob/main/LICENSE) - you can use it freely in commercial and private work.
 
-Star us on GitHub if you dig it. Tell your NLP pipeline we said hi. 🚀
+If you find this project helpful, please consider giving it a ⭐!
