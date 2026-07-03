@@ -18,6 +18,7 @@ from yasbd import (
     UnsupportedLanguageError,
     __version__,
     get_supported_langs,
+    register_lang_packs,
 )
 
 cli = Radicli(
@@ -67,6 +68,14 @@ def _stdin_is_pipe() -> bool:
 def _stdout_is_pipe() -> bool:
     """Check if stdout is a pipe (redirected to another process)."""
     return stat.S_ISFIFO(os.fstat(1).st_mode)
+
+
+def _resolve_lang(lang: Optional[str], from_pack: Optional[list[str]]) -> str | None:
+    """Register packs and resolve language. Returns lang or None."""
+    registered = register_lang_packs(from_pack) if from_pack else []
+    if lang is None and len(registered) == 1:
+        lang = registered[0]
+    return lang
 
 
 def _create_external_cleaner(
@@ -218,6 +227,7 @@ def _output(items, destination: Optional[str], *, label: str):
     file=Arg("--file", "-f", help="Read input from a text file."),
     destination=Arg("--destination", "-d", help="Write output to a file."),
     lang=Arg("--lang", "-l", help="Language code (e.g., 'en', 'fr', 'de')."),
+    from_pack=Arg("--from-pack", help="Load external language pack (repeatable)."),
     preserve_whitespace=Arg(
         "--preserve-whitespace", "-w", help="Preserve original whitespace in output."
     ),
@@ -228,6 +238,7 @@ def segment(
     file: Optional[str] = None,
     destination: Optional[str] = None,
     lang: Optional[str] = None,
+    from_pack: Optional[list[str]] = None,
     preserve_whitespace: bool = False,
     verbose: bool = False,
 ):
@@ -237,6 +248,7 @@ def segment(
     Writes enumerated sentences to stdout or JSONL to --destination.
     """
     with _resolve_input(text, file) as input_text:
+        lang = _resolve_lang(lang, from_pack)
         detector = BoundaryDetector(lang=lang, preserve_quote_and_paren=True, verbose=verbose)
         _output(
             detector.segment(input_text, preserve_whitespace=preserve_whitespace),
@@ -251,6 +263,7 @@ def segment(
     file=Arg("--file", "-f", help="Read input from a text file."),
     destination=Arg("--destination", "-d", help="Write boundary offsets to a file."),
     lang=Arg("--lang", "-l", help="Language code (e.g., 'en', 'fr', 'de')."),
+    from_pack=Arg("--from-pack", help="Load external language pack (repeatable)."),
     relative=Arg("--relative", "-r", help="Yield paragraph-relative offsets."),
     verbose=Arg("--verbose", "-v", help="Enable verbose logging."),
 )
@@ -259,6 +272,7 @@ def detect(
     file: Optional[str] = None,
     destination: Optional[str] = None,
     lang: Optional[str] = None,
+    from_pack: Optional[list[str]] = None,
     relative: bool = False,
     verbose: bool = False,
 ):
@@ -269,6 +283,7 @@ def detect(
     Use --relative for per-paragraph offsets (ParagraphEOF marks gaps).
     """
     with _resolve_input(text, file) as input_text:
+        lang = _resolve_lang(lang, from_pack)
         detector = BoundaryDetector(lang=lang, preserve_quote_and_paren=True, verbose=verbose)
         _output(
             detector.detect(input_text, relative=relative),
