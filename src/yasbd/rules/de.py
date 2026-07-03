@@ -86,8 +86,8 @@ class DeRules(Rules):
     }
 
     STREET_ABBRVS = {
-        "str", "gasse", "pl", "allee", "weg", "hbf", "platz",
-        "ring", "ufer", "chaussee", "damm", "brücke", "geb"
+        "str", "pl", "weg", "hbf",
+        "ring", "ufer", "damm", "geb"
     }
     INLINE_ONLY_ABBRVS |= STREET_ABBRVS
 

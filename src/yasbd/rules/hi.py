@@ -9,7 +9,7 @@ class HiRules(Rules):
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Academic & Professional
-        "डॉ", "प्रो", "एड", "इंजी", "कैप्टन", "प्रि", "प्रा", "वै", "वैद्य",
+        "डॉ", "प्रो", "एड", "इंजी", "प्रि", "प्रा", "वै", "वैद्य",
 
         # Military, Legal & Administrative
         "ले", "कैप्ट", "न्या", "सचि", "अधि", "निदे", "सां", "वि", "मु", "मं",
@@ -18,7 +18,7 @@ class HiRules(Rules):
         "पं", "स्वामी", "स्वा", "सं", "आ", "पू",
 
         # Social & Formal Address
-        "श्री", "श्रीमती", "श्रीम", "कुमारी", "कु", "सुश्री", "सु", "मा"
+        "श्रीम", "कु", "सु", "मा"
     }
 
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
@@ -39,16 +39,12 @@ class HiRules(Rules):
         "सार", "विव", "ता", "तुल", "सू", "सूच",
 
         # Legal, Structural, and Cross-References
-        "ध", "धारा", "उ.ध", "उपदफ़ा", "नि", "नियम",
-        "आदे", "या", "याचि", "प्रक", "मुक", "ब",
+        "ध", "धारा", "उ.ध", "नि", "नियम", "आदे", "या", "याचि",
+        "प्रक", "मुक", "ब",
     }
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
-        # Structural Connections, Document Locators
-        "बनाम", "वि.द्र", "पु.श्च", "स्था",
-
-        # Address
-        "चौ", "जि"
+        "बनाम", "वि.द्र", "पु.श्च", "स्था", "चौ", "जि"
     }
 
     COMMON_SENT_STARTERS = {

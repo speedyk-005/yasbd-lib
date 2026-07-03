@@ -8,14 +8,7 @@ class MlRules(Rules):
 
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
-        # Social
-        "ശ്രീ", "ശ്രീമതി", "കുമാരി",
-
-        # Academic & Professional
-        "ഡോ", "പ്രൊ", "അഡ്വ",
-
-       # Political
-        "എംഎൽഎ", "എംപി",
+        "ഡോ", "പ്രൊ", "അഡ്വ", "എംഎൽഎ", "എംപി",
     }
 
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {

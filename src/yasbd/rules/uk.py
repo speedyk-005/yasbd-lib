@@ -6,7 +6,7 @@ class UkRules(RuRules):
 
 
     TITLE_ABBRVS = RuRules.TITLE_ABBRVS | {
-        "пан", "пані", "панна", "підп", "асист", "інж",
+        "пан", "підп", "асист", "інж",
         "в.о", "уклад", "упоряд",
     }
 
@@ -21,7 +21,7 @@ class UkRules(RuRules):
 
     INLINE_ONLY_ABBRVS = RuRules.INLINE_ONLY_ABBRVS | {
         # General inline
-        "тобто", "зокр", "згідно", "включ", "у т.ч",
+        "зокр", "включ", "у т.ч",
 
         # Address
         "вул", "буд", "просп", "пров",
