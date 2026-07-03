@@ -416,6 +416,18 @@ echo "Hello. World." | yasbd segment | cat
 # Hello.
 # World.
 
+# Load external language pack and segment a mono-profile pack
+pip install yasbd-xx
+yasbd segment --from-pack yasbd_xx "Hello. World."
+# [1] 'Hello.'
+# [2] 'World.'
+
+# Multi-profile pack with explicit --lang
+pip install yasbd-auxlang
+yasbd segment --from-pack yasbd_auxlang --lang eo "Saluton. Kiel vi fartas?"
+# [1] 'Saluton.'
+# [2] 'Kiel vi fartas?'
+
 # Clean noisy text (HTML, mojibake, OCR artifacts)
 yasbd clean "<script>x</script>Hello <b>world</b>."
 # [1] 'Hello <b>world</b>.'
@@ -527,7 +539,8 @@ Need support for a language that isn't built in? Plug in your own lang pack. A l
 from yasbd.rules import register_lang_packs
 # Or from yasbd import register_lang_packs
 
-register_lang_packs(["my_yasbd_pack"])
+registered = register_lang_packs(["my_yasbd_pack"])
+print(registered)  # e.g. ["xx", "eo"]
 ```
 
 To reset the registry at runtime:

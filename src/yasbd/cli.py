@@ -13,10 +13,12 @@ from radicli import Arg, Radicli
 
 from yasbd import (
     BoundaryDetector,
+    InvalidInputError,
     ParagraphEOF,
     UnsupportedLanguageError,
     __version__,
     get_supported_langs,
+    register_lang_packs,
 )
 
 cli = Radicli(
@@ -66,6 +68,14 @@ def _stdin_is_pipe() -> bool:
 def _stdout_is_pipe() -> bool:
     """Check if stdout is a pipe (redirected to another process)."""
     return stat.S_ISFIFO(os.fstat(1).st_mode)
+
+
+def _resolve_lang(lang: Optional[str], from_pack: Optional[list[str]]) -> str | None:
+    """Register packs and resolve language. Returns lang or None."""
+    registered = register_lang_packs(from_pack) if from_pack else []
+    if lang is None and len(registered) == 1:
+        lang = registered[0]
+    return lang
 
 
 def _create_external_cleaner(
@@ -133,12 +143,14 @@ def _resolve_input(
     if text is not None and file is not None:
         print("Error: provide text argument or --file, not both.", file=sys.stderr)
         sys.exit(1)
+
     if text is None and file is None:
         if _stdin_is_pipe():
             yield sys.stdin
             return
         print("Error: provide text argument or --file.", file=sys.stderr)
         sys.exit(1)
+
     if file is not None:
         f = open(file, encoding="utf-8")  # noqa: SIM115
         try:
@@ -162,8 +174,10 @@ def _to_json(no: int, item) -> str:
     """
     if item is ParagraphEOF:
         return json.dumps({"no": no, "eof": True})
+
     if isinstance(item, int):
         return json.dumps({"no": no, "offset": item})
+
     return json.dumps({"no": no, "text": item})
 
 
@@ -213,6 +227,7 @@ def _output(items, destination: Optional[str], *, label: str):
     file=Arg("--file", "-f", help="Read input from a text file."),
     destination=Arg("--destination", "-d", help="Write output to a file."),
     lang=Arg("--lang", "-l", help="Language code (e.g., 'en', 'fr', 'de')."),
+    from_pack=Arg("--from-pack", help="Load external language pack (repeatable)."),
     preserve_whitespace=Arg(
         "--preserve-whitespace", "-w", help="Preserve original whitespace in output."
     ),
@@ -222,7 +237,8 @@ def segment(
     text: Optional[str] = None,
     file: Optional[str] = None,
     destination: Optional[str] = None,
-    lang: str = "en",
+    lang: Optional[str] = None,
+    from_pack: Optional[list[str]] = None,
     preserve_whitespace: bool = False,
     verbose: bool = False,
 ):
@@ -232,6 +248,7 @@ def segment(
     Writes enumerated sentences to stdout or JSONL to --destination.
     """
     with _resolve_input(text, file) as input_text:
+        lang = _resolve_lang(lang, from_pack)
         detector = BoundaryDetector(lang=lang, preserve_quote_and_paren=True, verbose=verbose)
         _output(
             detector.segment(input_text, preserve_whitespace=preserve_whitespace),
@@ -246,6 +263,7 @@ def segment(
     file=Arg("--file", "-f", help="Read input from a text file."),
     destination=Arg("--destination", "-d", help="Write boundary offsets to a file."),
     lang=Arg("--lang", "-l", help="Language code (e.g., 'en', 'fr', 'de')."),
+    from_pack=Arg("--from-pack", help="Load external language pack (repeatable)."),
     relative=Arg("--relative", "-r", help="Yield paragraph-relative offsets."),
     verbose=Arg("--verbose", "-v", help="Enable verbose logging."),
 )
@@ -253,7 +271,8 @@ def detect(
     text: Optional[str] = None,
     file: Optional[str] = None,
     destination: Optional[str] = None,
-    lang: str = "en",
+    lang: Optional[str] = None,
+    from_pack: Optional[list[str]] = None,
     relative: bool = False,
     verbose: bool = False,
 ):
@@ -264,6 +283,7 @@ def detect(
     Use --relative for per-paragraph offsets (ParagraphEOF marks gaps).
     """
     with _resolve_input(text, file) as input_text:
+        lang = _resolve_lang(lang, from_pack)
         detector = BoundaryDetector(lang=lang, preserve_quote_and_paren=True, verbose=verbose)
         _output(
             detector.detect(input_text, relative=relative),
@@ -332,12 +352,19 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] in ("--version", "-v"):
         print(_version())
         sys.exit(0)
+
     if len(sys.argv) == 1 or (len(sys.argv) > 1 and sys.argv[1] in ("--help", "-h")):
         print(_logo_colored(), end="\n\n")
+
     try:
         cli.run()
-    except UnsupportedLanguageError as e:
+    except (UnsupportedLanguageError, InvalidInputError) as e:
         print(f"Error: {e}", file=sys.stderr)
+        if isinstance(e, InvalidInputError):
+            print(
+                "Use --lang or -l to specify a language (e.g., --lang en).",
+                file=sys.stderr,
+            )
         raise SystemExit(2) from None
 
 

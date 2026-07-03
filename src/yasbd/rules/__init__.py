@@ -29,7 +29,7 @@ def _validate_profile(profile: type, name: str) -> None:
 
 
 @validate_input
-def register_lang_packs(names: list[str]) -> None:
+def register_lang_packs(names: list[str]) -> list[str]:
     """Import and validate external language pack modules.
 
     Each module must expose a ``PROFILES`` list of ``Rules`` subclasses.
@@ -44,9 +44,13 @@ def register_lang_packs(names: list[str]) -> None:
         names: Module names resolvable from the Python path
             (e.g. ``["yasbd_indic", "yasbd_legal"]``).
 
+    Returns:
+        List of registered language codes (e.g. ``["xx", "eo"]``).
+
     Raises:
         LangPackError: If a language pack module cannot be imported.
     """
+    registered: list[str] = []
     for name in names:
         try:
             mod = import_module(name)
@@ -69,6 +73,7 @@ def register_lang_packs(names: list[str]) -> None:
                 _validate_profile(profile, name)
                 lang_code = profile.__name__.removesuffix("Rules").lower()
                 _LANG_PACK_REGISTRY[lang_code] = (name, profile)
+                registered.append(lang_code)
             except (TypeError, RuntimeError) as e:
                 raise LangPackError(
                     f"Validation failed for {profile.__name__!r} in module {name!r}.\n"
@@ -76,6 +81,7 @@ def register_lang_packs(names: list[str]) -> None:
                 ) from e
 
     get_supported_langs.cache_clear()
+    return registered
 
 
 def clear_lang_packs() -> None:

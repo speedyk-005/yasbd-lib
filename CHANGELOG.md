@@ -18,9 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Persian (fa) language support** ([#128](https://github.com/speedyk-005/yasbd-lib/pull/128)).
 - **Malayalam (ml) language support** ([#124](https://github.com/speedyk-005/yasbd-lib/pull/124)).
 - **Ukrainian (uk) language support** ([#122](https://github.com/speedyk-005/yasbd-lib/pull/122)).
+- **`--from-pack` CLI flag** ([#140](https://github.com/speedyk-005/yasbd-lib/pull/140)): lets you load external language packs right from the terminal.
 
 ### Changed
 
+- **`--lang` now required** in CLI `segment` and `detect` commands ([#140](https://github.com/speedyk-005/yasbd-lib/pull/140)): dropped the default to match the Python API. Pass `--lang` explicitly or get an error.
+- **`register_lang_packs()` return type** ([#140](https://github.com/speedyk-005/yasbd-lib/pull/140)): now returns a `list[str]` of language codes instead of `None`. No more reaching into `_LANG_PACK_REGISTRY`.
 - **CJKV mixin renamed to CJK** ([#131](https://github.com/speedyk-005/yasbd-lib/pull/131)): Vietnamese uses Latin script, not CJK ideographs.
 
 ### Fixed
