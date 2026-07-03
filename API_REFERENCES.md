@@ -395,7 +395,7 @@ Raised when a StreamCleaner extra step fails (non-callable or non-str return).
 
 ```python
 @validate_input
-def register_lang_packs(names: list[str]) -> None
+def register_lang_packs(names: list[str]) -> list[str]
 ```
 
 Import and validate external language pack modules.
@@ -407,6 +407,9 @@ Caution:
 This function imports arbitrary Python modules by name. Only load lang
 packs from sources you trust — an untrusted module can execute
 arbitrary code at import time.
+
+**Returns**
+List of registered language codes (e.g. ``["xx", "eo"]``).
 
 **Arguments**:
 
