@@ -33,31 +33,31 @@ keywords = [
 
 dependencies = [
   "loguru>=0.7.3,<1.0",
-  "regex>=2024.11.6",
-  "ftfy>=6.2.0,<7.0",
-  "retrie>=0.3.0,<1.0",
-  "py3langid>=0.2.2,<1.0",
-  "radicli>=0.0.25,<1.0",
-  "beartype>=0.22.6,<1.0",
+  "regex>=2026.6.28",
+  "ftfy>=6.3.1,<7.0",
+  "retrie>=0.3.1,<1.0",
+  "py3langid>=0.3.0,<1.0",
+  "radicli>=0.0.26,<1.0",
+  "beartype>=0.22.9,<1.0",
 ]
 
 [project.optional-dependencies]
 dev = [
   "pytest>=8.3.5",
   "pytest-cov>=6.2.1",
-  "pre-commit>=4.4.0",
-  "pydoc-markdown>=4.8.0,<5.0",
+  "pre-commit>=4.6.0",
+  "pydoc-markdown>=4.8.2,<5.0",
   "ruff>=0.14.14",
 ]
 
 bench = [
   "pysbd",
   "sentencex",
-  "sentsplit",  # depends on deprecated pkg_resources — needs setuptools<81
+  "sentsplit",  # depends on deprecated pkg_resources — needs setuptools<83
   "nupunkt",
   "blingfire",
   "sentence-splitter",
-  "setuptools<81",
+  "setuptools<83",
   "matplotlib",
   "rich",
   "radicli",
@@ -75,7 +75,7 @@ yasbd = "yasbd.cli:main"
 
 [build-system]
 requires = [
-    "setuptools>=64",
+    "setuptools>=82.0.1",
     "wheel",
 ]
 build-backend = "setuptools.build_meta"
