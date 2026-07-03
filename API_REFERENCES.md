@@ -25,27 +25,40 @@
   * [clear\_lang\_packs](#yasbd.rules.clear_lang_packs)
   * [get\_supported\_langs](#yasbd.rules.get_supported_langs)
   * [load\_rule](#yasbd.rules.load_rule)
+* [yasbd.rules.af](#yasbd.rules.af)
 * [yasbd.rules.am](#yasbd.rules.am)
 * [yasbd.rules.ar](#yasbd.rules.ar)
 * [yasbd.rules.base](#yasbd.rules.base)
+  * [build\_abbr\_pattern](#yasbd.rules.base.build_abbr_pattern)
+  * [CJK](#yasbd.rules.base.CJK)
   * [Rules](#yasbd.rules.base.Rules)
     * [\_\_init\_\_](#yasbd.rules.base.Rules.__init__)
+    * [post\_process\_boundaries](#yasbd.rules.base.Rules.post_process_boundaries)
     * [apply](#yasbd.rules.base.Rules.apply)
+* [yasbd.rules.da](#yasbd.rules.da)
 * [yasbd.rules.de](#yasbd.rules.de)
 * [yasbd.rules.el](#yasbd.rules.el)
 * [yasbd.rules.en](#yasbd.rules.en)
 * [yasbd.rules.es](#yasbd.rules.es)
+* [yasbd.rules.fa](#yasbd.rules.fa)
 * [yasbd.rules.fr](#yasbd.rules.fr)
 * [yasbd.rules.hi](#yasbd.rules.hi)
 * [yasbd.rules.ht](#yasbd.rules.ht)
+* [yasbd.rules.id](#yasbd.rules.id)
 * [yasbd.rules.it](#yasbd.rules.it)
 * [yasbd.rules.ja](#yasbd.rules.ja)
 * [yasbd.rules.ko](#yasbd.rules.ko)
+* [yasbd.rules.ml](#yasbd.rules.ml)
+* [yasbd.rules.mr](#yasbd.rules.mr)
 * [yasbd.rules.my](#yasbd.rules.my)
 * [yasbd.rules.nl](#yasbd.rules.nl)
 * [yasbd.rules.pt](#yasbd.rules.pt)
 * [yasbd.rules.ru](#yasbd.rules.ru)
+* [yasbd.rules.sk](#yasbd.rules.sk)
+* [yasbd.rules.sv](#yasbd.rules.sv)
 * [yasbd.rules.th](#yasbd.rules.th)
+* [yasbd.rules.uk](#yasbd.rules.uk)
+* [yasbd.rules.vi](#yasbd.rules.vi)
 * [yasbd.rules.zh](#yasbd.rules.zh)
 * [yasbd.utils](#yasbd.utils)
 * [yasbd.utils.cleaner](#yasbd.utils.cleaner)
@@ -221,6 +234,8 @@ Split text into sentences.
     file=Arg("--file", "-f", help="Read input from a text file."),
     destination=Arg("--destination", "-d", help="Write output to a file."),
     lang=Arg("--lang", "-l", help="Language code (e.g., 'en', 'fr', 'de')."),
+    from_pack=Arg("--from-pack",
+                  help="Load external language pack (repeatable)."),
     preserve_whitespace=Arg("--preserve-whitespace",
                             "-w",
                             help="Preserve original whitespace in output."),
@@ -229,7 +244,8 @@ Split text into sentences.
 def segment(text: Optional[str] = None,
             file: Optional[str] = None,
             destination: Optional[str] = None,
-            lang: str = "en",
+            lang: Optional[str] = None,
+            from_pack: Optional[list[str]] = None,
             preserve_whitespace: bool = False,
             verbose: bool = False)
 ```
@@ -255,13 +271,16 @@ Writes enumerated sentences to stdout or JSONL to --destination.
                     "-d",
                     help="Write boundary offsets to a file."),
     lang=Arg("--lang", "-l", help="Language code (e.g., 'en', 'fr', 'de')."),
+    from_pack=Arg("--from-pack",
+                  help="Load external language pack (repeatable)."),
     relative=Arg("--relative", "-r", help="Yield paragraph-relative offsets."),
     verbose=Arg("--verbose", "-v", help="Enable verbose logging."),
 )
 def detect(text: Optional[str] = None,
            file: Optional[str] = None,
            destination: Optional[str] = None,
-           lang: str = "en",
+           lang: Optional[str] = None,
+           from_pack: Optional[list[str]] = None,
            relative: bool = False,
            verbose: bool = False)
 ```
@@ -408,13 +427,15 @@ This function imports arbitrary Python modules by name. Only load lang
 packs from sources you trust — an untrusted module can execute
 arbitrary code at import time.
 
-**Returns**
-List of registered language codes (e.g. ``["xx", "eo"]``).
-
 **Arguments**:
 
 - `names` - Module names resolvable from the Python path
   (e.g. ``["yasbd_indic", "yasbd_legal"]``).
+  
+
+**Returns**:
+
+  List of registered language codes (e.g. ``["xx", "eo"]``).
   
 
 **Raises**:
@@ -466,6 +487,10 @@ Checks the language pack registry first; falls back to the built-in rules direct
 
 - `UnsupportedLanguageError` - If no rule module exists for *lang*.
 
+<a id="yasbd.rules.af"></a>
+
+# yasbd.rules.af
+
 <a id="yasbd.rules.am"></a>
 
 # yasbd.rules.am
@@ -477,6 +502,29 @@ Checks the language pack registry first; falls back to the built-in rules direct
 <a id="yasbd.rules.base"></a>
 
 # yasbd.rules.base
+
+<a id="yasbd.rules.base.build_abbr_pattern"></a>
+
+#### build\_abbr\_pattern
+
+```python
+def build_abbr_pattern(options: set[str]) -> str
+```
+
+Build an optimised and escaped regex alternation pattern.
+
+Returns a never-match pattern if no valid options exist.
+Ref: https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything?
+
+<a id="yasbd.rules.base.CJK"></a>
+
+## CJK Objects
+
+```python
+class CJK()
+```
+
+Mixin for CJK languages sharing full-width geopolitical abbreviation patterns.
 
 <a id="yasbd.rules.base.Rules"></a>
 
@@ -499,6 +547,20 @@ Initialize rule instance with lazy-compiled regex patterns.
 Patterns are compiled once per class and cached via ``_REGEX_CACHED``.
 Subclasses can override data constants (abbreviation sets, terminators, etc.)
 and the classmethod ``_compile_regex_dynamically`` will pick them up.
+
+<a id="yasbd.rules.base.Rules.post_process_boundaries"></a>
+
+#### post\_process\_boundaries
+
+```python
+def post_process_boundaries(sentence_boundaries: set[int], text: str) -> None
+```
+
+Hook for language-specific boundary filtering.
+
+Override in subclasses to remove false-positive boundaries that
+the regex passes cannot catch. Mutate ``sentence_boundaries`` in
+place; do not touch any other engine state.
 
 <a id="yasbd.rules.base.Rules.apply"></a>
 
@@ -526,6 +588,10 @@ quote/paren spans, list markers).
 
   Sorted list of character offsets at which sentences end.
 
+<a id="yasbd.rules.da"></a>
+
+# yasbd.rules.da
+
 <a id="yasbd.rules.de"></a>
 
 # yasbd.rules.de
@@ -542,6 +608,10 @@ quote/paren spans, list markers).
 
 # yasbd.rules.es
 
+<a id="yasbd.rules.fa"></a>
+
+# yasbd.rules.fa
+
 <a id="yasbd.rules.fr"></a>
 
 # yasbd.rules.fr
@@ -554,6 +624,10 @@ quote/paren spans, list markers).
 
 # yasbd.rules.ht
 
+<a id="yasbd.rules.id"></a>
+
+# yasbd.rules.id
+
 <a id="yasbd.rules.it"></a>
 
 # yasbd.rules.it
@@ -565,6 +639,14 @@ quote/paren spans, list markers).
 <a id="yasbd.rules.ko"></a>
 
 # yasbd.rules.ko
+
+<a id="yasbd.rules.ml"></a>
+
+# yasbd.rules.ml
+
+<a id="yasbd.rules.mr"></a>
+
+# yasbd.rules.mr
 
 <a id="yasbd.rules.my"></a>
 
@@ -582,9 +664,25 @@ quote/paren spans, list markers).
 
 # yasbd.rules.ru
 
+<a id="yasbd.rules.sk"></a>
+
+# yasbd.rules.sk
+
+<a id="yasbd.rules.sv"></a>
+
+# yasbd.rules.sv
+
 <a id="yasbd.rules.th"></a>
 
 # yasbd.rules.th
+
+<a id="yasbd.rules.uk"></a>
+
+# yasbd.rules.uk
+
+<a id="yasbd.rules.vi"></a>
+
+# yasbd.rules.vi
 
 <a id="yasbd.rules.zh"></a>
 
