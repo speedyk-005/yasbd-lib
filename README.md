@@ -133,7 +133,7 @@ You can also get a list from `yasbd.get_supported_langs`.
 
 ### How Language Profiles Are Built
 
-Each language profile (`IdRules`, `ViRules`, etc.) is research-backed, not guessed. Sources include AI/LLM assistance, spaCy sentencizer tokenizer exceptions, pysbd abbreviations, other SBD libraries, web research (Wikipedia, style guides), and real text corpora.
+Each language profile (`IdRules`, `ViRules`, etc.) is assembled from multiple sources: real text corpora, web research (Wikipedia, style guides), exception lists from spaCy's sentencizer, abbreviation lists from pysbd and other SBD libraries, and AI/LLM assistance as a supplementary tool. No profile is built from guessing.
 
 Candidate abbreviations are collected from all sources, classified by type (`TITLE_ABBRVS`, `REFERENCE_ABBRVS`, etc.), deduplicated against the base `Rules` class, validated with test sentences, and checked against the full test suite to prevent regressions.
 

@@ -25,6 +25,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`--lang` now required** in CLI `segment` and `detect` commands ([#140](https://github.com/speedyk-005/yasbd-lib/pull/140)): dropped the default to match the Python API. Pass `--lang` explicitly or get an error.
 - **`register_lang_packs()` return type** ([#140](https://github.com/speedyk-005/yasbd-lib/pull/140)): now returns a `list[str]` of language codes instead of `None`. No more reaching into `_LANG_PACK_REGISTRY`.
 - **CJKV mixin renamed to CJK** ([#131](https://github.com/speedyk-005/yasbd-lib/pull/131)): Vietnamese uses Latin script, not CJK ideographs.
+- **Internal refactors** ([#141](https://github.com/speedyk-005/yasbd-lib/pull/141)):
+  - Etc-style entries removed from abbreviation sets; and-others moved to `REFERENCE` for context-limited suppression.
+  - Full-word honorifics and geopolitical names stripped from script-language abbreviation sets.
+  - `_post_process_boundaries` and `_build_abbr_pattern` made public; `main_boundaries` renamed to `sentence_boundaries`.
+  - Project and CLI descriptions updated to rule-based.
 
 ### Fixed
 

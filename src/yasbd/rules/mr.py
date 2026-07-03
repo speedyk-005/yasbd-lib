@@ -10,13 +10,11 @@ class MrRules(HiRules):
     }
 
     DOTTED_GEOPOL_ABBRVS = HiRules.DOTTED_GEOPOL_ABBRVS | {
-        # Marathi state and administrative reference
         "म.रा", "भा.रा",
     }
 
     REFERENCE_ABBRVS = HiRules.REFERENCE_ABBRVS | {
-        "मुखपृ", "संद", "पान", "अध्य", "प्रकरण", "कलम",
-        "उपकलम", "आदेश", "अधिनियम", "परिपत्रक",
+        "मुखपृ", "संद", "पान", "अध्य", "आदेश",
     }
 
     INLINE_ONLY_ABBRVS = HiRules.INLINE_ONLY_ABBRVS | {

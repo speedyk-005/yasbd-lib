@@ -58,10 +58,10 @@ class LangRules(Rules):
     REPORTING_WORDS = {...}
 
     # fmt: on
-    def _post_process_boundaries(
-        self, main_boundaries: set[int], text: str
+    def post_process_boundaries(
+        self, sentence_boundaries: set[int], text: str
     ) -> None:
         """Hook for language-specific boundary filtering that the regex
-        passes cannot catch. Override and mutate ``main_boundaries``.
+        passes cannot catch. Override and mutate ``sentence_boundaries``.
         """
         pass

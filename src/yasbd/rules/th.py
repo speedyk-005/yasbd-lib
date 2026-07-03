@@ -1,7 +1,7 @@
 import re
 from itertools import chain
 
-from yasbd.rules.base import Rules, _build_abbr_pattern
+from yasbd.rules.base import Rules, build_abbr_pattern
 
 
 # fmt: off
@@ -64,17 +64,17 @@ class ThRules(Rules):
         super()._compile_regex_dynamically()
 
         cls.FINAL_PARTICLES_FINDER = re.compile(
-            rf"{_build_abbr_pattern(cls.DISCOURSE_FINAL_PARTICLES)}(?![\s]*[.?!;:๚๛])"
+            rf"{build_abbr_pattern(cls.DISCOURSE_FINAL_PARTICLES)}(?![\s]*[.?!;:๚๛])"
         )
 
         cls.SPACE_PLUS_STARTER_FINDER = re.compile(
             rf"(?!\.\s*)(?=\s{cls.COMMON_STARTERS_PATTERN})"
         )
 
-    def _post_process_boundaries(
-        self, main_boundaries: set[int], text: str
+    def post_process_boundaries(
+        self, sentence_boundaries: set[int], text: str
     ) -> None:
-        main_boundaries.update(
+        sentence_boundaries.update(
             m.end() for m in
             chain(
                 self.FINAL_PARTICLES_FINDER.finditer(text),

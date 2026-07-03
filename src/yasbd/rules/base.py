@@ -4,7 +4,7 @@ import regex as re2
 from retrie.trie import Trie
 
 
-def _build_abbr_pattern(options: set[str]) -> str:
+def build_abbr_pattern(options: set[str]) -> str:
     """Build an optimised and escaped regex alternation pattern.
 
     Returns a never-match pattern if no valid options exist.
@@ -208,9 +208,9 @@ class Rules:
         """Compile language-specific regex patterns."""
         cls.TERMINATORS_PATTERN = f"[{''.join(cls.TERMINATORS)}]"
         cls.DOTS_PATTERN = r"[.．]"
-        cls.TITLE_ABBRVS_PATTERN = _build_abbr_pattern(cls.TITLE_ABBRVS)
-        cls.DOTTED_GEOPOL_ABBRVS_PATTERN = _build_abbr_pattern(cls.DOTTED_GEOPOL_ABBRVS)
-        cls.COMMON_STARTERS_PATTERN = _build_abbr_pattern(cls.COMMON_SENT_STARTERS)
+        cls.TITLE_ABBRVS_PATTERN = build_abbr_pattern(cls.TITLE_ABBRVS)
+        cls.DOTTED_GEOPOL_ABBRVS_PATTERN = build_abbr_pattern(cls.DOTTED_GEOPOL_ABBRVS)
+        cls.COMMON_STARTERS_PATTERN = build_abbr_pattern(cls.COMMON_SENT_STARTERS)
 
         # https://regex101.com/r/qBSyU5/16
         # Handle flattened lists due to messy OCR.
@@ -272,19 +272,19 @@ class Rules:
 
             # Abbrv that NEVER ends a sentence
             re.compile(
-               rf"\b(?i:{_build_abbr_pattern(cls.INLINE_ONLY_ABBRVS)}){cls.DOTS_PATTERN}"
+               rf"\b(?i:{build_abbr_pattern(cls.INLINE_ONLY_ABBRVS)}){cls.DOTS_PATTERN}"
             ),
 
             # References abbrv + number/letter/bracket (e.g., to p. 55, app. A, et al. [2004])
             re2.compile(rf"""
-                \b(?i:{_build_abbr_pattern(cls.REFERENCE_ABBRVS)}){cls.DOTS_PATTERN}
+                \b(?i:{build_abbr_pattern(cls.REFERENCE_ABBRVS)}){cls.DOTS_PATTERN}
                 (?=\s+(?:\(|\[|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))
                 """, re2.X
             ),
 
             # Date abbrv followed by a number
             re2.compile(
-                rf"\b(?i:{_build_abbr_pattern(cls.DATE_ABBRVS)}){cls.DOTS_PATTERN}(?=\s+\p{{N}})"
+                rf"\b(?i:{build_abbr_pattern(cls.DATE_ABBRVS)}){cls.DOTS_PATTERN}(?=\s+\p{{N}})"
             ),
 
             # A dot followed by an superscript indicator (e.g. n.º, ​1.º)
@@ -304,14 +304,14 @@ class Rules:
                 """, re2.X
             ),
             re.compile(rf"""
-                (?:(?i:{_build_abbr_pattern(cls.NAMES_WITH_EXCLAMATION)})[! ！‼])
+                (?:(?i:{build_abbr_pattern(cls.NAMES_WITH_EXCLAMATION)})[! ！‼])
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                """, re.X
             ),
 
             # structural headings (e.g., "Section 1. The Beginning.")
             re.compile(rf"""
-                \b(?:{_build_abbr_pattern(cls.SECTION_MARKERS)})\s+
+                \b(?:{build_abbr_pattern(cls.SECTION_MARKERS)})\s+
                 (?:[\dIVXLCDM]+{cls.DOTS_PATTERN}){{1,3}}
                 """, re.X
             )
@@ -326,7 +326,7 @@ class Rules:
             )
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
                 \s*[\p{{Po}}\p{{Ll}}\p{{Pe}}]|
-                {_build_abbr_pattern(cls.POST_QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}
+                {build_abbr_pattern(cls.POST_QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}
             )
             """,
             re2.X,
@@ -335,7 +335,7 @@ class Rules:
     # fmt: on
     def _remove_quote_and_paren_spans(
         self,
-        main_boundaries: set[int],
+        sentence_boundaries: set[int],
         text: str,
         preserve_quote_and_paren: bool,
     ) -> None:
@@ -343,24 +343,24 @@ class Rules:
         if preserve_quote_and_paren:
             # Ignore first pos to preserve splits before opening quote/paren,
             # especially for non-whitespace languages
-            main_boundaries.difference_update(
+            sentence_boundaries.difference_update(
                 pos for m in self.QUOTE_AND_PAREN_FINDER.finditer(text)
                 for pos in range(m.start() + 1, m.end())
             )
 
-            main_boundaries.update(
+            sentence_boundaries.update(
                 m.end() for m in self.QUOTE_AND_PAREN_END_FINDER.finditer(text)
             )
 
     def _remove_toc_spans(
-        self, main_boundaries: set[int], text: str
+        self, sentence_boundaries: set[int], text: str
     ) -> None:
         """Remove boundaries inside TOC leader runs."""
         if "..." in text:
             for m in self.TOC_LEADER_FINDER.finditer(text):
-                main_boundaries.difference_update(range(*m.span()))
+                sentence_boundaries.difference_update(range(*m.span()))
 
-    def _adjust_list_boundaries(self, main_boundaries: set[int], text: str) -> None:
+    def _adjust_list_boundaries(self, sentence_boundaries: set[int], text: str) -> None:
         """Remove and re-align boundaries around list markers."""
         horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(text))
 
@@ -374,22 +374,22 @@ class Rules:
         )
 
         if is_flattened_list:
-            main_boundaries.difference_update(m.end() for m in horiz_matches)
+            sentence_boundaries.difference_update(m.end() for m in horiz_matches)
             # Shift boundaries back (1.\)| => |1.\), a. | => |a. ) to correctly
             # terminate the preceding sentence before flattened horizontal list.
-            main_boundaries.update(m.start() + 1 for m in horiz_matches if m.start())
+            sentence_boundaries.update(m.start() + 1 for m in horiz_matches if m.start())
 
-        main_boundaries.difference_update(
+        sentence_boundaries.difference_update(
             m.end() for m in self.VERTICAL_LIST_START_FINDER.finditer(text)
         )
 
-    def _post_process_boundaries(
-        self, main_boundaries: set[int], text: str
+    def post_process_boundaries(
+        self, sentence_boundaries: set[int], text: str
     ) -> None:
         """Hook for language-specific boundary filtering.
 
         Override in subclasses to remove false-positive boundaries that
-        the regex passes cannot catch. Mutate ``main_boundaries`` in
+        the regex passes cannot catch. Mutate ``sentence_boundaries`` in
         place; do not touch any other engine state.
         """
 
@@ -417,21 +417,21 @@ class Rules:
             return [len(text)]
 
         text = self.NEWLINE_INSIDE_SENTENCE_FINDER.sub(" ", text)
-        main_boundaries = {
+        sentence_boundaries = {
             m.end() for m in self.NAIVE_BOUNDARY_FINDER.finditer(text)
         }
 
         # -- Remove false alarms --
-        main_boundaries.difference_update(
+        sentence_boundaries.difference_update(
             m.end() for pat in self.MID_SENTENCE_FINDER_LST
             for m in pat.finditer(text)
         )
-        self._post_process_boundaries(main_boundaries, text)
+        self.post_process_boundaries(sentence_boundaries, text)
         self._remove_quote_and_paren_spans(
-            main_boundaries, text, preserve_quote_and_paren
+            sentence_boundaries, text, preserve_quote_and_paren
         )
-        self._remove_toc_spans(main_boundaries, text)
-        self._adjust_list_boundaries(main_boundaries, text)
+        self._remove_toc_spans(sentence_boundaries, text)
+        self._adjust_list_boundaries(sentence_boundaries, text)
 
-        main_boundaries.update({0, len(text)})
-        return sorted(main_boundaries)
+        sentence_boundaries.update({0, len(text)})
+        return sorted(sentence_boundaries)

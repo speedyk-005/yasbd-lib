@@ -36,7 +36,7 @@ class ItRules(Rules):
     }
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
-        "es", "p.es", "ecc", "c.d", "c.d.d",
+        "es", "p.es", "c.d", "c.d.d",
         "v", "vv", "ss", "segg",
     }
 

@@ -24,7 +24,7 @@ from yasbd import (
 cli = Radicli(
     prog="yasbd",
     help="Yet Another Sentence Boundary Detector. "
-    "Split text into sentences with multilingual support.",
+    "A rule-based multilingual sentence segmenter.",
 )
 
 _YELLOW = "\033[93m"

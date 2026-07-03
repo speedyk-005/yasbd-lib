@@ -8,10 +8,7 @@ class AmRules(Rules):
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Social & Professional
-        "አቶ", "ወ/ሮ", "ወ/ሪት", "ዶ/ር", "ፕ/ሮፌሰር", "ኢንጂነር",
-
-        # Traditional Honorifics
-        "ራስ", "ልጅ",
+        "አቶ", "ወ/ሮ", "ወ/ሪት", "ዶ/ር", "ፕ/ሮፌሰር",
     }
 
     DOTTED_GEOPOL_ABBRVS = {

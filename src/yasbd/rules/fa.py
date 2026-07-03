@@ -8,18 +8,7 @@ class FaRules(Rules):
 
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
-        # Social titles
-        "آقا", "خانم", "جناب", "سرکار",
-
-        # Academic & Professional
-        "دکتر", "مهندس", "استاد", "پروفسور", "وکیل", "قاضی",
-
-        # Religious
-        "آیت‌الله", "حجت‌الاسلام", "سید", "حاجی", "حاج", "شیخ", "آخوند",
-
-        # Military
-        "سرتیپ", "سرلشکر", "سپهبد", "سرهنگ", "سرهنگ‌دوم",
-        "سرگرد", "سروان", "ستوان", "استوار", "ناو", "ناخدا",
+        "آقا", "سید", "حاج", "شیخ", "ناو",
     }
 
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
@@ -30,7 +19,6 @@ class FaRules(Rules):
     REFERENCE_ABBRVS = {
         "ص", "ج", "ش", "ق", "م", "ب", "ط", "خ",
         "ف", "ض", "ت", "ن", "ک", "س", "ه",
-        "انظر", "قارن",
     }
 
     SECTION_MARKERS = {
@@ -41,7 +29,7 @@ class FaRules(Rules):
     }
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
-        "م.م", "ر.ک", "بن", "همان", "ص.م", "ع.م",
+        "م.م", "ر.ک", "بن", "ص.م", "ع.م",
         "ق.م", "ب.م",
     }
 

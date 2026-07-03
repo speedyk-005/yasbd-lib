@@ -1,6 +1,6 @@
 import re
 
-from yasbd.rules.base import Rules, _build_abbr_pattern
+from yasbd.rules.base import Rules, build_abbr_pattern
 
 
 # fmt: off
@@ -86,8 +86,8 @@ class DeRules(Rules):
     }
 
     STREET_ABBRVS = {
-        "str", "gasse", "pl", "allee", "weg", "hbf", "platz",
-        "ring", "ufer", "chaussee", "damm", "brücke", "geb"
+        "str", "pl", "weg", "hbf",
+        "ring", "ufer", "damm", "geb"
     }
     INLINE_ONLY_ABBRVS |= STREET_ABBRVS
 
@@ -123,7 +123,7 @@ class DeRules(Rules):
             re.compile(rf"""
                 (?:\d\.|(?:(?<=\d)|\b)(?i:[ap]\.m\.))
                 (?=
-                    \s+(?i:{_build_abbr_pattern(cls.DATE_ABBRVS | cls.DATE_WORDS)})
+                    \s+(?i:{build_abbr_pattern(cls.DATE_ABBRVS | cls.DATE_WORDS)})
                     (?:\.|\s|$)
                 )
             """, re.X),
@@ -131,14 +131,14 @@ class DeRules(Rules):
 
         # Street abbrv followed by a common starters
         cls.ENDING_STREET_ABBRVS_FINDER = re.compile(rf"""
-            (?:\b(?i:{_build_abbr_pattern(cls.STREET_ABBRVS)})\.)
+            (?:\b(?i:{build_abbr_pattern(cls.STREET_ABBRVS)})\.)
             (?=\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
            """, re.X
         )
 
-    def _post_process_boundaries(
-        self, main_boundaries: set[int], text: str
+    def post_process_boundaries(
+        self, sentence_boundaries: set[int], text: str
     ) -> None:
-        main_boundaries.update(
+        sentence_boundaries.update(
             m.end() for m in self.ENDING_STREET_ABBRVS_FINDER.finditer(text)
         )

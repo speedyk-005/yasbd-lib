@@ -19,6 +19,7 @@ class SvRules(DeRules):
         "s", "sid", "anm", "ang", "bil", "kap", "forts",
         "förf", "avd", "uppl", "utg", "red",  "hft",
         "sammanst",
+        "m.fl", "o.l", "osv", "o.s.v",
     }
 
     SECTION_MARKERS = Rules.SECTION_MARKERS | {
@@ -29,7 +30,7 @@ class SvRules(DeRules):
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
         "bl.a", "dvs", "d.v.s", "jf", "jvf", "pga", "ifm", "ca",
-        "t.ex", "m.m", "m.fl", "o.l", "osv", "o.s.v", "m.a.o",
+        "t.ex", "m.a.o",
         "fr.o.m", "t.o.m", "p.g.a", "inkl", "ekskl", "evt",
         "hhv", "kl",
     }
