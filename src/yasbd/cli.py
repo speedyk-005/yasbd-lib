@@ -13,6 +13,7 @@ from radicli import Arg, Radicli
 
 from yasbd import (
     BoundaryDetector,
+    InvalidInputError,
     ParagraphEOF,
     UnsupportedLanguageError,
     __version__,
@@ -133,12 +134,14 @@ def _resolve_input(
     if text is not None and file is not None:
         print("Error: provide text argument or --file, not both.", file=sys.stderr)
         sys.exit(1)
+
     if text is None and file is None:
         if _stdin_is_pipe():
             yield sys.stdin
             return
         print("Error: provide text argument or --file.", file=sys.stderr)
         sys.exit(1)
+
     if file is not None:
         f = open(file, encoding="utf-8")  # noqa: SIM115
         try:
@@ -162,8 +165,10 @@ def _to_json(no: int, item) -> str:
     """
     if item is ParagraphEOF:
         return json.dumps({"no": no, "eof": True})
+
     if isinstance(item, int):
         return json.dumps({"no": no, "offset": item})
+
     return json.dumps({"no": no, "text": item})
 
 
@@ -222,7 +227,7 @@ def segment(
     text: Optional[str] = None,
     file: Optional[str] = None,
     destination: Optional[str] = None,
-    lang: str = "en",
+    lang: Optional[str] = None,
     preserve_whitespace: bool = False,
     verbose: bool = False,
 ):
@@ -253,7 +258,7 @@ def detect(
     text: Optional[str] = None,
     file: Optional[str] = None,
     destination: Optional[str] = None,
-    lang: str = "en",
+    lang: Optional[str] = None,
     relative: bool = False,
     verbose: bool = False,
 ):
@@ -332,12 +337,19 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] in ("--version", "-v"):
         print(_version())
         sys.exit(0)
+
     if len(sys.argv) == 1 or (len(sys.argv) > 1 and sys.argv[1] in ("--help", "-h")):
         print(_logo_colored(), end="\n\n")
+
     try:
         cli.run()
-    except UnsupportedLanguageError as e:
+    except (UnsupportedLanguageError, InvalidInputError) as e:
         print(f"Error: {e}", file=sys.stderr)
+        if isinstance(e, InvalidInputError):
+            print(
+                "Use --lang or -l to specify a language (e.g., --lang en).",
+                file=sys.stderr,
+            )
         raise SystemExit(2) from None
 
 
