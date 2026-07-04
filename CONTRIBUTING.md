@@ -63,7 +63,11 @@ Copy [`src/yasbd/rules/_template.py`](src/yasbd/rules/_template.py) to `src/yasb
 If you change the teeth of a blade, you must verify it still cuts straight. Run the test suite using uv run:
 
 ```bash
+# All
 uv run pytest
+
+# For a single language only, use the `-k` filter:
+pytest tests/test_boundary_detector.py -k "test_segment_multiple_langs and pl-"
 ```
 
 ### Machine the Surfaces
