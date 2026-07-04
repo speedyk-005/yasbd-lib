@@ -17,7 +17,7 @@ class PlRules(Rules):
     }
 
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
-        "R.P", "N.A.P", "P.N.E", "N.E",
+        "R.P", "P.N.E",
     }
 
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
