@@ -276,7 +276,7 @@ Copyright © 2024 Example Corp. All rights reserved.
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 10 | 3.24 | **Top pick.** Correct boundaries. Dialog splits into 2 pieces (all others: 3+). URL intact. |
+| **1** | **yasbd** | 10 | 3.24 | **Best overall.** Correct boundaries. Dialog splits into 2 pieces (all others: 3+). URL intact. |
 | **2** | **pysbd** | 10 | 6.45 | **Correct sentence count.** Breaks URL at `?` — a real accuracy miss. |
 | **3** | **blingfire** | 11 | 0.11 | **Fast.** Dialog splits into 3 pieces. URL intact. |
 | **4** | **nupunkt** | 11 | 1.00 | **Same output as blingfire.** |
@@ -400,7 +400,7 @@ incl. the events of the s. XIX, was retransmitted.
 
 | Rank | Library | Sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **7** | 1.61 | **Top pick.** Joins all newlines, preserves `s. XIX` intact. |
+| **1** | **yasbd** | **7** | 1.61 | **Perfect.** Joins all newlines, preserves `s. XIX` intact. |
 | **2** | **nupunkt** | **7** | 0.77 | **Same accuracy as yasbd.** |
 | **3** | **blingfire** | 7 | 0.08 | **Fast but flawed.** Merges first two sentences. Splits `s.` + `XIX`. |
 | **4** | **sentencex** | 8 | 0.03 | **Splits `incl.`** from the sentence. One extra boundary. |
@@ -678,7 +678,7 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
 | **6** | **sentence-splitter** | 12 | 5.63 | **Blind to chat.** Completely misses conversational sentence boundaries, smashing whole paragraphs together. Breaks in the middle of `sec. 4` and `frn. 12`. |
 | **7** | **blingfire** | 1 | 0.13 | **Total Failure.** Treated the entire chat and log dump as **one single sentence**. |
 
-### French compound abbreviations
+### French
 
 French uses compound abbreviations with internal periods: `c.-à-d.` (c'est-à-dire), `m.-à-j.` (mise à jour), `R.-V.` (rendez-vous), `av.-j.-c.` (avant Jésus-Christ). These are brutal for SBD because every period looks like a sentence boundary.
 
@@ -780,7 +780,7 @@ L'historien étudiait les événements survenus en 52 av.-j.-c. puis ceux de 476
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **4** | 1.32 | **Top pick.** All compound abbreviations preserved intact. Clean output, no trailing whitespace. |
+| **1** | **yasbd** | **4** | 1.32 | **Best in class.** All compound abbreviations preserved intact. Clean output, no trailing whitespace. |
 | **2** | **blingfire** | **4** | 0.06 | **Perfect output, fastest.** 22× faster than yasbd. |
 | **3** | **sentence-splitter** | **4** | 1.52 | **Perfect but slow.** Identical splits to yasbd. |
 | **4** | **sentsplit** | **4** | 10.31 | **Correct count, sloppy output.** Leading whitespace on sentences 2 and 4. |
@@ -788,7 +788,7 @@ L'historien étudiait les événements survenus en 52 av.-j.-c. puis ceux de 476
 | **6** | **pysbd** | **23** | 3.78 | **Catastrophic.** Shreds every compound abbreviation: `c.` + `-à-d.` + `m.` + `-à-j.` + `R.` + `-V.` + `av.` + `-j.` + `-c.` etc. French support is fundamentally broken. |
 | **7** | **sentencex** | **21** | 0.04 | **Same destruction as pysbd.** Fast but useless for French. |
 
-### Japanese with quotes
+### Japanese
 
 Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting as sentence boundaries. The challenge is keeping quotes intact: `「...？」` should not be split mid-quote.
 
@@ -1114,7 +1114,7 @@ To był test. A może nie? Zobaczymy :-)
 
 </details>
 
-### Spanish abbreviations
+### Spanish
 
 Spanish uses abbreviations with internal periods similar to French: `p. ej.` (por ejemplo), `Cía.` (Compañía), `Asoc.` (Asociación), `s.` (siglo), `act.` (actualización). Plus guillemets `«...»` for quotes.
 
@@ -1212,7 +1212,7 @@ La conferencia sobre la historia de América, incl. los eventos ocurridos en el 
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **6** | 1.77 | **Top pick.** All abbreviations and guillemets preserved intact. |
+| **1** | **yasbd** | **6** | 1.77 | **Top scorer.** All abbreviations and guillemets preserved intact. |
 | **2** | **nupunkt** | 7 | 2.21 | **Almost perfect.** Handles all abbreviations correctly but splits inside the guillemet quote: `«La act.` + `del sistema...»`. One extra sentence. |
 | **3** | **sentencex** | 9 | 0.04 | **Splits `Cía.` and `Asoc.`** Trailing `\n` and whitespace. |
 | **4** | **blingfire** | 9 | 0.10 | **Splits `Srta.`, `Lic.`, `Asoc.`, `s.`** before the next word. |
@@ -1334,7 +1334,7 @@ Greek uses `;` as a question mark (ερωτηματικό) and `·` (άνω τε
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **17** | 2.06 | **Top pick.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Single-word sentences split correctly. |
+| **1** | **yasbd** | **17** | 2.06 | **Gold standard.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Single-word sentences split correctly. |
 | **2** | **nupunkt** | 21 | 0.77 | **Cold-start penalty.** Splits `π.μ.` and rips apart final quoted block. 4s cold start. |
 | **3** | **sentencex** | 23 | 0.07 | **Phantom empty sentences.** Splits quotes from attribution verbs, splits `χλμ.` |
 | **4** | **pysbd** | 23 | 2.72 | **Worst.** Splits abbreviations into fragments, breaks guillemets in half. |
@@ -1472,7 +1472,7 @@ The meeting is at 2 p.m. Mwen pral vini.
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **24** | 1.94 | **Top pick.** All abbreviations preserved. Parenthesized sentence kept intact. Ellipsis preserved. |
+| **1** | **yasbd** | **24** | 1.94 | **Cleanest output.** All abbreviations preserved. Parenthesized sentence kept intact. Ellipsis preserved. |
 | **2** | **nupunkt** | 23 | 1.53 | **Merged two sentences.** `Li nan p. 55 nan liv la. Li empòtan.` merged into one. Split `"Sa a se bèl."` from `li di.`, breaking the quote attribution. |
 | **3** | **blingfire** | 25 | 0.84 | **Splits `St.`** into `St.` + `Michel se...`. Also splits `"Sa a se bèl."` from `li di.` |
 | **4** | **sentencex** | 26 | 0.05 | **Splits `p.`** into `Li nan p.` + `55 nan liv la.`. Splits `St.` too. Trailing `\n` fragments everywhere. |
