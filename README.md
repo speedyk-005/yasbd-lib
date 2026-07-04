@@ -418,8 +418,8 @@ echo "Hello. World." | yasbd segment | cat
 # World.
 
 # Load external language pack and segment a mono-profile pack
-pip install yasbd-xx
-yasbd segment --from-pack yasbd_xx "Hello. World."
+pip install yasbd-union
+yasbd segment --from-pack yasbd_union "Hello. World."
 # [1] 'Hello.'
 # [2] 'World.'
 
@@ -563,7 +563,7 @@ Want to build a lang pack? Start with the [language template](https://github.com
 | Package | Languages | Description |
 |---------|-----------|-------------|
 | [`yasbd-auxlang`](https://github.com/speedyk-005/yasbd-auxlang) | `eo`, `ia`, `ie`, `io` | Esperanto, Interlingua, Interlingue, Ido — constructed auxiliary languages |
-| [`yasbd-xx`](https://github.com/speedyk-005/yasbd-xx) | `xx` | Experimental multi-language profile for mixed-text segmentation without language constraints |
+| [`yasbd-union`](https://github.com/speedyk-005/yasbd-union) | `xx` | Experimental multi-language profile for mixed-text segmentation without language constraints |
 
 ---
 
