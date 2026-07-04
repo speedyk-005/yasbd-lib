@@ -10,7 +10,7 @@ So you want to know how yasbd stacks up against the competition? Fair enough. He
 | nupunkt | Zero deps, legal-text optimized. Claims 91.1% precision at 10M chars/sec. ~12 langs. | [GitHub](https://github.com/alea-institute/nupunkt) / [pypi](https://pypi.org/project/nupunkt/) |
 | blingfire | Microsoft C++ FSM + Python bindings. Language agnostic. | [GitHub](https://github.com/microsoft/BlingFire) / [pypi](https://pypi.org/project/blingfire/) |
 | sentence-splitter | Heuristic algorithm from Europarl (Koehn/Schroeder). Archived 2025. | [GitHub](https://github.com/mediacloud/sentence-splitter) / [pypi](https://pypi.org/project/sentence-splitter/) |
-| yasbd | Pure Python, 28 langs and growing. Pointer-based SBD with pysbd adapter. | *(this repo)* |
+| yasbd | Pure Python, 29 langs and growing. Pointer-based SBD with pysbd adapter. | *(this repo)* |
 
 Not every library supports every language. We picked multiple languages that stress different weaknesses.
 
@@ -276,7 +276,7 @@ Copyright © 2024 Example Corp. All rights reserved.
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 10 | 3.24 | **Top pick.** Correct boundaries. Dialog splits into 2 pieces (all others: 3+). URL intact. |
+| **1** | **yasbd** | 10 | 3.24 | **Best overall.** Correct boundaries. Dialog splits into 2 pieces (all others: 3+). URL intact. |
 | **2** | **pysbd** | 10 | 6.45 | **Correct sentence count.** Breaks URL at `?` — a real accuracy miss. |
 | **3** | **blingfire** | 11 | 0.11 | **Fast.** Dialog splits into 3 pieces. URL intact. |
 | **4** | **nupunkt** | 11 | 1.00 | **Same output as blingfire.** |
@@ -400,7 +400,7 @@ incl. the events of the s. XIX, was retransmitted.
 
 | Rank | Library | Sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **7** | 1.61 | **Top pick.** Joins all newlines, preserves `s. XIX` intact. |
+| **1** | **yasbd** | **7** | 1.61 | **Perfect.** Joins all newlines, preserves `s. XIX` intact. |
 | **2** | **nupunkt** | **7** | 0.77 | **Same accuracy as yasbd.** |
 | **3** | **blingfire** | 7 | 0.08 | **Fast but flawed.** Merges first two sentences. Splits `s.` + `XIX`. |
 | **4** | **sentencex** | 8 | 0.03 | **Splits `incl.`** from the sentence. One extra boundary. |
@@ -678,7 +678,7 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
 | **6** | **sentence-splitter** | 12 | 5.63 | **Blind to chat.** Completely misses conversational sentence boundaries, smashing whole paragraphs together. Breaks in the middle of `sec. 4` and `frn. 12`. |
 | **7** | **blingfire** | 1 | 0.13 | **Total Failure.** Treated the entire chat and log dump as **one single sentence**. |
 
-### French compound abbreviations
+### French
 
 French uses compound abbreviations with internal periods: `c.-à-d.` (c'est-à-dire), `m.-à-j.` (mise à jour), `R.-V.` (rendez-vous), `av.-j.-c.` (avant Jésus-Christ). These are brutal for SBD because every period looks like a sentence boundary.
 
@@ -780,7 +780,7 @@ L'historien étudiait les événements survenus en 52 av.-j.-c. puis ceux de 476
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **4** | 1.32 | **Top pick.** All compound abbreviations preserved intact. Clean output, no trailing whitespace. |
+| **1** | **yasbd** | **4** | 1.32 | **Best in class.** All compound abbreviations preserved intact. Clean output, no trailing whitespace. |
 | **2** | **blingfire** | **4** | 0.06 | **Perfect output, fastest.** 22× faster than yasbd. |
 | **3** | **sentence-splitter** | **4** | 1.52 | **Perfect but slow.** Identical splits to yasbd. |
 | **4** | **sentsplit** | **4** | 10.31 | **Correct count, sloppy output.** Leading whitespace on sentences 2 and 4. |
@@ -788,7 +788,7 @@ L'historien étudiait les événements survenus en 52 av.-j.-c. puis ceux de 476
 | **6** | **pysbd** | **23** | 3.78 | **Catastrophic.** Shreds every compound abbreviation: `c.` + `-à-d.` + `m.` + `-à-j.` + `R.` + `-V.` + `av.` + `-j.` + `-c.` etc. French support is fundamentally broken. |
 | **7** | **sentencex** | **21** | 0.04 | **Same destruction as pysbd.** Fast but useless for French. |
 
-### Japanese with quotes
+### Japanese
 
 Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting as sentence boundaries. The challenge is keeping quotes intact: `「...？」` should not be split mid-quote.
 
@@ -946,7 +946,175 @@ Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting a
 | **6** | **sentsplit** | 6 | 12.31 | **Splits by paragraph only.** Same as sentence-splitter but 68× slower. |
 | **7** | **nupunkt** | 1 | 0.01 | **Total Failure.** No support for CJK punctuation (`。`, `？`, `」`). Returns the entire text as one sentence. |
 
-### Spanish abbreviations
+### Polish
+
+Polish uses decimal comma and space as thousands separator. Quotes use „..." and «...».
+
+```txt
+Dr. Kowalski przyjechał do Warszawy ok. godz. 17.30. Spotkał tam prof. Nowaka i inż. Wiśniewskiego. „To już koniec?” zapytał. „Nie... jeszcze nie!”
+Następnego dnia, tj. 15.03.2026 r., odwiedzili ul. Marszałkowską 10. Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.
+Pan J. K. powiedział: „Spotkajmy się o 8.00 rano.” Nikt jednak nie przyszedł. Dziwne, prawda?
+
+W raporcie napisano m.in., że:
+- sprzedaż wzrosła o 3,7%;
+- koszty spadły;
+- zysk netto wyniósł 1,25 mln zł.
+
+„Naprawdę?!” wykrzyknęła Anna. „Tak!!!” odpowiedział Marek... i wyszedł.
+To był test. A może nie? Zobaczymy :-)
+```
+
+<details>
+<summary>click to see output</summary>
+
+```txt
+  yasbd [pl]:
+    1: 'Dr. Kowalski przyjechał do Warszawy ok. godz. 17.30.'
+    2: 'Spotkał tam prof. Nowaka i inż. Wiśniewskiego.'
+    3: '„To już koniec?” zapytał.'
+    4: '„Nie... jeszcze nie!”'
+    5: 'Następnego dnia, tj. 15.03.2026 r., odwiedzili ul. Marszałkowską 10.'
+    6: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.'
+    7: 'Pan J. K. powiedział: „Spotkajmy się o 8.00 rano.”'
+    8: 'Nikt jednak nie przyszedł.'
+    9: 'Dziwne, prawda?'
+   10: 'W raporcie napisano m.in., że:'
+   11: '- sprzedaż wzrosła o 3,7%;'
+   12: '- koszty spadły;'
+   13: '- zysk netto wyniósł 1,25 mln zł.'
+   14: '„Naprawdę?!” wykrzyknęła Anna.'
+   15: '„Tak!!!” odpowiedział Marek... i wyszedł.'
+   16: 'To był test.'
+   17: 'A może nie?'
+   18: 'Zobaczymy :-)'
+
+  pysbd [pl]:
+    1: 'Dr.'
+    2: 'Kowalski przyjechał do Warszawy ok.'
+    3: 'godz.'
+    4: '17.30.'
+    5: 'Spotkał tam prof.'
+    6: 'Nowaka i inż.'
+    7: 'Wiśniewskiego.'
+    8: '„To już koniec?'
+    9: '” zapytał.'
+   10: '„Nie... jeszcze nie!'
+   11: '”'
+   12: 'Następnego dnia, tj.'
+   13: '15.03.2026 r.'
+   14: ', odwiedzili ul.'
+   15: 'Marszałkowską 10.'
+   16: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.'
+   17: 'Pan J. K. powiedział: „Spotkajmy się o 8.00 rano.'
+   18: '” Nikt jednak nie przyszedł.'
+   19: 'Dziwne, prawda?'
+   20: 'W raporcie napisano m.in.'
+   21: ', że:'
+   22: '- sprzedaż wzrosła o 3,7%;'
+   23: '- koszty spadły;'
+   24: '- zysk netto wyniósł 1,25 mln zł.'
+   25: '„Naprawdę?!'
+   26: '” wykrzyknęła Anna.'
+   27: '„Tak!!'
+   28: '!” odpowiedział Marek... i wyszedł.'
+   29: 'To był test.'
+   30: 'A może nie?'
+   31: 'Zobaczymy :-)'
+
+  sentencex [pl]:
+    1: 'Dr.'
+    2: 'Kowalski przyjechał do Warszawy ok.'
+    3: 'godz.'
+    4: '17.30.'
+    5: 'Spotkał tam prof.'
+    6: 'Nowaka i inż.'
+    7: 'Wiśniewskiego.'
+    8: '„To już koniec?'
+    9: '” zapytał.'
+   10: '„Nie...'
+   11: 'jeszcze nie!'
+   12: '”\nNastępnego dnia, tj.'
+   13: '15.03.2026 r.'
+   14: ', odwiedzili ul. Marszałkowską 10.'
+   15: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.'
+   16: 'Pan J.'
+   17: 'K.'
+   18: 'powiedział: „Spotkajmy się o 8.00 rano.'
+   19: '” Nikt jednak nie przyszedł.'
+   20: 'Dziwne, prawda?'
+   21: ''
+   22: 'W raporcie napisano m.in.'
+   23: ', że:\n- sprzedaż wzrosła o 3,7%;\n- koszty spadły;\n- zysk netto wyniósł 1,25 mln zł.'
+   24: ''
+   25: '„Naprawdę?!'
+   26: '” wykrzyknęła Anna.'
+   27: '„Tak!!!'
+   28: '” odpowiedział Marek...'
+   29: 'i wyszedł.'
+   30: 'To był test.'
+   31: 'A może nie?'
+   32: 'Zobaczymy :-)'
+
+  nupunkt [pl]:
+    1: 'Dr. Kowalski przyjechał do Warszawy ok. godz.'
+    2: '17.30.'
+    3: 'Spotkał tam prof. Nowaka i inż.'
+    4: 'Wiśniewskiego.'
+    5: '„To już koniec?” zapytał.'
+    6: '„Nie... jeszcze nie!”\nNastępnego dnia, tj.'
+    7: '15.03.2026 r., odwiedzili ul.'
+    8: 'Marszałkowską 10.'
+    9: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.'
+   10: 'Pan J. K. powiedział: „Spotkajmy się o 8.00 rano.” Nikt jednak nie przyszedł.'
+   11: 'Dziwne, prawda?'
+   12: 'W raporcie napisano m.in., że:\n- sprzedaż wzrosła o 3,7%;\n- koszty spadły;\n- zysk netto wyniósł 1,25 mln zł.'
+   13: '„Naprawdę?'
+   14: '!” wykrzyknęła Anna.'
+   15: '„Tak!!'
+   16: '!” odpowiedział Marek... i wyszedł.'
+   17: 'To był test.'
+   18: 'A może nie?'
+   19: 'Zobaczymy :-)'
+
+  sentsplit [pl]:
+    1: ''
+    2: 'Dr. Kowalski przyjechał do Warszawy ok. godz. 17.30.'
+    3: 'Spotkał tam prof.'
+    4: 'Nowaka i inż.'
+    5: 'Wiśniewskiego.'
+    6: '„To już koniec?” zapytał.'
+    7: '„Nie... jeszcze nie!”'
+    8: 'Następnego dnia, tj. 15.03.'
+    9: '2026 r., odwiedzili ul.'
+   10: 'Marszałkowską 10.'
+   11: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.'
+   12: 'Pan J. K. powiedział: „Spotkajmy się o 8.00 rano.”'
+   13: 'Nikt jednak nie przyszedł.'
+   14: 'Dziwne, prawda?'
+   15: ''
+   16: 'W raporcie napisano m.in., że:'
+   17: '- sprzedaż wzrosła o 3,7%;'
+   18: '- koszty spadły;'
+   19: '- zysk netto wyniósł 1,25 mln zł.'
+   20: ''
+   21: '„Naprawdę?!” wykrzyknęła Anna.'
+   22: '„Tak!!!” odpowiedział Marek... i wyszedł.'
+   23: 'To był test.'
+   24: 'A może nie?'
+   25: 'Zobaczymy :-)'
+```
+
+| Rank | Library | Sents | Speed (ms) | Notes |
+|---|---|---|---|---|
+| **1** | **yasbd** | 18 | 2.31 | **Flawless.** All abbreviations, quotes, ellipsis, and decimal commas preserved. |
+| **2** | **nupunkt** | 19 | 1.05 | Respectable — only minor over-splitting on godz./ul. and merges quote into continuation. Fastest but not as accurate. |
+| **3** | **sentsplit** | 25 | 11.29 | Decent but splits prof./inż. from surnames and tj. dates. 6× slower than yasbd. |
+| **4** | **pysbd** | 31 | 4.64 | **No Polish support — shatters text.** Splits at every period: Dr., godz., prof., inż., tj., ul., m.in. Also fragments quotes. 2× slower than yasbd. |
+| **5** | **sentencex** | 32 | 1.17 | **Worst accuracy.** Same fragmentation as pysbd plus splits ellipsis and initial J. K. Also fastest, but wrong. |
+
+</details>
+
+### Spanish
 
 Spanish uses abbreviations with internal periods similar to French: `p. ej.` (por ejemplo), `Cía.` (Compañía), `Asoc.` (Asociación), `s.` (siglo), `act.` (actualización). Plus guillemets `«...»` for quotes.
 
@@ -1044,7 +1212,7 @@ La conferencia sobre la historia de América, incl. los eventos ocurridos en el 
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **6** | 1.77 | **Top pick.** All abbreviations and guillemets preserved intact. |
+| **1** | **yasbd** | **6** | 1.77 | **Top scorer.** All abbreviations and guillemets preserved intact. |
 | **2** | **nupunkt** | 7 | 2.21 | **Almost perfect.** Handles all abbreviations correctly but splits inside the guillemet quote: `«La act.` + `del sistema...»`. One extra sentence. |
 | **3** | **sentencex** | 9 | 0.04 | **Splits `Cía.` and `Asoc.`** Trailing `\n` and whitespace. |
 | **4** | **blingfire** | 9 | 0.10 | **Splits `Srta.`, `Lic.`, `Asoc.`, `s.`** before the next word. |
@@ -1166,7 +1334,7 @@ Greek uses `;` as a question mark (ερωτηματικό) and `·` (άνω τε
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **17** | 2.06 | **Top pick.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Single-word sentences split correctly. |
+| **1** | **yasbd** | **17** | 2.06 | **Gold standard.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Single-word sentences split correctly. |
 | **2** | **nupunkt** | 21 | 0.77 | **Cold-start penalty.** Splits `π.μ.` and rips apart final quoted block. 4s cold start. |
 | **3** | **sentencex** | 23 | 0.07 | **Phantom empty sentences.** Splits quotes from attribution verbs, splits `χλμ.` |
 | **4** | **pysbd** | 23 | 2.72 | **Worst.** Splits abbreviations into fragments, breaks guillemets in half. |
@@ -1304,7 +1472,7 @@ The meeting is at 2 p.m. Mwen pral vini.
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **24** | 1.94 | **Top pick.** All abbreviations preserved. Parenthesized sentence kept intact. Ellipsis preserved. |
+| **1** | **yasbd** | **24** | 1.94 | **Cleanest output.** All abbreviations preserved. Parenthesized sentence kept intact. Ellipsis preserved. |
 | **2** | **nupunkt** | 23 | 1.53 | **Merged two sentences.** `Li nan p. 55 nan liv la. Li empòtan.` merged into one. Split `"Sa a se bèl."` from `li di.`, breaking the quote attribution. |
 | **3** | **blingfire** | 25 | 0.84 | **Splits `St.`** into `St.` + `Michel se...`. Also splits `"Sa a se bèl."` from `li di.` |
 | **4** | **sentencex** | 26 | 0.05 | **Splits `p.`** into `Li nan p.` + `55 nan liv la.`. Splits `St.` too. Trailing `\n` fragments everywhere. |
