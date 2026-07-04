@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.10.0] - Unreleased
+
+### Added
+
+- **Polish (pl) language support** ([#144](https://github.com/speedyk-005/yasbd-lib/pull/144)).
+
 ## [0.9.0] - Unreleased
 
 ### Added
