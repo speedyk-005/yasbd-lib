@@ -38,7 +38,7 @@ class CsRules(Rules):
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
         # Discourse & Syntactic Coordinators
-        "např", "tj", "tzn", "tzv", "resp", "cca", "fa",
+        "např", "tj", "tzn", "tzv", "resp", "cca",
         "zejm", "př", "popř", "příp", "r", "ev",
         "č.p", "č.ev",
 
