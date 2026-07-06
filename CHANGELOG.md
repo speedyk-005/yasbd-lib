@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Czech (cs) language support** ([#146](https://github.com/speedyk-005/yasbd-lib/pull/146)).
 - **Polish (pl) language support** ([#144](https://github.com/speedyk-005/yasbd-lib/pull/144)).
 
-## [0.9.0] - Unreleased
+## [0.9.0] - 2026-07-03
 
 ### Added
 
