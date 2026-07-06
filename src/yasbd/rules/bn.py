@@ -24,7 +24,7 @@ class BnRules(Rules):
 
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
         # Native Political, Administrative & Security Entities
-        "বি.এন.পি", "আ.লীগ", "ইউ.পি", "জা.দল", "রা.সে.সং", "বি.জি.বি", "সি.আই.ডি",
+        "বি.এন.পি", "আ.লীগ", "ইউ.পি", "জা.দল", "রা.সে.সং", "বি.জি.বি", "সি.আই.ডি", "সং.রা",
 
         # Transliterated Geopolitical Countries & Regions
         "বি.ডি", "ইউ.এস", "ইউ.এস.এ", "ইউ.কে", "ই.ইউ", "ইউ.এ.ই", "ইউ.এস.এস.আর",
