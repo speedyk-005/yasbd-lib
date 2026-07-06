@@ -6,7 +6,7 @@ class SkRules(Rules):
 
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
-        "p", "P", "pani", "sl", "doc",
+        "p", "pani", "sl", "doc",
     }
 
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
