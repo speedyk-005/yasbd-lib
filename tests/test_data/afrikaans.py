@@ -15,6 +15,7 @@ TEST_DATA = [
     "Die verslag is in des. gepubliseer.| Dit is deur prof. Smit en mnr. Nel goedgekeur.",
     "Sien afb. 2 in deel 3, hfst. 4, bl. 18-22.",
     "Ons sien mekaar op vr. 14 Feb.",
+    "Die vergadering is om 14.| Vandag bespreek ons die besonderhede.",
     "Die V.S. regering het 'n nuwe wet aangeneem.",
 
     # Structural headings

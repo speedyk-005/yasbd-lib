@@ -97,4 +97,14 @@ class NlRules(DeRules):
         "zaterdag", "zondag",
      }
 
+    @classmethod
+    def _compile_regex_dynamically(cls):
+        """Remove the German ordinal guard inherited from DeRules."""
+        super()._compile_regex_dynamically()
+        cls.MID_SENTENCE_FINDER_LST = [
+            pattern
+            for pattern in cls.MID_SENTENCE_FINDER_LST
+            if pattern.pattern != r"\s\d{1,3}\."
+        ]
+
 # fmt: on
