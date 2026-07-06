@@ -63,16 +63,6 @@ class BnRules(Rules):
     }
 
     REPORTING_WORDS = {
-        # Base Verb Stems
-        "বল", "কহ", "জিজ্ঞেস", "জানা", "লিখ", "বুঝ", "বুঝা",
-
-        # Nominal / Adjectival Components of Conjunct Verbs
-        "উত্তর", "জবাব", "আদেশ", "আজ্ঞা", "পরামর্শ",
-        "উপদেশ", "ঘোষণা", "এলান", "মন্তব্য", "স্বীকার",
-        "দাবি", "চিৎকার", "ফিসফিস"
-    }
-
-    REPORTING_WORDS = {
         # Pure Verb Roots / Base Forms
         "বল", "কহ", "জিজ্ঞেস", "জানা", "লিখ", "বুঝ", "বুঝা", "ডাক",
 
