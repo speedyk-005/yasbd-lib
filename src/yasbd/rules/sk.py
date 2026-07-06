@@ -16,7 +16,7 @@ class SkRules(Rules):
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         "s", "č", "zv", "vyd", "roč", "čís", "ods", "písm",
         "par", "obr", "obv", "odd", "pok", "pozn",
-        "str", "st", "kol", "zn",
+        "str", "st", "kol", "zn", "hod",
     }
 
     SECTION_MARKERS = Rules.SECTION_MARKERS | {

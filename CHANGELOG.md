@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Polish (pl) language support** ([#144](https://github.com/speedyk-005/yasbd-lib/pull/144)).
 - **Swahili (sw) language support** ([#149](https://github.com/speedyk-005/yasbd-lib/pull/149)).
 
+### Fixed
+
+- **Clock abbreviations** ([#152](https://github.com/speedyk-005/yasbd-lib/pull/152)): protect kl, hod, год from false sentence boundaries in cs, sk, uk, sv.
+
 ## [0.9.0] - 2026-07-03
 
 ### Added
