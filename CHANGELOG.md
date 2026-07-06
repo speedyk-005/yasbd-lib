@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Bengali (bn) language support** ([#147](https://github.com/speedyk-005/yasbd-lib/pull/147)).
 - **Czech (cs) language support** ([#146](https://github.com/speedyk-005/yasbd-lib/pull/146)).
 - **Polish (pl) language support** ([#144](https://github.com/speedyk-005/yasbd-lib/pull/144)).
 
