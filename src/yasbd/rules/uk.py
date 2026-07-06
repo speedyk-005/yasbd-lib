@@ -12,7 +12,7 @@ class UkRules(RuRules):
 
     REFERENCE_ABBRVS = RuRules.REFERENCE_ABBRVS | {
         "перекл", "передм", "вид", "покажч",
-        "уклад", "часоп", "розд", "дод",
+        "уклад", "часоп", "розд", "дод", "год",
     }
 
     SECTION_MARKERS = RuRules.SECTION_MARKERS | {
