@@ -16,6 +16,7 @@ TEST_DATA = [
     "Čítaj č. 5 časopisu.",
     "Dôležité je napr. čítať inštrukcie.",
     "Kúpil chlieb, mlieko, atď. a vrátil sa.",
+    "Stretnutie začína o hod. 14.| Uvidíme sa tam.",
     "Toto je tzv. nový zákon.",
     "Stretnutie je v jan. 2025.",
     "Práca bola publikovaná v mar. 2024.",

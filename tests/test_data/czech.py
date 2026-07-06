@@ -16,6 +16,7 @@ TEST_DATA = [
     "plk. Štefan řídí posádku.",
     "Viz str. 55 v učebnici.",
     "Přečtěte si odst. 3 a 4.",
+    "Schůzka začíná v hod. 14.| Uvidíme se tam.",
     "Článek 5 upravuje daně.",
     "Kupil jsem chleb, mléko atd. a vrátil se domů.",
     "To je tzv. nový přístup.",
