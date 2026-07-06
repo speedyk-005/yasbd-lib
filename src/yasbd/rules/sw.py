@@ -21,11 +21,15 @@ class SwRules(Rules):
         "mf", "m.n", "k.v", "n.k", "k.m", "ya", "taz",
     }
 
-    SECTION_MARKERS = {
+    # Swahili section headings use the pattern: [SectionWord] ya [Number]
+    # e.g., "Sura ya 1", "Sehemu ya 2", "Kifungu ya 3"
+    # "ya" is the connective particle equivalent to "of".
+    _section_markers = {
         "sura", "sehemu", "kifungu", "mwisho",
         "mlango", "Sura", "Sehemu", "Kiambatisho",
         "Hitimisho", "Utangulizi", "Dibaji",
     }
+    SECTION_MARKERS = {f"{m} ya" for m in _section_markers}
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
         "mac", "mei", "ago", "des",
