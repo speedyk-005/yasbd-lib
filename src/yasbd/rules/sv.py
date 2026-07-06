@@ -18,8 +18,7 @@ class SvRules(DeRules):
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         "s", "sid", "anm", "ang", "bil", "kap", "forts",
         "förf", "avd", "uppl", "utg", "red",  "hft",
-        "sammanst",
-        "m.fl", "o.l", "osv", "o.s.v",
+        "sammanst", "m.fl", "o.l", "osv", "o.s.v", "kl",
     }
 
     SECTION_MARKERS = Rules.SECTION_MARKERS | {
@@ -30,14 +29,12 @@ class SvRules(DeRules):
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
         "bl.a", "dvs", "d.v.s", "jf", "jvf", "pga", "ifm", "ca",
-        "t.ex", "m.a.o",
-        "fr.o.m", "t.o.m", "p.g.a", "inkl", "ekskl", "evt",
-        "hhv", "kl",
+        "t.ex", "m.a.o", "fr.o.m", "t.o.m", "p.g.a", "inkl",
+        "ekskl", "evt", "hhv",
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
-        "mån", "tis", "ons",
-        "tors", "fre", "lör", "sön",
+        "mån", "tis", "ons", "tors", "fre", "lör", "sön",
     }
 
     COMMON_SENT_STARTERS = {
