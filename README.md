@@ -242,7 +242,7 @@ Switching languages at runtime is a property set:
 detector.lang = "es"
 ```
 
-The rule module loads lazily on first access. Switching mid-stream reimports the module and rebinds the pattern cache. Zero config, no restarts needed.
+Each language rule loads once into a 5-slot cache. Once loaded, a language stays cached. Switching back is instant.
 
 > [!TIP]
 > **Auto-detect**
