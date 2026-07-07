@@ -1,5 +1,4 @@
 ISO_CODE = "ur"
-
 TEST_DATA = [
     # Basic punctuation
     "سلام علیکم!| آپ کیسے ہیں؟| میں ٹھیک ہوں.",
