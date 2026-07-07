@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Czech (cs) language support** ([#146](https://github.com/speedyk-005/yasbd-lib/pull/146)).
 - **Polish (pl) language support** ([#144](https://github.com/speedyk-005/yasbd-lib/pull/144)).
 - **Swahili (sw) language support** ([#149](https://github.com/speedyk-005/yasbd-lib/pull/149)).
+- **Urdu (ur) language support** ([#154](https://github.com/speedyk-005/yasbd-lib/pull/154)).
 
 ### Fixed
 
