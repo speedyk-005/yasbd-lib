@@ -570,11 +570,12 @@ Want to build a lang pack? Start with the [language template](https://github.com
 
 ---
 
----
-
 ## 🤝 Contributors
 
 A massive thank you to the open source community helping make `yasbd` more accurate and scalable:
+
+<details>
+<summary>Click to see all contributors</summary>
 
 | Name | Role |
 |------|------|
@@ -587,6 +588,8 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@terminalchai](https://github.com/terminalchai)** | Burmese and Thai reporting words fix |
 | **[@1cbyc](https://github.com/1cbyc)** | Coordinate direction abbreviation fix |
 | **[@kernelpanic888](https://github.com/kernelpanic888)** | Non-German ordinal boundary inheritance fix |
+
+</details>
 
 Interested in contributing? See the [**Contributing Guide**](https://github.com/speedyk-005/yasbd-lib/blob/main/CONTRIBUTING.md) to get started!
 
