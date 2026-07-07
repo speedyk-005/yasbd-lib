@@ -19,6 +19,7 @@ TEST_DATA = [
     "Han bor i USA i 20 år.| Nu bor han i EU.",
     "Mötet ställdes in pga. sjukdom.",
     "Han sa bl.a. att det var viktigt.",
+    "Mötet är 14.| Idag är det tisdag.",
 
     # Quoted speech
     'Hon vänder sig mot honom: "Det är fantastiskt."| Hon räcker honom boken.',

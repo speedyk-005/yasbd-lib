@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **Clock abbreviations** ([#152](https://github.com/speedyk-005/yasbd-lib/pull/152)): protect kl, hod, год from false sentence boundaries in cs, sk, uk, sv.
+- **Non-German ordinal boundary inheritance** ([#153](https://github.com/speedyk-005/yasbd-lib/pull/153)): remove inherited German ordinal pattern from nl, sv, da, af to fix false negatives on numbered sentence boundaries.
 
 ## [0.9.0] - 2026-07-03
 
