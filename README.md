@@ -585,8 +585,8 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@sanmaxdev](https://github.com/sanmaxdev)** | Language tag normalization helper |
 | **[@hongquan](https://github.com/hongquan)** | `py.typed` marker for PEP 561 compliance |
 | **[@terminalchai](https://github.com/terminalchai)** | Burmese and Thai reporting words fix |
-| **[kernelpanic888](https://github.com/kernelpanic888)** | Non-German ordinal boundary inheritance fix |
 | **[@1cbyc](https://github.com/1cbyc)** | Coordinate direction abbreviation fix |
+| **[@kernelpanic888](https://github.com/kernelpanic888)** | Non-German ordinal boundary inheritance fix |
 
 Interested in contributing? See the [**Contributing Guide**](https://github.com/speedyk-005/yasbd-lib/blob/main/CONTRIBUTING.md) to get started!
 
