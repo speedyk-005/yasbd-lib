@@ -42,11 +42,6 @@ class UrRules(Rules):
         "ضمیمہ", "حوالہ", "حواشی", "اشاریہ", "عنوان",
     }
 
-    DATE_ABBRVS = {
-        # Days (Rarely abbreviated, but initial letters sometimes appear in schedules)
-       "پیر", "منگل", "بدھ", "جمعرات", "جمعہ", "ہفتہ", "اتوار",
-    }
-
     COMMON_SENT_STARTERS = {
         # Pronouns
         "میں", "ہم", "تو", "تم", "آپ", "وہ", "یہ", "انہوں", "انہیں",
