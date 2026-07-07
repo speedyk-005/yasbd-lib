@@ -19,19 +19,19 @@ cd yasbd
 
 ### Calibrate the Environment
 
-Create and activate your virtual environment using uv. Do not install dependencies globally unless you enjoy contaminating your workshop.
+Create and activate your virtual environment running python -m venv. Do not install dependencies globally unless you enjoy contaminating your workshop.
 
 ```bash
-uv venv
+python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
 ### Install the Tooling
 
-Install the development package with the necessary testing rigs using uv pip.
+Install the development package with the necessary testing rigs using pip.
 
 ```bash
-uv pip install -e ".[dev]"
+pip install -e ".[dev]"
 
 # Optional: only needed for some components
 pip install spacy -U
@@ -60,11 +60,11 @@ Copy [`src/yasbd/rules/_template.py`](src/yasbd/rules/_template.py) to `src/yasb
 
 ### Run Diagnostics
 
-If you change the teeth of a blade, you must verify it still cuts straight. Run the test suite using uv run:
+If you change the teeth of a blade, you must verify it still cuts straight. Run the test suite using pytest:
 
 ```bash
 # All
-uv run pytest
+pytest
 
 # For a single language only, use the `-k` filter:
 pytest tests/test_boundary_detector.py -k "test_segment_multiple_langs and pl-"
@@ -75,7 +75,7 @@ pytest tests/test_boundary_detector.py -k "test_segment_multiple_langs and pl-"
 Our code surfaces must be perfectly smooth. Before pushing, sand down the rough edges:
 
 ```bash
-uv run ruff format && uv run ruff check --fix
+ruff format && ruff check --fix
 ```
 
 Pre-commit hooks are available to automate this. Install them with:
@@ -91,7 +91,7 @@ This runs `ruff` on every commit so you never forget.
 If you changed any docstrings or public interfaces, regenerate the docs:
 
 ```bash
-uv pip install -e ".[dev]"
+pip install -e ".[dev]"
 
 # Generate API_REFERENCES.md from docstrings
 bash scripts/gen_api_docs.sh
