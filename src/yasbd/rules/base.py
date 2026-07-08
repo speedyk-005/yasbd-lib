@@ -343,13 +343,15 @@ class Rules:
         if preserve_quote_and_paren:
             # Ignore first pos to preserve splits before opening quote/paren,
             # especially for non-whitespace languages
-            sentence_boundaries.difference_update(
+            inner_range = {
                 pos for m in self.QUOTE_AND_PAREN_FINDER.finditer(text)
                 for pos in range(m.start() + 1, m.end())
-            )
+            }
+            sentence_boundaries.difference_update(inner_range)
 
             sentence_boundaries.update(
                 m.end() for m in self.QUOTE_AND_PAREN_END_FINDER.finditer(text)
+                if m.end() not in inner_range
             )
 
     def _remove_toc_spans(
