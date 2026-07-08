@@ -68,6 +68,9 @@ TEST_DATA = [
     'He said: "First sentence. Second sentence."| Then done.',
     'The witness testified: "He said — and I quote — \'I will not comply.\' Then he turned around and left. I could not believe it."',
 
+    # "&" separator (fix for #150)
+    'Trying to get back to Com. & Adm. through the most direct path in the dark.',
+
     # Contiguous terminators
     "Hello ! ! ! !",
     "Hello!!| Long time no see.",
