@@ -66,6 +66,7 @@ TEST_DATA = [
     'Then he stop.| "wait" he said',
     "The letter concluded with a simple warning: 'Do not follow me.'| Then she left.",
     'He said: "First sentence. Second sentence."| Then done.',
+    'The witness testified: "He said — and I quote — \'I will not comply.\' Then he turned around and left. I could not believe it."',
 
     # Contiguous terminators
     "Hello ! ! ! !",
