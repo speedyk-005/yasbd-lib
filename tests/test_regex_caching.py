@@ -34,6 +34,6 @@ def test_regex_caching_isolation():
 
     # EnRules must still compile its own patterns
     e = EnRules()
-    assert "NAIVE_BOUNDARY_FINDER" in type(e).__dict__, (
-        "EnRules should have its own NAIVE_BOUNDARY_FINDER, not inherit from Rules"
+    assert "CANDIDATE_BOUNDARY_FINDER" in type(e).__dict__, (
+        "EnRules should have its own CANDIDATE_BOUNDARY_FINDER, not inherit from Rules"
     )

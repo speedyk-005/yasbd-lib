@@ -232,7 +232,7 @@ class Rules:
         )
 
         # https://regex101.com/r/VMzYsx/10
-        cls.NAIVE_BOUNDARY_FINDER = re2.compile(
+        cls.CANDIDATE_BOUNDARY_FINDER = re2.compile(
             rf"""
             (?:
                 # Newline not followed by another newline
@@ -418,7 +418,7 @@ class Rules:
 
         text = self.NEWLINE_INSIDE_SENTENCE_FINDER.sub(" ", text)
         sentence_boundaries = {
-            m.end() for m in self.NAIVE_BOUNDARY_FINDER.finditer(text)
+            m.end() for m in self.CANDIDATE_BOUNDARY_FINDER.finditer(text)
         }
 
         # -- Remove false alarms --

@@ -73,9 +73,9 @@ And multilingual quirks a naive splitter never saw coming.
 
 Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
-**Pass 1** - Naive boundary finder. Finds every position that could plausibly end a sentence: periods, question marks, exclamation points - anything followed by whitespace, uppercase, or a newline. Deliberately over-inclusive. Better to catch a false positive than miss a real boundary.
+**Pass 1** Candidate boundary finder. Finds every position that could plausibly end a sentence: periods, question marks, exclamation points followed by whitespace, uppercase, or a newline. Deliberately over-inclusive. Better to catch a false positive than miss a real boundary.
 
-**Pass 2** - Cross-references 9+ mid-sentence patterns to surgically excise false positives:
+**Pass 2** Cross-references 9+ mid-sentence patterns to surgically excise false positives:
 
 - Newline inside sentence
 - Title/initialism protection
