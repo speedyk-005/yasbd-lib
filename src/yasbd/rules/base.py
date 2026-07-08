@@ -212,12 +212,13 @@ class Rules:
         cls.DOTTED_GEOPOL_ABBRVS_PATTERN = build_abbr_pattern(cls.DOTTED_GEOPOL_ABBRVS)
         cls.COMMON_STARTERS_PATTERN = build_abbr_pattern(cls.COMMON_SENT_STARTERS)
 
-        # https://regex101.com/r/qBSyU5/16
+        # https://regex101.com/r/qBSyU5/19
         # Handle flattened lists due to messy OCR.
         cls.HORIZONTAL_LIST_FINDER = re2.compile(
             rf"""
-            # Must preceded by string or word boundary
-            (?:^|(?<![A-Z]\w+)\s+)
+            # Must preceded by string start or word boundary
+            # while skipping initialisms 
+            (?:^|(?<![A-Z](?:\.|\w+))\s+)
             (?:[•◦]\s+)?   # Optional bullet point (e.g., • 9.)
             (?:
                 [-*+]|      #  Markdown style list
@@ -226,9 +227,14 @@ class Rules:
                 (?:\d{{1,2}}|[a-eA-Eα-εΑ-Εа-еА-Е])
                 (?:{cls.DOT_LIKE_PATTERN}|\)){{1,2}}
             )
-            (?=\s)  # Must followed by a space
-            """,
-            re2.X,
+
+            # Must be followed by whitespace
+            # Numeric markers only require whitespace
+            # Alphabetic markers must not be name initials (e.g. "A. B. Smith")
+            (?:
+                (?<=\d\.)(?=\s)|(?=\s+(?!\p{{LU}}\.))
+            )
+            """, re2.X,
         )
 
         # https://regex101.com/r/VMzYsx/10
@@ -377,6 +383,7 @@ class Rules:
 
         if is_flattened_list:
             sentence_boundaries.difference_update(m.end() for m in horiz_matches)
+
             # Shift boundaries back (1.\)| => |1.\), a. | => |a. ) to correctly
             # terminate the preceding sentence before flattened horizontal list.
             sentence_boundaries.update(m.start() + 1 for m in horiz_matches if m.start())
