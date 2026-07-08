@@ -246,7 +246,7 @@ class Rules:
                 (?<={cls.TERMINATORS_PATTERN}(?!\s*\p{{Emoji_Presentation}}))
                 (?=
                     \s*[\n\p{{Lo}}]|
-                    \s+(?:[^\p{{Ll}}]|
+                    \s+(?:[^\p{{Ll}}&]|
                     \s+(?<!\.\.)(?i:{cls.COMMON_STARTERS_PATTERN})\b)
                )|
 
