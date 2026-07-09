@@ -13,7 +13,7 @@ from yasbd.utils.paragraph_stream import ParagraphStream
 
 # Signals transition between paragraphs in relative mode
 # during boundary detection
-ParagraphEOF = type("_ParagraphEOF", (), {"__repr__": lambda self: "ParagraphEOF"})()
+ParagraphEOF = type("_ParagraphEOF", (), {"__repr__": lambda _: "ParagraphEOF"})()
 
 
 class BoundaryDetector:

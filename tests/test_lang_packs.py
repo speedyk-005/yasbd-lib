@@ -44,7 +44,7 @@ def test_non_rules_profile():
     """Test that register_lang_packs rejects a non-Rules subclass in PROFILES."""
 
     class NotRules:
-        def apply(self, text, preserve_quote_and_paren):
+        def apply(self, text, _preserve_quote_and_paren):
             return [len(text)]
 
     _make_fake_lang_pack("_test_lang_pack_notrules", profiles=[NotRules])
@@ -56,7 +56,7 @@ def test_handshake_override_apply():
     """Test that register_lang_packs rejects a profile overriding apply()."""
 
     class WrongReturn(Rules):
-        def apply(self, text, preserve_quote_and_paren):
+        def apply(self, _text, _preserve_quote_and_paren):
             return "not a list"
 
     _make_fake_lang_pack("_test_lang_pack_wrong_return", profiles=[WrongReturn])

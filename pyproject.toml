@@ -148,7 +148,7 @@ ignore = ["COM812", "D203", "D213", "RUF001", "RUF003", "RUF012", "S311", "FURB1
 "src/yasbd/utils/pysbd_adapter.py" = ["FBT001", "FBT002"]
 "src/yasbd/utils/logger.py" = ["FBT001", "FBT002"]
 "src/yasbd/utils/spacy_component.py" = ["BLE001", "FBT001", "FBT002"]
-"tests/*" = ["E501", "S101", "PLR2004", "Q0", "ERA001", "SLF001", "PT006"]
+"tests/*" = ["E501", "S101", "PLR2004", "Q0", "ERA001", "SLF001", "PT006", "ARG002"]
 "benchmarks/*" = ["E501", "FBT001", "FBT002", "PLR2004", "BLE001", "INP001"]
 
 [tool.ruff.format]
