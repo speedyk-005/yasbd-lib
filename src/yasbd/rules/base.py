@@ -217,7 +217,7 @@ class Rules:
         cls.HORIZONTAL_LIST_FINDER = re2.compile(
             rf"""
             # Must preceded by string start or word boundary
-            # while skipping initialisms 
+            # while skipping initialisms
             (?:^|(?<![A-Z](?:\.|\w+))\s+)
             (?:[•◦]\s+)?   # Optional bullet point (e.g., • 9.)
             (?:
