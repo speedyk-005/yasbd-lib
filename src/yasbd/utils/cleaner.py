@@ -88,8 +88,7 @@ def _clean_ocr_text(text: str) -> str:
     cleaned_text = NO_SPACE_BETWEEN_SENTENCES_FINDER.sub(" ", cleaned_text)
     cleaned_text = ARTIFACT_FINDER.sub("", cleaned_text)
     cleaned_text = HYPHENATED_WORD_FINDER.sub("", cleaned_text)
-    cleaned_text = PAGE_FINDER.sub("", cleaned_text)
-    return cleaned_text
+    return PAGE_FINDER.sub("", cleaned_text)
 
 
 CLEANING_PIPELINE = {

@@ -127,8 +127,7 @@ class Segmenter:
             return res
 
         if self.clean:
-            sents = list(self._detector.segment(text))
-            return sents
+            return list(self._detector.segment(text))
         sents = list(self._detector.segment(text, preserve_whitespace=True))
         return self._convert_leading_space_to_trails(sents)
 

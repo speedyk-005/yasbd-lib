@@ -104,7 +104,7 @@ def get_supported_langs() -> list[str]:
             continue
         if f.suffix == ".py":
             langs.add(f.stem)
-    return ["auto"] + sorted(langs)
+    return ["auto", *sorted(langs)]
 
 
 def load_rule(lang: str, *, verbose: bool = False) -> Rules:
