@@ -35,6 +35,8 @@
     * [\_\_init\_\_](#yasbd.rules.base.Rules.__init__)
     * [post\_process\_boundaries](#yasbd.rules.base.Rules.post_process_boundaries)
     * [apply](#yasbd.rules.base.Rules.apply)
+* [yasbd.rules.bn](#yasbd.rules.bn)
+* [yasbd.rules.cs](#yasbd.rules.cs)
 * [yasbd.rules.da](#yasbd.rules.da)
 * [yasbd.rules.de](#yasbd.rules.de)
 * [yasbd.rules.el](#yasbd.rules.el)
@@ -52,12 +54,15 @@
 * [yasbd.rules.mr](#yasbd.rules.mr)
 * [yasbd.rules.my](#yasbd.rules.my)
 * [yasbd.rules.nl](#yasbd.rules.nl)
+* [yasbd.rules.pl](#yasbd.rules.pl)
 * [yasbd.rules.pt](#yasbd.rules.pt)
 * [yasbd.rules.ru](#yasbd.rules.ru)
 * [yasbd.rules.sk](#yasbd.rules.sk)
 * [yasbd.rules.sv](#yasbd.rules.sv)
+* [yasbd.rules.sw](#yasbd.rules.sw)
 * [yasbd.rules.th](#yasbd.rules.th)
 * [yasbd.rules.uk](#yasbd.rules.uk)
+* [yasbd.rules.ur](#yasbd.rules.ur)
 * [yasbd.rules.vi](#yasbd.rules.vi)
 * [yasbd.rules.zh](#yasbd.rules.zh)
 * [yasbd.utils](#yasbd.utils)
@@ -471,7 +476,7 @@ the built-in rules directory and any registered language packs.
 #### load\_rule
 
 ```python
-def load_rule(lang: str, verbose: bool = False) -> Rules
+def load_rule(lang: str, *, verbose: bool = False) -> Rules
 ```
 
 Import and instantiate the rule module for *lang*.
@@ -588,6 +593,14 @@ quote/paren spans, list markers).
 
   Sorted list of character offsets at which sentences end.
 
+<a id="yasbd.rules.bn"></a>
+
+# yasbd.rules.bn
+
+<a id="yasbd.rules.cs"></a>
+
+# yasbd.rules.cs
+
 <a id="yasbd.rules.da"></a>
 
 # yasbd.rules.da
@@ -656,6 +669,10 @@ quote/paren spans, list markers).
 
 # yasbd.rules.nl
 
+<a id="yasbd.rules.pl"></a>
+
+# yasbd.rules.pl
+
 <a id="yasbd.rules.pt"></a>
 
 # yasbd.rules.pt
@@ -672,6 +689,10 @@ quote/paren spans, list markers).
 
 # yasbd.rules.sv
 
+<a id="yasbd.rules.sw"></a>
+
+# yasbd.rules.sw
+
 <a id="yasbd.rules.th"></a>
 
 # yasbd.rules.th
@@ -679,6 +700,10 @@ quote/paren spans, list markers).
 <a id="yasbd.rules.uk"></a>
 
 # yasbd.rules.uk
+
+<a id="yasbd.rules.ur"></a>
+
+# yasbd.rules.ur
 
 <a id="yasbd.rules.vi"></a>
 
@@ -956,6 +981,7 @@ retaining state across calls and yielding reconstructed paragraph blocks.
 ```python
 @validate_input
 def __init__(source: str | TextIOBase | StreamCleanerStub,
+             *,
              skip_empty_lines: bool = False) -> None
 ```
 
