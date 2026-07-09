@@ -10,6 +10,7 @@ TEST_DATA = [
 
     # -- Abbreviations --
     "My name is Jonas E. Smith.",
+    "A. B. Smith graduated from Harvard.| He then worked from IBM Corp.",
     "Please turn to p. 55.",
     "Were Jane and co. at the party?",
     "They closed the deal with Pitt, Briggs & Co. at noon.",
@@ -83,6 +84,8 @@ TEST_DATA = [
     "1. The first item.| 2. The second item.",
     "• 9. The first item.| • 10. The second item.",
     "a. The first item |b. The second item",
+    "A. I am a king.| B. You are a prince.",
+    "A. ananas| B. banana.",
 
     # Not a list (fix for #52)
     "I really want letter A.| I know that I asked you for the B.| I changed my mind.",
