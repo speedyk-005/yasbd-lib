@@ -261,7 +261,7 @@ class Rules:
                (?<=\s+\p{{Emoji_Presentation}})(?=\s*(?:{cls.COMMON_STARTERS_PATTERN})\b)|
 
                 # Split at transition between Latin letters separate by alien
-                (?<=[\p{{LU}}\p{{Ll}}][​。！？।])(?=[\p{{Lu}}])
+                (?<=[\p{{LU}}\p{{Ll}}][。！？।])(?=[\p{{Lu}}])
             )
 
             # Not followed by another terminators (clusters)
