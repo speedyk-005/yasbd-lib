@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Non-German ordinal boundary inheritance** ([#153](https://github.com/speedyk-005/yasbd-lib/pull/153)): remove inherited German ordinal pattern from nl, sv, da, af to fix false negatives on numbered sentence boundaries.
 - **Nested quote boundary leak** ([#156](https://github.com/speedyk-005/yasbd-lib/pull/156)): prevent inner single quotes inside double quotes from creating false sentence boundaries.
 - **`&` after title abbreviation** ([#157](https://github.com/speedyk-005/yasbd-lib/pull/157)): prevent & from triggering false sentence boundary after Com. or similar title abbreviations.
+- **Name initials at start of text** ([#160](https://github.com/speedyk-005/yasbd-lib/pull/160)): prevent `A. B. Smith` from being split by horizontal list marker pattern.
 
 ## [0.9.0] - 2026-07-03
 
