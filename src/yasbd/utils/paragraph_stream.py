@@ -25,6 +25,7 @@ class ParagraphStream:
     def __init__(
         self,
         source: str | TextIOBase | StreamCleanerStub,
+        *,
         skip_empty_lines: bool = False,
     ) -> None:
         """Initialize ParagraphStream.
@@ -113,6 +114,6 @@ if __name__ == "__main__":  # pragma: no cover
     world"""
 
     # Correctly instantiate the iterable class and consume its stream
-    para = ParagraphStream(text, False)
+    para = ParagraphStream(text, skip_empty_lines=False)
     for p in para:
         print(repr(p))

@@ -98,7 +98,7 @@ class BoundaryDetector:
             self._rule_cache.move_to_end(lang)
             return self._rule_cache[lang]
 
-        rule = load_rule(lang, self.verbose)
+        rule = load_rule(lang, verbose=self.verbose)
         self._rule_cache[lang] = rule
 
         if len(self._rule_cache) > 5:

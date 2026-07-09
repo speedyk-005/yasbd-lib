@@ -142,11 +142,14 @@ ignore = ["COM812", "D203", "D213", "RUF001", "RUF003", "RUF012", "S311", "FURB1
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F403", "I001"]
-"cli.py" = ["PLR0913", "UP045"]
+"cli.py" = ["PLR0913", "UP045", "FBT001", "FBT002"]
 "src/yasbd/utils/cleaner.py" = ["E501"]
-"src/yasbd/utils/spacy_component.py" = ["BLE001"]
+"src/yasbd/rules/base.py" = ["FBT001"]
+"src/yasbd/utils/pysbd_adapter.py" = ["FBT001", "FBT002"]
+"src/yasbd/utils/logger.py" = ["FBT001", "FBT002"]
+"src/yasbd/utils/spacy_component.py" = ["BLE001", "FBT001", "FBT002"]
 "tests/*" = ["E501", "S101", "PLR2004", "Q0", "ERA001", "SLF001", "PT006"]
-"benchmarks/*" = ["E501", "FBT002", "PLR2004", "BLE001", "INP001"]
+"benchmarks/*" = ["E501", "FBT001", "FBT002", "PLR2004", "BLE001", "INP001"]
 
 [tool.ruff.format]
 exclude = [".git", ".venv", "build", "dist", "tests/test_data/*", "*/EN_GOLDEN_DATA.py"]

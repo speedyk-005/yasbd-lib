@@ -107,7 +107,7 @@ def get_supported_langs() -> list[str]:
     return ["auto"] + sorted(langs)
 
 
-def load_rule(lang: str, verbose: bool = False) -> Rules:
+def load_rule(lang: str, *, verbose: bool = False) -> Rules:
     """Import and instantiate the rule module for *lang*.
 
     Checks the language pack registry first; falls back to the built-in rules directory.
