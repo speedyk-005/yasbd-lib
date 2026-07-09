@@ -16,12 +16,12 @@ class FaRules(Rules):
         "س.م.م", "ک.و.آ.ر",
     }
 
-    REFERENCE_ABBRVS = {
+    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         "ص", "ج", "ش", "ق", "م", "ب", "ط", "خ",
         "ف", "ض", "ت", "ن", "ک", "س", "ه",
     }
 
-    SECTION_MARKERS = {
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {
         "فصل", "فصلنامه", "بخش", "قسمت", "گفتار",
         "ماده", "بند", "تبصره", "ضمیمه", "پیوست",
         "مقدمه", "دیباچه", "خاتمه", "نتیجه",
@@ -33,7 +33,7 @@ class FaRules(Rules):
         "ق.م", "ب.م",
     }
 
-    DATE_ABBRVS = {
+    DATE_ABBRVS = Rules.DATE_ABBRVS | {
         # Days (Rarely abbreviated,
         # but initial letters sometimes appear)
         "ش", "ی", "د", "س", "چ", "پ", "ج",

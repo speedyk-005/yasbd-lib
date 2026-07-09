@@ -42,14 +42,14 @@ if _utils_path not in __path__:
 
 __all__ = [
     "BoundaryDetector",
-    "ParagraphEOF",
     "CleanStepError",
     "InvalidInputError",
+    "ParagraphEOF",
     "UnsupportedLanguageError",
     "YasbdError",
+    "__version__",
+    "clear_lang_packs",
     "get_supported_langs",
     "register_lang_packs",
-    "clear_lang_packs",
     "register_spacy_component",
-    "__version__",
 ]

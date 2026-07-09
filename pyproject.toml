@@ -102,17 +102,51 @@ target-version = "py311"
 line-length = 95
 
 [tool.ruff.lint]
-# E, W (Flake8), F (Pyflakes), I (Isort), B (Bugbear)
-select = ["E", "F", "I", "W", "B"]
+select = [
+    "A",      # Built-in shadowing and variable shadowing checks
+    "ARG",    # Unused function and method arguments
+    "B",      # Likely bugs and dangerous patterns (flake8-bugbear)
+    "BLE",    # Blind exception handling (e.g. bare except)
+    "C90",    # McCabe complexity checks
+    "E",      # pycodestyle errors (PEP 8 violations)
+    "ERA",    # Commented-out dead code detection
+    "F",      # Pyflakes logical and static analysis errors
+    "FBT",    # Boolean positional argument "traps"
+    "FIX",    # TODO, FIXME, XXX comment detection
+    "FURB",   # Refactoring and modernization suggestions (refurb)
+    "I",      # Import sorting and organization (isort)
+    "ICN",    # Import alias naming conventions
+    "INP",    # Missing __init__.py package checks
+    "N",      # PEP 8 naming conventions (pep8-naming)
+    "PERF",   # Performance anti-patterns
+    "PGH",    # Pygrep-hooks rules and miscellaneous checks
+    "PIE",    # Unnecessary or non-pythonic code patterns
+    "PL",     # Pylint-derived checks
+    "PT",     # Pytest style and correctness checks
+    "PTH",    # Prefer pathlib over os/path utilities
+    "Q",      # Quote style consistency
+    "RET",    # Return statement consistency and simplification
+    "RSE",    # Raise statement improvements
+    "RUF",    # Ruff-specific rules
+    "S",      # Security issues and insecure code patterns (bandit)
+    "SLF",    # Access to private members
+    "SIM",    # Code simplification opportunities
+    "TC",     # Type-checking block optimizations
+    "TCH",    # Move typing-only imports into TYPE_CHECKING blocks
+    "TID",    # Import restriction and tidiness rules
+    "T10",    # Debugger breakpoint detection
+    "UP",     # Python syntax and API modernization (pyupgrade)
+    "W",      # pycodestyle warnings
+]
+ignore = ["PLW2901", "COM812", "D203", "D213", "RUF001", "RUF003", "RUF012", "S311", "FURB167", "PLC0206", "PLC0415"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F403", "I001"]
-"src/yasbd/utils/cleaner.py" = ["E501"]
-"tests/test_data/*" = ["E501"]
-"benchmarks/*" = ["E501"]
+"cli.py" = ["PLR0913", "UP045", "FBT001", "FBT002", "PTH123", "S603"]
+"src/yasbd/rules/base.py" = ["FBT001", "PLR2004", "SLF001"]
+"src/yasbd/utils/*.py" = ["E501", "BLE001", "FBT001", "FBT002", "PLR2004"]
+"tests/*" = ["E501", "S101", "PLR2004", "Q0", "ERA001", "SLF001", "PT006", "ARG002"]
+"benchmarks/*" = ["E501", "FBT001", "FBT002", "PLR2004", "BLE001", "INP001"]
 
 [tool.ruff.format]
 exclude = [".git", ".venv", "build", "dist", "tests/test_data/*", "*/EN_GOLDEN_DATA.py"]
-
-[tool.uv]
-link-mode = "copy"

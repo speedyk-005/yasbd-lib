@@ -11,7 +11,7 @@ class AmRules(Rules):
         "አቶ", "ወ/ሮ", "ወ/ሪት", "ዶ/ር", "ፕ/ሮፌሰር",
     }
 
-    DOTTED_GEOPOL_ABBRVS = {
+    DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
         # International Countries & Blocs
         "አ.ሜ.ሪ.ካ", "ዩ.ኤስ.ኤ", "ዩ.ኬ", "ዩ.ኤ.ኢ", "ኢ.ፌ.ዴ.ሪ", "ሶ.ቪ.የ.ት",
 
@@ -25,7 +25,7 @@ class AmRules(Rules):
         "አ.አ", "ድ.ዳ", "ክ.ሀ", "ወ.ረ",
     }
 
-    REFERENCE_ABBRVS = {
+    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         # Publishing / Documents
         "ዕ.ሕ.", "ማ.ታ.", "ም.ዕ.", "ቅ.ጽ.", "ገ.ቁ.", "ገ.", "ም.", "ቅ.", "ማ.", "ማጣ.",
 

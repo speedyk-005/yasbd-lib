@@ -64,4 +64,3 @@ class LangRules(Rules):
         """Hook for language-specific boundary filtering that the regex
         passes cannot catch. Override and mutate ``sentence_boundaries``.
         """
-        pass

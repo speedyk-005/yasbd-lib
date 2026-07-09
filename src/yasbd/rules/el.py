@@ -71,7 +71,7 @@ class ElRules(Rules):
         "παρ", "περ", "οικ", "τμ"
     }
 
-    NAMES_WITH_EXCLAMATION = {
+    NAMES_WITH_EXCLAMATION = Rules.NAMES_WITH_EXCLAMATION | {
         # Domestic and highly active digital platforms / retail
         "efood!", "jumbo!", "skroutz!", "box!", "wolt!", "viva!", "public!",
 

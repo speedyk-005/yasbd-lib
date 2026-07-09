@@ -6,7 +6,7 @@ from yasbd.rules.base import Rules
 # fmt: off
 class ArRules(Rules):
 
-    TITLE_ABBRVS = {
+    TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Academic & Professional
         "أ", "د", "أ.د", "م", "أ.م", "د.م", "ط", "ص", "سـم"
 
@@ -22,11 +22,11 @@ class ArRules(Rules):
         "و.م.أ", "أ.م", "ج.ص.ش"
     }
 
-    REFERENCE_ABBRVS = {
+    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         "ص", "ج", "مج", "ت", "ط", "ع", "ب", "ح", "خ", "ف", "ق", "ن",
     }
 
-    SECTION_MARKERS = {
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {
         "فصل", "الفصل", "باب", "الباب", "جزء", "الجزء", "قسم", "القسم",
         "مادة", "المادة", "بند", "البند", "مقدمة", "المقدمة", "تمهيد", "التمهيد",
         "خاتمة", "الخاتمة", "كتاب", "الكتاب", "ملحق", "الملحق", "فهرس", "الفهرس",
@@ -41,7 +41,7 @@ class ArRules(Rules):
         "ص.ب", "ت.إ", "ت.ف", "ت"
     }
 
-    DATE_ABBRVS = {
+    DATE_ABBRVS = Rules.DATE_ABBRVS | {
         # Days (Rarely abbreviated, but initial letters sometimes appear in schedules)
         "ح", "ن", "ث", "ر", "خ", "ج", "س",
 

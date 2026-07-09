@@ -77,7 +77,7 @@ def register_lang_packs(names: list[str]) -> list[str]:
             except (TypeError, RuntimeError) as e:
                 raise LangPackError(
                     f"Validation failed for {profile.__name__!r} in module {name!r}.\n"
-                    f"Details: {str(e)}"
+                    f"Details: {e!s}"
                 ) from e
 
     get_supported_langs.cache_clear()
@@ -104,10 +104,10 @@ def get_supported_langs() -> list[str]:
             continue
         if f.suffix == ".py":
             langs.add(f.stem)
-    return ["auto"] + sorted(langs)
+    return ["auto", *sorted(langs)]
 
 
-def load_rule(lang: str, verbose: bool = False) -> Rules:
+def load_rule(lang: str, *, verbose: bool = False) -> Rules:
     """Import and instantiate the rule module for *lang*.
 
     Checks the language pack registry first; falls back to the built-in rules directory.

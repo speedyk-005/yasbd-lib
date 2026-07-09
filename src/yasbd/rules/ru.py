@@ -5,7 +5,7 @@ from yasbd.rules.base import Rules
 class RuRules(Rules):
 
 
-    TITLE_ABBRVS = {
+    TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Standard Professional
         "ак", "акад", "доц", "проф", "д-р", "канд",
         "дир", "зам. дир", "зав. каф", "асп", "в.н.с", "гл. науч. сотр",
@@ -29,7 +29,7 @@ class RuRules(Rules):
     # as foreign Latin-script tokens rather than native patterns.
     DOTTED_GEOPOL_ABBRVS = set()
 
-    REFERENCE_ABBRVS = {
+    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         "см", "ср", "цит", "цит по", "с", "стр", "гл", "разд", "раздл", "§",
         "п", "пп", "ст", "табл", "рис", "прим", "прил", "напр", "вып", "т.к",
         "и.о", "ч", "изд", "собр", "соч", "т", "тт",
@@ -37,7 +37,7 @@ class RuRules(Rules):
         "и др", "и пр", "и т.п", "в т.ч",
     }
 
-    SECTION_MARKERS = {
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {
         "Глава", "Часть", "Раздел", "Статья", "Параграф",
         "Том", "Книга", "Подраздел", "Модуль", "Дивизион",
         "Использование", "Единица", "Предисловие", "Введение"
@@ -54,7 +54,7 @@ class RuRules(Rules):
         "Яндекс", "Билайн", "Сбер",
     }
 
-    DATE_ABBRVS = {
+    DATE_ABBRVS = Rules.DATE_ABBRVS | {
         # Months
         "янв", "фев", "мар", "апр", "июн", "июл", "авг", "сен",
         "окт", "ноя", "дек",

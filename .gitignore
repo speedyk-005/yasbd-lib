@@ -219,7 +219,17 @@ __marimo__/
 
 # Agents
 .agents/
+.pi-subagents/
+.pi/
+.cursor/
+.idea/
+.windsurfrules
+.gemini/
 skills-lock.json
 .skills/
 .claude/
 .opencode/
+
+# Temporary working files
+issue.md
+pr.md

@@ -17,6 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Swahili (sw) language support** ([#149](https://github.com/speedyk-005/yasbd-lib/pull/149)).
 - **Urdu (ur) language support** ([#154](https://github.com/speedyk-005/yasbd-lib/pull/154)).
 
+### Changed
+
+- **Code quality improvements** ([#161](https://github.com/speedyk-005/yasbd-lib/pull/161)):
+  - Language abbreviation/section sets extended instead of replaced in 8 modules (ar, fa, ru, am, cs, pl, sw, el).
+  - Boolean parameters made keyword-only in `load_rule()`, `ParagraphStream`, and pysbd `Segmenter`.
+  - Named constants `MIN_CONFIDENCE` and `MAX_CACHED_RULES` extracted from magic numbers.
+  - Expanded ruff lint rules with FBT, ARG, PLR, and other rule sets; auto-fixes applied.
+  - `TextSpan.__hash__` added; unused parameters cleaned up.
+
 ### Fixed
 
 - **Clock abbreviations** ([#152](https://github.com/speedyk-005/yasbd-lib/pull/152)): protect kl, hod, год from false sentence boundaries in cs, sk, uk, sv.
