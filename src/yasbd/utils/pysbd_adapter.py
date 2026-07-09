@@ -37,6 +37,9 @@ class TextSpan:
             )
         return NotImplemented
 
+    def __hash__(self) -> int:
+        return hash((self.sent, self.start, self.end))
+
 
 class Segmenter:
     @validate_input
