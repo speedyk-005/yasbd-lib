@@ -350,7 +350,7 @@ with open("document.txt", encoding="utf-8") as f:
 Common cleanup operations include:
 
 - Fixing mojibake and OCR artifacts
-- Removing HTML tags
+- Removing HTML markup (lightweight preprocessor, not a full HTML parser)
 - Normalizing whitespace and repeated slashes
 - Rejoining hyphenated words split across lines
 - Merging vertically stacked characters
@@ -387,7 +387,7 @@ Available built-in steps:
 |------|-------------|
 | `fix_mojibake` | Fixes Unicode mojibake via ftfy |
 | `fix_ocr_text` | Repairs OCR artifacts, rejoins hyphenated words, removes page markers |
-| `unwrap_htmls` | Strips HTML tags (including `<script>`, `<style>` and their content) |
+| `unwrap_htmls` | Removes most HTML markup while preserving visible text. `<b>`, `<i>`, and `<u>` tags are preserved |
 | `normalize_slashes` | Collapses `///` triple slashes |
 | `normalize_spaces` | Collapses multiple spaces into one |
 
