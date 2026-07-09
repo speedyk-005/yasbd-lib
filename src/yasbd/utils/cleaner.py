@@ -65,8 +65,8 @@ HTML_TAGS_FINDER = re.compile(
     # Processing instructions (<?xml ... ?>, <?php ... ?>)
     <\?.*?\?>|
 
-    # Strip the tag AND its content
-    <(script|style|iframe|object|embed|img|code|noscript|svg|canvas|template)\b[^>]*?>.*?</\1>|
+    # Strip the tag AND its content (container elements only)
+    <(script|style|iframe|object|code|noscript|svg|canvas|template)\b[^>]*?>.*?</\1>|
 
     # Strip all remaining tags except lightweight formatting (<b>, <i>, <u>)
     </?(?!/?[bui]\b)[^>]+?>
