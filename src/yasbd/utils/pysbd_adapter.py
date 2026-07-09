@@ -24,11 +24,8 @@ class TextSpan:
         return f"[{self.start}:{self.end}] {self.sent}"
 
     def __eq__(self, other) -> bool:
-        if (
-            isinstance(other, TextSpan)
-            or (hasattr(other, "sent")
-            and hasattr(other, "start")
-            and hasattr(other, "end"))
+        if isinstance(other, TextSpan) or (
+            hasattr(other, "sent") and hasattr(other, "start") and hasattr(other, "end")
         ):
             return (self.start, self.end, self.sent) == (
                 other.start,

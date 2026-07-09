@@ -7,4 +7,3 @@ class StreamCleanerStub:
 
     This class provides no functionality.
     """
-
