@@ -53,14 +53,23 @@ PAGE_FINDER = re.compile(
     re.X | re.M,
 )
 
-# https://regexr.com/8n5a8
+# https://regex101.com/r/Am0FSD/2
 HTML_TAGS_FINDER = re.compile(
     r"""
-    # Branch 1: Strip the tag AND its content
-    <(script|img|iframe|object|embed|style|code)[^>]*?>.*?</\1>|
+    # HTML comments
+    <!--.*?-->|
 
-    # Branch 2: Just strip the brackets except quick formatting
-    </?\b[^libu][^>]*?>
+    # Declarations (<!DOCTYPE html>, <!ENTITY ...>, etc.)
+    <![^>]+>|
+
+    # Processing instructions (<?xml ... ?>, <?php ... ?>)
+    <\?.*?\?>|
+
+    # Strip the tag AND its content (container elements only)
+    <(script|style|iframe|object|code|noscript|svg|canvas|template)\b[^>]*?>.*?</\1>|
+
+    # Strip all remaining tags except lightweight formatting (<b>, <i>, <u>)
+    </?(?!/?[bui]\b)[a-zA-Z][^>]*?>
     """,
     re.X | re.I | re.S,
 )
@@ -107,6 +116,8 @@ class StreamCleaner(StreamCleanerStub):
     and various regex cleanup rules across paragraphs.
 
     Examples:
+        >>> list(StreamCleaner("x < 5 and y > 3"))
+        ['x < 5 and y > 3']
         >>> list(StreamCleaner("Hello <b>world</b>. How are you?"))
         ['Hello <b>world</b>. How are you?']
         >>> list(StreamCleaner("<script>alert('xss')</script>clean text"))
