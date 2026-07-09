@@ -33,6 +33,11 @@ class YasbdComponent:
             verbose=verbose,
         )
 
+    # Same params as BoundaryDetector.__init__, just reuse its docstring.
+    __init__.__doc__ = BoundaryDetector.__init__.__doc__.replace(
+        "boundary detector", "spaCy pipeline component"
+    )
+
     def __call__(self, doc: Doc) -> Doc:
         """Assign sentence sent_ends using yasbd."""
 

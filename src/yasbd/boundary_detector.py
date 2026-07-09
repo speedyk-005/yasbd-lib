@@ -31,7 +31,7 @@ class BoundaryDetector:
         preserve_quote_and_paren: bool = True,
         verbose: bool = False,
     ):
-        """Initialize the segmenter.
+        """Initialize the boundary detector.
 
         Args:
             lang: Two chars ISO language code (e.g., 'en', 'fr', ...).
