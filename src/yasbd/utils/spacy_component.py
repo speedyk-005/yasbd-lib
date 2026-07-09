@@ -68,7 +68,7 @@ class YasbdComponent:
 )
 def create_yasbd(
     nlp: Language,
-    _name: str,
+    name: str,  # noqa: ARG001
     lang: str | None,
     preserve_quote_and_paren: bool,
     verbose: bool,
