@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.11.0] - Unreleased
+
+### Fixed
+
+- **HTML markup leaking through cleaner** ([#162](https://github.com/speedyk-005/yasbd-lib/pull/162)): doctype declarations, comments, processing instructions, and script/style content no longer pass through.
+
 ## [0.10.0] - 2026-07-09
 
 ### Added
