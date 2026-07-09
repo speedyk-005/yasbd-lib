@@ -9,7 +9,7 @@ class DeRules(Rules):
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         "dr.h.c", "di", "dipl", "dipl.-Ing", "mag", "ba", "ma", "bsc", "msc",
-        "h", "hr", "hnr", "hll", "frl", "min", "pfr", "ass", "​projektass",
+        "h", "hr", "hnr", "hll", "frl", "min", "pfr", "ass", "\u200bprojektass",
 
         # Military Ranks
         "gen", "lt", "maj", "oberstlt", "kpt", "kptlt", "fkpt", "kkpt",

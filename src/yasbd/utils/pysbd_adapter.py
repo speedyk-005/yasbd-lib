@@ -26,9 +26,9 @@ class TextSpan:
     def __eq__(self, other) -> bool:
         if (
             isinstance(other, TextSpan)
-            or hasattr(other, "sent")
+            or (hasattr(other, "sent")
             and hasattr(other, "start")
-            and hasattr(other, "end")
+            and hasattr(other, "end"))
         ):
             return (self.start, self.end, self.sent) == (
                 other.start,
@@ -126,9 +126,8 @@ class Segmenter:
         if self.clean:
             sents = list(self._detector.segment(text))
             return sents
-        else:
-            sents = list(self._detector.segment(text, preserve_whitespace=True))
-            return self._convert_leading_space_to_trails(sents)
+        sents = list(self._detector.segment(text, preserve_whitespace=True))
+        return self._convert_leading_space_to_trails(sents)
 
     @validate_input
     def sentences_with_char_spans(self, sentences: list[str]) -> list[TextSpan]:

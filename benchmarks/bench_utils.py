@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import timeit
 import warnings
-from typing import Any, Type, TypeVar
+from typing import Any, TypeVar
 
 from loguru import logger as _loguru
 from rich.console import Console
@@ -23,7 +23,7 @@ _REGISTRY: dict[str, BaseSegmenter] = {}
 def register_with_lang(lang: str):
     """Decorator factory to instantiate a segmenter with a specific language."""
 
-    def decorator(cls: Type[T]) -> Type[T]:
+    def decorator(cls: type[T]) -> type[T]:
         instance = cls(lang=lang)
         _REGISTRY[instance.name] = instance
         return cls

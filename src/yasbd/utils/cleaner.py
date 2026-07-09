@@ -205,7 +205,7 @@ class StreamCleaner(StreamCleanerStub):
                 except Exception as e:
                     raise CleanStepError(
                         f"extra step {getattr(step, '__name__', step)!r} raised an error.\n"
-                        f"Details: {str(e)}"
+                        f"Details: {e!s}"
                     ) from e
 
                 if not isinstance(result, str):

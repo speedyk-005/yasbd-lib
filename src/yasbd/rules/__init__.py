@@ -77,7 +77,7 @@ def register_lang_packs(names: list[str]) -> list[str]:
             except (TypeError, RuntimeError) as e:
                 raise LangPackError(
                     f"Validation failed for {profile.__name__!r} in module {name!r}.\n"
-                    f"Details: {str(e)}"
+                    f"Details: {e!s}"
                 ) from e
 
     get_supported_langs.cache_clear()
