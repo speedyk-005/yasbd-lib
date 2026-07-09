@@ -47,7 +47,7 @@ class CsRules(Rules):
         "ul", "tř", "nám", "nábř",
     }
 
-    SECTION_MARKERS = {
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {
         "Kapitola", "Část", "Sekce", "Odstavec", "Bod",
         "Hlava", "Oddíl", "Článek", "Paragraf", "Písmeno",
     }

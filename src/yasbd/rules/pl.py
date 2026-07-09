@@ -32,7 +32,7 @@ class PlRules(Rules):
         "os", "ul", "al", "pl", "skw", "bulw", "boul",
     }
 
-    SECTION_MARKERS = {
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {
         "Rozdział", "Część", "Ustęp", "Paragraf", "Artykuł", "Punkt", "Sekcja",
     }
 

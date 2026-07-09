@@ -29,7 +29,7 @@ class SwRules(Rules):
         "mlango", "Sura", "Sehemu", "Kiambatisho",
         "Hitimisho", "Utangulizi", "Dibaji",
     }
-    SECTION_MARKERS = {f"{m} ya" for m in _section_markers}
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {f"{m} ya" for m in _section_markers}
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
         "mac", "mei", "ago", "des",
