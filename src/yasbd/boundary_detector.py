@@ -16,10 +16,10 @@ from yasbd.utils.paragraph_stream import ParagraphStream
 ParagraphEOF = type("_ParagraphEOF", (), {"__repr__": lambda _: "ParagraphEOF"})()
 
 # Confidence threshold for auto language detection
-MIN_CONFIDENCE = 0.8
+_MIN_CONFIDENCE = 0.8
 
 # Maximum number of rule instances to keep in cache
-MAX_CACHED_RULES = 5
+_MAX_CACHED_RULES = 5
 
 
 class BoundaryDetector:
@@ -92,7 +92,7 @@ class BoundaryDetector:
         """
         if lang == "auto":
             lang, confidence = classify_language(snippet)
-            if confidence < MIN_CONFIDENCE:
+            if confidence < _MIN_CONFIDENCE:
                 log_info(
                     self.verbose,
                     "Low confidence ({:.2f}) for detected lang {!r} in auto mode",
@@ -107,7 +107,7 @@ class BoundaryDetector:
         rule = load_rule(lang, verbose=self.verbose)
         self._rule_cache[lang] = rule
 
-        if len(self._rule_cache) > MAX_CACHED_RULES:
+        if len(self._rule_cache) > _MAX_CACHED_RULES:
             self._rule_cache.popitem(last=False)
 
         return rule
