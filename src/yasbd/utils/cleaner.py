@@ -53,14 +53,23 @@ PAGE_FINDER = re.compile(
     re.X | re.M,
 )
 
-# https://regexr.com/8n5a8
+# https://regex101.com/r/Am0FSD/1
 HTML_TAGS_FINDER = re.compile(
     r"""
-    # Branch 1: Strip the tag AND its content
-    <(script|img|iframe|object|embed|style|code)[^>]*?>.*?</\1>|
+    # HTML comments
+    <!--.*?-->|
 
-    # Branch 2: Just strip the brackets except quick formatting
-    </?\b[^libu][^>]*?>
+    # Declarations (<!DOCTYPE html>, <!ENTITY ...>, etc.)
+    <![^>]+>|
+
+    # Processing instructions (<?xml ... ?>, <?php ... ?>)
+    <\?.*?\?>|
+
+    # Strip the tag AND its content
+    <(script|style|iframe|object|embed|img|code|noscript|svg|canvas|template)\b[^>]*?>.*?</\1>|
+
+    # Strip all remaining tags except lightweight formatting (<b>, <i>, <u>)
+    </?(?!/?[bui]\b)[^>]+?>
     """,
     re.X | re.I | re.S,
 )
