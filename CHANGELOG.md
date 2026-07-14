@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **French `est` blocking sentence boundary** ([#166](https://github.com/speedyk-005/yasbd-lib/pull/166)): `est` removed from French inline-only abbreviations so sentences ending with `est.` split correctly.
 - **HTML markup leaking through cleaner** ([#162](https://github.com/speedyk-005/yasbd-lib/pull/162)): doctype declarations, comments, and processing instructions no longer pass through. Void elements removed from content-stripping group. Math expressions like `x < 5 and y > 3` no longer mangled.
 
 ## [0.10.0] - 2026-07-09
