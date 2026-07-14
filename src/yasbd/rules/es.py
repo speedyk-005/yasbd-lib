@@ -48,33 +48,35 @@ class EsRules(Rules):
         "El", "La", "Los", "Las", "Un", "Una", "Unos", "Unas",
 
         # Pronouns
-        "Yo", "Tú", "Él", "Ella", "Usted", "Nosotros", "Vosotros",
-        "Ellos", "Ellas", "Este", "Esta", "Estos", "Estas",
-        "Ese", "Esa", "Esos", "Esas",
-        "Aquel", "Aquella", "Aquellos", "Aquellas", "Aquí", "Allí",
-        "Quien", "Quienes", "Cual", "Cuales", "Cuanto",
+        "Allí", "Aquel", "Aquella", "Aquellas", "Aquellos",
+        "Aquí", "Cual", "Cuales", "Cuanto", "Ella", "Ellas",
+        "Ellos", "Esa", "Esas", "Ese", "Esos", "Esta", "Estas",
+        "Este", "Estos", "Nosotros", "Quien", "Quienes", "Tú",
+        "Usted", "Vosotros", "Yo", "Él",
 
         # Inverted punctuation (always start a new sentence in Spanish)
         "¿", "¡",
 
         # Adverbs & Transitions
-        "Pero", "Entonces", "Así que", "Sin embargo", "Luego", "Además",
-        "Aunque", "Tampoco", "También", "Incluso", "Solo", "Solamente",
-        "Más", "Menos", "Mejor", "Peor", "Mientras", "Ahora", "Después",
-        "Antes", "Temprano", "Tarde", "Pronto", "Siempre", "Nunca", "Jamás",
-        "Ya", "Aún", "Todavía", "Ayer", "Hoy", "Mañana", "Anoche",
-        "Quizás", "Quizá", "Tal vez", "Ojalá", "Casi",
-        "Finalmente", "Generalmente", "Normalmente", "Realmente",
-        "Seguramente", "Probablemente", "Lamentablemente", "Afortunadamente",
-        "Posteriormente", "Previamente", "Últimamente", "Actualmente",
-        "Antiguamente", "Próximamente",
-        "Inmediatamente", "Simultáneamente", "Sucesivamente",
-        "Primero", "Segundo", "Tercero", "Último",
-        "Anteriormente", "Consecuentemente", "Subsiguientemente",
+        "Actualmente", "Además", "Afortunadamente", "Ahora",
+        "Anoche", "Anteriormente", "Antes", "Antiguamente",
+        "Así que", "Aunque", "Ayer", "Aún", "Casi",
+        "Consecuentemente", "Después", "Entonces", "Finalmente",
+        "Generalmente", "Hoy", "Incluso", "Inmediatamente",
+        "Jamás", "Lamentablemente", "Luego", "Mañana", "Mejor",
+        "Menos", "Mientras", "Más", "Normalmente", "Nunca",
+        "Ojalá", "Peor", "Pero", "Posteriormente",
+        "Previamente", "Primero", "Probablemente", "Pronto",
+        "Próximamente", "Quizá", "Quizás", "Realmente",
+        "Segundo", "Seguramente", "Siempre", "Simultáneamente",
+        "Sin embargo", "Solamente", "Solo", "Subsiguientemente",
+        "Sucesivamente", "Tal vez", "También", "Tampoco",
+        "Tarde", "Temprano", "Tercero", "Todavía", "Ya",
+        "Últimamente", "Último",
 
         # Question words
-        "Como", "Cuando", "Donde", "Qué", "Quién", "Cuál", "Cuánto", "Cómo", "Cuándo",
-        "Dónde", "Porqué", "Porque",
+        "Como", "Cuando", "Cuál", "Cuándo", "Cuánto", "Cómo",
+        "Donde", "Dónde", "Porque", "Porqué", "Quién", "Qué",
     }
 
     # fmt: on

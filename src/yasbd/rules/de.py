@@ -69,17 +69,17 @@ class DeRules(Rules):
         "Dieser", "Diese", "Dieses", "Jener", "Jene", "Jenes",
 
         # Question words
-        "Wer", "Was", "Wo", "Wann", "Warum", "Wie", "Welcher", "Welche", "Welches",
-        "Wessen", "Wem", "Wen",
+        "Wann", "Warum", "Was", "Welche", "Welcher", "Welches",
+        "Wem", "Wen", "Wer", "Wessen", "Wie", "Wo",
 
         # Adverbs and Connectors
-        "Allerdings", "Zudem", "Dennoch", "Deshalb", "Folglich", "Darum",
-        "Mittlerweile", "Außerdem", "Darüberhinaus", "Ansonsten", "Jedoch",
-        "Ebenso", "Somit", "Dann", "Denn",
-        "Später", "Derzeit", "Inzwischen", "Schließlich", "Anfangs", "Danach",
-        "Nächst", "Nächste", "Letzt", "Letzte",
-        "Erstens", "Zweitens", "Drittens", "Zuletzt",
-        "Früher", "Zuvor", "Daraufhin",
+        "Allerdings", "Anfangs", "Ansonsten", "Außerdem",
+        "Danach", "Dann", "Daraufhin", "Darum", "Darüberhinaus",
+        "Denn", "Dennoch", "Derzeit", "Deshalb", "Drittens",
+        "Ebenso", "Erstens", "Folglich", "Früher", "Inzwischen",
+        "Jedoch", "Letzt", "Letzte", "Mittlerweile", "Nächst",
+        "Nächste", "Schließlich", "Somit", "Später", "Zudem",
+        "Zuletzt", "Zuvor", "Zweitens",
 
         # Other starters
         "Tun", "Tat", "Millionen", "Gestern", "Heute", "Morgen",
@@ -93,12 +93,13 @@ class DeRules(Rules):
 
     DATE_WORDS = {
         # Months
-        "januar", "februar", "märz", "april", "mai", "juni",
-        "juli", "august", "september", "oktober", "november", "dezember",
+        "april", "august", "dezember", "februar", "januar",
+        "juli", "juni", "mai", "märz", "november", "oktober",
+        "september",
 
         # Days
-        "montag", "dienstag", "mittwoch", "donnerstag", "freitag",
-        "samstag", "sonntag",
+        "dienstag", "donnerstag", "freitag", "mittwoch",
+        "montag", "samstag", "sonntag",
      }
 
     # fmt: on

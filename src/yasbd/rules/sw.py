@@ -37,12 +37,14 @@ class SwRules(Rules):
 
     COMMON_SENT_STARTERS = {
         # Pronouns
-        "Mimi", "Sisi", "Wewe", "Ninyi", "Yeye", "Wao",
-        "Huyu", "Hawa", "Huu", "Hii", "Hiki", "Hivi", "Hili", "Haya",
-        "Yule", "Wale", "Ule", "Ile", "Kile", "Vile", "Lile", "Yale",
+        "Hawa", "Haya", "Hii", "Hiki", "Hili", "Hivi", "Huu",
+        "Huyu", "Ile", "Kile", "Lile", "Mimi", "Ninyi", "Sisi",
+        "Ule", "Vile", "Wale", "Wao", "Wewe", "Yale", "Yeye",
+        "Yule",
 
         # Question Particles
-        "Nani", "Nini", "Lini", "Wapi", "Kwanini", "Mbona", "Vipi",
+        "Kwanini", "Lini", "Mbona", "Nani", "Nini", "Vipi",
+        "Wapi",
 
         # Logical Conjunctions & Transitions
         "Kwa", "Kwa sababu", "Lakini", "Ingawa", "Kisha",
