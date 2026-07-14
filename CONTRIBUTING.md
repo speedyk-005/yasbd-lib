@@ -78,6 +78,13 @@ Our code surfaces must be perfectly smooth. Before pushing, sand down the rough 
 ruff format && ruff check --fix
 ```
 
+If you modified any set literals in rule files (abbreviation sets, section markers, etc.),
+reformat them for consistent line widths:
+
+```bash
+python3 scripts/reformat_sets.py
+```
+
 Pre-commit hooks are available to automate this. Install them with:
 
 ```bash
