@@ -39,7 +39,7 @@ class DaRules(SvRules):
         "Hvorfor", "Hvilken", "Hvilket", "Hvilke",
 
         # Others
-         "Et", "Ydermere", "Dermed", "Ellers",
+        "Et", "Ydermere", "Dermed", "Ellers",
     }
 
     DATE_WORDS = {

@@ -24,8 +24,8 @@ class EsRules(Rules):
     }
 
     SECTION_MARKERS = Rules.SECTION_MARKERS | {
-    "Artículo", "Anexo", "Capítulo", "Sección", "Subsección", "Unidad",
-    "Módulo", "División",
+        "Artículo", "Anexo", "Capítulo", "Sección", "Subsección", "Unidad",
+        "Módulo", "División",
     }
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS - {"ave"} | {

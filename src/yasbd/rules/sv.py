@@ -69,7 +69,7 @@ class SvRules(DeRules):
         # Swedish days
         "måndag", "tisdag", "onsdag", "torsdag", "fredag",
         "lördag", "söndag",
-     }
+    }
 
     @classmethod
     def _compile_regex_dynamically(cls):
