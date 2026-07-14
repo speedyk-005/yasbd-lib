@@ -7,6 +7,7 @@ TEST_DATA = [
 
     # Abbreviations
     "M. Dupont est un professeur.",
+    "Il est.| Ensuite il est parti.",
     "Veuillez consulter la p. 55 du livre.",
     "Voir fig. 3 dans le chap. 5.",
     "L'ouvrage est publié dans le t. II du recueil.",

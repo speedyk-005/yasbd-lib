@@ -24,7 +24,7 @@ class FrRules(Rules):
         "Annexe", "Chapitre", "Sous-section", "Unité", "Préface",
     }
 
-    INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
+    INLINE_ONLY_ABBRVS = (Rules.INLINE_ONLY_ABBRVS - {"est"}) | {
         # Bridge/connectors
         "c.-à-d", "c-à-d", "c-a-d", "p.ex", "n.b", "p.s", "éts", "sté", "ste",
 
