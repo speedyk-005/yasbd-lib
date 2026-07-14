@@ -4,7 +4,12 @@ import types
 import pytest
 
 from yasbd.exceptions import LangPackError
-from yasbd.rules import _LANG_PACK_REGISTRY, clear_lang_packs, load_rule, register_lang_packs
+from yasbd.rules import (
+    _LANG_PACK_REGISTRY,
+    clear_lang_packs,
+    load_rule,
+    register_lang_packs,
+)
 from yasbd.rules.base import Rules
 
 

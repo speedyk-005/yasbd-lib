@@ -49,7 +49,13 @@ def run_golden_tests():
         passed, total, failures = _evaluate_segmenter(seg, GOLDEN_EN_RULES_TEST_CASES)
         pct = passed / total * 100
         report.append(
-            {"name": name, "passed": passed, "total": total, "pct": pct, "failures": failures}
+            {
+                "name": name,
+                "passed": passed,
+                "total": total,
+                "pct": pct,
+                "failures": failures,
+            }
         )
 
         console.print(f"{name:20s} {passed:2d}/{total} ({pct:5.1f}%)", end="")
@@ -68,7 +74,9 @@ def run_golden_tests():
     for r in sorted(report, key=lambda x: -x["pct"]):
         color = _score_color(r["pct"])
         table.add_row(
-            r["name"], f"{r['passed']:2d}/{r['total']}", f"[{color}]{r['pct']:5.1f}%[/{color}]"
+            r["name"],
+            f"{r['passed']:2d}/{r['total']}",
+            f"[{color}]{r['pct']:5.1f}%[/{color}]",
         )
 
     console.print("\n", table)

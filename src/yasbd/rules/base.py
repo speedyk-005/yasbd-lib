@@ -285,7 +285,7 @@ class Rules:
                rf"\b(?i:{build_abbr_pattern(cls.INLINE_ONLY_ABBRVS)}){cls.DOTS_PATTERN}"
             ),
 
-            # References abbrv + number/letter/bracket (e.g., to p. 55, app. A, et al. [2004])
+            # References abbrv + number/letter/bracket (e.g., p. 55, app. A, et al. [2004])
             re2.compile(rf"""
                 \b(?i:{build_abbr_pattern(cls.REFERENCE_ABBRVS)}){cls.DOTS_PATTERN}
                 (?=\s+(?:\(|\[|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))
@@ -300,7 +300,7 @@ class Rules:
             # A dot followed by an superscript indicator (e.g. n.º, ​1.º)
             re.compile(r"\.(?=[ºª])"),
 
-            # Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
+            # Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding)
             # excluding coordinate directions or geopolitical ones not followed
             # by a common starters
             re2.compile(rf"""
