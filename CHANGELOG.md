@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Brand/snack exclamation entries**: Crunch and Banga added to `NAMES_WITH_EXCLAMATION`.
 - **Set literal reformatting script** ([#165](https://github.com/speedyk-005/yasbd-lib/pull/165)): `scripts/reformat_sets.py` automatically balances set items to ≤70 chars per line.
+- **Lithuanian (lt) language support** ([#167](https://github.com/speedyk-005/yasbd-lib/pull/167)).
 
 ### Changed
 
