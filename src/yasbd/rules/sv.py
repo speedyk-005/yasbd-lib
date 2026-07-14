@@ -63,13 +63,14 @@ class SvRules(DeRules):
 
     DATE_WORDS = {
         # Swedish months
-        "januari", "februari", "mars", "april", "maj", "juni",
-        "juli", "augusti", "september", "oktober", "november", "december",
+        "april", "augusti", "december", "februari", "januari",
+        "juli", "juni", "maj", "mars", "november", "oktober",
+        "september",
 
         # Swedish days
         "måndag", "tisdag", "onsdag", "torsdag", "fredag",
         "lördag", "söndag",
-     }
+    }
 
     @classmethod
     def _compile_regex_dynamically(cls):

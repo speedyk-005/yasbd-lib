@@ -14,7 +14,8 @@ class AfRules(NlRules):
 
     REFERENCE_ABBRVS = NlRules.REFERENCE_ABBRVS | {
         # Bibliographical, Document, and Page References
-        "bl", "a.w", "bg", "samest", "uitg", "byl", "red", "hers",
+        "a.w", "bg", "bl", "byl", "hers", "red", "samest",
+        "uitg",
 
         # Unique Afrikaans legal and cross-referencing markers
         "kol", "vg", "verg", "hfst"
@@ -37,11 +38,12 @@ class AfRules(NlRules):
 
     COMMON_SENT_STARTERS = NlRules.COMMON_SENT_STARTERS | {
         # Unique Afrikaans Articles & Pronouns
-        "Die", "'n", "Ek", "Ons", "Jy", "Sy", "Hulle", "Hierdie", "Daardie",
-        "Dié", "Sulke", "Mens",
+        "'n", "Daardie", "Die", "Dié", "Ek", "Hierdie", "Hulle",
+        "Jy", "Mens", "Ons", "Sulke", "Sy",
 
         # Unique Afrikaans Question/Connector Anchors
-        "Watter", "Boonop", "Gevolglik", "Inteendeel", "Daarbenewens", "Daarteenoor",
+        "Boonop", "Daarbenewens", "Daarteenoor", "Gevolglik",
+        "Inteendeel", "Watter",
 
         # Sequence/Time Variations
         "Eerstens", "Tweedens", "Gister", "Môre", "Dikwels",
@@ -49,8 +51,9 @@ class AfRules(NlRules):
 
     DATE_WORDS = {
         # Months
-        "januarie", "februarie", "maart", "april", "mei", "junie",
-        "julie", "augustus", "september", "oktober", "november", "desember",
+        "april", "augustus", "desember", "februarie",
+        "januarie", "julie", "junie", "maart", "mei",
+        "november", "oktober", "september",
 
         # Days
         "maandag", "dinsdag", "woensdag", "donderdag", "vrydag",

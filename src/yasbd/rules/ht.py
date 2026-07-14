@@ -17,16 +17,17 @@ class HtRules(Rules):
         "Mwen", "Nou", "Ou", "Li", "Yo", "Sa", "Sila",
 
         # Question words
-        "Kiyes", "Kiyès", "Kimoun", "Kisa", "Kikote", "Ki kote", "Kibo",
-        "Kibò", "Kile", "Kilè", "Ki lè", "Poukisa", "Kijan", "Koman",
-        "Kòman", "Kouman", "Poukiyes", "Poukiyès", "Pou kiyes", "Pou kiyès",
+        "Ki kote", "Ki lè", "Kibo", "Kibò", "Kijan", "Kikote",
+        "Kile", "Kilè", "Kimoun", "Kisa", "Kiyes", "Kiyès",
+        "Koman", "Kouman", "Kòman", "Pou kiyes", "Pou kiyès",
+        "Poukisa", "Poukiyes", "Poukiyès",
 
         # Adverbs
-        "Poutan", "Sepandan", "Anplis", "Epitou", "Men", "Sinon", "Otreman",
-        "Kidonk", "Donk", "Antretan", "Pakonsekan", "Pa konsekan",
-        "Pandan se tan", "Pandansetan",
-        "Apre", "Lè", "Pita", "Finalman", "Okòmansman",
-        "Kounye a", "Premye", "Denye", "Anvan",
+        "Anplis", "Antretan", "Anvan", "Apre", "Denye", "Donk",
+        "Epitou", "Finalman", "Kidonk", "Kounye a", "Lè", "Men",
+        "Okòmansman", "Otreman", "Pa konsekan", "Pakonsekan",
+        "Pandan se tan", "Pandansetan", "Pita", "Poutan",
+        "Premye", "Sepandan", "Sinon",
 
         # Other common starters
         "Yon", "Eske", "Èske",

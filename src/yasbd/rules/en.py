@@ -33,27 +33,29 @@ class EnRules(Rules):
         "The", "A", "An",
 
         # Pronouns
-        "I", "We", "You", "He", "She", "It", "They", "This", "That",
-        "These", "Those", "There",
+        "He", "I", "It", "She", "That", "There", "These",
+        "They", "This", "Those", "We", "You",
 
         # Question words
-        "Who", "What", "Where", "When", "Why", "How", "Which", "Whose", "Whom",
+        "How", "What", "When", "Where", "Which", "Who", "Whom",
+        "Whose", "Why",
 
         # Adverbs
-        "However", "Moreover", "Nevertheless", "Therefore", "Consequently",
-        "Meanwhile", "Besides", "Furthermore", "Otherwise",
-        "Then", "Afterwards", "Later", "Currently",
-        "Finally", "Initially", "Subsequently", "Next", "Last", "First",
-        "Second", "Third", "Lastly", "Formerly",
+        "Afterwards", "Besides", "Consequently", "Currently",
+        "Finally", "First", "Formerly", "Furthermore",
+        "However", "Initially", "Last", "Lastly", "Later",
+        "Meanwhile", "Moreover", "Nevertheless", "Next",
+        "Otherwise", "Second", "Subsequently", "Then",
+        "Therefore", "Third",
 
         # Other common starters
         "Do", "Did", "Millions",
     }
 
     STREET_ABBRVS = {
-        "ave", "blvd", "blv", "ct", "ln", "pl", "rd", "sq", "st", "wy",
-        "rte", "rt", "jct", "riv", "pen", "bldg", "expy", "hway", "hwy",
-        "pkwy", "isl",
+        "ave", "bldg", "blv", "blvd", "ct", "expy", "hway",
+        "hwy", "isl", "jct", "ln", "pen", "pkwy", "pl", "rd",
+        "riv", "rt", "rte", "sq", "st", "wy",
     }
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | STREET_ABBRVS
 
@@ -62,8 +64,9 @@ class EnRules(Rules):
         "Army", "Navy", "Air Force", "Pentagon",
 
         # Political / legislative institutions
-        "Congress", "Senate", "House of Representatives", "Supreme Court",
-        "Cabinet", "Parliament", "Commons",
+        "Cabinet", "Commons", "Congress",
+        "House of Representatives", "Parliament", "Senate",
+        "Supreme Court",
     }
 
     DATE_WORDS = {

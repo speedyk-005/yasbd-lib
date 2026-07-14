@@ -39,13 +39,14 @@ class DaRules(SvRules):
         "Hvorfor", "Hvilken", "Hvilket", "Hvilke",
 
         # Others
-         "Et", "Ydermere", "Dermed", "Ellers",
+        "Et", "Ydermere", "Dermed", "Ellers",
     }
 
     DATE_WORDS = {
         # Danish months
-        "januar", "februar", "marts", "april", "maj", "juni",
-        "juli", "august", "september", "oktober", "november", "december",
+        "april", "august", "december", "februar", "januar",
+        "juli", "juni", "maj", "marts", "november", "oktober",
+        "september",
 
         # Danish days
         "mandag", "tirsdag", "onsdag", "torsdag", "fredag",

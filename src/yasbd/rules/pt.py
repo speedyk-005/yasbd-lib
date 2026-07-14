@@ -59,22 +59,23 @@ class PtRules(Rules):
         "O", "A", "Os", "As", "Um", "Uma", "Uns", "Unas",
 
         # Pronouns
-        "Eu", "Nós", "Tu", "Você", "Vocês", "Ele", "Ela", "Eles", "Elas",
-        "Este", "Esta", "Estes", "Estas", "Esse", "Essa", "Esses", "Essas",
-        "Aquele", "Aquela", "Aqueles", "Aquelas", "Isto", "Isso", "Aquilo",
-        "Lá", "Ali", "Aqui",
+        "Ali", "Aquela", "Aquelas", "Aquele", "Aqueles", "Aqui",
+        "Aquilo", "Ela", "Elas", "Ele", "Eles", "Essa", "Essas",
+        "Esse", "Esses", "Esta", "Estas", "Este", "Estes", "Eu",
+        "Isso", "Isto", "Lá", "Nós", "Tu", "Você", "Vocês",
 
         # Question words
-        "Quem", "O que", "Que", "Onde", "Aonde", "Quando", "Por que", "Como",
-        "Qual", "Quais", "Cujo", "Cuja",
+        "Aonde", "Como", "Cuja", "Cujo", "O que", "Onde",
+        "Por que", "Quais", "Qual", "Quando", "Que", "Quem",
 
         # Adverbs
-        "Contudo", "Todavia", "Entretanto", "Porém", "Além disso", "Portanto",
-        "Assim", "Consequentemente", "Enquanto",
-        "Depois", "Então", "Atualmente", "Finalmente", "Inicialmente",
-        "Posteriormente", "Seguinte", "Último",
-        "Primeiramente", "Primeiro", "Segundo", "Terceiro",
-        "Por último", "Antigamente", "Previamente", "Imediatamente",
+        "Além disso", "Antigamente", "Assim", "Atualmente",
+        "Consequentemente", "Contudo", "Depois", "Enquanto",
+        "Entretanto", "Então", "Finalmente", "Imediatamente",
+        "Inicialmente", "Por último", "Portanto", "Porém",
+        "Posteriormente", "Previamente", "Primeiramente",
+        "Primeiro", "Seguinte", "Segundo", "Terceiro",
+        "Todavia", "Último",
 
         # Other common starters
         "Faz", "Fez", "Milhões",

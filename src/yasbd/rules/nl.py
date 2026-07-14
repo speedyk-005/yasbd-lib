@@ -41,7 +41,8 @@ class NlRules(DeRules):
     }
 
     INLINE_ONLY_ABBRVS = DeRules.INLINE_ONLY_ABBRVS | {
-        "d.w.z", "bijv", "e.v.t.l", "incl", "excl", "z.g.n", "ca",
+        "bijv", "ca", "d.w.z", "e.v.t.l", "excl", "incl",
+        "z.g.n",
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
@@ -62,35 +63,41 @@ class NlRules(DeRules):
         "De", "Het", "Een",
 
         # Pronouns
-        "Ik", "We", "Wij", "Je", "Jij", "U", "Jullie", "Hij", "Zij", "Ze",
-        "Men", "Die", "Deze", "Dit", "Dat", "Gene", "Er",
+        "Dat", "Deze", "Die", "Dit", "Er", "Gene", "Hij", "Ik",
+        "Je", "Jij", "Jullie", "Men", "U", "We", "Wij", "Ze",
+        "Zij",
 
         # Question words
-        "Wie", "Wat", "Waar", "Wanneer", "Waarom", "Hoe", "Welke", "Welk",
-        "Wiens", "Wier",
+        "Hoe", "Waar", "Waarom", "Wanneer", "Wat", "Welk",
+        "Welke", "Wie", "Wiens", "Wier",
 
         # Adverbs and Connectors
-        "Echter", "Bovendien", "Desondanks", "Daarom", "Daardoor", "Dus",
-        "Desalniettemin", "Niettemin", "Intussen", "Inmiddels", "Tevens",
-        "Verder", "Tenslotte", "Uiteindelijk", "Vervolgens", "Voorlopig",
-        "Overigens", "Trouwens", "Anderzijds", "Enerzijds", "Immers",
-        "Namelijk", "Kortom", "Aldus", "Zodoende", "Bijgevolg", "Daarnaast",
-        "Daarentegen", "Toch", "Hoewel", "Ondertussen",
+        "Aldus", "Anderzijds", "Bijgevolg", "Bovendien",
+        "Daardoor", "Daarentegen", "Daarnaast", "Daarom",
+        "Desalniettemin", "Desondanks", "Dus", "Echter",
+        "Enerzijds", "Hoewel", "Immers", "Inmiddels",
+        "Intussen", "Kortom", "Namelijk", "Niettemin",
+        "Ondertussen", "Overigens", "Tenslotte", "Tevens",
+        "Toch", "Trouwens", "Uiteindelijk", "Verder",
+        "Vervolgens", "Voorlopig", "Zodoende",
 
         # Time / Sequence Anchors
-        "Later", "Vroeger", "Daarna", "Vandaag", "Gisteren", "Morgen",
-        "Eerst", "Toen", "Nu", "Soms", "Vaak", "Altijd", "Nooit",
+        "Altijd", "Daarna", "Eerst", "Gisteren", "Later",
+        "Morgen", "Nooit", "Nu", "Soms", "Toen", "Vaak",
+        "Vandaag", "Vroeger",
     }
 
     STREET_ABBRVS = {
-        "str", "st", "ln", "pl", "rd", "wgh", "plts", "hbf", "geb"
+        "geb", "hbf", "ln", "pl", "plts", "rd", "st", "str",
+        "wgh",
     }
     INLINE_ONLY_ABBRVS |= STREET_ABBRVS
 
     DATE_WORDS = {
         # Months
-        "januari", "februari", "maart", "april", "mei", "juni",
-        "juli", "augustus", "september", "oktober", "november", "december",
+        "april", "augustus", "december", "februari", "januari",
+        "juli", "juni", "maart", "mei", "november", "oktober",
+        "september",
 
         # Days
         "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag",

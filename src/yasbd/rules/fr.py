@@ -46,20 +46,21 @@ class FrRules(Rules):
         "Le", "La", "Les", "L'",
 
         # Pronouns
-        "Je", "Tu", "Il", "Elle", "On", "Nous", "Vous", "Ils", "Elles",
-        "Ce", "Cet", "Cette", "Ces",
+        "Ce", "Ces", "Cet", "Cette", "Elle", "Elles", "Il",
+        "Ils", "Je", "Nous", "On", "Tu", "Vous",
 
         # Adverbs
-        "Mais", "Donc", "Alors", "Cependant", "Toutefois", "Néanmoins",
-        "Ainsi", "Puis", "Ensuite", "Voici", "Voilà",
-        "Plus tard", "Actuellement", "Finalement", "Initialement",
-        "Par la suite", "Suivant", "Dernier",
-        "Premièrement", "Deuxièmement", "Troisièmement",
-        "Enfin", "Auparavant", "Désormais", "Dorénavant",
+        "Actuellement", "Ainsi", "Alors", "Auparavant",
+        "Cependant", "Dernier", "Deuxièmement", "Donc",
+        "Dorénavant", "Désormais", "Enfin", "Ensuite",
+        "Finalement", "Initialement", "Mais", "Néanmoins",
+        "Par la suite", "Plus tard", "Premièrement", "Puis",
+        "Suivant", "Toutefois", "Troisièmement", "Voici",
+        "Voilà",
 
         # Question words
-        "Qui", "Que", "Qu'", "Quand", "Où", "Pourquoi", "Comment", "Combien",
-        "Quel", "Quelle", "Quels", "Quelles",
+        "Combien", "Comment", "Où", "Pourquoi", "Qu'", "Quand",
+        "Que", "Quel", "Quelle", "Quelles", "Quels", "Qui",
 
         # Other common starters
         "Est-ce", "Millions",

@@ -34,25 +34,28 @@ class CJK:
 # fmt: off
 class Rules:
     TERMINATORS = {
-        "｡", "。", "．", ".", "！", "!", "？", "?", "‼", "⁉", "⁈", "։", "؟", "۔", "߹",
-        "।", "॥", "။", "።", "፧", "᠃", "᠉", "᙮", "꓿", "꧉",
+        "!", ".", "?", "։", "؟", "۔", "߹", "।", "॥", "။", "።",
+        "፧", "᙮", "᠃", "᠉", "‼", "⁈", "⁉", "。", "꓿", "꧉", "！",
+        "．", "？", "｡",
     }
 
     TITLE_ABBRVS = {
         # Standard Professional (Universal Latin roots)
-        "dr", "dir", "drs", "prof", "hon", "ing", "med", "rev", "supt", "insp", "spec",
+        "dir", "dr", "drs", "hon", "ing", "insp", "med", "prof",
+        "rev", "spec", "supt",
 
         # Global Social
-        "mr", "mrs", "ms", "mme", "messrs", "mlle", "mmes", "mssrs",
-        "st", "fr", "br",
+        "br", "fr", "messrs", "mlle", "mme", "mmes", "mr",
+        "mrs", "ms", "mssrs", "st",
 
         # Military (NATO/International Standardized Ranks)
-        "adm", "brig", "capt", "cmdr", "comdr", "commr", "col", "kol",
-        "cpl", "gen", "lt", "maj", "sgt", "serg", "pvt", "kapt",
+        "adm", "brig", "capt", "cmdr", "col", "comdr", "commr",
+        "cpl", "gen", "kapt", "kol", "lt", "maj", "pvt", "serg",
+        "sgt",
 
         # Political/Administrative (Common in Western bureaucracy)
-        "gov", "rep", "sen", "pres", "sec", "min", "mgr", "asst", "det", "surg",
-        "msgr", "amb",
+        "amb", "asst", "det", "gov", "mgr", "min", "msgr",
+        "pres", "rep", "sec", "sen", "surg",
     }
 
     DOTTED_GEOPOL_ABBRVS = {
@@ -78,10 +81,10 @@ class Rules:
 
     REFERENCE_ABBRVS = {
         # Publishing / Documents / Manuscripts
-        "app", "apps", "cf", "cod", "diag", "ext", "fig", "figs",
-        "fol", "illus", "l", "ll", "ms", "mss", "p", "pp", "pag",
-        "pt", "pts", "ref", "refs", "tab", "tbl", "tbls", "v", "vol",
-        "vols",
+        "app", "apps", "cf", "cod", "diag", "ext", "fig",
+        "figs", "fol", "illus", "l", "ll", "ms", "mss", "p",
+        "pag", "pp", "pt", "pts", "ref", "refs", "tab", "tbl",
+        "tbls", "v", "vol", "vols",
 
         # Section / Structure
         "ann", "art", "arts", "cap", "cl", "cls", "col",
@@ -124,15 +127,15 @@ class Rules:
         "assoc", "mfg",
 
         # Bridge/connectors
-        "cf", "eg", "e.g", "ie", "i.e", "i.q", "i.c", "a.k.a", "vs", "v", "viz",
-        "ibid", "ca", "sc",
+        "a.k.a", "ca", "cf", "e.g", "eg", "i.c", "i.e", "i.q",
+        "ibid", "ie", "sc", "v", "viz", "vs",
 
         # Notes & postscript markers
         "n.b", "p.s", "p.p.s", "sci", "scill", "s.vloc",
 
         # Streets
-        "ave", "blvd", "blv", "ct", "ln", "pl", "rd", "sq", "st", "wy",
-        "rte", "rt", "jct", "riv", "pen",
+        "ave", "blv", "blvd", "ct", "jct", "ln", "pen", "pl",
+        "rd", "riv", "rt", "rte", "sq", "st", "wy",
 
         # Others
         "approx", "est", "intl", "misc", "mt", "dist", "tel",
@@ -140,12 +143,14 @@ class Rules:
 
     NAMES_WITH_EXCLAMATION = {
         # Tech, Corporate Entities, & Major Consumer Brands
-        "Yahoo", "Yum", "Chips Ahoy", "Kahoot", "JOOP", "Walla",
-        "I Can't Believe It's Not Butter", "Pop", "FreshDirect", "Boost",
+        "Boost", "Chips Ahoy", "FreshDirect",
+        "I Can't Believe It's Not Butter", "JOOP", "Kahoot",
+        "Pop", "Walla", "Yahoo", "Yum",
 
         # Gaming, Media, Animation, & Entertainment
-        "Fun Radio", "Mamma Mia", "Jeopardy", "Oklahoma", "Oliver", "Shindig",
-        "Hailey's On It", "Airplane", "Osu", "VSPO", "bam", "go", "wham",
+        "Airplane", "bam", "Fun Radio", "go", "Hailey's On It",
+        "Jeopardy", "Mamma Mia", "Oklahoma", "Oliver", "Osu",
+        "Shindig", "VSPO", "wham",
 
        # Geopolitical Quirks / Municipalities
         "Westward Ho", "Saint-Louis-du-Ha", "Baie-des-Ha", "Ha",
@@ -285,7 +290,7 @@ class Rules:
                rf"\b(?i:{build_abbr_pattern(cls.INLINE_ONLY_ABBRVS)}){cls.DOTS_PATTERN}"
             ),
 
-            # References abbrv + number/letter/bracket (e.g., to p. 55, app. A, et al. [2004])
+            # References abbrv + number/letter/bracket (e.g., p. 55, app. A, et al. [2004])
             re2.compile(rf"""
                 \b(?i:{build_abbr_pattern(cls.REFERENCE_ABBRVS)}){cls.DOTS_PATTERN}
                 (?=\s+(?:\(|\[|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))
@@ -300,7 +305,7 @@ class Rules:
             # A dot followed by an superscript indicator (e.g. n.º, ​1.º)
             re.compile(r"\.(?=[ºª])"),
 
-            # Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding, Ave. Central)
+            # Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding)
             # excluding coordinate directions or geopolitical ones not followed
             # by a common starters
             re2.compile(rf"""

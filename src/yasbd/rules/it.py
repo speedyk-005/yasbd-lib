@@ -69,11 +69,11 @@ class ItRules(Rules):
         "Quello", "Quella", "Quei", "Quelle",
 
         # Adverbs & Transitions
-        "Ma", "Però", "Tuttavia", "Quindi", "Dunque",
-        "Sempre", "Mai", "Ancora", "Già", "Appena", "Ormai",
-        "Inoltre", "Neanche", "Nemmeno", "Neppure", "Così",
-        "Piuttosto", "Quasi", "Almeno", "Davvero", "Certamente",
-        "Sicuramente", "Probabilmente", "Forse", "Magari", "Chissà",
+        "Almeno", "Ancora", "Appena", "Certamente", "Chissà",
+        "Così", "Davvero", "Dunque", "Forse", "Già", "Inoltre",
+        "Ma", "Magari", "Mai", "Neanche", "Nemmeno", "Neppure",
+        "Ormai", "Però", "Piuttosto", "Probabilmente", "Quasi",
+        "Quindi", "Sempre", "Sicuramente", "Tuttavia",
 
         # Question words
         "Chi", "Che", "Cosa", "Quando", "Dove", "Come", "Perché",
