@@ -89,7 +89,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 ---
 
-## 🌐 Supported Languages
+## 🌐 Supported Languages ([API](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbdrules))
 
 33 languages supported.
 
@@ -193,7 +193,7 @@ That's awesome. See [**Contributing Guide**](https://github.com/speedyk-005/yasb
 
 ---
 
-## 📟 Usage
+## 📟 Usage ([API](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbdboundary_detector))
 
 > [!TIP]
 > Not a Pythonista? Jump straight to the [CLI](#cli) section.
@@ -321,7 +321,7 @@ print(res)
 > ```
 > You can also skip empty lines with `skip_empty_lines=True`
 
-### Cleaner
+### Cleaner ([API](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbdutilscleaner))
 
 OCR'd a PDF, parsed a DOCX, or scraped noisy HTML? "StreamCleaner" normalizes text before it reaches the language detector or sentence segmenter.
 StreamCleaner accepts either a string or an open text stream and yields cleaned paragraphs lazily.
@@ -391,7 +391,7 @@ Available built-in steps:
 | `normalize_slashes` | Collapses `///` triple slashes |
 | `normalize_spaces` | Collapses multiple spaces into one |
 
-### CLI
+### CLI ([API](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbdcli))
 
 Do you just want to split text into sentences without writing Python?
 The `yasbd` command works right from your terminal. Install once, pipe
@@ -458,7 +458,6 @@ yasbd detect --help
 yasbd clean --help
 ```
 
-CLI API reference at [`API_REFERENCES.md#yasbd.cli`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.cli).
 
 #### About JSONL
 
@@ -468,7 +467,7 @@ When writing to a file with `--destination`, output is JSONL (one JSON object pe
 - **detect**: `{"no": 1, "offset": 6}` or `{"no": 2, "offset": 13}`
 - **detect --relative**: `{"no": 3, "eof": true}` on paragraph boundaries
 
-### Adapter
+### Adapter ([API](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbdutilspysbd_adapter))
 
 Migrating from pysbd? Swap the import and keep your pipeline:
 
@@ -487,7 +486,7 @@ Same API surface. Same [`Segmenter`](https://github.com/speedyk-005/yasbd-lib/bl
 
 ---
 
-### spaCy component
+### spaCy component ([API](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbdutilsspacy_component))
 
 Even your spaCy pipeline deserves smart scissors. Call `register_spacy_component()` once, then add `yasbd` to any pipeline:
 
@@ -536,7 +535,7 @@ pipe.preserve_quote_and_paren = False
 
 ---
 
-## 🔌 Lang Packs
+## 🔌 Lang Packs ([API](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbdrules))
 
 Need support for a language that isn't built in? Plug in your own lang pack. A lang pack is simply a Python module that exposes a `PROFILES` list of `Rules` subclasses.
 
