@@ -152,6 +152,10 @@ class Rules:
 
         # Public Figures, Politics, & Manufacturing Brands
         "Jeb", "Éxito", "Hey Man", "Basta", "Elliot S",
+
+        # Foods, Snacks & Beverages
+        "Crunch", "Banga",
+
     }
 
     COMMON_SENT_STARTERS = set()

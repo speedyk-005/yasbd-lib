@@ -9,12 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.11.0] - Unreleased
 
+### Added
+
+- **Brand/snack exclamation entries**: Crunch and Banga added to `NAMES_WITH_EXCLAMATION`.
+
 ### Fixed
 
-- **HTML markup leaking through cleaner** ([#162](https://github.com/speedyk-005/yasbd-lib/pull/162)):
-  - Doctype declarations, comments, and processing instructions no longer pass through.
-  - Void elements (`<img>`, `<embed>`) removed from the content-stripping group, preventing massive backtracking.
-  - Tag-stripping branch now requires a letter after `<`, so `x < 5 and y > 3` is left intact.
+- **HTML markup leaking through cleaner** ([#162](https://github.com/speedyk-005/yasbd-lib/pull/162)): doctype declarations, comments, and processing instructions no longer pass through. Void elements removed from content-stripping group. Math expressions like `x < 5 and y > 3` no longer mangled.
 
 ## [0.10.0] - 2026-07-09
 
