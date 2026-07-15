@@ -1,3 +1,5 @@
+import regex as re
+
 from yasbd.rules.base import Rules
 
 
@@ -64,4 +66,11 @@ class KkRules(Rules):
         "Сайып келгенде", "Мысалы", "Атап айтқанда",
     }
 
-# fmt: on
+    # fmt: on
+    @classmethod
+    def _compile_regex_dynamically(cls):
+        """Override base regex compilation to handle year abbrvs"""
+        super()._compile_regex_dynamically()
+        cls.MID_SENTENCE_FINDER_LST.append(
+            re.compile(r"(?<=\d\s+ж{1,2}\.)")
+        )
