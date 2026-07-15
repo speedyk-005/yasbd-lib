@@ -30,4 +30,8 @@ TEST_DATA = [
     # Ellipsis
     "Le projet était presque terminé... mais nous avons trouvé un problème.",
     'Il a dit: "Comment avons-nous pu manquer cela!..."| Puis il s\'en va.',
+
+    # est (fix for #164)
+    "Il est...| Ensuite il est parti.",
+    "Il est.| Il Etait.| Il sera.",
 ]

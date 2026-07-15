@@ -14,7 +14,7 @@ class FrRules(Rules):
         "ll.mm.ii.rr", "nn.ss", "ll", "aa", "ii", "rr", "ss", "ee",
     }
 
-    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
+    REFERENCE_ABBRVS = (Rules.REFERENCE_ABBRVS - {"est"}) | {
         # Publishing / Documents
         "ann", "chap", "coll", "dict", "fasc", "ill", "impr", "introd",
         "ms", "pl", "pref", "suppl", "suiv", "t", "trad",
