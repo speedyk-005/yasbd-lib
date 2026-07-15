@@ -1,4 +1,5 @@
 import re  # For simpler patterns
+from itertools import pairwise
 
 import regex as re2
 from retrie.trie import Trie
@@ -382,14 +383,19 @@ class Rules:
 
         # Quick contextual heuristic
         is_flattened_list = (
+            # A flattened list must contain at least two horizontal markers
             len(horiz_matches) >= 2
             and (
+                # List is introduced by a colon
+                # or starts directly at the beginning of the text
                 ":" in text
                 or text[horiz_matches[0].start()] == text.lstrip()[0]
             )
+
+            # List markers are close enough to belong to the same flattened list
             and all(
                 b.start() - a.end() < 40
-                for a, b in zip(horiz_matches, horiz_matches[1:])
+                for a, b in pairwise(horiz_matches)
             )
         )
 
