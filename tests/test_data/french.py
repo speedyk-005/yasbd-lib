@@ -7,7 +7,6 @@ TEST_DATA = [
 
     # Abbreviations
     "M. Dupont est un professeur.",
-    "Il est.| Ensuite il est parti.",
     "Veuillez consulter la p. 55 du livre.",
     "Voir fig. 3 dans le chap. 5.",
     "L'ouvrage est publié dans le t. II du recueil.",
@@ -31,4 +30,8 @@ TEST_DATA = [
     # Ellipsis
     "Le projet était presque terminé... mais nous avons trouvé un problème.",
     'Il a dit: "Comment avons-nous pu manquer cela!..."| Puis il s\'en va.',
+
+    # est (fix for #164)
+    "Il est...| Ensuite il est parti.",
+    "Il est.| Il Etait.| Il sera.",
 ]
