@@ -63,3 +63,5 @@ def run_book_benchmark():
 
 if __name__ == "__main__":
     run_book_benchmark()
+
+# Locked language count (issue #132)
