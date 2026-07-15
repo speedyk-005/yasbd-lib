@@ -1493,6 +1493,7 @@ The meeting is at 2 p.m. Mwen pral vini.
   - [Thai — yasbd vs Sentencex vs nupunkt vs PyThaiNLP](https://github.com/speedyk-005/yasbd-lib/pull/100#issue-4676465427)
   - [Vietnamese — yasbd vs sentencex vs nupunkt](https://github.com/speedyk-005/yasbd-lib/pull/131#issue-4779574782)
   - [Indonesian — yasbd vs sentencex vs nupunkt](https://github.com/speedyk-005/yasbd-lib/pull/137#issue-4788758204)
+  - [Kazakh — yasbd vs sentencex vs nupunkt vs pysbd](https://github.com/speedyk-005/yasbd-lib/pull/171#issue-4895200602)
 
 ## Conclusion
 
