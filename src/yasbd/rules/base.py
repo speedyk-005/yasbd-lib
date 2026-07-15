@@ -387,6 +387,10 @@ class Rules:
                 ":" in text
                 or text[horiz_matches[0].start()] == text.lstrip()[0]
             )
+            and all(
+                b.start() - a.end() < 40
+                for a, b in zip(horiz_matches, horiz_matches[1:])
+            )
         )
 
         if is_flattened_list:
