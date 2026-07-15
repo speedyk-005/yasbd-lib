@@ -138,7 +138,7 @@ class Rules:
         "rd", "riv", "rt", "rte", "sq", "st", "wy",
 
         # Others
-        "approx", "est", "intl", "misc", "mt", "dist", "tel",
+        "approx", "intl", "mt",
     }
 
     NAMES_WITH_EXCLAMATION = {
@@ -160,7 +160,6 @@ class Rules:
 
         # Foods, Snacks & Beverages
         "Crunch", "Banga",
-
     }
 
     COMMON_SENT_STARTERS = set()

@@ -14,7 +14,7 @@ class FrRules(Rules):
         "ll.mm.ii.rr", "nn.ss", "ll", "aa", "ii", "rr", "ss", "ee",
     }
 
-    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
+    REFERENCE_ABBRVS = (Rules.REFERENCE_ABBRVS - {"est"}) | {
         # Publishing / Documents
         "ann", "chap", "coll", "dict", "fasc", "ill", "impr", "introd",
         "ms", "pl", "pref", "suppl", "suiv", "t", "trad",
@@ -24,7 +24,7 @@ class FrRules(Rules):
         "Annexe", "Chapitre", "Sous-section", "Unité", "Préface",
     }
 
-    INLINE_ONLY_ABBRVS = (Rules.INLINE_ONLY_ABBRVS - {"est"}) | {
+    INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
         # Bridge/connectors
         "c.-à-d", "c-à-d", "c-a-d", "p.ex", "n.b", "p.s", "éts", "sté", "ste",
 
