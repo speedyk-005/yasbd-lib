@@ -72,7 +72,7 @@ class LtRules(Rules):
 
         cls.MID_SENTENCE_FINDER_LST.append(
             re.compile(
-                rf"""
+                r"""
                 # A lowercase letter + dot  followed by any char + dot
                 (?<=[a-ząčęėįšųūž]\.)(?=\s+.\.)|
 
