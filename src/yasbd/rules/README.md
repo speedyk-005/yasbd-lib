@@ -6,6 +6,7 @@
 | `am.py` | Amharic | Semitic |
 | `ar.py` | Arabic | Semitic |
 | `bn.py` | Bengali | Indo-Aryan |
+| `bg.py` | Bulgarian | East Slavic / Cyrillic |
 | `cs.py` | Czech | West Slavic |
 | `da.py` | Danish | North Germanic |
 | `de.py` | German | West Germanic |
