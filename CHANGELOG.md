@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Missing commas in set literals** ([#173](https://github.com/speedyk-005/yasbd-lib/pull/173)): 3 files had missing commas causing silent string concatenation; 5 files had missing space after comma.
 - **Flattened list heuristic** ([#169](https://github.com/speedyk-005/yasbd-lib/pull/169)): pairwise proximity check prevents false positives from randomly spaced horizontal markers.
 - **Removed ambiguous shared abbreviations** ([#166](https://github.com/speedyk-005/yasbd-lib/pull/166)): `est`, `dist`, `misc`, `tel` removed from base `INLINE_ONLY_ABBRVS`. French also excludes `est` from reference abbreviations.
 - **HTML markup leaking through cleaner** ([#162](https://github.com/speedyk-005/yasbd-lib/pull/162)): doctype declarations, comments, and processing instructions no longer pass through. Void elements removed from content-stripping group. Math expressions like `x < 5 and y > 3` no longer mangled.
