@@ -24,7 +24,7 @@ class DeRules(Rules):
         # Bibliographical and Document References
         "abb", "anm", "bd", "bzw", "cap", "ed", "hrsg", "kap", "nr",
         "s", "sp", "std", "u.a", "u.ä", "vgl", "z.t", "f", "ff", "o.ä",
-        "gl", "a.a.o", "s.o", "s.u", "s.a"
+        "gl", "a.a.o", "s.o", "s.u", "s.a",
 
         # Legal and Formal References
         "abs", "art", "az", "lit", "m.w.n", "rspr",
