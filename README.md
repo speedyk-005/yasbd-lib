@@ -591,6 +591,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@1cbyc](https://github.com/1cbyc)** | Coordinate direction abbreviation fix |
 | **[@kernelpanic888](https://github.com/kernelpanic888)** | Non-German ordinal boundary inheritance fix |
 | **[@hkJerryLeung](https://github.com/hkJerryLeung)** | French `est` abbreviation fix |
+| **[@Mayankshrey438](https://github.com/Mayankshrey438)** | Flattened list proximity heuristic |
 
 </details>
 
