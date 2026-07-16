@@ -134,7 +134,7 @@ class Rules:
         # Notes & postscript markers
         "n.b", "p.s", "p.p.s", "sci", "scill", "s.vloc",
 
-        # Streets
+        # Address elements
         "ave", "blv", "blvd", "ct", "jct", "ln", "pen", "pl",
         "rd", "riv", "rt", "rte", "sq", "st", "wy",
 
