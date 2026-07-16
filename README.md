@@ -91,7 +91,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 ## 🌐 Supported Languages ([API](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbdrules))
 
-34 languages supported.
+35 languages supported.
 
 <details>
 <summary>Click to see all supported languages</summary>
@@ -115,6 +115,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇮🇩 | id   | Indonesian |
 | 🇮🇹 | it   | Italian |
 | 🇯🇵 | ja   | Japanese |
+| 🇰🇿 | kk   | Kazakh |
 | 🇰🇷 | ko   | Korean |
 | 🇱🇹 | lt   | Lithuanian |
 | 🇮🇳 | ml   | Malayalam |
