@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/speedyk-005/yasbd-lib/blob/main/yasbd_logo.png?raw=true" alt="Yasbd-lib Logo" width="500"/>
+  <img src="https://raw.githubusercontent.com/speedyk-005/yasbd-lib/main/yasbd_logo.png" alt="Yasbd-lib Logo" width="500"/>
   <p><i>"Even a pair of scissors deserves to be smart. Welcome to cybernetic boundary shearing."</i></p>
 </div>
 
