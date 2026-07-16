@@ -19,7 +19,7 @@ cd yasbd-lib
 
 ### Calibrate the Environment
 
-Create and activate your virtual environment running python -m venv. Do not install dependencies globally unless you enjoy contaminating your workshop.
+Create and activate your virtual environment by running python -m venv. Do not install dependencies globally unless you enjoy contaminating your workshop.
 
 ```bash
 python -m venv .venv
