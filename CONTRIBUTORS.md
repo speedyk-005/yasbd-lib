@@ -16,5 +16,6 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@hkJerryLeung](https://github.com/hkJerryLeung)** | French `est` abbreviation fix |
 | **[@Mayankshrey438](https://github.com/Mayankshrey438)** | Flattened list proximity heuristic |
 | **[@cnaples79](https://github.com/cnaples79)** | Missing commas in set literals (silent concatenation fix) |
+| **[@JosephM961](https://github.com/JosephM961)** | Documentation typos and stale path fixes |
 
 Interested in contributing? See the [**Contributing Guide**](CONTRIBUTING.md) to get started!
