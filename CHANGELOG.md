@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Set literal reformatting script** ([#165](https://github.com/speedyk-005/yasbd-lib/pull/165)): `scripts/reformat_sets.py` automatically balances set items to ≤70 chars per line.
 - **Lithuanian (lt) language support** ([#168](https://github.com/speedyk-005/yasbd-lib/pull/168)).
 - **Turkish (tr) language support** ([#180](https://github.com/speedyk-005/yasbd-lib/pull/180)).
+- **Bulgarian (bg) language support** ([#185](https://github.com/speedyk-005/yasbd-lib/pull/185)).
 - **Kazakh (kk) language support** ([#171](https://github.com/speedyk-005/yasbd-lib/pull/171)).
 
 ### Changed
