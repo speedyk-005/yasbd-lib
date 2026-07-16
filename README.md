@@ -252,7 +252,7 @@ Each language rule loads once into a 5-slot cache. Once loaded, a language stays
 > **Auto-detect**
 >
 > Pass `lang="auto"` if you want the system to figure out the language for you.
-> I wouldn't lean on it too hard tho — it's a bit slower, and short phrases can throw it off sometimes.
+> I wouldn't lean on it too hard though — it's a bit slower, and short phrases can throw it off sometimes.
 
 ### Core Methods
 The two primary APIs are detect() and segment().
@@ -583,6 +583,6 @@ Interested in contributing? See the [**Contributing Guide**](https://github.com/
 
 ## 📜 Last note
 
-**yasbd** is maintained by [speedyk-005](https://github.com/speedyk-005). Licensed under [Mozilla Public License 2.0](https://github.com/speedyk-005/yasbd-lib/blob/main/LICENSE)
+**yasbd** is maintained by [speedyk-005](https://github.com/speedyk-005). Licensed under [Mozilla Public License 2.0](https://github.com/speedyk-005/yasbd-lib/blob/main/LICENSE).
 
 If you find this project helpful, please consider giving it a ⭐!
