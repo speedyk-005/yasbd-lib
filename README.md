@@ -83,9 +83,9 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 - Geopolitical + case markers
 - Quote/parenthesis span filtering
 - TOC leader suppression
-- List marker re-alignmen
+- List marker re-alignment
 - Contiguous terminator collapsing
-- Language specifical final fixups
+- Language-specific final fixups
 
 ---
 
@@ -183,7 +183,7 @@ Prefer building from source? Clone and install manually for full control:
 
 ```bash
 git clone https://github.com/speedyk-005/yasbd-lib.git
-cd yasbd
+cd yasbd-lib
 pip install .
 ```
 
