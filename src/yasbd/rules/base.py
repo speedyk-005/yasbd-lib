@@ -88,12 +88,12 @@ class Rules:
         "tbls", "v", "vol", "vols",
 
         # Section / Structure
-        "ann", "art", "arts", "cap", "cl", "cls", "col",
+        "ann", "art", "arts", "cap", "cl", "cls", "col", "cit",
         "cols", "para", "paras", "quaest", "sec", "sect",
         "secs", "subsec",
 
         # Legal / Numbering / Cross References
-        "a.c", "a.d", "a.u.c", "b.c", "lc", "n", "nn",
+        "a.c", "a.d", "a.u.c", "b.c", "lc", "n", "nn", "nr",
         "no", "nos", "n°", "n.º", "qv", "reg", "regs",
 
         # Scientific / Technical
