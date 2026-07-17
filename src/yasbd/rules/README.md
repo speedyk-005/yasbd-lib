@@ -29,6 +29,7 @@
 | `nl.py` | Dutch | West Germanic |
 | `pl.py` | Polish | West Slavic |
 | `pt.py` | Portuguese | Romance |
+| `ro.py` | Romanian | Romance |
 | `ru.py` | Russian | East Slavic / Cyrillic |
 | `sk.py` | Slovak | West Slavic |
 | `sv.py` | Swedish | North Germanic |
