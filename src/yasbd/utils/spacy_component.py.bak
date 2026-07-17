@@ -10,7 +10,7 @@ try:  # pragma: no cover
     from spacy.language import Language
     from spacy.tokens import Doc
 except ImportError:  # pragma: no cover
-    raise ImportError(
+    raise ImportError(  # pragma: no cover
         "spaCy is required for the yasbd spaCy component. Install it with: pip install spacy"
     ) from None
 
