@@ -78,16 +78,13 @@ def _resolve_lang(lang: Optional[str], from_pack: Optional[list[str]]) -> str | 
     return lang
 
 
-def _create_external_cleaner(
-    command_str: str, timeout: int | None = None
-) -> Callable[[str], str]:
+def _create_external_cleaner(command_str: str) -> Callable[[str], str]:
     """Create a cleaner function from a shell command string.
 
     The command receives text on stdin and must output cleaned text on stdout.
 
     Args:
         command_str: Shell command to execute (e.g., ``"sed 's/foo/bar/g'"``).
-        timeout: Optional timeout in seconds for each call.
 
     Returns:
         A callable that accepts a string and returns the cleaned string.
@@ -107,14 +104,10 @@ def _create_external_cleaner(
                 input=text,
                 capture_output=True,
                 text=True,
-                timeout=timeout,
                 check=True,
             )
             return process.stdout.removesuffix("\n")
 
-        except subprocess.TimeoutExpired:
-            print(f"Error: cleaner command timed out after {timeout}s", file=sys.stderr)
-            sys.exit(1)
         except subprocess.CalledProcessError as e:
             print(f"Error: cleaner command: {e}", file=sys.stderr)
             sys.exit(1)
