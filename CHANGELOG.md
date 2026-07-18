@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.11.0] - Unreleased
+## [Unreleased]
+
+### Removed
+
+- **Unused timeout parameter from `_create_external_cleaner`** ([#193](https://github.com/speedyk-005/yasbd-lib/pull/193)).
+
+## [0.12.0] - 2026-07-18
 
 ### Added
 
@@ -19,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Bulgarian (bg) language support** ([#185](https://github.com/speedyk-005/yasbd-lib/pull/185)).
 - **Kazakh (kk) language support** ([#171](https://github.com/speedyk-005/yasbd-lib/pull/171)).
 - **Romanian (ro) language support** ([#189](https://github.com/speedyk-005/yasbd-lib/pull/189)).
+- **Armenian (hy) language support** ([#195](https://github.com/speedyk-005/yasbd-lib/pull/195)).
 
 ### Changed
 

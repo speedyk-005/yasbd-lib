@@ -35,6 +35,7 @@
     * [\_\_init\_\_](#yasbd.rules.base.Rules.__init__)
     * [post\_process\_boundaries](#yasbd.rules.base.Rules.post_process_boundaries)
     * [apply](#yasbd.rules.base.Rules.apply)
+* [yasbd.rules.bg](#yasbd.rules.bg)
 * [yasbd.rules.bn](#yasbd.rules.bn)
 * [yasbd.rules.cs](#yasbd.rules.cs)
 * [yasbd.rules.da](#yasbd.rules.da)
@@ -46,21 +47,26 @@
 * [yasbd.rules.fr](#yasbd.rules.fr)
 * [yasbd.rules.hi](#yasbd.rules.hi)
 * [yasbd.rules.ht](#yasbd.rules.ht)
+* [yasbd.rules.hy](#yasbd.rules.hy)
 * [yasbd.rules.id](#yasbd.rules.id)
 * [yasbd.rules.it](#yasbd.rules.it)
 * [yasbd.rules.ja](#yasbd.rules.ja)
+* [yasbd.rules.kk](#yasbd.rules.kk)
 * [yasbd.rules.ko](#yasbd.rules.ko)
+* [yasbd.rules.lt](#yasbd.rules.lt)
 * [yasbd.rules.ml](#yasbd.rules.ml)
 * [yasbd.rules.mr](#yasbd.rules.mr)
 * [yasbd.rules.my](#yasbd.rules.my)
 * [yasbd.rules.nl](#yasbd.rules.nl)
 * [yasbd.rules.pl](#yasbd.rules.pl)
 * [yasbd.rules.pt](#yasbd.rules.pt)
+* [yasbd.rules.ro](#yasbd.rules.ro)
 * [yasbd.rules.ru](#yasbd.rules.ru)
 * [yasbd.rules.sk](#yasbd.rules.sk)
 * [yasbd.rules.sv](#yasbd.rules.sv)
 * [yasbd.rules.sw](#yasbd.rules.sw)
 * [yasbd.rules.th](#yasbd.rules.th)
+* [yasbd.rules.tr](#yasbd.rules.tr)
 * [yasbd.rules.uk](#yasbd.rules.uk)
 * [yasbd.rules.ur](#yasbd.rules.ur)
 * [yasbd.rules.vi](#yasbd.rules.vi)
@@ -142,7 +148,7 @@ def __init__(lang: str | None = None,
              verbose: bool = False)
 ```
 
-Initialize the segmenter.
+Initialize the boundary detector.
 
 **Arguments**:
 
@@ -593,6 +599,10 @@ quote/paren spans, list markers).
 
   Sorted list of character offsets at which sentences end.
 
+<a id="yasbd.rules.bg"></a>
+
+# yasbd.rules.bg
+
 <a id="yasbd.rules.bn"></a>
 
 # yasbd.rules.bn
@@ -637,6 +647,10 @@ quote/paren spans, list markers).
 
 # yasbd.rules.ht
 
+<a id="yasbd.rules.hy"></a>
+
+# yasbd.rules.hy
+
 <a id="yasbd.rules.id"></a>
 
 # yasbd.rules.id
@@ -649,9 +663,17 @@ quote/paren spans, list markers).
 
 # yasbd.rules.ja
 
+<a id="yasbd.rules.kk"></a>
+
+# yasbd.rules.kk
+
 <a id="yasbd.rules.ko"></a>
 
 # yasbd.rules.ko
+
+<a id="yasbd.rules.lt"></a>
+
+# yasbd.rules.lt
 
 <a id="yasbd.rules.ml"></a>
 
@@ -677,6 +699,10 @@ quote/paren spans, list markers).
 
 # yasbd.rules.pt
 
+<a id="yasbd.rules.ro"></a>
+
+# yasbd.rules.ro
+
 <a id="yasbd.rules.ru"></a>
 
 # yasbd.rules.ru
@@ -696,6 +722,10 @@ quote/paren spans, list markers).
 <a id="yasbd.rules.th"></a>
 
 # yasbd.rules.th
+
+<a id="yasbd.rules.tr"></a>
+
+# yasbd.rules.tr
 
 <a id="yasbd.rules.uk"></a>
 
@@ -734,6 +764,8 @@ and various regex cleanup rules across paragraphs.
 
 **Examples**:
 
+  >>> list(StreamCleaner("x < 5 and y > 3"))
+  ['x < 5 and y > 3']
   >>> list(StreamCleaner("Hello <b>world</b>. How are you?"))
   ['Hello <b>world</b>. How are you?']
   >>> list(StreamCleaner("<script>alert('xss')</script>clean text"))

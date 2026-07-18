@@ -5,12 +5,7 @@ from yasbd.rules.base import Rules
 
 # fmt: off
 class LtRules(Rules):
-    """Sentence boundary detection rules for the Lithuanian language.
 
-    Defines the language-specific token arrays required to accurately parse
-    sentence boundaries in Lithuanian prose, handling complex dotted
-    abbreviations, citations, and inline tokens.
-    """
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Respectful & Social Address
