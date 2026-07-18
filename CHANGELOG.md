@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Removed
+
+- **Unused timeout parameter from `_create_external_cleaner`** ([#193](https://github.com/speedyk-005/yasbd-lib/pull/193)).
+
 ## [0.12.0] - 2026-07-18
 
 ### Added
