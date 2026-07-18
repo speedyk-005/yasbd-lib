@@ -5,9 +5,11 @@ from yasbd.rules.base import Rules
 class HyRules(Rules):
 
 
-    # Armenian sentence boundaries use the Armenian full stop (։),
-    # exclamation mark (՜), and the Armenian colon/verjaket (:).
-    TERMINATORS = {"։", "՜", ":"}
+    # Armenian does not use `.` as terminator.
+    # Instead sentences typically end with the Armenian full stop (։).
+    # Exclamations may end with the Armenian exclamation mark (՜)
+    # or the ASCII exclamation mark (!) in modern digital text.
+    TERMINATORS = {"։", "՜", "!"}
 
     TITLE_ABBRVS = set()
     DOTTED_GEOPOL_ABBRVS = set()
