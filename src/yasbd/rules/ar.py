@@ -8,7 +8,7 @@ class ArRules(Rules):
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Academic & Professional
-        "أ", "د", "أ.د", "م", "أ.م", "د.م", "ط", "ص", "سـم"
+        "أ", "د", "أ.د", "م", "أ.م", "د.م", "ط", "ص", "سـم",
 
         # Military, Legal & Administrative
         "لو", "عم", "عق", "مقد", "نق", "لـو", "عـم",

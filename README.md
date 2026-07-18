@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/speedyk-005/yasbd-lib/blob/main/yasbd_logo.png?raw=true" alt="Yasbd-lib Logo" width="500"/>
+  <img src="https://raw.githubusercontent.com/speedyk-005/yasbd-lib/main/yasbd_logo.png" alt="Yasbd-lib Logo" width="500"/>
   <p><i>"Even a pair of scissors deserves to be smart. Welcome to cybernetic boundary shearing."</i></p>
 </div>
 
@@ -83,15 +83,15 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 - Geopolitical + case markers
 - Quote/parenthesis span filtering
 - TOC leader suppression
-- List marker re-alignmen
+- List marker re-alignment
 - Contiguous terminator collapsing
-- Language specifical final fixups
+- Language-specific final fixups
 
 ---
 
 ## 🌐 Supported Languages ([API](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbdrules))
 
-34 languages supported.
+38 languages supported.
 
 <details>
 <summary>Click to see all supported languages</summary>
@@ -102,6 +102,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇪🇹 | am   | Amharic |
 | 🇸🇦 | ar   | Arabic |
 | 🇧🇩 | bn   | Bengali |
+| 🇧🇬 | bg   | Bulgarian |
 | 🇨🇿 | cs   | Czech |
 | 🇩🇰 | da   | Danish |
 | 🇩🇪 | de   | German |
@@ -115,6 +116,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇮🇩 | id   | Indonesian |
 | 🇮🇹 | it   | Italian |
 | 🇯🇵 | ja   | Japanese |
+| 🇰🇿 | kk   | Kazakh |
 | 🇰🇷 | ko   | Korean |
 | 🇱🇹 | lt   | Lithuanian |
 | 🇮🇳 | ml   | Malayalam |
@@ -123,11 +125,13 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇳🇱 | nl   | Dutch |
 | 🇵🇱 | pl   | Polish |
 | 🇵🇹 | pt   | Portuguese |
+| 🇷🇴 | ro   | Romanian |
 | 🇷🇺 | ru   | Russian |
 | 🇸🇰 | sk   | Slovak |
 | 🇸🇪 | sv   | Swedish |
 | 🇹🇿 | sw   | Swahili |
 | 🇹🇭 | th   | Thai |
+| 🇹🇷 | tr   | Turkish |
 | 🇺🇦 | uk   | Ukrainian |
 | 🇵🇰 | ur   | Urdu |
 | 🇻🇳 | vi   | Vietnamese |
@@ -181,7 +185,7 @@ Prefer building from source? Clone and install manually for full control:
 
 ```bash
 git clone https://github.com/speedyk-005/yasbd-lib.git
-cd yasbd
+cd yasbd-lib
 pip install .
 ```
 
@@ -250,7 +254,7 @@ Each language rule loads once into a 5-slot cache. Once loaded, a language stays
 > **Auto-detect**
 >
 > Pass `lang="auto"` if you want the system to figure out the language for you.
-> I wouldn't lean on it too hard tho — it's a bit slower, and short phrases can throw it off sometimes.
+> I wouldn't lean on it too hard though — it's a bit slower, and short phrases can throw it off sometimes.
 
 ### Core Methods
 The two primary APIs are detect() and segment().
@@ -573,25 +577,7 @@ Want to build a lang pack? Start with the [language template](https://github.com
 
 ## 🤝 Contributors
 
-A massive thank you to the open source community helping make `yasbd` more accurate and scalable:
-
-<details>
-<summary>Click to see all contributors</summary>
-
-| Name | Role |
-|------|------|
-| **[@speedyk-005](https://github.com/speedyk-005)** | Maintainer & Creator |
-| **[@JheanLL](https://github.com/JheanLL)** | Trie prototype design & Spanish rule contributions |
-| **[@Jah-yee](https://github.com/Jah-yee)** | Reference abbreviation bracketed citation fix |
-| **[@Rajesh270712](https://github.com/Rajesh270712)** | Base + English rule contributions |
-| **[@sanmaxdev](https://github.com/sanmaxdev)** | Language tag normalization helper |
-| **[@hongquan](https://github.com/hongquan)** | `py.typed` marker for PEP 561 compliance |
-| **[@terminalchai](https://github.com/terminalchai)** | Burmese and Thai reporting words fix |
-| **[@1cbyc](https://github.com/1cbyc)** | Coordinate direction abbreviation fix |
-| **[@kernelpanic888](https://github.com/kernelpanic888)** | Non-German ordinal boundary inheritance fix |
-| **[@hkJerryLeung](https://github.com/hkJerryLeung)** | French `est` abbreviation fix |
-
-</details>
+See [**CONTRIBUTORS.md**](CONTRIBUTORS.md) for the full list.
 
 Interested in contributing? See the [**Contributing Guide**](https://github.com/speedyk-005/yasbd-lib/blob/main/CONTRIBUTING.md) to get started!
 
@@ -599,6 +585,6 @@ Interested in contributing? See the [**Contributing Guide**](https://github.com/
 
 ## 📜 Last note
 
-**yasbd** is maintained by [speedyk-005](https://github.com/speedyk-005). Licensed under [Mozilla Public License 2.0](https://github.com/speedyk-005/yasbd-lib/blob/main/LICENSE)
+**yasbd** is maintained by [speedyk-005](https://github.com/speedyk-005). Licensed under [Mozilla Public License 2.0](https://github.com/speedyk-005/yasbd-lib/blob/main/LICENSE).
 
 If you find this project helpful, please consider giving it a ⭐!

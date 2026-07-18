@@ -14,12 +14,12 @@ Pull the official schematics from the main repository:
 
 ```bash
 git clone https://github.com/speedyk-005/yasbd-lib.git
-cd yasbd
+cd yasbd-lib
 ```
 
 ### Calibrate the Environment
 
-Create and activate your virtual environment running python -m venv. Do not install dependencies globally unless you enjoy contaminating your workshop.
+Create and activate your virtual environment by running python -m venv. Do not install dependencies globally unless you enjoy contaminating your workshop.
 
 ```bash
 python -m venv .venv
@@ -98,7 +98,6 @@ This runs `ruff` on every commit so you never forget.
 If you changed any docstrings or public interfaces, regenerate the docs:
 
 ```bash
-pip install -e ".[dev]"
 
 # Generate API_REFERENCES.md from docstrings
 bash scripts/gen_api_docs.sh

@@ -64,10 +64,10 @@ class MyRules(Rules):
         "ပါတယ်", "ပါသည်",
 
         # Question sentence-final markers
-        "လား", "မလား", "ပါသလား", "သလား"
+        "လား", "မလား", "ပါသလား", "သလား",
 
         # Formal written completions
-         "ခဲ့ပါသည်"
+        "ခဲ့ပါသည်",
     }
 
     # fmt: on

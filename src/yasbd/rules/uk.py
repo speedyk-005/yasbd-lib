@@ -29,7 +29,7 @@ class UkRules(RuRules):
 
     DATE_ABBRVS = RuRules.DATE_ABBRVS | {
         "січ", "лют", "бер", "кві", "тра", "чер", "лип",
-        "сер", "вер", "жов", "лис", "гру","нд",
+        "сер", "вер", "жов", "лис", "гру", "нд",
     }
 
     COMMON_SENT_STARTERS = RuRules.COMMON_SENT_STARTERS | {

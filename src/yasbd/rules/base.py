@@ -1,4 +1,5 @@
 import re  # For simpler patterns
+from itertools import pairwise
 
 import regex as re2
 from retrie.trie import Trie
@@ -87,12 +88,12 @@ class Rules:
         "tbls", "v", "vol", "vols",
 
         # Section / Structure
-        "ann", "art", "arts", "cap", "cl", "cls", "col",
+        "ann", "art", "arts", "cap", "cl", "cls", "col", "cit",
         "cols", "para", "paras", "quaest", "sec", "sect",
         "secs", "subsec",
 
         # Legal / Numbering / Cross References
-        "a.c", "a.d", "a.u.c", "b.c", "lc", "n", "nn",
+        "a.c", "a.d", "a.u.c", "b.c", "lc", "n", "nn", "nr",
         "no", "nos", "n°", "n.º", "qv", "reg", "regs",
 
         # Scientific / Technical
@@ -133,7 +134,7 @@ class Rules:
         # Notes & postscript markers
         "n.b", "p.s", "p.p.s", "sci", "scill", "s.vloc",
 
-        # Streets
+        # Address elements
         "ave", "blv", "blvd", "ct", "jct", "ln", "pen", "pl",
         "rd", "riv", "rt", "rte", "sq", "st", "wy",
 
@@ -152,7 +153,7 @@ class Rules:
         "Jeopardy", "Mamma Mia", "Oklahoma", "Oliver", "Osu",
         "Shindig", "VSPO", "wham",
 
-       # Geopolitical Quirks / Municipalities
+        # Geopolitical Quirks / Municipalities
         "Westward Ho", "Saint-Louis-du-Ha", "Baie-des-Ha", "Ha",
 
         # Public Figures, Politics, & Manufacturing Brands
@@ -268,8 +269,8 @@ class Rules:
                (?<={cls.TERMINATORS_PATTERN}\s*\p{{Emoji_Presentation}}+)|
                (?<=\s+\p{{Emoji_Presentation}})(?=\s*(?:{cls.COMMON_STARTERS_PATTERN})\b)|
 
-                # Split at transition between Latin letters separate by alien
-                (?<=[\p{{LU}}\p{{Ll}}][。！？।])(?=[\p{{Lu}}])
+               # Split at transition between Latin letters separate by alien
+               (?<=[\p{{LU}}\p{{Ll}}][。！？।])(?=[\p{{Lu}}])
             )
 
             # Not followed by another terminators (clusters)
@@ -382,10 +383,19 @@ class Rules:
 
         # Quick contextual heuristic
         is_flattened_list = (
+            # A flattened list must contain at least two horizontal markers
             len(horiz_matches) >= 2
             and (
+                # List is introduced by a colon
+                # or starts directly at the beginning of the text
                 ":" in text
                 or text[horiz_matches[0].start()] == text.lstrip()[0]
+            )
+
+            # List markers are close enough to belong to the same flattened list
+            and all(
+                b.start() - a.end() < 40
+                for a, b in pairwise(horiz_matches)
             )
         )
 
