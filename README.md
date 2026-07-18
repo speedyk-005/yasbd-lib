@@ -7,15 +7,13 @@
 [![PyPI](https://img.shields.io/pypi/v/yasbd-lib?kill_cache=1)](https://pypi.org/project/yasbd-lib)
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/yasbd-lib?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/yasbd-lib)
 [![Coverage Status](https://coveralls.io/repos/github/speedyk-005/yasbd-lib/badge.svg?branch=main&kill_cache=1)](https://coveralls.io/github/speedyk-005/yasbd-lib?branch=main)
-[![Stability](https://img.shields.io/badge/stability-alpha-red)](https://github.com/speedyk-005/yasbd-lib)
+[![Stability](https://img.shields.io/badge/stability-beta-yellow)](https://github.com/speedyk-005/yasbd-lib)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](https://github.com/speedyk-005/yasbd-lib/actions)
 [![CodeFactor](https://www.codefactor.io/repository/github/speedyk-005/yasbd-lib/badge)](https://www.codefactor.io/repository/github/speedyk-005/yasbd-lib)
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/speedyk-005/yasbd-lib)
 
-> [!WARNING]
-> This project is currently in alpha.
 
 ---
 
@@ -91,7 +89,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 ## 🌐 Supported Languages ([API](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbdrules))
 
-38 languages supported.
+39 languages supported.
 
 <details>
 <summary>Click to see all supported languages</summary>
@@ -113,6 +111,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 | 🇫🇷 | fr   | French |
 | 🇮🇳 | hi   | Hindi |
 | 🇭🇹 | ht   | Haitian Creole |
+| 🇦🇲 | hy   | Armenian |
 | 🇮🇩 | id   | Indonesian |
 | 🇮🇹 | it   | Italian |
 | 🇯🇵 | ja   | Japanese |
