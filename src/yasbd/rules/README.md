@@ -17,6 +17,7 @@
 | `fr.py` | French | Romance |
 | `hi.py` | Hindi | Indo-Aryan |
 | `ht.py` | Haitian Creole | French-based Creole |
+| `hy.py` | Armenian | Armenian / Isolate |
 | `id.py` | Indonesian | Austronesian |
 | `it.py` | Italian | Romance |
 | `ja.py` | Japanese | Japonic / CJK |
