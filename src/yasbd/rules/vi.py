@@ -33,7 +33,7 @@ class ViRules(Rules):
         # Articles
         "Cái", "Chiếc", "Con", "Sự", "Việc", "Niềm", "Cuộc", "Các", "Những",
 
-        # Pronouns & Demonstratives
+        # Pronouns
         "Tôi", "Bạn", "Nó", "Anh", "Chị", "Ông", "Bà", "Chúng tôi", "Họ",
         "Đây", "Đó", "Kia", "Này",
 

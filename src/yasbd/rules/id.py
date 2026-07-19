@@ -61,7 +61,7 @@ class IdRules(Rules):
         # (Indonesian lacks true articles; uses structural specifiers)
         "Sang", "Si", "Para", "Kaum", "Para-",
 
-        # Pronouns & Demonstratives
+        # Pronouns
         "Saya", "Aku", "Kamu", "Dia", "Ia", "Mereka", "Kami", "Kita",
         "Ini", "Itu",
 
