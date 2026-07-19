@@ -146,26 +146,7 @@ All public interface controls must be documented using Google-style docstrings. 
 
 ## Pull Request Template
 
-When submitting your modifications to the main system, use the following engineering template.
-
-### Objective
-
-Brief, precise summary of why the machinery needed modification.
-
-### Changes
-
-- Component 'X' was swapped out for 'Y'.
-- Caching layer was optimized to prevent O(N²) lockups.
-- Fixed boundary-slippage bug near abbreviation patterns.
-
-### Verification
-
-- Confirm that `pytest` executed successfully.
-- Mention any new test cases added to the validation suite.
-
-### Related Issues
-
-- Fixes #issue-number
+See [PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md) for the full template to use when submitting modifications.
 
 ## Conduct
 

@@ -168,7 +168,7 @@ class Rules:
     REPORTING_WORDS = set()
 
     # https://regex101.com/r/tI9Cmg/3
-    DOT_LIKE_PATTERN = r"[.．。။।॥·•∙⋅]"
+    DOT_LIKE_PATTERN = r"[.．။।॥·•∙⋅]"
     VERTICAL_LIST_START_FINDER = re2.compile(rf"""
         (?<=^\s*
             (?:
