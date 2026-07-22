@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Code quality cleanup** ([#203](https://github.com/speedyk-005/yasbd-lib/pull/203)):
+  - Extracted `_apply_cleaning_pipeline` from `StreamCleaner.__next__` and renamed `CLEANING_PIPELINE` to `DEFAULT_CLEANING_PIPELINE`.
+  - Simplified `detect()` offset calculation by removing unnecessary ternary.
+  - Simplified `TextSpan.__eq__` with `all()` for cleaner `hasattr` checks.
+  - Fixed double spaces after commas (nl, my, sv, tr, id) and double space after operator (bg).
+- **Merged "Pronouns & Demonstratives" header into "Pronouns"** ([#196](https://github.com/speedyk-005/yasbd-lib/pull/196)): comment-only change in id.py and vi.py.
+
 ### Removed
 
 - **Unused timeout parameter from `_create_external_cleaner`** ([#193](https://github.com/speedyk-005/yasbd-lib/pull/193)).
