@@ -16,6 +16,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@k-anushka14](https://github.com/k-anushka14)** | Removed unused timeout parameter from external cleaner; merged Pronouns & Demonstratives header into Pronouns |
 | **[@kernelpanic888](https://github.com/kernelpanic888)** | Non-German ordinal boundary inheritance fix |
 | **[@Mayankshrey438](https://github.com/Mayankshrey438)** | Armenian language support & flattened list heuristic |
+| **[@MasRama](https://github.com/MasRama)** | Double boundary for `.\n` fix |
 | **[@Rajesh270712](https://github.com/Rajesh270712)** | Base + English rule contributions |
 | **[@sanmaxdev](https://github.com/sanmaxdev)** | Language tag normalization helper |
 | **[@terminalchai](https://github.com/terminalchai)** | Burmese and Thai reporting words fix |

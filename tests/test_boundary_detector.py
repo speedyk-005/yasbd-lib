@@ -173,6 +173,9 @@ def test_rule_cache_lru(en_detector):
         "10 languages supported today\n|Target is 22+.",
         "> Somewhere, something incredible\n> is waiting to be known",
 
+        # Dot followed by newline (fix for #205)
+        "Hello world.\n|Next sentence.",
+
         # Emojis (fix for #73)
         "Nice work! 👍| Next step.",
         "The alternative is to put it before the full stop 👉.| So cool, right?",

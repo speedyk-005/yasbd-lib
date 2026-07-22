@@ -274,7 +274,7 @@ class Rules:
             )
 
             # Not followed by another terminators (clusters)
-            (?!\s*+{cls.TERMINATORS_PATTERN})
+            (?!\n|\s*+{cls.TERMINATORS_PATTERN})
             """, re2.X,
         )
 
