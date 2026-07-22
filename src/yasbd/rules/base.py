@@ -184,11 +184,12 @@ class Rules:
     QUOTE_AND_PAREN_FINDER = re2.compile(
         r"""
         # Quoted text with quotations or dashes
-        (?:[\p{Pi}»‚„]|(?:^|(?<=[\s:]))(['""])).+?(?:[\p{Pf}«‘“]|\1)|
-        —.+?[,.!?]\s*—|
+        "(?:[^"\n]*)"| '(?:[^'\n]*)'|
+        [\p{Pi}»‚„].+?[\p{Pf}«‘“]|
+        —[^—]*[,.!?]\s*—|
 
         # Parenthesized text
-        \p{Ps}.+?\p{Pe}
+        \p{Ps}[^\p{Pe}]*\p{Pe}
         """,
         re2.X,
     )
