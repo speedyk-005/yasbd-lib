@@ -34,7 +34,7 @@ class IdRules(Rules):
 
     SECTION_MARKERS = Rules.SECTION_MARKERS | {
         "Bab", "Pasal", "Ayat", "Bagian", "Subbagian",
-        "Lampiran",  "Paragraf", "Sub-bab",
+        "Lampiran", "Paragraf", "Sub-bab",
     }
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {

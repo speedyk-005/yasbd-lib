@@ -185,7 +185,7 @@ class BoundaryDetector:
             boundaries = rule.apply(para.rstrip(), self.preserve_quote_and_paren)
 
             for pos in boundaries[1:]:
-                yield offset + pos if not relative else pos
+                yield offset + pos
 
             if not relative:
                 offset += len(para)

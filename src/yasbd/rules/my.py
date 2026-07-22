@@ -56,7 +56,7 @@ class MyRules(Rules):
     }
 
     POST_QUOTATIVE_PARTICLES = {
-        "ဟု",  "လို့",  "ဟူ၍",
+        "ဟု", "လို့", "ဟူ၍",
     }
 
     DISCOURSE_FINAL_PARTICLES = {

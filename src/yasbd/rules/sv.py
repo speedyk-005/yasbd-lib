@@ -17,7 +17,7 @@ class SvRules(DeRules):
 
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         "s", "sid", "anm", "ang", "bil", "kap", "forts",
-        "förf", "avd", "uppl", "utg", "red",  "hft",
+        "förf", "avd", "uppl", "utg", "red", "hft",
         "sammanst", "m.fl", "o.l", "osv", "o.s.v", "kl",
     }
 

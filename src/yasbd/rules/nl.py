@@ -27,7 +27,7 @@ class NlRules(DeRules):
 
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         # Bibliographical, Page, and Document References
-        "art", "afb", "hfdst", "blz", "nr",  "par", "reg",
+        "art", "afb", "hfdst", "blz", "nr", "par", "reg",
         "bijl", "ca", "cf", "ed", "vert", "id",
 
         # Legal, Corporate, and Formal Citation Markers

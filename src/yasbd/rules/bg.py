@@ -45,7 +45,7 @@ class BgRules(RuRules):
         "пон", "вто", "сря", "чет", "пет", "съб", "нед",
     }
 
-    COMMON_SENT_STARTERS =  {
+    COMMON_SENT_STARTERS = {
         # Pronouns
         "Аз", "Ти", "Той", "Тя", "То", "Ние", "Вие", "Те",
         "Това", "Тези", "Тази", "Този",

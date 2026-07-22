@@ -24,7 +24,7 @@ class TrRules(Rules):
     }
 
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
-        "s", "ss", "c",  "yay", "yy", "doğ", "vb", "v.b",
+        "s", "ss", "c", "yay", "yy", "doğ", "vb", "v.b",
         "sf", "mad", "par", "böl", "bzk", "md", "sy",
     }
 

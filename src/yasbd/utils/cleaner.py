@@ -100,7 +100,7 @@ def _clean_ocr_text(text: str) -> str:
     return PAGE_FINDER.sub("", cleaned_text)
 
 
-CLEANING_PIPELINE = {
+DEFAULT_CLEANING_PIPELINE = {
     "fix_mojibake": ftfy.fix_text,
     "fix_ocr_text": _clean_ocr_text,
     "unwrap_htmls": lambda t: t if "<" not in t else HTML_TAGS_FINDER.sub("", t),
@@ -177,10 +177,10 @@ class StreamCleaner(StreamCleanerStub):
         self.steps_to_skip = set(steps_to_skip or ())
         self.verbose = verbose
 
-        if invalid_steps := self.steps_to_skip - set(CLEANING_PIPELINE):
+        if invalid_steps := self.steps_to_skip - set(DEFAULT_CLEANING_PIPELINE):
             raise InvalidInputError(
                 f"🧩 Oops! Unknown step(s): {', '.join(repr(s) for s in sorted(invalid_steps))}. "
-                f"Valid steps: {', '.join(CLEANING_PIPELINE.keys())}."
+                f"Valid steps: {', '.join(DEFAULT_CLEANING_PIPELINE.keys())}."
             )
 
         self.extra_steps = list(extra_steps or ())
@@ -198,32 +198,31 @@ class StreamCleaner(StreamCleanerStub):
             stripped = para.strip()
             if not stripped:
                 continue
-
-            cleaned_text = stripped
-            for step_name in CLEANING_PIPELINE:
-                if step_name not in self.steps_to_skip:
-                    log_info(self.verbose, "Applying step: {}", step_name)
-                    cleaned_text = CLEANING_PIPELINE[step_name](cleaned_text)
-
-            for step in self.extra_steps:
-                log_info(
-                    self.verbose, "Applying extra step: {}", getattr(step, "__name__", step)
-                )
-
-                try:
-                    result = step(cleaned_text)
-                except Exception as e:
-                    raise CleanStepError(
-                        f"extra step {getattr(step, '__name__', step)!r} raised an error.\n"
-                        f"Details: {e!s}"
-                    ) from e
-
-                if not isinstance(result, str):
-                    raise CleanStepError(
-                        f"extra step {getattr(step, '__name__', step)!r} "
-                        f"returned {type(result).__name__}, expected str"
-                    )
-                cleaned_text = result
-            return cleaned_text
+            return self._apply_cleaning_pipeline(stripped)
 
         raise StopIteration
+
+    def _apply_cleaning_pipeline(self, text: str) -> str:
+        for step_name in DEFAULT_CLEANING_PIPELINE:
+            if step_name not in self.steps_to_skip:
+                log_info(self.verbose, "Applying step: {}", step_name)
+                text = DEFAULT_CLEANING_PIPELINE[step_name](text)
+
+        for step in self.extra_steps:
+            log_info(self.verbose, "Applying extra step: {}", getattr(step, "__name__", step))
+
+            try:
+                result = step(text)
+            except Exception as e:
+                raise CleanStepError(
+                    f"extra step {getattr(step, '__name__', step)!r} raised an error.\n"
+                    f"Details: {e!s}"
+                ) from e
+
+            if not isinstance(result, str):
+                raise CleanStepError(
+                    f"extra step {getattr(step, '__name__', step)!r} "
+                    f"returned {type(result).__name__}, expected str"
+                )
+            text = result
+        return text
