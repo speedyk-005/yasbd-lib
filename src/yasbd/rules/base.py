@@ -167,17 +167,17 @@ class Rules:
     POST_QUOTATIVE_PARTICLES = set()
     REPORTING_WORDS = set()
 
-    # https://regex101.com/r/tI9Cmg/3
+    # https://regex101.com/r/tI9Cmg/4
     DOT_LIKE_PATTERN = r"[.．။।॥·•∙⋅]"
     VERTICAL_LIST_START_FINDER = re2.compile(rf"""
         (?<=^\s*
             (?:
-                [\p{{L}}\p{{N}}]
+                [\p{{L}}\p{{N}}]{{1,4}}
                 (?:{DOT_LIKE_PATTERN}|\))
             ){{1,3}}
         )
         (?=\s)
-        """, re.X
+        """, re.X | re.M
     )
 
     # https://regex101.com/r/JYdWZw/6
