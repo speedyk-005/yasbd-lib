@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **Double boundary for `.\n`** ([#205](https://github.com/speedyk-005/yasbd-lib/issues/205)): `detect()` yielded two consecutive offsets for `.\n`, leaving an empty span when sentences were reconstructed. Added `\n` to the negative lookahead in `CANDIDATE_BOUNDARY_FINDER` so the terminator no longer creates a separate boundary when a newline follows.
+- **Double boundary for `.\n`** ([#207](https://github.com/speedyk-005/yasbd-lib/pull/207)): `detect()` yielded two consecutive offsets for `.\n`, leaving an empty span when sentences were reconstructed. Added `\n` to the negative lookahead in `CANDIDATE_BOUNDARY_FINDER` so the terminator no longer creates a separate boundary when a newline follows.
 - **Vertical list detection for multi-digit numbers** ([#204](https://github.com/speedyk-005/yasbd-lib/pull/204)): Expanded VERTICAL_LIST_START_FINDER quantifier to `{1,4}` and added `re.M` flag so multi-digit list markers at any line start are not mistaken for sentence boundaries.
 
 ### Removed
