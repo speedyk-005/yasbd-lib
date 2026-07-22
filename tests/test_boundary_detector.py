@@ -180,6 +180,10 @@ def test_rule_cache_lru(en_detector):
         # Coordinate directions ambiguity (fix for #134)
         "Server A at 40.7128° N, 74.0060° W.| Server B at 34.0522° S, 118.2437° E.",
         "N. Scott Momaday is a writer.| He won the Pulitzer.",
+
+        # Multi-digit vertical list items
+        "12. The first item.\n|13. The second item.",
+        "    A12. The first item.\n|    B13. The second item.",
     ],
 )
 def test_universal_regression(en_detector, marked_text):
