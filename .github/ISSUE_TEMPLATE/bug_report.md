@@ -6,7 +6,7 @@ labels: bug, edge-cases
 assignees: ''
 ---
 
-### 🔍 Description of the Bug
+### 🔍 Description
 A clear description of what text string is parsing incorrectly. Include a short example inline.
 
 ### 🧪 Code Snippet to Reproduce
