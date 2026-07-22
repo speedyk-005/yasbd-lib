@@ -138,3 +138,54 @@ def test_rule_cache_lru(en_detector):
     r_en = en_detector._get_rule("en")
     assert r_en is not r1, "en should have been evicted after 6 other langs"
     assert type(r_en) is type(r1), "freshly loaded en rule should exist"  # type: ignore[unreachable]
+
+
+@pytest.mark.parametrize(
+    "marked_text",
+    [
+        # Scientific units (fix for #33)
+        "Each tick denotes an increase of 100 meV.| Each data point follows.",
+        "The supply reached 10 kV.| Measurements continued.",
+        "The frequency was 20 MHz.| The receiver locked.",
+
+        # Day-month ambiguity (fix for #29)
+        "The meeting is at 9 a.m. Monday.",
+        "The event starts at 11a.m. Tue.",
+        "The store opens at 8 p.m. December.",
+        "The meeting is at 2 p.m.| Martin called.",
+        "The meeting is at 10 a.m.| Monday's agenda was postponed.",
+
+        # "&" separator (fix for #150)
+        "Trying to get back to Com. & Adm. through the most direct path in the dark.",
+
+        # Not a list (fix for #52)
+        "I really want letter A.| I know that I asked you for the B.| I changed my mind.",
+        "You are going to the store, and so am I.| We can go together.",
+
+        # Bracketed references (fix for #34)
+        "Yan et al. [2004] analysed SSH variations.| The study was comprehensive.",
+        "Fig. [1] shows the architecture.| Figure 2 provides details.",
+        "As shown in pp. [55-60], the results are significant.| This confirms our hypothesis.",
+        "See sec. [2.1] for details.| The methodology is described there.",
+
+        # Newlines (fix for #50)
+        "The simplest way\nto get started is with pip.",
+        "10 languages supported today\n|Target is 22+.",
+        "> Somewhere, something incredible\n> is waiting to be known",
+
+        # Emojis (fix for #73)
+        "Nice work! 👍| Next step.",
+        "The alternative is to put it before the full stop 👉.| So cool, right?",
+
+        # Coordinate directions ambiguity (fix for #134)
+        "Server A at 40.7128° N, 74.0060° W.| Server B at 34.0522° S, 118.2437° E.",
+        "N. Scott Momaday is a writer.| He won the Pulitzer.",
+    ],
+)
+def test_universal_regression(en_detector, marked_text):
+    """Test that fixed boundary issues aren't regressed"""
+    expected = [sent.strip() for sent in marked_text.split("|")]
+    input_text = marked_text.replace("|", "")
+
+    result = list(en_detector.segment(input_text))
+    assert result == expected, f"Input: {input_text}"
