@@ -180,11 +180,11 @@ class Rules:
         """, re.X | re.M
     )
 
-    # https://regex101.com/r/JYdWZw/6
+    # https://regex101.com/r/JYdWZw/8
     QUOTE_AND_PAREN_FINDER = re2.compile(
         r"""
         # Quoted text with quotations or dashes
-        "(?:[^"\n]*)"| '(?:[^'\n]*)'|
+        "(?:[^"]*)"|(?<=\s)'(?:[^']*)'|
         [\p{Pi}»‚„].+?[\p{Pf}«‘“]|
         —[^—]*[,.!?]\s*—|
 
@@ -194,8 +194,8 @@ class Rules:
         re2.X,
     )
 
-    # https://regex101.com/r/0P9f2V/1
-    TOC_LEADER_FINDER = re.compile(r"[^\W_][\s\.]{4,}\d")
+    # https://regex101.com/r/0P9f2V/3
+    TOC_LEADER_FINDER = re.compile(r".\s*\.[\s\.]{3,}\d")
 
     # https://regex101.com/r/ZOZlLb/3/substitution
     NEWLINE_INSIDE_SENTENCE_FINDER = re2.compile(r"(?<=[,:;)\w\s])\n(?=([a-z(>]))")
