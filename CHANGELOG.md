@@ -9,11 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-
-### Fixed
-
-- **Vertical list detection for multi-digit numbers** ([#204](https://github.com/speedyk-005/yasbd-lib/pull/204)): Expanded VERTICAL_LIST_START_FINDER quantifier to `{1,4}` and added `re.M` flag so multi-digit list markers at any line start are not mistaken for sentence boundaries.
-
 ### Changed
 
 - **Code quality cleanup** ([#203](https://github.com/speedyk-005/yasbd-lib/pull/203)):
@@ -22,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Simplified `TextSpan.__eq__` with `all()` for cleaner `hasattr` checks.
   - Fixed double spaces after commas (nl, my, sv, tr, id) and double space after operator (bg).
 - **Merged "Pronouns & Demonstratives" header into "Pronouns"** ([#196](https://github.com/speedyk-005/yasbd-lib/pull/196)): comment-only change in id.py and vi.py.
+
+### Fixed
+
+- **Vertical list detection for multi-digit numbers** ([#204](https://github.com/speedyk-005/yasbd-lib/pull/204)): Expanded VERTICAL_LIST_START_FINDER quantifier to `{1,4}` and added `re.M` flag so multi-digit list markers at any line start are not mistaken for sentence boundaries.
 
 ### Removed
 
