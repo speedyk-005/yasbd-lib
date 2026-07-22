@@ -92,9 +92,10 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 
 39 languages supported.
 
+> [!NOTE]
 > **v1.x freeze:** The built-in language set is locked for the v1.x series (reached with Armenian; see #132 / #198).
-> New languages are **not** accepted as built-in modules — ship them as external
-> [lang packs](#-lang-packs) via `register_lang_packs()` instead. Focus for core
+> New languages are **not** accepted as built-in modules. They should be distributed as external packs.
+> Use [lang packs](#-lang-packs) via `register_lang_packs()` instead. Focus for core
 > stays on bug fixes, edge cases, and API stabilization. Non-breaking improvements
 > to *existing* language rules are still welcome.
 
