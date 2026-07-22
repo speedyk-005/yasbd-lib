@@ -23,7 +23,7 @@
 ## Verification
 
 - [ ] I ran `pytest` and all tests pass.
-- [ ] I ran `ruff format && ruff check --fix` on the modified files.
+- [ ] I ran `ruff format . && ruff check --fix .`.
 - [ ] I have added tests for my changes (if applicable).
 - [ ] My changes don't require documentation updates, or I've updated them.
 
