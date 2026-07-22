@@ -116,19 +116,6 @@ def test_detect_paragraph_eof_sentinel(en_detector):
     assert result == [6, 15]
 
 
-def test_detect_dot_newline_no_double_boundary(en_detector):
-    """test that `.\n` produces a single boundary, not one at `.` and another at `\n`.
-
-    Regression test for the double-boundary bug where `detect()` yielded two
-    consecutive offsets for `.\n`, leaving an empty span when sentences were
-    reconstructed from offsets.
-    """
-    result = list(en_detector.detect("Hello world.\nNext sentence.", relative=False))
-    assert result == [13, 27]
-    assert all(isinstance(b, int) for b in result)
-    assert result == sorted(result)
-
-
 def test_rule_cache_lru(en_detector):
     """test that rule objects are cached (max 5) and reused on lang switch."""
     # Same lang = same cached object
@@ -160,32 +147,43 @@ def test_rule_cache_lru(en_detector):
         "Each tick denotes an increase of 100 meV.| Each data point follows.",
         "The supply reached 10 kV.| Measurements continued.",
         "The frequency was 20 MHz.| The receiver locked.",
+
         # Day-month ambiguity (fix for #29)
         "The meeting is at 9 a.m. Monday.",
         "The event starts at 11a.m. Tue.",
         "The store opens at 8 p.m. December.",
         "The meeting is at 2 p.m.| Martin called.",
         "The meeting is at 10 a.m.| Monday's agenda was postponed.",
+
         # "&" separator (fix for #150)
         "Trying to get back to Com. & Adm. through the most direct path in the dark.",
+
         # Not a list (fix for #52)
         "I really want letter A.| I know that I asked you for the B.| I changed my mind.",
         "You are going to the store, and so am I.| We can go together.",
+
         # Bracketed references (fix for #34)
         "Yan et al. [2004] analysed SSH variations.| The study was comprehensive.",
         "Fig. [1] shows the architecture.| Figure 2 provides details.",
         "As shown in pp. [55-60], the results are significant.| This confirms our hypothesis.",
         "See sec. [2.1] for details.| The methodology is described there.",
+
         # Newlines (fix for #50)
         "The simplest way\nto get started is with pip.",
         "10 languages supported today\n|Target is 22+.",
         "> Somewhere, something incredible\n> is waiting to be known",
+
+        # Dot followed by newline (fix for #205)
+        "Hello world.\n|Next sentence.",
+
         # Emojis (fix for #73)
         "Nice work! 👍| Next step.",
         "The alternative is to put it before the full stop 👉.| So cool, right?",
+
         # Coordinate directions ambiguity (fix for #134)
         "Server A at 40.7128° N, 74.0060° W.| Server B at 34.0522° S, 118.2437° E.",
         "N. Scott Momaday is a writer.| He won the Pulitzer.",
+
         # Multi-digit vertical list items
         "12. The first item.\n|13. The second item.",
         "    A12. The first item.\n|    B13. The second item.",
