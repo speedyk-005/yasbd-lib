@@ -501,18 +501,27 @@ Hello world. 😊 How are you? Nice work! 👍 Next step. Done. 🎉 Amazing res
     1: 'Hello world. 😊 How are you?'
     2: 'Nice work! 👍 Next step.'
     3: 'Done. 🎉 Amazing result.'
+
+  spacy-sentencizer [en]:
+    1: 'Hello world.'
+    2: '😊 How are you?'
+    3: 'Nice work!'
+    4: '👍 Next step.'
+    5: 'Done.'
+    6: '🎉 Amazing result.'
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 6 | 0.37 | **Emoji stays attached.** Period + emoji kept as one unit before the next sentence starts. Clean output. |
-| **2** | **pysbd** | 6 | 0.76 | **Detaches each emoji.** Same count, but `😊 How are you?` reads like the emoji is leading. |
-| **3** | **sentencex** | 6 | 0.02 | **Same detachment as pysbd.** Fast but wrong grouping. |
-| **4** | **nupunkt** | 6 | 0.27 | **Also detaches emojis.** Same fragmentation. |
-| **5** | **sentsplit** | 5 | 2.14 | **Merges last two sentences.** `Done. 🎉 Amazing result.` glued together. Leading whitespace everywhere. |
-| **6** | **sentence-splitter** | 3 | 0.95 | **Under-splits.** Collapses everything into 3 chunks, but at least keeps emojis with their sentences. |
-| **7** | **blingfire** | 2 | 0.02 | **Total failure.** Joins entire first half into one sentence. FSM has no concept of emoji. |
+| **1** | **yasbd** | 6 | 1.10 | **Emoji stays attached.** Period + emoji kept as one unit before the next sentence starts. Clean output. |
+| **2** | **pysbd** | 6 | 1.34 | **Detaches each emoji.** Same count, but `😊 How are you?` reads like the emoji is leading. |
+| **3** | **sentencex** | 6 | 0.01 | **Same detachment as pysbd.** Fast but wrong grouping. |
+| **4** | **nupunkt** | 6 | 0.19 | **Also detaches emojis.** Same fragmentation. |
+| **5** | **spacy-sentencizer** | 6 | 0.13 | **Detaches emojis.** Same output as nupunkt. |
+| **6** | **sentsplit** | 5 | 1.38 | **Merges last two sentences.** `Done. 🎉 Amazing result.` glued together. Leading whitespace everywhere. |
+| **7** | **sentence-splitter** | 3 | 0.41 | **Under-splits.** Collapses everything into 3 chunks, but at least keeps emojis with their sentences. |
+| **8** | **blingfire** | 2 | 0.03 | **Total failure.** Joins entire first half into one sentence. FSM has no concept of emoji. |
 
 ---
 
