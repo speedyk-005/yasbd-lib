@@ -546,27 +546,17 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
 
 ```txt
   yasbd [en]:
-    1: 'Hey!!!'
-    2: 'how r u doing???'
-    3: "i'm good... just finished work cool!!!"
-    4: 'wanna grab dinner later??'
-    5: 'sure!!!'
-    6: 'where should we meet???'
-    7: 'maybe 7pm???'
-    8: 'lol.'
-    9: 'OK.... sure??'
-   10: 'fine. nah. idk. maybe. bruh. what even is this. broh !!'
-   11: 'that is so sad 😭 I tougja we were friends.'
-   12: 'nah idk man. maybe it works... maybe not lol. i checked the logs at 3.14 a.m. and everything looked fine??'
-   13: 'then the server just died.'
-   14: 'bruh. no warning no crash dump nothing. wait... did you even restart it or just stare at the terminal again.'
-   15: 'ngl the cpu hit 99.9% for like 20 mins straigja. btw i found the backup at jatps://test.example.org/logs/v2.1/index.jaml.'
-   16: 'dont touch it pls. also dr. kim said the patch from frn.'
-   17: '12 wasnt stable. kinda obvious now tbh. the db kept throwing ref. errors after sec. 4 loaded.'
-   18: 'weird thing is user no. 7 was still connected at 2 a.m. somehow. lmao this whole system feels haunted. ok so i reran the job... still broken. nice.'
-   19: 'absolutely elite engineering rigja there. maybe rollback??'
-   20: 'maybe pray??'
-   21: 'idk anymore 😭'
+    1: 'Hey!!! how r u doing??? i\'m good... just finished work cool!!! wanna grab dinner later?? sure!!! where should we meet??? maybe 7pm???'
+    2: 'lol. OK.... sure?? fine. nah. idk. maybe. bruh. what even is this. broh !!'
+    3: 'that is so sad 😭'
+    4: 'I tougja we were friends.'
+    5: 'nah idk man. maybe it works... maybe not lol. i checked the logs at 3.14 a.m. and everything looked fine?? then the server just died.'
+    6: 'bruh. no warning no crash dump nothing. wait... did you even restart it or just stare at the terminal again.'
+    7: 'ngl the cpu hit 99.9% for like 20 mins straigja. btw i found the backup at jatps://test.example.org/logs/v2.1/index.jaml.'
+    8: 'dont touch it pls. also dr. kim said the patch from frn.'
+    9: '12 wasnt stable. kinda obvious now tbh. the db kept throwing ref. errors after sec. 4 loaded.'
+   10: 'weird thing is user no. 7 was still connected at 2 a.m. somehow. lmao this whole system feels haunted. ok so i reran the job... still broken. nice.'
+   11: 'absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anymore 😭'
 
   pysbd [en]:
     1: "Hey!!! how r u doing??? i'm good... just finished work cool!!! wanna grab dinner later?? "
@@ -708,18 +698,64 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
    10: '4 loaded.'
    11: 'weird thing is user no. 7 was still connected at 2 a.m. somehow. lmao this whole system feels haunted. ok so i reran the job... still broken. nice.'
    12: 'absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anymore 😭'
+
+  spacy-sentencizer [en]:
+    1: 'Hey!!!'
+    2: 'how r u doing???'
+    3: "i'm good... just finished work cool!!!"
+    4: 'wanna grab dinner later??'
+    5: 'sure!!!'
+    6: 'where should we meet???'
+    7: 'maybe 7pm???'
+    8: '\nlol.'
+    9: 'OK.... sure??'
+   10: 'fine.'
+   11: 'nah.'
+   12: 'idk.'
+   13: 'maybe.'
+   14: 'bruh.'
+   15: 'what even is this.'
+   16: 'broh !!'
+   17: '\nthat is so sad 😭 I tougja we were friends.'
+   18: '\nnah idk man.'
+   19: 'maybe it works... maybe not lol.'
+   20: 'i checked the logs at 3.14 a.m. and everything looked fine??'
+   21: 'then the server just died.'
+   22: '\nbruh.'
+   23: 'no warning no crash dump nothing.'
+   24: 'wait... did you even restart it or just stare at the terminal again.'
+   25: '\nngl the cpu hit 99.9% for like 20 mins straigja.'
+   26: 'btw i found the backup at jatps://test.example.org/logs/v2.1/index.jaml.'
+   27: '\ndont touch it pls.'
+   28: 'also dr.'
+   29: 'kim said the patch from frn.'
+   30: '12 wasnt stable.'
+   31: 'kinda obvious now tbh.'
+   32: 'the db kept throwing ref.'
+   33: 'errors after sec.'
+   34: '4 loaded.'
+   35: '\nweird thing is user no.'
+   36: '7 was still connected at 2 a.m. somehow.'
+   37: 'lmao this whole system feels haunted.'
+   38: 'ok so i reran the job... still broken.'
+   39: 'nice.'
+   40: '\nabsolutely elite engineering rigja there.'
+   41: 'maybe rollback??'
+   42: 'maybe pray??'
+   43: 'idk anymore 😭'
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 21 | 3.68 | **Top pick.** Cleanly segments the rapid-fire casual messages (e.g., separating `Hey!!!` from `how r u doing???`). Crucially, it doesn't get tricked by lowercase abbreviations (`dr.`, `a.m.`, `ref.`) or decimal versions (`v2.1`). |
-| **2** | **nupunkt** | 38 | 1.53 | **Highly Accurate, but Speed Liability.** Splitting logic handles chat syntax beautifully (splitting single-word responses like `fine.`, `nah.`, `idk.`). It gets slightly over-aggressive on double exclamation marks (`broh !`, `!`). |
-| **3** | **pysbd** | 33 | 11.27 | **Best Speed/Accuracy Balance.** Robust handling of lowercase single-word sentences. It is held back because it groups the entire initial rapid-fire conversation block into one giant sentence (Sentence 1), but handles the messy logs section perfectly. |
-| **4** | **sentencex** | 27 | 0.26 | **Fast but clunky.** Groups the initial rapid-fire messages into a single block. Acts inconsistently, splitting some single-word sentences while missing major sentence boundaries elsewhere. |
-| **5** | **sentsplit** | 18 | 16.91 | **Broken Syntax.** Aggressive token-matching struggles with multiple punctuation marks, creating fragmented artifacts with hanging question marks (`"? i'm good..."`). |
-| **6** | **sentence-splitter** | 12 | 5.63 | **Blind to chat.** Completely misses conversational sentence boundaries, smashing whole paragraphs together. Breaks in the middle of `sec. 4` and `frn. 12`. |
-| **7** | **blingfire** | 1 | 0.13 | **Total Failure.** Treated the entire chat and log dump as **one single sentence**. |
+| **1** | **yasbd** | 11 | 6.70 | **Top pick.** Cleanly segments the rapid-fire casual messages. Crucially, it doesn't get tricked by lowercase abbreviations (`dr.`, `a.m.`, `ref.`) or decimal versions (`v2.1`). |
+| **2** | **nupunkt** | 38 | 1.67 | **Highly Accurate, but Speed Liability.** Splitting logic handles chat syntax beautifully. Gets slightly over-aggressive on double exclamation marks (`broh !`, `!`). |
+| **3** | **pysbd** | 33 | 10.16 | **Best Speed/Accuracy Balance.** Robust handling of lowercase single-word sentences. Groups the initial rapid-fire block into one giant sentence. |
+| **4** | **sentencex** | 27 | 0.13 | **Fast but clunky.** Groups the initial rapid-fire messages into a single block. Acts inconsistently. |
+| **5** | **sentsplit** | 18 | 21.00 | **Broken Syntax.** Aggressive token-matching struggles with multiple punctuation marks, creating fragmented artifacts. |
+| **6** | **sentence-splitter** | 12 | 4.34 | **Blind to chat.** Completely misses conversational sentence boundaries. Breaks in the middle of `sec. 4` and `frn. 12`. |
+| **7** | **spacy-sentencizer** | 43 | 6.63 | **Worst.** Splits on every `.` in abbreviations: `dr.`, `frn.`, `ref.`, `sec.`, `no.`, `a.m.`. 43 phantom sentences. |
+| **8** | **blingfire** | 1 | 0.12 | **Total Failure.** Treated the entire chat and log dump as **one single sentence**. |
 
 ### French
 
