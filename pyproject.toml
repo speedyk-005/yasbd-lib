@@ -8,13 +8,14 @@ authors = [
 
 license = "MPL-2.0"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
   "Intended Audience :: Science/Research",
   "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
