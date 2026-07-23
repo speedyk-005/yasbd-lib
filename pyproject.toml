@@ -8,13 +8,14 @@ authors = [
 
 license = "MPL-2.0"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
   "Intended Audience :: Science/Research",
   "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
@@ -54,7 +55,7 @@ bench = [
   "pysbd",
   "sentencex",
   "sentsplit",  # depends on deprecated pkg_resources — needs setuptools<81
-  "nupunkt",
+  "nupunkt; python_version >= '3.11'",
   "blingfire",
   "sentence-splitter",
   "setuptools<81",
@@ -98,7 +99,7 @@ python_files = "test_*.py"
 omit = ["*/_template.py", "*/cleaner_stub.py", "*/cli.py"]
 
 [tool.ruff]
-target-version = "py311"
+target-version = "py310"
 line-length = 95
 
 [tool.ruff.lint]
@@ -138,7 +139,7 @@ select = [
     "UP",     # Python syntax and API modernization (pyupgrade)
     "W",      # pycodestyle warnings
 ]
-ignore = ["PLW2901", "COM812", "D203", "D213", "RUF001", "RUF003", "RUF012", "S311", "FURB167", "PLC0206", "PLC0415"]
+ignore = ["PLW2901", "COM812", "D203", "D213", "RUF001", "RUF003", "RUF012", "S311", "FURB167", "PLC0206", "PLC0415", "PERF203"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F403", "I001"]
