@@ -1024,18 +1024,28 @@ Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting a
     4: 'しかし、政治の中心は永田町です。経済の中心は日本橋や丸の内にあります。 これはペンですか？いいえ、それは鉛筆です。あれは何ですか？あれはスマートフォンです。'
     5: '富士山は3776メートルです。日本で一番高い山です。毎年たくさんの登山者が訪れます。約束手形、為替手形、小切手などは商業手形と呼ばれます。これらの取り扱いには注意が必要です。'
     6: '「例えば、このような場合どうすればいいのですか？」「まずは落ち着いて、上司に相談してください。」締切は3月25日（水）午後5時です。それ以降の提出は受け付けられません。彼は「また明日」と言って、笑顔で手を振った。そして、雨の中を走って帰っていった。'
+
+  spacy-sentencizer [ja]:
+    1: '今日はいい天気ですね。明日から雨が降るそうです。外出するなら傘を持って行ったほうがいいでしょう。'
+    2: '\n「すみません、駅はどちらですか？」と観光客が聞いた。私は「この道をまっすぐ行って、二つ目の信号を右に曲がってください」と答えた。'
+    3: '\n田中さんは「来週の会議は午後2時からです。遅れないでください」と言いました。日本の首都は東京です。'
+    4: '\nしかし、政治の中心は永田町です。経済の中心は日本橋や丸の内にあります。'
+    5: 'これはペンですか？いいえ、それは鉛筆です。あれは何ですか？あれはスマートフォンです。'
+    6: '\n富士山は3776メートルです。日本で一番高い山です。毎年たくさんの登山者が訪れます。約束手形、為替手形、小切手などは商業手形と呼ばれます。これらの取り扱いには注意が必要です。'
+    7: '\n「例えば、このような場合どうすればいいのですか？」「まずは落ち着いて、上司に相談してください。」締切は3月25日（水）午後5時です。それ以降の提出は受け付けられません。彼は「また明日」と言って、笑顔で手を振った。そして、雨の中を走って帰っていった。'
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 24 | 1.29 | **Flawless Output.** The absolute gold standard for Japanese. It perfectly respects quotation boundaries, keeps trailing particles intact with their quotes (Sentences 4, 5, 6), cleans up stray whitespace/newlines, and separates back-to-back dialog quotes neatly (Sentences 19 and 20). |
-| **2** | **sentencex** | 25 | 0.09 | **Blazing Fast, Sub-minor Flaw.** Unbelievably efficient. Gets almost everything right. Only error is a tiny over-segmentation on Sentence 4/5, cutting `と観光客が聞いた` from its quote. |
-| **3** | **blingfire** | 26 | 0.11 | **Brittle RegEx behavior.** Blind to Japanese quotation grammar. Chops mid-quote multiple times (Sentences 4/5, 7/8, 21/22/23), leaving stray floating brackets. Fast but wrong. |
-| **4** | **pysbd** | **26** | 10.16 | **Worst of the quote-aware libraries.** Same 26 count as blingfire but 92× slower. Smashes back-to-back dialog into one chunk (Sentence 19→21), splits inside quotes. |
-| **5** | **sentence-splitter** | 6 | 0.18 | **Splits by paragraph only.** Cannot handle CJK punctuation at all. Returns one sentence per newline block. |
-| **6** | **sentsplit** | 6 | 12.31 | **Splits by paragraph only.** Same as sentence-splitter but 68× slower. |
-| **7** | **nupunkt** | 1 | 0.01 | **Total Failure.** No support for CJK punctuation (`。`, `？`, `」`). Returns the entire text as one sentence. |
+| **1** | **yasbd** | 24 | 1.53 | **Flawless Output.** The absolute gold standard for Japanese. Perfectly respects quotation boundaries, keeps trailing particles intact, separates back-to-back dialog neatly. |
+| **2** | **sentencex** | 25 | 0.08 | **Blazing Fast, Sub-minor Flaw.** Gets almost everything right. Only error is a tiny over-segmentation on Sentence 4/5. |
+| **3** | **blingfire** | 26 | 0.11 | **Brittle RegEx behavior.** Blind to Japanese quotation grammar. Chops mid-quote multiple times. Fast but wrong. |
+| **4** | **pysbd** | **26** | 3.71 | **Worst of the quote-aware libraries.** Same count as blingfire but 34× slower. Splits inside quotes. |
+| **5** | **spacy-sentencizer** | 7 | 2.02 | **No CJK punctuation support.** Ignores `。` and `？` entirely. Only splits on newlines. Returns entire paragraphs as single sentences. |
+| **6** | **sentence-splitter** | 6 | 0.16 | **Splits by paragraph only.** Cannot handle CJK punctuation at all. |
+| **7** | **sentsplit** | 6 | 7.72 | **Splits by paragraph only.** Same as sentence-splitter but 48× slower. |
+| **8** | **nupunkt** | 1 | 0.02 | **Total Failure.** No support for CJK punctuation. Returns the entire text as one sentence. |
 
 ### Polish
 
