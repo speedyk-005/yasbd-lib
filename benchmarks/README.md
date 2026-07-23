@@ -417,18 +417,30 @@ incl. the events of the s. XIX, was retransmitted.
    13: 'The conference on the history of America,'
    14: 'incl. the events of the s.'
    15: 'XIX, was retransmitted.'
+
+  spacy-sentencizer [en]:
+    1: 'This is a sentence that wraps\nto a second line but should not be split into two.'
+    2: '\nDr. Smith went to Washington\nand met with the president.'
+    3: 'The URL https://example.com/path/to/page\nhas a long path.'
+    4: 'She said "I am not going\nto let this happen" and walked out.'
+    5: '\nThe results (see Fig.'
+    6: '3 for details)\nshowed a significant improvement.'
+    7: '\nPursuant to Section 4.3(a)(ii) of the handbook,\nstudents are entitled to a 48-hour grace period.'
+    8: '\nThe conference on the history of America,\nincl.'
+    9: 'the events of the s. XIX, was retransmitted.'
 ```
 </details>
 
 | Rank | Library | Sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **7** | 1.61 | **Perfect.** Joins all newlines, preserves `s. XIX` intact. |
-| **2** | **nupunkt** | **7** | 0.77 | **Same accuracy as yasbd.** |
-| **3** | **blingfire** | 7 | 0.08 | **Fast but flawed.** Merges first two sentences. Splits `s.` + `XIX`. |
-| **4** | **sentencex** | 8 | 0.03 | **Splits `incl.`** from the sentence. One extra boundary. |
-| **5** | **pysbd** | **16** | 3.46 | **Splits on every `\n`.** Text wrapping completely breaks it. |
-| **6** | **sentsplit** | **15** | 7.58 | **Splits on every `\n`**, plus splits `Fig.` from `3 for details)`. |
-| **7** | **sentence-splitter** | **15** | 1.41 | **Splits on every `\n`.** Same count as sentsplit but cleaner output. |
+| **1** | **yasbd** | **7** | 3.08 | **Perfect.** Joins all newlines, preserves `s. XIX` intact. |
+| **2** | **nupunkt** | **7** | 1.24 | **Same accuracy as yasbd.** |
+| **3** | **blingfire** | 7 | 0.13 | **Fast but flawed.** Merges first two sentences. Splits `s.` + `XIX`. |
+| **4** | **sentencex** | 8 | 0.02 | **Splits `incl.`** from the sentence. One extra boundary. |
+| **5** | **spacy-sentencizer** | 9 | 1.96 | **Splits on `Fig.`, `incl.`, `s.`** No abbreviation awareness. |
+| **6** | **pysbd** | **16** | 4.23 | **Splits on every `\n`.** Text wrapping completely breaks it. |
+| **7** | **sentsplit** | **15** | 8.58 | **Splits on every `\n`**, plus splits `Fig.` from `3 for details)`. |
+| **8** | **sentence-splitter** | **15** | 2.46 | **Splits on every `\n`.** Same count as sentsplit but cleaner output. |
 
 ### Emoji boundaries
 
