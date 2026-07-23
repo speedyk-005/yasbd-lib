@@ -854,18 +854,30 @@ L'historien étudiait les événements survenus en 52 av.-j.-c. puis ceux de 476
     2: "Le rendez-vous, noté R.-V. dans le dossier administratif, a été déplacé à 14 h. après une d.-h. d'attente."
     3: "L'historien étudiait les événements survenus en 52 av.-j.-c. puis ceux de 476 ap.-j.-c. afin de comparer les deux périodes."
     4: "Le document portait les mentions s.-d. et s.-l., ce qui compliquait l'identification de son origine exacte."
+
+  spacy-sentencizer [fr]:
+    1: 'Le manuel, c.-à-d. la version complète, a été publié après une longue m.-à-j. du système interne.'
+    2: 'Le rendez-vous, noté R.-V. dans le dossier administratif, a été déplacé à 14 h. après une d.-h.'
+    3: "d'attente."
+    4: "\nL'historien étudiait les événements survenus en 52 av.-j.-c."
+    5: 'puis ceux de 476 ap.-j.-c.'
+    6: 'afin de comparer les deux périodes.'
+    7: 'Le document portait les mentions s.-d.'
+    8: 'et s.-l.,'
+    9: "ce qui compliquait l'identification de son origine exacte."
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **4** | 1.32 | **Best in class.** All compound abbreviations preserved intact. Clean output, no trailing whitespace. |
-| **2** | **blingfire** | **4** | 0.06 | **Perfect output, fastest.** 22× faster than yasbd. |
-| **3** | **sentence-splitter** | **4** | 1.52 | **Perfect but slow.** Identical splits to yasbd. |
-| **4** | **sentsplit** | **4** | 10.31 | **Correct count, sloppy output.** Leading whitespace on sentences 2 and 4. |
-| **5** | **nupunkt** | 11 | 1.18 | **Shreds `c.-à-d.` and `m.-à-j.`** but oddly preserves `av.-j.-c.` intact. Inconsistent. |
-| **6** | **pysbd** | **23** | 3.78 | **Catastrophic.** Shreds every compound abbreviation: `c.` + `-à-d.` + `m.` + `-à-j.` + `R.` + `-V.` + `av.` + `-j.` + `-c.` etc. French support is fundamentally broken. |
-| **7** | **sentencex** | **21** | 0.04 | **Same destruction as pysbd.** Fast but useless for French. |
+| **1** | **yasbd** | **4** | 1.70 | **Best in class.** All compound abbreviations preserved intact. Clean output, no trailing whitespace. |
+| **2** | **blingfire** | **4** | 0.10 | **Perfect output, fastest.** 17× faster than yasbd. |
+| **3** | **sentence-splitter** | **4** | 2.04 | **Perfect but slow.** Identical splits to yasbd. |
+| **4** | **sentsplit** | **4** | 6.98 | **Correct count, sloppy output.** Leading whitespace on sentences 2 and 4. |
+| **5** | **spacy-sentencizer** | 9 | 1.37 | **Splits on `d.-h.`, `av.-j.-c.`, `s.-d.`, `s.-l.`** Shreds French compound abbreviations. |
+| **6** | **nupunkt** | 11 | 0.81 | **Shreds `c.-à-d.` and `m.-à-j.`** but oddly preserves `av.-j.-c.` intact. Inconsistent. |
+| **7** | **pysbd** | **23** | 4.37 | **Catastrophic.** Shreds every compound abbreviation. French support is fundamentally broken. |
+| **8** | **sentencex** | **21** | 0.06 | **Same destruction as pysbd.** Fast but useless for French. |
 
 ### Japanese
 
