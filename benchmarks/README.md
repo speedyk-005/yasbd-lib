@@ -1339,18 +1339,34 @@ La conferencia sobre la historia de América, incl. los eventos ocurridos en el 
     8: 'La conferencia sobre la historia de América, incl. los eventos ocurridos en el s.'
     9: 'XIX, fue retransmitida en línea.'
    10: 'El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte.'
+
+  spacy-sentencizer [es]:
+    1: 'El informe, p. ej.,'
+    2: 'fue revisado por el Dr. Gómez antes de su publicación oficial.'
+    3: '\nLa reunión con la Srta.'
+    4: 'Martínez y el Lic.'
+    5: 'Pérez terminó a las 18 h. después de una larga discusión.'
+    6: '\nLa empresa Rodríguez y Cía.'
+    7: 'firmó el contrato junto con la Asoc.'
+    8: 'Internacional de Comercio.'
+    9: 'El documento indicaba "confidencial", es decir, solo podía ser leído por el personal autorizado.'
+   10: '\nLa conferencia sobre la historia de América, incl.'
+   11: 'los eventos ocurridos en el s. XIX, fue retransmitida en línea.'
+   12: 'El técnico añadió una nota: «La act.'
+   13: 'del sistema debe realizarse manualmente» antes de cerrar el reporte.'
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **6** | 1.77 | **Top scorer.** All abbreviations and guillemets preserved intact. |
-| **2** | **nupunkt** | 7 | 2.21 | **Almost perfect.** Handles all abbreviations correctly but splits inside the guillemet quote: `«La act.` + `del sistema...»`. One extra sentence. |
-| **3** | **sentencex** | 9 | 0.04 | **Splits `Cía.` and `Asoc.`** Trailing `\n` and whitespace. |
-| **4** | **blingfire** | 9 | 0.10 | **Splits `Srta.`, `Lic.`, `Asoc.`, `s.`** before the next word. |
-| **5** | **sentsplit** | 9 | 12.60 | **Correct count but sloppy.** Leading whitespace, same split points as sentencex. |
-| **6** | **sentence-splitter** | 10 | 4.54 | **Splits `Srta.` and `Lic.`** into separate fragments. Same `Cía.`/`Asoc.` issue. |
-| **7** | **pysbd** | **15** | 4.47 | **Shreds `p. ej.`** into `p.` + `ej.`, plus splits `Cía.`, `Asoc.`, `s.` |
+| **1** | **yasbd** | **6** | 3.88 | **Top scorer.** All abbreviations and guillemets preserved intact. |
+| **2** | **nupunkt** | 7 | 0.91 | **Almost perfect.** Handles all abbreviations correctly but splits inside the guillemet quote: `«La act.` + `del sistema...»`. One extra sentence. |
+| **3** | **sentencex** | 9 | 0.03 | **Splits `Cía.` and `Asoc.`** Trailing `\n` and whitespace. |
+| **4** | **blingfire** | 9 | 0.07 | **Splits `Srta.`, `Lic.`, `Asoc.`, `s.`** before the next word. |
+| **5** | **sentsplit** | 9 | 8.30 | **Correct count but sloppy.** Leading whitespace, same split points as sentencex. |
+| **6** | **sentence-splitter** | 10 | 2.41 | **Splits `Srta.` and `Lic.`** into separate fragments. Same `Cía.`/`Asoc.` issue. |
+| **7** | **spacy-sentencizer** | 13 | 2.66 | **No abbreviation awareness.** Splits `p. ej.`, `Srta.`, `Lic.`, `Cía.`, `Asoc.`, `incl.`, `s.`, `«La act.`. Fragments guillemet quotes. |
+| **8** | **pysbd** | **15** | 4.45 | **Shreds `p. ej.`** into `p.` + `ej.`, plus splits `Cía.`, `Asoc.`, `s.` |
 
 ### Greek
 
