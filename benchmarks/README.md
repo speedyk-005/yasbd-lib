@@ -49,27 +49,29 @@ Real-world performance on full-length books via [`bench_books.py`](https://githu
 
 | Library | Cold (ms) | Warm (ms) | Sentences |
 |---|---|---|---|
-| blingfire | 17.9 | 10.0 | 676 |
-| nupunkt | 48.7 | 38.6 | 1592 |
-| pysbd | 1087.6 | 747.7 | 3378 |
-| sentence-splitter | 220.6 | 220.5 | 3960 |
-| sentencex | 4.0 | 2.1 | 2014 |
-| sentsplit | 1528.5 | 1081.6 | 4170 |
-| spacy-sentencizer | 298.2 | 257.0 | 1622 |
-| yasbd | 258.8 | 250.5 | 1620 |
+| blingfire | 33.4 | 5.7 | 676 |
+| nupunkt | 2583.6 | 24.9 | 1592 |
+| pysbd | 730.8 | 740.7 | 3378 |
+| sentence-splitter | 221.3 | 221.5 | 3960 |
+| sentencex | 5.3 | 2.1 | 2014 |
+| sentsplit | 1330.6 | 1034.5 | 4170 |
+| spacy-sentencizer | 460.7 | 267.4 | 1622 |
+| yasbd | 262.4 | 248.7 | 1620 |
 
 ### Adventures of Sherlock Holmes (593,911 chars)
 
 | Library | Cold (ms) | Warm (ms) | Sentences |
 |---|---|---|---|
-| blingfire | 29.6 | 26.0 | 5185 |
-| nupunkt | 166.6 | 136.9 | 5092 |
-| pysbd | 9330.6 | 9047.8 | 14501 |
-| sentence-splitter | 4251.4 | 4361.1 | 16269 |
-| sentencex | 9.8 | 7.7 | 7142 |
-| sentsplit | 8086.1 | 4634.0 | 15961 |
-| spacy-sentencizer | 997.5 | 855.9 | 6900 |
-| yasbd | 1047.8 | 1167.7 | 5962 |
+| blingfire | 24.4 | 24.4 | 5185 |
+| nupunkt | 157.9 | 124.5 | 5092 |
+| pysbd | 9148.2 | 9161.5 | 14501 |
+| sentence-splitter | 4186.9 | 4102.7 | 16269 |
+| sentencex | 10.3 | 7.7 | 7142 |
+| sentsplit | 6664.4 | 4687.1 | 15961 |
+| spacy-sentencizer | 1572.9 | 863.4 | 6900 |
+| yasbd | 1071.3 | 1178.1 | 5962 |
+
+> **Runtime:** ~2 min 30 sec on a single machine (8 segmenters × 2 books).
 
 <p align="center">
   <img src="bench.png" alt="SBD Benchmark Performance" width="800"/>
@@ -1796,9 +1798,9 @@ The meeting is at 2 p.m. Mwen pral vini.
 
 **sentence-splitter** sits in the middle tier. Struggles with chat, pollutes counts with empty lines. Archived in 2025.
 
-### The cold-start trap: nupunkt
+### The cold-start caveat: nupunkt
 
-Warm runtime is competitive (0.01-1.49ms), often beating yasbd. But there's an 11-13 second cold-start penalty as it loads the full model into memory. Zero CJK support. Splits inside Spanish quotes. Not practical for dynamic workloads.
+Warm runtime is competitive (0.01-1.49ms), often beating yasbd. Cold start is ~2.6s on first use (Alice in Wonderland), but subsequent cold starts in the same process are much faster (~158ms on Sherlock Holmes due to caching). Zero CJK support. Splits inside Spanish quotes. Not practical for dynamic workloads.
 
 ### The poor performers: pysbd & sentsplit
 
