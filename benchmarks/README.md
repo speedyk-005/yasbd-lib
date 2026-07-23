@@ -1520,7 +1520,7 @@ Greek uses `;` as a question mark (ερωτηματικό) and `·` (άνω τε
 
 ### Haitian Creole
 
-Haitian Creole (Kreyòl) uses French-derived abbreviations (`fig.`, `p.`, `St.`, `p.m.`) and standard Latin punctuation. Only 4 of 7 libraries support `ht`.
+Haitian Creole (Kreyòl) uses French-derived abbreviations (`fig.`, `p.`, `St.`, `p.m.`) and standard Latin punctuation. All 8 libraries now support `ht`.
 
 ```txt
 Alo mond. Koman ou ye? Mwen byen. Kisa ou ap fè? Mwen ap li yon liv.
@@ -1592,6 +1592,114 @@ The meeting is at 2 p.m. Mwen pral vini.
    25: 'The meeting is at 2 p.m. '
    26: 'Mwen pral vini.'
 
+  pysbd [ht]:
+    1: 'Alo mond. '
+    2: 'Koman ou ye? '
+    3: 'Mwen byen. '
+    4: 'Kisa ou ap fè? '
+    5: 'Mwen ap li yon liv.\n'
+    6: 'Gade fig. 2 pou rezilta yo. '
+    7: 'Li nan p. 55 nan liv la. '
+    8: 'Li empòtan.\n'
+    9: 'Li te fèt nan mwa janv. '
+   10: 'Li te vini an fevriye. '
+   11: 'St. Michel se yon kote bèl.\n'
+   12: 'Li toupre vil la. '
+   13: 'Li te di (Mwen prale demen.) pandan l ap pale.\n'
+   14: 'Li te mande: Èske ou vini? '
+   15: 'Mwen repon wi. '
+   16: '"Sa a se bèl." li di.\n'
+   17: 'M pa konnen ki sa l ap pale de. '
+   18: 'Kilè l ap sispann?\n'
+   19: 'Pwojè a te prèske fini... men nou jwenn yon pwoblèm. '
+   20: 'Jan te rele byen fò.\n'
+   21: 'Mwen renmen Python. '
+   22: 'It is useful for data science.\n'
+   23: 'The meeting is at 2 p.m. '
+   24: 'Mwen pral vini.'
+
+  sentsplit [ht]:
+    1: 'Alo mond.'
+    2: ' Koman ou ye?'
+    3: ' Mwen byen.'
+    4: ' Kisa ou ap fè?'
+    5: ' Mwen ap li yon liv.\n'
+    6: 'Gade fig.'
+    7: ' 2 pou rezilta yo.'
+    8: ' Li nan p. 55 nan liv la.'
+    9: ' Li empòtan.\n'
+   10: 'Li te fèt nan mwa janv.'
+   11: ' Li te vini an fevriye.'
+   12: ' St. Michel se yon kote bèl.\n'
+   13: 'Li toupre vil la.'
+   14: ' Li te di (Mwen prale demen.) pandan l ap pale.\n'
+   15: 'Li te mande: Èske ou vini?'
+   16: ' Mwen repon wi.'
+   17: ' "Sa a se bèl." li di.\n'
+   18: 'M pa konnen ki sa l ap pale de.'
+   19: ' Kilè l ap sispann?\n'
+   20: 'Pwojè a te prèske fini... men nou jwenn yon pwoblèm.'
+   21: ' Jan te rele byen fò.\n'
+   22: 'Mwen renmen Python.'
+   23: ' It is useful for data science.\n'
+   24: 'The meeting is at 2 p.m.'
+   25: ' Mwen pral vini.'
+
+  sentence-splitter [ht]:
+    1: 'Alo mond.'
+    2: 'Koman ou ye?'
+    3: 'Mwen byen.'
+    4: 'Kisa ou ap fè?'
+    5: 'Mwen ap li yon liv.'
+    6: 'Gade fig. 2 pou rezilta yo.'
+    7: 'Li nan p.'
+    8: '55 nan liv la.'
+    9: 'Li empòtan.'
+   10: 'Li te fèt nan mwa janv.'
+   11: 'Li te vini an fevriye.'
+   12: 'St. Michel se yon kote bèl.'
+   13: 'Li toupre vil la.'
+   14: 'Li te di (Mwen prale demen.) pandan l ap pale.'
+   15: 'Li te mande: Èske ou vini?'
+   16: 'Mwen repon wi.'
+   17: '"Sa a se bèl." li di.'
+   18: 'M pa konnen ki sa l ap pale de.'
+   19: 'Kilè l ap sispann?'
+   20: 'Pwojè a te prèske fini... men nou jwenn yon pwoblèm.'
+   21: 'Jan te rele byen fò.'
+   22: 'Mwen renmen Python.'
+   23: 'It is useful for data science.'
+   24: 'The meeting is at 2 p.m.'
+   25: 'Mwen pral vini.'
+
+  spacy-sentencizer [ht]:
+    1: 'Alo mond.'
+    2: 'Koman ou ye?'
+    3: 'Mwen byen.'
+    4: 'Kisa ou ap fè?'
+    5: 'Mwen ap li yon liv.'
+    6: '\nGade fig.'
+    7: '2 pou rezilta yo.'
+    8: 'Li nan p. 55 nan liv la.'
+    9: 'Li empòtan.'
+   10: '\nLi te fèt nan mwa janv.'
+   11: 'Li te vini an fevriye.'
+   12: 'St. Michel se yon kote bèl.'
+   13: '\nLi toupre vil la.'
+   14: 'Li te di (Mwen prale demen.)'
+   15: 'pandan l ap pale.'
+   16: '\nLi te mande: Èske ou vini?'
+   17: 'Mwen repon wi. "'
+   18: 'Sa a se bèl."'
+   19: 'li di.'
+   20: '\nM pa konnen ki sa l ap pale de.'
+   21: 'Kilè l ap sispann?'
+   22: '\nPwojè a te prèske fini... men nou jwenn yon pwoblèm.'
+   23: 'Jan te rele byen fò.'
+   24: '\nMwen renmen Python.'
+   25: 'It is useful for data science.'
+   26: '\nThe meeting is at 2 p.m. Mwen pral vini.'
+
   nupunkt [ht]:
     1: 'Alo mond.'
     2: 'Koman ou ye?'
@@ -1648,13 +1756,14 @@ The meeting is at 2 p.m. Mwen pral vini.
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **24** | 1.94 | **Cleanest output.** All abbreviations preserved. Parenthesized sentence kept intact. Ellipsis preserved. |
-| **2** | **nupunkt** | 23 | 1.53 | **Merged two sentences.** `Li nan p. 55 nan liv la. Li empòtan.` merged into one. Split `"Sa a se bèl."` from `li di.`, breaking the quote attribution. |
-| **3** | **blingfire** | 25 | 0.84 | **Splits `St.`** into `St.` + `Michel se...`. Also splits `"Sa a se bèl."` from `li di.` |
-| **4** | **sentencex** | 26 | 0.05 | **Splits `p.`** into `Li nan p.` + `55 nan liv la.`. Splits `St.` too. Trailing `\n` fragments everywhere. |
-| — | **pysbd** | — | — | **Does not support Haitian Creole.** |
-| — | **sentsplit** | — | — | **Does not support Haitian Creole.** |
-| — | **sentence-splitter** | — | — | **Does not support Haitian Creole.** |
+| **1** | **yasbd** | **24** | 2.75 | **Cleanest output.** All abbreviations preserved. Parenthesized sentence kept intact. Ellipsis preserved. |
+| **2** | **pysbd** | 24 | 4.85 | **Good accuracy.** Handles abbreviations well but trailing `\n` on some sentences. |
+| **3** | **nupunkt** | 23 | 1.83 | **Merged two sentences.** `Li nan p. 55 nan liv la. Li empòtan.` merged into one. Split `"Sa a se bèl."` from `li di.`, breaking the quote attribution. |
+| **4** | **sentsplit** | 25 | 9.49 | **Splits `fig.`** into `Gade fig.` + `2 pou rezilta yo.` Leading whitespace on most sentences. |
+| **5** | **blingfire** | 25 | 0.21 | **Splits `St.`** into `St.` + `Michel se...`. Also splits `"Sa a se bèl."` from `li di.` |
+| **6** | **sentence-splitter** | 25 | 3.19 | **Splits `p.`** into `Li nan p.` + `55 nan liv la.`. Otherwise clean. |
+| **7** | **spacy-sentencizer** | 26 | 2.79 | **Splits `fig.`, `p.`**, `(Mwen prale demen.)`, `"Sa a se bèl."`, and `p.m.`. Fragments quotes from attribution. |
+| **8** | **sentencex** | 26 | 0.05 | **Splits `p.`** into `Li nan p.` + `55 nan liv la.`. Splits `St.` too. Trailing `\n` fragments everywhere. |
 
 ---
 
