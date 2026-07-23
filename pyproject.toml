@@ -99,7 +99,7 @@ python_files = "test_*.py"
 omit = ["*/_template.py", "*/cleaner_stub.py", "*/cli.py"]
 
 [tool.ruff]
-target-version = "py311"
+target-version = "py310"
 line-length = 95
 
 [tool.ruff.lint]
@@ -139,7 +139,7 @@ select = [
     "UP",     # Python syntax and API modernization (pyupgrade)
     "W",      # pycodestyle warnings
 ]
-ignore = ["PLW2901", "COM812", "D203", "D213", "RUF001", "RUF003", "RUF012", "S311", "FURB167", "PLC0206", "PLC0415"]
+ignore = ["PLW2901", "COM812", "D203", "D213", "RUF001", "RUF003", "RUF012", "S311", "FURB167", "PLC0206", "PLC0415", "PERF203"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F403", "I001"]
