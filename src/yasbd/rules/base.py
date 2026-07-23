@@ -365,10 +365,11 @@ class Rules:
             }
             sentence_boundaries.difference_update(inner_range)
 
-            sentence_boundaries.update(
-                m.end() for m in self.QUOTE_AND_PAREN_END_FINDER.finditer(text)
-                if m.end() not in inner_range
-            )
+            if inner_range:
+                sentence_boundaries.update(
+                    m.end() for m in self.QUOTE_AND_PAREN_END_FINDER.finditer(text)
+                    if m.end() not in inner_range
+                )
 
     def _remove_toc_spans(
         self, sentence_boundaries: set[int], text: str
@@ -393,9 +394,10 @@ class Rules:
                 or text[horiz_matches[0].start()] == text.lstrip()[0]
             )
 
-            # List markers are close enough to belong to the same flattened list
-            and all(
-                b.start() - a.end() < 40
+            # At least one pair of list markers is close enough to belong
+            # to the same flattened list
+            and any(
+                4 < b.start() - a.end() < 40
                 for a, b in pairwise(horiz_matches)
             )
         )
