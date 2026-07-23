@@ -1,5 +1,7 @@
 # Benchmarks
 
+_Last updated: 2026-07-23_
+
 So you want to know how yasbd stacks up against the competition? Fair enough. Here are the contenders:
 
 | Library | About | Source |
