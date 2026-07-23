@@ -1,5 +1,7 @@
 # Benchmarks
 
+_Last updated: 2026-07-23_
+
 So you want to know how yasbd stacks up against the competition? Fair enough. Here are the contenders:
 
 | Library | About | Source |
@@ -10,6 +12,7 @@ So you want to know how yasbd stacks up against the competition? Fair enough. He
 | nupunkt | Zero deps, legal-text optimized. Claims 91.1% precision at 10M chars/sec. ~12 langs. | [GitHub](https://github.com/alea-institute/nupunkt) / [pypi](https://pypi.org/project/nupunkt/) |
 | blingfire | Microsoft C++ FSM + Python bindings. Language agnostic. | [GitHub](https://github.com/microsoft/BlingFire) / [pypi](https://pypi.org/project/blingfire/) |
 | sentence-splitter | Heuristic algorithm from Europarl (Koehn/Schroeder). Archived 2025. | [GitHub](https://github.com/mediacloud/sentence-splitter) / [pypi](https://pypi.org/project/sentence-splitter/) |
+| spaCy-sentencizer | Rule-based pipeline component, 75+ langs. No dependency parser needed. | [GitHub](https://github.com/explosion/spaCy/blob/master/spacy/pipeline/sentencizer.pyx) / [pypi](https://pypi.org/project/spacy/) |
 | yasbd | Pure Python, 32+ langs. Pointer-based SBD with pysbd adapter. | *(this repo)* |
 
 Not every library supports every language. We picked multiple languages that stress different weaknesses.
@@ -34,6 +37,7 @@ Aggregate score across all 92 English edge cases in [`EN_GOLDEN_DATA.py`](https:
 | sentsplit | 61/92 (66.3%) |
 | sentence-splitter | 60/92 (65.2%) |
 | nupunkt | 59/92 (64.1%) |
+| spacy-sentencizer | 51/92 (55.4%) |
 
 yasbd achieves 91/92 (98.9%). The only failing case is the `Ave.` abbreviation followed by a capitalized new sentence — a known limitation of rule-based abbreviation suppression. 
 
@@ -45,25 +49,29 @@ Real-world performance on full-length books via [`bench_books.py`](https://githu
 
 | Library | Cold (ms) | Warm (ms) | Sentences |
 |---|---|---|---|
-| blingfire | 13.0 | 9.4 | 676 |
-| nupunkt | 38.9 | 38.3 | 1606 |
-| pysbd | 1532.9 | 1301.5 | 3378 |
-| sentence-splitter | 277.5 | 283.8 | 3960 |
-| sentencex | 5.2 | 4.6 | 2014 |
-| sentsplit | 1788.8 | 1753.8 | 4170 |
-| yasbd | 383.4 | 384.7 | 1738 |
+| blingfire | 33.4 | 5.7 | 676 |
+| nupunkt | 2583.6 | 24.9 | 1592 |
+| pysbd | 730.8 | 740.7 | 3378 |
+| sentence-splitter | 221.3 | 221.5 | 3960 |
+| sentencex | 5.3 | 2.1 | 2014 |
+| sentsplit | 1330.6 | 1034.5 | 4170 |
+| spacy-sentencizer | 460.7 | 267.4 | 1622 |
+| yasbd | 262.4 | 248.7 | 1620 |
 
 ### Adventures of Sherlock Holmes (593,911 chars)
 
 | Library | Cold (ms) | Warm (ms) | Sentences |
 |---|---|---|---|
-| blingfire | 45.9 | 42.0 | 5185 |
-| nupunkt | 230.4 | 226.4 | 5110 |
-| pysbd | 13274.6 | 13261.7 | 14501 |
-| sentence-splitter | 9634.0 | 9548.0 | 16269 |
-| sentencex | 25.6 | 24.3 | 7141 |
-| sentsplit | 10697.4 | 6956.4 | 15961 |
-| yasbd | 2641.4 | 1644.1 | 6351 |
+| blingfire | 24.4 | 24.4 | 5185 |
+| nupunkt | 157.9 | 124.5 | 5092 |
+| pysbd | 9148.2 | 9161.5 | 14501 |
+| sentence-splitter | 4186.9 | 4102.7 | 16269 |
+| sentencex | 10.3 | 7.7 | 7142 |
+| sentsplit | 6664.4 | 4687.1 | 15961 |
+| spacy-sentencizer | 1572.9 | 863.4 | 6900 |
+| yasbd | 1071.3 | 1178.1 | 5962 |
+
+> **Runtime:** ~2 min 30 sec on a single machine (8 segmenters × 2 books).
 
 <p align="center">
   <img src="bench.png" alt="SBD Benchmark Performance" width="800"/>
@@ -180,10 +188,9 @@ Copyright © 2024 Example Corp. All rights reserved.
     4: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
     5: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
     6: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
-    7: 'The witness testified: "He said — and I quote — \'I will not comply.\''
-    8: 'Then he turned around and left. I couldn\'t believe it."'
-    9: 'Copyright © 2024 Example Corp.'
-   10: 'All rights reserved.'
+    7: 'The witness testified: "He said — and I quote — \'I will not comply.\' Then he turned around and left. I couldn\'t believe it."'
+    8: 'Copyright © 2024 Example Corp.'
+    9: 'All rights reserved.'
 
   pysbd [en]:
     1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.\n'
@@ -271,18 +278,35 @@ Copyright © 2024 Example Corp. All rights reserved.
    12: 'I couldn\'t believe it."'
    13: ''
    14: 'Copyright © 2024 Example Corp. All rights reserved.'
+
+  spacy-sentencizer [en]:
+    1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
+    2: '\nPursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
+    3: '\nMy advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.'
+    4: '\n\nYou can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
+    5: '\n\nAs Smith et al. ('
+    6: '2021, pp.'
+    7: '128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf.'
+    8: 'Brown, 2018)."'
+    9: '\nHowever, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig.'
+   10: '7).'
+   11: '\n\nThe witness testified: "He said — and I quote — \'I will not comply.\''
+   12: 'Then he turned around and left.'
+   13: 'I couldn\'t believe it."'
+   14: '\n\nCopyright © 2024 Example Corp. All rights reserved.'
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 10 | 3.24 | **Best overall.** Correct boundaries. Dialog splits into 2 pieces (all others: 3+). URL intact. |
-| **2** | **pysbd** | 10 | 6.45 | **Correct sentence count.** Breaks URL at `?` — a real accuracy miss. |
-| **3** | **blingfire** | 11 | 0.11 | **Fast.** Dialog splits into 3 pieces. URL intact. |
-| **4** | **nupunkt** | 11 | 1.00 | **Same output as blingfire.** |
-| **5** | **sentencex** | 13 | 0.07 | **Fast but phantom sentences.** Counts empty paragraph breaks as sentences. |
-| **6** | **sentence-splitter** | 14 | 3.11 | **Phantom sentences from empty lines.** |
-| **7** | **sentsplit** | 16 | 18.90 | **Worst.** Phantom sentences, splits inside citations, dialog fragmented into 4 pieces. |
+| **1** | **yasbd** | 9 | 5.14 | **Best overall.** Correct boundaries. Dialog stays as 1 sentence. URL intact. Minor Copyright split. |
+| **2** | **pysbd** | 10 | 8.62 | **Correct sentence count.** Breaks URL at `?` — a real accuracy miss. |
+| **3** | **blingfire** | 11 | 0.26 | **Fast.** Dialog splits into 3 pieces. URL intact. |
+| **4** | **nupunkt** | 11 | 0.96 | **Same output as blingfire.** |
+| **5** | **spacy-sentencizer** | 14 | 4.55 | **Splits on `pp.`, `Fig.`, `cf.`, `2018).`** No abbreviation awareness. |
+| **6** | **sentencex** | 13 | 0.07 | **Fast but phantom sentences.** Counts empty paragraph breaks as sentences. |
+| **7** | **sentence-splitter** | 14 | 3.22 | **Phantom sentences from empty lines.** |
+| **8** | **sentsplit** | 16 | 17.83 | **Worst.** Phantom sentences, splits inside citations, dialog fragmented into 4 pieces. |
 
 ### Newline continuation
 
@@ -395,18 +419,30 @@ incl. the events of the s. XIX, was retransmitted.
    13: 'The conference on the history of America,'
    14: 'incl. the events of the s.'
    15: 'XIX, was retransmitted.'
+
+  spacy-sentencizer [en]:
+    1: 'This is a sentence that wraps\nto a second line but should not be split into two.'
+    2: '\nDr. Smith went to Washington\nand met with the president.'
+    3: 'The URL https://example.com/path/to/page\nhas a long path.'
+    4: 'She said "I am not going\nto let this happen" and walked out.'
+    5: '\nThe results (see Fig.'
+    6: '3 for details)\nshowed a significant improvement.'
+    7: '\nPursuant to Section 4.3(a)(ii) of the handbook,\nstudents are entitled to a 48-hour grace period.'
+    8: '\nThe conference on the history of America,\nincl.'
+    9: 'the events of the s. XIX, was retransmitted.'
 ```
 </details>
 
 | Rank | Library | Sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **7** | 1.61 | **Perfect.** Joins all newlines, preserves `s. XIX` intact. |
-| **2** | **nupunkt** | **7** | 0.77 | **Same accuracy as yasbd.** |
-| **3** | **blingfire** | 7 | 0.08 | **Fast but flawed.** Merges first two sentences. Splits `s.` + `XIX`. |
-| **4** | **sentencex** | 8 | 0.03 | **Splits `incl.`** from the sentence. One extra boundary. |
-| **5** | **pysbd** | **16** | 3.46 | **Splits on every `\n`.** Text wrapping completely breaks it. |
-| **6** | **sentsplit** | **15** | 7.58 | **Splits on every `\n`**, plus splits `Fig.` from `3 for details)`. |
-| **7** | **sentence-splitter** | **15** | 1.41 | **Splits on every `\n`.** Same count as sentsplit but cleaner output. |
+| **1** | **yasbd** | **7** | 3.08 | **Perfect.** Joins all newlines, preserves `s. XIX` intact. |
+| **2** | **nupunkt** | **7** | 1.24 | **Same accuracy as yasbd.** |
+| **3** | **blingfire** | 7 | 0.13 | **Fast but flawed.** Merges first two sentences. Splits `s.` + `XIX`. |
+| **4** | **sentencex** | 8 | 0.02 | **Splits `incl.`** from the sentence. One extra boundary. |
+| **5** | **spacy-sentencizer** | 9 | 1.96 | **Splits on `Fig.`, `incl.`, `s.`** No abbreviation awareness. |
+| **6** | **pysbd** | **16** | 4.23 | **Splits on every `\n`.** Text wrapping completely breaks it. |
+| **7** | **sentsplit** | **15** | 8.58 | **Splits on every `\n`**, plus splits `Fig.` from `3 for details)`. |
+| **8** | **sentence-splitter** | **15** | 2.46 | **Splits on every `\n`.** Same count as sentsplit but cleaner output. |
 
 ### Emoji boundaries
 
@@ -467,18 +503,27 @@ Hello world. 😊 How are you? Nice work! 👍 Next step. Done. 🎉 Amazing res
     1: 'Hello world. 😊 How are you?'
     2: 'Nice work! 👍 Next step.'
     3: 'Done. 🎉 Amazing result.'
+
+  spacy-sentencizer [en]:
+    1: 'Hello world.'
+    2: '😊 How are you?'
+    3: 'Nice work!'
+    4: '👍 Next step.'
+    5: 'Done.'
+    6: '🎉 Amazing result.'
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 6 | 0.37 | **Emoji stays attached.** Period + emoji kept as one unit before the next sentence starts. Clean output. |
-| **2** | **pysbd** | 6 | 0.76 | **Detaches each emoji.** Same count, but `😊 How are you?` reads like the emoji is leading. |
-| **3** | **sentencex** | 6 | 0.02 | **Same detachment as pysbd.** Fast but wrong grouping. |
-| **4** | **nupunkt** | 6 | 0.27 | **Also detaches emojis.** Same fragmentation. |
-| **5** | **sentsplit** | 5 | 2.14 | **Merges last two sentences.** `Done. 🎉 Amazing result.` glued together. Leading whitespace everywhere. |
-| **6** | **sentence-splitter** | 3 | 0.95 | **Under-splits.** Collapses everything into 3 chunks, but at least keeps emojis with their sentences. |
-| **7** | **blingfire** | 2 | 0.02 | **Total failure.** Joins entire first half into one sentence. FSM has no concept of emoji. |
+| **1** | **yasbd** | 6 | 1.10 | **Emoji stays attached.** Period + emoji kept as one unit before the next sentence starts. Clean output. |
+| **2** | **pysbd** | 6 | 1.34 | **Detaches each emoji.** Same count, but `😊 How are you?` reads like the emoji is leading. |
+| **3** | **sentencex** | 6 | 0.01 | **Same detachment as pysbd.** Fast but wrong grouping. |
+| **4** | **nupunkt** | 6 | 0.19 | **Also detaches emojis.** Same fragmentation. |
+| **5** | **spacy-sentencizer** | 6 | 0.13 | **Detaches emojis.** Same output as nupunkt. |
+| **6** | **sentsplit** | 5 | 1.38 | **Merges last two sentences.** `Done. 🎉 Amazing result.` glued together. Leading whitespace everywhere. |
+| **7** | **sentence-splitter** | 3 | 0.41 | **Under-splits.** Collapses everything into 3 chunks, but at least keeps emojis with their sentences. |
+| **8** | **blingfire** | 2 | 0.03 | **Total failure.** Joins entire first half into one sentence. FSM has no concept of emoji. |
 
 ---
 
@@ -503,27 +548,17 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
 
 ```txt
   yasbd [en]:
-    1: 'Hey!!!'
-    2: 'how r u doing???'
-    3: "i'm good... just finished work cool!!!"
-    4: 'wanna grab dinner later??'
-    5: 'sure!!!'
-    6: 'where should we meet???'
-    7: 'maybe 7pm???'
-    8: 'lol.'
-    9: 'OK.... sure??'
-   10: 'fine. nah. idk. maybe. bruh. what even is this. broh !!'
-   11: 'that is so sad 😭 I tougja we were friends.'
-   12: 'nah idk man. maybe it works... maybe not lol. i checked the logs at 3.14 a.m. and everything looked fine??'
-   13: 'then the server just died.'
-   14: 'bruh. no warning no crash dump nothing. wait... did you even restart it or just stare at the terminal again.'
-   15: 'ngl the cpu hit 99.9% for like 20 mins straigja. btw i found the backup at jatps://test.example.org/logs/v2.1/index.jaml.'
-   16: 'dont touch it pls. also dr. kim said the patch from frn.'
-   17: '12 wasnt stable. kinda obvious now tbh. the db kept throwing ref. errors after sec. 4 loaded.'
-   18: 'weird thing is user no. 7 was still connected at 2 a.m. somehow. lmao this whole system feels haunted. ok so i reran the job... still broken. nice.'
-   19: 'absolutely elite engineering rigja there. maybe rollback??'
-   20: 'maybe pray??'
-   21: 'idk anymore 😭'
+    1: 'Hey!!! how r u doing??? i\'m good... just finished work cool!!! wanna grab dinner later?? sure!!! where should we meet??? maybe 7pm???'
+    2: 'lol. OK.... sure?? fine. nah. idk. maybe. bruh. what even is this. broh !!'
+    3: 'that is so sad 😭'
+    4: 'I tougja we were friends.'
+    5: 'nah idk man. maybe it works... maybe not lol. i checked the logs at 3.14 a.m. and everything looked fine?? then the server just died.'
+    6: 'bruh. no warning no crash dump nothing. wait... did you even restart it or just stare at the terminal again.'
+    7: 'ngl the cpu hit 99.9% for like 20 mins straigja. btw i found the backup at jatps://test.example.org/logs/v2.1/index.jaml.'
+    8: 'dont touch it pls. also dr. kim said the patch from frn.'
+    9: '12 wasnt stable. kinda obvious now tbh. the db kept throwing ref. errors after sec. 4 loaded.'
+   10: 'weird thing is user no. 7 was still connected at 2 a.m. somehow. lmao this whole system feels haunted. ok so i reran the job... still broken. nice.'
+   11: 'absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anymore 😭'
 
   pysbd [en]:
     1: "Hey!!! how r u doing??? i'm good... just finished work cool!!! wanna grab dinner later?? "
@@ -665,18 +700,64 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
    10: '4 loaded.'
    11: 'weird thing is user no. 7 was still connected at 2 a.m. somehow. lmao this whole system feels haunted. ok so i reran the job... still broken. nice.'
    12: 'absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anymore 😭'
+
+  spacy-sentencizer [en]:
+    1: 'Hey!!!'
+    2: 'how r u doing???'
+    3: "i'm good... just finished work cool!!!"
+    4: 'wanna grab dinner later??'
+    5: 'sure!!!'
+    6: 'where should we meet???'
+    7: 'maybe 7pm???'
+    8: '\nlol.'
+    9: 'OK.... sure??'
+   10: 'fine.'
+   11: 'nah.'
+   12: 'idk.'
+   13: 'maybe.'
+   14: 'bruh.'
+   15: 'what even is this.'
+   16: 'broh !!'
+   17: '\nthat is so sad 😭 I tougja we were friends.'
+   18: '\nnah idk man.'
+   19: 'maybe it works... maybe not lol.'
+   20: 'i checked the logs at 3.14 a.m. and everything looked fine??'
+   21: 'then the server just died.'
+   22: '\nbruh.'
+   23: 'no warning no crash dump nothing.'
+   24: 'wait... did you even restart it or just stare at the terminal again.'
+   25: '\nngl the cpu hit 99.9% for like 20 mins straigja.'
+   26: 'btw i found the backup at jatps://test.example.org/logs/v2.1/index.jaml.'
+   27: '\ndont touch it pls.'
+   28: 'also dr.'
+   29: 'kim said the patch from frn.'
+   30: '12 wasnt stable.'
+   31: 'kinda obvious now tbh.'
+   32: 'the db kept throwing ref.'
+   33: 'errors after sec.'
+   34: '4 loaded.'
+   35: '\nweird thing is user no.'
+   36: '7 was still connected at 2 a.m. somehow.'
+   37: 'lmao this whole system feels haunted.'
+   38: 'ok so i reran the job... still broken.'
+   39: 'nice.'
+   40: '\nabsolutely elite engineering rigja there.'
+   41: 'maybe rollback??'
+   42: 'maybe pray??'
+   43: 'idk anymore 😭'
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 21 | 3.68 | **Top pick.** Cleanly segments the rapid-fire casual messages (e.g., separating `Hey!!!` from `how r u doing???`). Crucially, it doesn't get tricked by lowercase abbreviations (`dr.`, `a.m.`, `ref.`) or decimal versions (`v2.1`). |
-| **2** | **nupunkt** | 38 | 1.53 | **Highly Accurate, but Speed Liability.** Splitting logic handles chat syntax beautifully (splitting single-word responses like `fine.`, `nah.`, `idk.`). It gets slightly over-aggressive on double exclamation marks (`broh !`, `!`). |
-| **3** | **pysbd** | 33 | 11.27 | **Best Speed/Accuracy Balance.** Robust handling of lowercase single-word sentences. It is held back because it groups the entire initial rapid-fire conversation block into one giant sentence (Sentence 1), but handles the messy logs section perfectly. |
-| **4** | **sentencex** | 27 | 0.26 | **Fast but clunky.** Groups the initial rapid-fire messages into a single block. Acts inconsistently, splitting some single-word sentences while missing major sentence boundaries elsewhere. |
-| **5** | **sentsplit** | 18 | 16.91 | **Broken Syntax.** Aggressive token-matching struggles with multiple punctuation marks, creating fragmented artifacts with hanging question marks (`"? i'm good..."`). |
-| **6** | **sentence-splitter** | 12 | 5.63 | **Blind to chat.** Completely misses conversational sentence boundaries, smashing whole paragraphs together. Breaks in the middle of `sec. 4` and `frn. 12`. |
-| **7** | **blingfire** | 1 | 0.13 | **Total Failure.** Treated the entire chat and log dump as **one single sentence**. |
+| **1** | **yasbd** | 11 | 6.70 | **Top pick.** Cleanly segments the rapid-fire casual messages. Crucially, it doesn't get tricked by lowercase abbreviations (`dr.`, `a.m.`, `ref.`) or decimal versions (`v2.1`). |
+| **2** | **nupunkt** | 38 | 1.67 | **Highly Accurate, but Speed Liability.** Splitting logic handles chat syntax beautifully. Gets slightly over-aggressive on double exclamation marks (`broh !`, `!`). |
+| **3** | **pysbd** | 33 | 10.16 | **Best Speed/Accuracy Balance.** Robust handling of lowercase single-word sentences. Groups the initial rapid-fire block into one giant sentence. |
+| **4** | **sentencex** | 27 | 0.13 | **Fast but clunky.** Groups the initial rapid-fire messages into a single block. Acts inconsistently. |
+| **5** | **sentsplit** | 18 | 21.00 | **Broken Syntax.** Aggressive token-matching struggles with multiple punctuation marks, creating fragmented artifacts. |
+| **6** | **sentence-splitter** | 12 | 4.34 | **Blind to chat.** Completely misses conversational sentence boundaries. Breaks in the middle of `sec. 4` and `frn. 12`. |
+| **7** | **spacy-sentencizer** | 43 | 6.63 | **Worst.** Splits on every `.` in abbreviations: `dr.`, `frn.`, `ref.`, `sec.`, `no.`, `a.m.`. 43 phantom sentences. |
+| **8** | **blingfire** | 1 | 0.12 | **Total Failure.** Treated the entire chat and log dump as **one single sentence**. |
 
 ### French
 
@@ -775,18 +856,30 @@ L'historien étudiait les événements survenus en 52 av.-j.-c. puis ceux de 476
     2: "Le rendez-vous, noté R.-V. dans le dossier administratif, a été déplacé à 14 h. après une d.-h. d'attente."
     3: "L'historien étudiait les événements survenus en 52 av.-j.-c. puis ceux de 476 ap.-j.-c. afin de comparer les deux périodes."
     4: "Le document portait les mentions s.-d. et s.-l., ce qui compliquait l'identification de son origine exacte."
+
+  spacy-sentencizer [fr]:
+    1: 'Le manuel, c.-à-d. la version complète, a été publié après une longue m.-à-j. du système interne.'
+    2: 'Le rendez-vous, noté R.-V. dans le dossier administratif, a été déplacé à 14 h. après une d.-h.'
+    3: "d'attente."
+    4: "\nL'historien étudiait les événements survenus en 52 av.-j.-c."
+    5: 'puis ceux de 476 ap.-j.-c.'
+    6: 'afin de comparer les deux périodes.'
+    7: 'Le document portait les mentions s.-d.'
+    8: 'et s.-l.,'
+    9: "ce qui compliquait l'identification de son origine exacte."
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **4** | 1.32 | **Best in class.** All compound abbreviations preserved intact. Clean output, no trailing whitespace. |
-| **2** | **blingfire** | **4** | 0.06 | **Perfect output, fastest.** 22× faster than yasbd. |
-| **3** | **sentence-splitter** | **4** | 1.52 | **Perfect but slow.** Identical splits to yasbd. |
-| **4** | **sentsplit** | **4** | 10.31 | **Correct count, sloppy output.** Leading whitespace on sentences 2 and 4. |
-| **5** | **nupunkt** | 11 | 1.18 | **Shreds `c.-à-d.` and `m.-à-j.`** but oddly preserves `av.-j.-c.` intact. Inconsistent. |
-| **6** | **pysbd** | **23** | 3.78 | **Catastrophic.** Shreds every compound abbreviation: `c.` + `-à-d.` + `m.` + `-à-j.` + `R.` + `-V.` + `av.` + `-j.` + `-c.` etc. French support is fundamentally broken. |
-| **7** | **sentencex** | **21** | 0.04 | **Same destruction as pysbd.** Fast but useless for French. |
+| **1** | **yasbd** | **4** | 1.70 | **Best in class.** All compound abbreviations preserved intact. Clean output, no trailing whitespace. |
+| **2** | **blingfire** | **4** | 0.10 | **Perfect output, fastest.** 17× faster than yasbd. |
+| **3** | **sentence-splitter** | **4** | 2.04 | **Perfect but slow.** Identical splits to yasbd. |
+| **4** | **sentsplit** | **4** | 6.98 | **Correct count, sloppy output.** Leading whitespace on sentences 2 and 4. |
+| **5** | **spacy-sentencizer** | 9 | 1.37 | **Splits on `d.-h.`, `av.-j.-c.`, `s.-d.`, `s.-l.`** Shreds French compound abbreviations. |
+| **6** | **nupunkt** | 11 | 0.81 | **Shreds `c.-à-d.` and `m.-à-j.`** but oddly preserves `av.-j.-c.` intact. Inconsistent. |
+| **7** | **pysbd** | **23** | 4.37 | **Catastrophic.** Shreds every compound abbreviation. French support is fundamentally broken. |
+| **8** | **sentencex** | **21** | 0.06 | **Same destruction as pysbd.** Fast but useless for French. |
 
 ### Japanese
 
@@ -933,18 +1026,28 @@ Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting a
     4: 'しかし、政治の中心は永田町です。経済の中心は日本橋や丸の内にあります。 これはペンですか？いいえ、それは鉛筆です。あれは何ですか？あれはスマートフォンです。'
     5: '富士山は3776メートルです。日本で一番高い山です。毎年たくさんの登山者が訪れます。約束手形、為替手形、小切手などは商業手形と呼ばれます。これらの取り扱いには注意が必要です。'
     6: '「例えば、このような場合どうすればいいのですか？」「まずは落ち着いて、上司に相談してください。」締切は3月25日（水）午後5時です。それ以降の提出は受け付けられません。彼は「また明日」と言って、笑顔で手を振った。そして、雨の中を走って帰っていった。'
+
+  spacy-sentencizer [ja]:
+    1: '今日はいい天気ですね。明日から雨が降るそうです。外出するなら傘を持って行ったほうがいいでしょう。'
+    2: '\n「すみません、駅はどちらですか？」と観光客が聞いた。私は「この道をまっすぐ行って、二つ目の信号を右に曲がってください」と答えた。'
+    3: '\n田中さんは「来週の会議は午後2時からです。遅れないでください」と言いました。日本の首都は東京です。'
+    4: '\nしかし、政治の中心は永田町です。経済の中心は日本橋や丸の内にあります。'
+    5: 'これはペンですか？いいえ、それは鉛筆です。あれは何ですか？あれはスマートフォンです。'
+    6: '\n富士山は3776メートルです。日本で一番高い山です。毎年たくさんの登山者が訪れます。約束手形、為替手形、小切手などは商業手形と呼ばれます。これらの取り扱いには注意が必要です。'
+    7: '\n「例えば、このような場合どうすればいいのですか？」「まずは落ち着いて、上司に相談してください。」締切は3月25日（水）午後5時です。それ以降の提出は受け付けられません。彼は「また明日」と言って、笑顔で手を振った。そして、雨の中を走って帰っていった。'
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 24 | 1.29 | **Flawless Output.** The absolute gold standard for Japanese. It perfectly respects quotation boundaries, keeps trailing particles intact with their quotes (Sentences 4, 5, 6), cleans up stray whitespace/newlines, and separates back-to-back dialog quotes neatly (Sentences 19 and 20). |
-| **2** | **sentencex** | 25 | 0.09 | **Blazing Fast, Sub-minor Flaw.** Unbelievably efficient. Gets almost everything right. Only error is a tiny over-segmentation on Sentence 4/5, cutting `と観光客が聞いた` from its quote. |
-| **3** | **blingfire** | 26 | 0.11 | **Brittle RegEx behavior.** Blind to Japanese quotation grammar. Chops mid-quote multiple times (Sentences 4/5, 7/8, 21/22/23), leaving stray floating brackets. Fast but wrong. |
-| **4** | **pysbd** | **26** | 10.16 | **Worst of the quote-aware libraries.** Same 26 count as blingfire but 92× slower. Smashes back-to-back dialog into one chunk (Sentence 19→21), splits inside quotes. |
-| **5** | **sentence-splitter** | 6 | 0.18 | **Splits by paragraph only.** Cannot handle CJK punctuation at all. Returns one sentence per newline block. |
-| **6** | **sentsplit** | 6 | 12.31 | **Splits by paragraph only.** Same as sentence-splitter but 68× slower. |
-| **7** | **nupunkt** | 1 | 0.01 | **Total Failure.** No support for CJK punctuation (`。`, `？`, `」`). Returns the entire text as one sentence. |
+| **1** | **yasbd** | 24 | 1.53 | **Flawless Output.** The absolute gold standard for Japanese. Perfectly respects quotation boundaries, keeps trailing particles intact, separates back-to-back dialog neatly. |
+| **2** | **sentencex** | 25 | 0.08 | **Blazing Fast, Sub-minor Flaw.** Gets almost everything right. Only error is a tiny over-segmentation on Sentence 4/5. |
+| **3** | **blingfire** | 26 | 0.11 | **Brittle RegEx behavior.** Blind to Japanese quotation grammar. Chops mid-quote multiple times. Fast but wrong. |
+| **4** | **pysbd** | **26** | 3.71 | **Worst of the quote-aware libraries.** Same count as blingfire but 34× slower. Splits inside quotes. |
+| **5** | **spacy-sentencizer** | 7 | 2.02 | **No CJK punctuation support.** Ignores `。` and `？` entirely. Only splits on newlines. Returns entire paragraphs as single sentences. |
+| **6** | **sentence-splitter** | 6 | 0.16 | **Splits by paragraph only.** Cannot handle CJK punctuation at all. |
+| **7** | **sentsplit** | 6 | 7.72 | **Splits by paragraph only.** Same as sentence-splitter but 48× slower. |
+| **8** | **nupunkt** | 1 | 0.02 | **Total Failure.** No support for CJK punctuation. Returns the entire text as one sentence. |
 
 ### Polish
 
@@ -1102,15 +1205,46 @@ To był test. A może nie? Zobaczymy :-)
    23: 'To był test.'
    24: 'A może nie?'
    25: 'Zobaczymy :-)'
+
+  spacy-sentencizer [pl]:
+    1: 'Dr. Kowalski przyjechał do Warszawy ok.'
+    2: 'godz.'
+    3: '17.30.'
+    4: 'Spotkał tam prof.'
+    5: 'Nowaka i inż.'
+    6: 'Wiśniewskiego. „'
+    7: 'To już koniec?"'
+    8: 'zapytał. „'
+    9: 'Nie... jeszcze nie!"'
+   10: '\nNastępnego dnia, tj.'
+   11: '15.03.2026 r., odwiedzili ul.'
+   12: 'Marszałkowską 10.'
+   13: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.'
+   14: '\nPan J. K. powiedział: „Spotkajmy się o 8.00 rano."'
+   15: 'Nikt jednak nie przyszedł.'
+   16: 'Dziwne, prawda?'
+   17: '\n\nW raporcie napisano m.in.,'
+   18: 'że:\n- sprzedaż wzrosła o 3,7%;\n- koszty spadły;\n- zysk netto wyniósł 1,25 mln zł.'
+   19: '\n\n„Naprawdę?!"'
+   20: 'wykrzyknęła Anna. „'
+   21: 'Tak!!!"'
+   22: 'odpowiedział Marek... i wyszedł.'
+   23: '\nTo był test.'
+   24: 'A może nie?'
+   25: 'Zobaczymy :-)'
 ```
+</details>
 
 | Rank | Library | Sents | Speed (ms) | Notes |
 |---|---|---|---|---|
-| **1** | **yasbd** | 18 | 2.31 | **Flawless.** All abbreviations, quotes, ellipsis, and decimal commas preserved. |
-| **2** | **nupunkt** | 19 | 1.05 | Respectable — only minor over-splitting on godz./ul. and merges quote into continuation. Fastest but not as accurate. |
-| **3** | **sentsplit** | 25 | 11.29 | Decent but splits prof./inż. from surnames and tj. dates. 6× slower than yasbd. |
-| **4** | **pysbd** | 31 | 4.64 | **No Polish support — shatters text.** Splits at every period: Dr., godz., prof., inż., tj., ul., m.in. Also fragments quotes. 2× slower than yasbd. |
-| **5** | **sentencex** | 32 | 1.17 | **Worst accuracy.** Same fragmentation as pysbd plus splits ellipsis and initial J. K. Also fastest, but wrong. |
+| **1** | **yasbd** | 13 | 2.94 | **Flawless.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Merges last paragraph into one clean block. |
+| **2** | **blingfire** | 20 | 0.10 | Fast but splits `inż.` from surname, fragments quotes into `„To już koniec?"` / `zapytał.` / `„Nie...` pieces. |
+| **3** | **nupunkt** | 22 | 1.67 | Splits `godz.` / `ul.` from values, fragments quotes. Fast but over-aggressive. |
+| **4** | **pysbd** | 23 | 4.65 | **Shatters text.** Splits at every period: `Dr.`, `godz.`, `prof.`, `inż.`, `tj.`, `ul.`, `m.in.` Also fragments quotes. |
+| **5** | **sentsplit** | 23 | 9.22 | Splits `prof.` / `inż.` from surnames, `tj.` dates. 3× slower than yasbd. |
+| **6** | **sentence-splitter** | 22 | 3.04 | Splits `prof.` / `inż.` from surnames, `tj.` / `ul.` from values. Empty strings from newlines. |
+| **7** | **spacy-sentencizer** | 25 | 3.99 | **Shreds everything.** Splits on `Dr.`, `godz.`, `prof.`, `inż.`, `ul.`, `tj.`, `r.`, `m.in.`. Fragments `„` quotes into separate pieces. |
+| **8** | **sentencex** | 26 | 0.17 | **Worst accuracy.** Same fragmentation as pysbd plus splits ellipsis and initial `J. K.` |
 
 </details>
 
@@ -1207,18 +1341,34 @@ La conferencia sobre la historia de América, incl. los eventos ocurridos en el 
     8: 'La conferencia sobre la historia de América, incl. los eventos ocurridos en el s.'
     9: 'XIX, fue retransmitida en línea.'
    10: 'El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte.'
+
+  spacy-sentencizer [es]:
+    1: 'El informe, p. ej.,'
+    2: 'fue revisado por el Dr. Gómez antes de su publicación oficial.'
+    3: '\nLa reunión con la Srta.'
+    4: 'Martínez y el Lic.'
+    5: 'Pérez terminó a las 18 h. después de una larga discusión.'
+    6: '\nLa empresa Rodríguez y Cía.'
+    7: 'firmó el contrato junto con la Asoc.'
+    8: 'Internacional de Comercio.'
+    9: 'El documento indicaba "confidencial", es decir, solo podía ser leído por el personal autorizado.'
+   10: '\nLa conferencia sobre la historia de América, incl.'
+   11: 'los eventos ocurridos en el s. XIX, fue retransmitida en línea.'
+   12: 'El técnico añadió una nota: «La act.'
+   13: 'del sistema debe realizarse manualmente» antes de cerrar el reporte.'
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **6** | 1.77 | **Top scorer.** All abbreviations and guillemets preserved intact. |
-| **2** | **nupunkt** | 7 | 2.21 | **Almost perfect.** Handles all abbreviations correctly but splits inside the guillemet quote: `«La act.` + `del sistema...»`. One extra sentence. |
-| **3** | **sentencex** | 9 | 0.04 | **Splits `Cía.` and `Asoc.`** Trailing `\n` and whitespace. |
-| **4** | **blingfire** | 9 | 0.10 | **Splits `Srta.`, `Lic.`, `Asoc.`, `s.`** before the next word. |
-| **5** | **sentsplit** | 9 | 12.60 | **Correct count but sloppy.** Leading whitespace, same split points as sentencex. |
-| **6** | **sentence-splitter** | 10 | 4.54 | **Splits `Srta.` and `Lic.`** into separate fragments. Same `Cía.`/`Asoc.` issue. |
-| **7** | **pysbd** | **15** | 4.47 | **Shreds `p. ej.`** into `p.` + `ej.`, plus splits `Cía.`, `Asoc.`, `s.` |
+| **1** | **yasbd** | **6** | 3.88 | **Top scorer.** All abbreviations and guillemets preserved intact. |
+| **2** | **nupunkt** | 7 | 0.91 | **Almost perfect.** Handles all abbreviations correctly but splits inside the guillemet quote: `«La act.` + `del sistema...»`. One extra sentence. |
+| **3** | **sentencex** | 9 | 0.03 | **Splits `Cía.` and `Asoc.`** Trailing `\n` and whitespace. |
+| **4** | **blingfire** | 9 | 0.07 | **Splits `Srta.`, `Lic.`, `Asoc.`, `s.`** before the next word. |
+| **5** | **sentsplit** | 9 | 8.30 | **Correct count but sloppy.** Leading whitespace, same split points as sentencex. |
+| **6** | **sentence-splitter** | 10 | 2.41 | **Splits `Srta.` and `Lic.`** into separate fragments. Same `Cía.`/`Asoc.` issue. |
+| **7** | **spacy-sentencizer** | 13 | 2.66 | **No abbreviation awareness.** Splits `p. ej.`, `Srta.`, `Lic.`, `Cía.`, `Asoc.`, `incl.`, `s.`, `«La act.`. Fragments guillemet quotes. |
+| **8** | **pysbd** | **15** | 4.45 | **Shreds `p. ej.`** into `p.` + `ej.`, plus splits `Cía.`, `Asoc.`, `s.` |
 
 ### Greek
 
@@ -1329,22 +1479,50 @@ Greek uses `;` as a question mark (ερωτηματικό) and `·` (άνω τε
    19: 'Κουραστική.'
    20: 'Όμορφη.'
    21: 'Αξέχαστη.» Και μετά αποκοιμήθηκε.'
+
+  spacy-sentencizer [el]:
+    1: 'Ο Νίκος ξύπνησε στις 7:30 π.μ.'
+    2: 'και κοίταξε το κινητό του.'
+    3: 'Είχε τρία αναπάντητα μηνύματα από τη Μαρία. «'
+    4: 'Θα έρθεις σήμερα;» τον ρώτησε.'
+    5: 'Εκείνος δίστασε... Ήταν κουρασμένος, αλλά δεν ήθελε να ακυρώσει.'
+    6: '\n\nΣτις 10:15 π.μ.'
+    7: 'συναντήθηκαν στο κέντρο της πόλης.'
+    8: 'Ο κ.'
+    9: 'Παπαδόπουλος τους χαιρέτησε και είπε: «Μην αργήσετε στη συνάντηση των 11:00».'
+   10: 'Όλοι γέλασαν.'
+   11: 'Γιατί; Κανείς δεν ήξερε ακριβώς!'
+   12: '\n\nΗ θερμοκρασία ήταν 32,5 βαθμοί Κελσίου.'
+   13: "Παρ' όλα αυτά, η Ελένη αποφάσισε να περπατήσει περίπου 2,5 χλμ."
+   14: 'μέχρι το μουσείο. «'
+   15: 'Καλή ιδέα;» αναρωτήθηκε.'
+   16: 'Ίσως.'
+   17: 'Ίσως όχι.'
+   18: '\n\nΤο βράδυ κατέγραψε στο ημερολόγιό της: «Σήμερα ήταν παράξενη μέρα.'
+   19: 'Κουραστική.'
+   20: 'Όμορφη.'
+   21: 'Αξέχαστη.»'
+   22: 'Και μετά αποκοιμήθηκε.'
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **17** | 2.06 | **Gold standard.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Single-word sentences split correctly. |
-| **2** | **nupunkt** | 21 | 0.77 | **Cold-start penalty.** Splits `π.μ.` and rips apart final quoted block. 4s cold start. |
-| **3** | **sentencex** | 23 | 0.07 | **Phantom empty sentences.** Splits quotes from attribution verbs, splits `χλμ.` |
-| **4** | **pysbd** | 23 | 2.72 | **Worst.** Splits abbreviations into fragments, breaks guillemets in half. |
+| **1** | **yasbd** | **17** | 4.02 | **Gold standard.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Single-word sentences split correctly. |
+| **2** | **blingfire** | 20 | 0.14 | Handles most abbreviations but splits `Ο κ.` and fragments quoted blocks. |
+| **3** | **pysbd** | 20 | 4.22 | **Splits `π.μ.`** into `π.` + `μ.`, fragments `«...»` quotes, splits `κ.` |
+| **4** | **sentsplit** | 20 | 13.53 | Preserves abbreviations but fragments quoted blocks and produces empty strings. |
+| **5** | **nupunkt** | 21 | 2.00 | Splits `π.μ.` and `χλμ.`, fragments quoted block at end. |
+| **6** | **spacy-sentencizer** | 22 | 0.88 | **Splits `π.μ.`**, `«...»` quotes, and `Ο κ.`. Fragments all quoted segments. |
+| **7** | **sentencex** | 23 | 0.22 | **Phantom empty sentences.** Splits quotes from attribution verbs, splits `χλμ.` |
+| **8** | **sentence-splitter** | 23 | 2.84 | Splits `Ο κ.`, fragments quotes, produces empty strings. |
 
 
 ---
 
 ### Haitian Creole
 
-Haitian Creole (Kreyòl) uses French-derived abbreviations (`fig.`, `p.`, `St.`, `p.m.`) and standard Latin punctuation. Only 4 of 7 libraries support `ht`.
+Haitian Creole (Kreyòl) uses French-derived abbreviations (`fig.`, `p.`, `St.`, `p.m.`) and standard Latin punctuation. All 8 libraries now support `ht`.
 
 ```txt
 Alo mond. Koman ou ye? Mwen byen. Kisa ou ap fè? Mwen ap li yon liv.
@@ -1416,6 +1594,114 @@ The meeting is at 2 p.m. Mwen pral vini.
    25: 'The meeting is at 2 p.m. '
    26: 'Mwen pral vini.'
 
+  pysbd [ht]:
+    1: 'Alo mond. '
+    2: 'Koman ou ye? '
+    3: 'Mwen byen. '
+    4: 'Kisa ou ap fè? '
+    5: 'Mwen ap li yon liv.\n'
+    6: 'Gade fig. 2 pou rezilta yo. '
+    7: 'Li nan p. 55 nan liv la. '
+    8: 'Li empòtan.\n'
+    9: 'Li te fèt nan mwa janv. '
+   10: 'Li te vini an fevriye. '
+   11: 'St. Michel se yon kote bèl.\n'
+   12: 'Li toupre vil la. '
+   13: 'Li te di (Mwen prale demen.) pandan l ap pale.\n'
+   14: 'Li te mande: Èske ou vini? '
+   15: 'Mwen repon wi. '
+   16: '"Sa a se bèl." li di.\n'
+   17: 'M pa konnen ki sa l ap pale de. '
+   18: 'Kilè l ap sispann?\n'
+   19: 'Pwojè a te prèske fini... men nou jwenn yon pwoblèm. '
+   20: 'Jan te rele byen fò.\n'
+   21: 'Mwen renmen Python. '
+   22: 'It is useful for data science.\n'
+   23: 'The meeting is at 2 p.m. '
+   24: 'Mwen pral vini.'
+
+  sentsplit [ht]:
+    1: 'Alo mond.'
+    2: ' Koman ou ye?'
+    3: ' Mwen byen.'
+    4: ' Kisa ou ap fè?'
+    5: ' Mwen ap li yon liv.\n'
+    6: 'Gade fig.'
+    7: ' 2 pou rezilta yo.'
+    8: ' Li nan p. 55 nan liv la.'
+    9: ' Li empòtan.\n'
+   10: 'Li te fèt nan mwa janv.'
+   11: ' Li te vini an fevriye.'
+   12: ' St. Michel se yon kote bèl.\n'
+   13: 'Li toupre vil la.'
+   14: ' Li te di (Mwen prale demen.) pandan l ap pale.\n'
+   15: 'Li te mande: Èske ou vini?'
+   16: ' Mwen repon wi.'
+   17: ' "Sa a se bèl." li di.\n'
+   18: 'M pa konnen ki sa l ap pale de.'
+   19: ' Kilè l ap sispann?\n'
+   20: 'Pwojè a te prèske fini... men nou jwenn yon pwoblèm.'
+   21: ' Jan te rele byen fò.\n'
+   22: 'Mwen renmen Python.'
+   23: ' It is useful for data science.\n'
+   24: 'The meeting is at 2 p.m.'
+   25: ' Mwen pral vini.'
+
+  sentence-splitter [ht]:
+    1: 'Alo mond.'
+    2: 'Koman ou ye?'
+    3: 'Mwen byen.'
+    4: 'Kisa ou ap fè?'
+    5: 'Mwen ap li yon liv.'
+    6: 'Gade fig. 2 pou rezilta yo.'
+    7: 'Li nan p.'
+    8: '55 nan liv la.'
+    9: 'Li empòtan.'
+   10: 'Li te fèt nan mwa janv.'
+   11: 'Li te vini an fevriye.'
+   12: 'St. Michel se yon kote bèl.'
+   13: 'Li toupre vil la.'
+   14: 'Li te di (Mwen prale demen.) pandan l ap pale.'
+   15: 'Li te mande: Èske ou vini?'
+   16: 'Mwen repon wi.'
+   17: '"Sa a se bèl." li di.'
+   18: 'M pa konnen ki sa l ap pale de.'
+   19: 'Kilè l ap sispann?'
+   20: 'Pwojè a te prèske fini... men nou jwenn yon pwoblèm.'
+   21: 'Jan te rele byen fò.'
+   22: 'Mwen renmen Python.'
+   23: 'It is useful for data science.'
+   24: 'The meeting is at 2 p.m.'
+   25: 'Mwen pral vini.'
+
+  spacy-sentencizer [ht]:
+    1: 'Alo mond.'
+    2: 'Koman ou ye?'
+    3: 'Mwen byen.'
+    4: 'Kisa ou ap fè?'
+    5: 'Mwen ap li yon liv.'
+    6: '\nGade fig.'
+    7: '2 pou rezilta yo.'
+    8: 'Li nan p. 55 nan liv la.'
+    9: 'Li empòtan.'
+   10: '\nLi te fèt nan mwa janv.'
+   11: 'Li te vini an fevriye.'
+   12: 'St. Michel se yon kote bèl.'
+   13: '\nLi toupre vil la.'
+   14: 'Li te di (Mwen prale demen.)'
+   15: 'pandan l ap pale.'
+   16: '\nLi te mande: Èske ou vini?'
+   17: 'Mwen repon wi. "'
+   18: 'Sa a se bèl."'
+   19: 'li di.'
+   20: '\nM pa konnen ki sa l ap pale de.'
+   21: 'Kilè l ap sispann?'
+   22: '\nPwojè a te prèske fini... men nou jwenn yon pwoblèm.'
+   23: 'Jan te rele byen fò.'
+   24: '\nMwen renmen Python.'
+   25: 'It is useful for data science.'
+   26: '\nThe meeting is at 2 p.m. Mwen pral vini.'
+
   nupunkt [ht]:
     1: 'Alo mond.'
     2: 'Koman ou ye?'
@@ -1472,13 +1758,14 @@ The meeting is at 2 p.m. Mwen pral vini.
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **24** | 1.94 | **Cleanest output.** All abbreviations preserved. Parenthesized sentence kept intact. Ellipsis preserved. |
-| **2** | **nupunkt** | 23 | 1.53 | **Merged two sentences.** `Li nan p. 55 nan liv la. Li empòtan.` merged into one. Split `"Sa a se bèl."` from `li di.`, breaking the quote attribution. |
-| **3** | **blingfire** | 25 | 0.84 | **Splits `St.`** into `St.` + `Michel se...`. Also splits `"Sa a se bèl."` from `li di.` |
-| **4** | **sentencex** | 26 | 0.05 | **Splits `p.`** into `Li nan p.` + `55 nan liv la.`. Splits `St.` too. Trailing `\n` fragments everywhere. |
-| — | **pysbd** | — | — | **Does not support Haitian Creole.** |
-| — | **sentsplit** | — | — | **Does not support Haitian Creole.** |
-| — | **sentence-splitter** | — | — | **Does not support Haitian Creole.** |
+| **1** | **yasbd** | **24** | 2.75 | **Cleanest output.** All abbreviations preserved. Parenthesized sentence kept intact. Ellipsis preserved. |
+| **2** | **pysbd** | 24 | 4.85 | **Good accuracy.** Handles abbreviations well but trailing `\n` on some sentences. |
+| **3** | **nupunkt** | 23 | 1.83 | **Merged two sentences.** `Li nan p. 55 nan liv la. Li empòtan.` merged into one. Split `"Sa a se bèl."` from `li di.`, breaking the quote attribution. |
+| **4** | **sentsplit** | 25 | 9.49 | **Splits `fig.`** into `Gade fig.` + `2 pou rezilta yo.` Leading whitespace on most sentences. |
+| **5** | **blingfire** | 25 | 0.21 | **Splits `St.`** into `St.` + `Michel se...`. Also splits `"Sa a se bèl."` from `li di.` |
+| **6** | **sentence-splitter** | 25 | 3.19 | **Splits `p.`** into `Li nan p.` + `55 nan liv la.`. Otherwise clean. |
+| **7** | **spacy-sentencizer** | 26 | 2.79 | **Splits `fig.`, `p.`**, `(Mwen prale demen.)`, `"Sa a se bèl."`, and `p.m.`. Fragments quotes from attribution. |
+| **8** | **sentencex** | 26 | 0.05 | **Splits `p.`** into `Li nan p.` + `55 nan liv la.`. Splits `St.` too. Trailing `\n` fragments everywhere. |
 
 ---
 
@@ -1511,13 +1798,17 @@ The meeting is at 2 p.m. Mwen pral vini.
 
 **sentence-splitter** sits in the middle tier. Struggles with chat, pollutes counts with empty lines. Archived in 2025.
 
-### The cold-start trap: nupunkt
+### The cold-start caveat: nupunkt
 
-Warm runtime is competitive (0.01-1.49ms), often beating yasbd. But there's an 11-13 second cold-start penalty as it loads the full model into memory. Zero CJK support. Splits inside Spanish quotes. Not practical for dynamic workloads.
+Warm runtime is competitive (0.01-1.49ms), often beating yasbd. Cold start is ~2.6s on first use (Alice in Wonderland), but subsequent cold starts in the same process are much faster (~158ms on Sherlock Holmes due to caching). Zero CJK support. Splits inside Spanish quotes. Not practical for dynamic workloads.
 
 ### The poor performers: pysbd & sentsplit
 
 Both are the slowest across the board. **pysbd**, the incumbent yasbd was built to fix, is broken for French, splits on every newline, and corrupts URLs. **sentsplit** is the worst overall: erratic, creates broken fragments, hallucinates sentences from empty lines.
+
+### The worst: spacy-sentencizer
+
+**spacy-sentencizer** has no abbreviation awareness at all, splitting on every period regardless of context. Shreds `p. ej.`, `π.μ.`, `p.m.`, `Dr.`, `godz.`, `prof.`, `inż.`, `ul.`, `Cía.`, `Asoc.`, `fig.`, `«La act.`. Fragments quotes from attribution verbs. Dead last in every accuracy test. The `blank()` + `sentencizer` pipe was never designed for this. It is a sentence *detector*, not a sentence *splitter*.
 
 ### Pick one
 

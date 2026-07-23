@@ -158,15 +158,15 @@ Candidate abbreviations are collected from all sources, classified by type (`TIT
 
 ## 🏁 Benchmarks
 
-Tested against 6 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, sentence-splitter) across multiple languages and 7 edge cases: compound abbreviations, CJK quotes, newline wrapping, chat logs, URLs, decimals, and nested punctuation.
+Tested against 7 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, sentence-splitter, spaCy-sentencizer) across multiple languages and 7 edge cases: compound abbreviations, CJK quotes, newline wrapping, chat logs, URLs, decimals, and nested punctuation.
 
 **TL;DR:** yasbd ranked #1 in accuracy across almost every test, while staying competitive on speed as pure Python. blingfire is faster but brittle. pysbd and sentencex shred French abbreviations.
 
-On our [golden benchmark](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks#en-golden-benchmark) (92 English edge cases — expanded from pysbd's original 48 with fixes and additions): yasbd scores **98.9%**, pysbd **83.7%**.
+On our [golden benchmark](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks#en-golden-benchmark) (92 English edge cases — expanded from pysbd's original 48 with fixes and additions): yasbd scores **98.9%**, pysbd **83.7%**, spaCy-sentencizer **55.4%**, etc.
 
 Full results, terminal output, and a performance graph can be found in **[benchmarks/](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks)**
 
-**SPOILER**: Yasbd aced 'em all in accuracy while offering balanced speed. On _Adventures of Sherlock Holmes_ (594k chars), yasbd is ~5× faster than pysbd (1.6s vs 13.3s warm) with far fewer false splits.
+**SPOILER**: Yasbd aced 'em all in accuracy while offering balanced speed. On _Adventures of Sherlock Holmes_ (594k chars), yasbd is ~8× faster than pysbd (1.2s vs 9.0s warm) with far fewer false splits.
 
 <img src="https://raw.githubusercontent.com/speedyk-005/yasbd-lib/main/benchmarks/bench.png" alt="SBD Benchmark Performance" width="800"/>
 
