@@ -1477,15 +1477,43 @@ Greek uses `;` as a question mark (ερωτηματικό) and `·` (άνω τε
    19: 'Κουραστική.'
    20: 'Όμορφη.'
    21: 'Αξέχαστη.» Και μετά αποκοιμήθηκε.'
+
+  spacy-sentencizer [el]:
+    1: 'Ο Νίκος ξύπνησε στις 7:30 π.μ.'
+    2: 'και κοίταξε το κινητό του.'
+    3: 'Είχε τρία αναπάντητα μηνύματα από τη Μαρία. «'
+    4: 'Θα έρθεις σήμερα;» τον ρώτησε.'
+    5: 'Εκείνος δίστασε... Ήταν κουρασμένος, αλλά δεν ήθελε να ακυρώσει.'
+    6: '\n\nΣτις 10:15 π.μ.'
+    7: 'συναντήθηκαν στο κέντρο της πόλης.'
+    8: 'Ο κ.'
+    9: 'Παπαδόπουλος τους χαιρέτησε και είπε: «Μην αργήσετε στη συνάντηση των 11:00».'
+   10: 'Όλοι γέλασαν.'
+   11: 'Γιατί; Κανείς δεν ήξερε ακριβώς!'
+   12: '\n\nΗ θερμοκρασία ήταν 32,5 βαθμοί Κελσίου.'
+   13: "Παρ' όλα αυτά, η Ελένη αποφάσισε να περπατήσει περίπου 2,5 χλμ."
+   14: 'μέχρι το μουσείο. «'
+   15: 'Καλή ιδέα;» αναρωτήθηκε.'
+   16: 'Ίσως.'
+   17: 'Ίσως όχι.'
+   18: '\n\nΤο βράδυ κατέγραψε στο ημερολόγιό της: «Σήμερα ήταν παράξενη μέρα.'
+   19: 'Κουραστική.'
+   20: 'Όμορφη.'
+   21: 'Αξέχαστη.»'
+   22: 'Και μετά αποκοιμήθηκε.'
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **17** | 2.06 | **Gold standard.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Single-word sentences split correctly. |
-| **2** | **nupunkt** | 21 | 0.77 | **Cold-start penalty.** Splits `π.μ.` and rips apart final quoted block. 4s cold start. |
-| **3** | **sentencex** | 23 | 0.07 | **Phantom empty sentences.** Splits quotes from attribution verbs, splits `χλμ.` |
-| **4** | **pysbd** | 23 | 2.72 | **Worst.** Splits abbreviations into fragments, breaks guillemets in half. |
+| **1** | **yasbd** | **17** | 4.02 | **Gold standard.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Single-word sentences split correctly. |
+| **2** | **blingfire** | 20 | 0.14 | Handles most abbreviations but splits `Ο κ.` and fragments quoted blocks. |
+| **3** | **pysbd** | 20 | 4.22 | **Splits `π.μ.`** into `π.` + `μ.`, fragments `«...»` quotes, splits `κ.` |
+| **4** | **sentsplit** | 20 | 13.53 | Preserves abbreviations but fragments quoted blocks and produces empty strings. |
+| **5** | **nupunkt** | 21 | 2.00 | Splits `π.μ.` and `χλμ.`, fragments quoted block at end. |
+| **6** | **spacy-sentencizer** | 22 | 0.88 | **Splits `π.μ.`**, `«...»` quotes, and `Ο κ.`. Fragments all quoted segments. |
+| **7** | **sentencex** | 23 | 0.22 | **Phantom empty sentences.** Splits quotes from attribution verbs, splits `χλμ.` |
+| **8** | **sentence-splitter** | 23 | 2.84 | Splits `Ο κ.`, fragments quotes, produces empty strings. |
 
 
 ---
