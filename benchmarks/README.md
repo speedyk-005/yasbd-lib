@@ -1203,15 +1203,46 @@ To był test. A może nie? Zobaczymy :-)
    23: 'To był test.'
    24: 'A może nie?'
    25: 'Zobaczymy :-)'
+
+  spacy-sentencizer [pl]:
+    1: 'Dr. Kowalski przyjechał do Warszawy ok.'
+    2: 'godz.'
+    3: '17.30.'
+    4: 'Spotkał tam prof.'
+    5: 'Nowaka i inż.'
+    6: 'Wiśniewskiego. „'
+    7: 'To już koniec?"'
+    8: 'zapytał. „'
+    9: 'Nie... jeszcze nie!"'
+   10: '\nNastępnego dnia, tj.'
+   11: '15.03.2026 r., odwiedzili ul.'
+   12: 'Marszałkowską 10.'
+   13: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.'
+   14: '\nPan J. K. powiedział: „Spotkajmy się o 8.00 rano."'
+   15: 'Nikt jednak nie przyszedł.'
+   16: 'Dziwne, prawda?'
+   17: '\n\nW raporcie napisano m.in.,'
+   18: 'że:\n- sprzedaż wzrosła o 3,7%;\n- koszty spadły;\n- zysk netto wyniósł 1,25 mln zł.'
+   19: '\n\n„Naprawdę?!"'
+   20: 'wykrzyknęła Anna. „'
+   21: 'Tak!!!"'
+   22: 'odpowiedział Marek... i wyszedł.'
+   23: '\nTo był test.'
+   24: 'A może nie?'
+   25: 'Zobaczymy :-)'
 ```
+</details>
 
 | Rank | Library | Sents | Speed (ms) | Notes |
 |---|---|---|---|---|
-| **1** | **yasbd** | 18 | 2.31 | **Flawless.** All abbreviations, quotes, ellipsis, and decimal commas preserved. |
-| **2** | **nupunkt** | 19 | 1.05 | Respectable — only minor over-splitting on godz./ul. and merges quote into continuation. Fastest but not as accurate. |
-| **3** | **sentsplit** | 25 | 11.29 | Decent but splits prof./inż. from surnames and tj. dates. 6× slower than yasbd. |
-| **4** | **pysbd** | 31 | 4.64 | **No Polish support — shatters text.** Splits at every period: Dr., godz., prof., inż., tj., ul., m.in. Also fragments quotes. 2× slower than yasbd. |
-| **5** | **sentencex** | 32 | 1.17 | **Worst accuracy.** Same fragmentation as pysbd plus splits ellipsis and initial J. K. Also fastest, but wrong. |
+| **1** | **yasbd** | 13 | 2.94 | **Flawless.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Merges last paragraph into one clean block. |
+| **2** | **blingfire** | 20 | 0.10 | Fast but splits `inż.` from surname, fragments quotes into `„To już koniec?"` / `zapytał.` / `„Nie...` pieces. |
+| **3** | **nupunkt** | 22 | 1.67 | Splits `godz.` / `ul.` from values, fragments quotes. Fast but over-aggressive. |
+| **4** | **pysbd** | 23 | 4.65 | **Shatters text.** Splits at every period: `Dr.`, `godz.`, `prof.`, `inż.`, `tj.`, `ul.`, `m.in.` Also fragments quotes. |
+| **5** | **sentsplit** | 23 | 9.22 | Splits `prof.` / `inż.` from surnames, `tj.` dates. 3× slower than yasbd. |
+| **6** | **sentence-splitter** | 22 | 3.04 | Splits `prof.` / `inż.` from surnames, `tj.` / `ul.` from values. Empty strings from newlines. |
+| **7** | **spacy-sentencizer** | 25 | 3.99 | **Shreds everything.** Splits on `Dr.`, `godz.`, `prof.`, `inż.`, `ul.`, `tj.`, `r.`, `m.in.`. Fragments `„` quotes into separate pieces. |
+| **8** | **sentencex** | 26 | 0.17 | **Worst accuracy.** Same fragmentation as pysbd plus splits ellipsis and initial `J. K.` |
 
 </details>
 
