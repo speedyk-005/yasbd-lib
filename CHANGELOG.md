@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Simplified `TextSpan.__eq__` with `all()` for cleaner `hasattr` checks.
   - Fixed double spaces after commas (nl, my, sv, tr, id) and double space after operator (bg).
 - **Merged "Pronouns & Demonstratives" header into "Pronouns"** ([#196](https://github.com/speedyk-005/yasbd-lib/pull/196)): comment-only change in id.py and vi.py.
+- **Python 3.10 support** ([#212](https://github.com/speedyk-005/yasbd-lib/pull/212)): Lowered minimum from 3.11 to 3.10. Added classifier and CI entry.
 
 ### Fixed
 
