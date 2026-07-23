@@ -188,7 +188,7 @@ def test_rule_cache_lru(en_detector):
         "12. The first item.\n|13. The second item.",
         "    A12. The first item.\n|    B13. The second item.",
 
-        # Flattened list items
+        # Flattened list items (fix for #208)
         "• 9. The first item.| • 10. The second item",
         "α· Πρώτο θέμα| β· Δεύτερο θέμα.",
         "The requirements are simple:| 1.) Python 3.12 environment.| 2. At least 8GB of RAM.",
