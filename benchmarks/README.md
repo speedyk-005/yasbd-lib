@@ -1804,6 +1804,10 @@ Warm runtime is competitive (0.01-1.49ms), often beating yasbd. But there's an 1
 
 Both are the slowest across the board. **pysbd**, the incumbent yasbd was built to fix, is broken for French, splits on every newline, and corrupts URLs. **sentsplit** is the worst overall: erratic, creates broken fragments, hallucinates sentences from empty lines.
 
+### The worst: spacy-sentencizer
+
+**spacy-sentencizer** has no abbreviation awareness at all, splitting on every period regardless of context. Shreds `p. ej.`, `π.μ.`, `p.m.`, `Dr.`, `godz.`, `prof.`, `inż.`, `ul.`, `Cía.`, `Asoc.`, `fig.`, `«La act.`. Fragments quotes from attribution verbs. Dead last in every accuracy test. The `blank()` + `sentencizer` pipe was never designed for this. It is a sentence *detector*, not a sentence *splitter*.
+
 ### Pick one
 
 **yasbd** if accuracy matters: chat logs, multiple languages, complex syntax. You can't afford wrong splits. 1-4ms warm is fast enough for most use cases. Pure Python, no native deps, works anywhere Python runs.
