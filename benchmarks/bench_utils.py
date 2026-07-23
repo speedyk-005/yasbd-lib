@@ -154,6 +154,22 @@ class SentenceSplitterWrapper(BaseSegmenter):
         return self._splitter.split(text)
 
 
+@register_with_lang(lang="en")
+class SpacySentencizerWrapper(BaseSegmenter):
+    name = "spacy-sentencizer"
+
+    def __init__(self, lang: str) -> None:
+        super().__init__(lang)
+        import spacy
+
+        self._nlp = spacy.blank(self.lang)
+        self._nlp.add_pipe("sentencizer")
+
+    def _segment(self, text: str) -> list[str]:
+        doc = self._nlp(text)
+        return [sent.text for sent in doc.sents]
+
+
 # ------ Public API -------
 
 
