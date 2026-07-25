@@ -184,6 +184,9 @@ def test_rule_cache_lru(en_detector):
         "Server A at 40.7128° N, 74.0060° W.| Server B at 34.0522° S, 118.2437° E.",
         "N. Scott Momaday is a writer.| He won the Pulitzer.",
 
+        # Ordinary word + period should not be treated as vertical list marker
+        "Note.| The file is ready.",
+
         # Multi-digit vertical list items
         "12. The first item.\n|13. The second item.",
         "    A12. The first item.\n|    B13. The second item.",

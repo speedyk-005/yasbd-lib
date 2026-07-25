@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- **Vertical list false positive on ordinary text** ([#214](https://github.com/speedyk-005/yasbd-lib/pull/214)): VERTICAL_LIST_START_FINDER matched any 1-4 character alphanumeric prefix as a list marker, causing false boundary removal in normal sentences. Restricts detection to pure digits and single-letter + optional digit markers.
+
+---
+
 ## [0.13.0] - 2026-07-23
 
 ### Changed
