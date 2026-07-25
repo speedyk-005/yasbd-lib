@@ -172,7 +172,10 @@ class Rules:
     VERTICAL_LIST_START_FINDER = re2.compile(rf"""
         (?<=^\s*
             (?:
-                [\p{{L}}\p{{N}}]{{1,4}}
+                (?:
+                    \p{{L}}\p{{N}}{{0,2}}|
+                    \p{{N}}{{1,4}}
+                )
                 (?:{DOT_LIKE_PATTERN}|\))
             ){{1,3}}
         )
