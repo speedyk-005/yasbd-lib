@@ -1,6 +1,7 @@
 ISO_CODE = "es"
 TEST_DATA = [
     # Basic punctuation
+    "Hola.| ¿Dónde estabas?",
     "Hola mundo.| ¿Cómo estás?| Bien, gracias.",
     "¿Cuál es tu nombre?| Me llamo Carlos.",
     "¿Viste la película anoche?.| Sí, fue increíble.| ¡Me encantó!| La actuación fue excelente.",
