@@ -54,11 +54,11 @@ dev = [
 bench = [
   "pysbd",
   "sentencex",
-  "sentsplit",  # depends on deprecated pkg_resources — needs setuptools<81
+  "sentsplit",  # depends on deprecated pkg_resources — needs setuptools<84
   "nupunkt; python_version >= '3.11'",
   "blingfire",
   "sentence-splitter",
-  "setuptools<81",
+  "setuptools<84",
   "matplotlib",
   "rich",
   "radicli",
