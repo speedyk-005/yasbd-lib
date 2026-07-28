@@ -53,6 +53,8 @@
 
 **Y**et **A**nother **S**entence **B**oundary **D**etector is a pair of smart scissors for text. Pointer-based, from-scratch [SBD](https://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) for production NLP pipelines. Features a drop-in adapter for pysbd to fix edge cases without heavy refactoring.
 
+It was born out of [chunklet-py](https://github.com/speedyk-005/chunklet-py/pull/49), an all-in-one chunker for sentences, documents, and code.
+
 ###  ✂ Why do I need a pair of "smart scissors" for text?
 
 Running `re.split(r'(?<=[.!?])(?=\s+[A-Z])')` and praying. This blunt tool instantly shears titles like `Mr. Smith` or French corporate markers like `Sté. Générale` in half, scattering semantic fragments across the pipeline.
