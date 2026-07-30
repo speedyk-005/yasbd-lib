@@ -13,7 +13,7 @@ So you want to know how yasbd stacks up against the competition? Fair enough. He
 | blingfire | Microsoft C++ FSM + Python bindings. Language agnostic. | [GitHub](https://github.com/microsoft/BlingFire) / [pypi](https://pypi.org/project/blingfire/) |
 | sentence-splitter | Heuristic algorithm from Europarl (Koehn/Schroeder). Archived 2025. | [GitHub](https://github.com/mediacloud/sentence-splitter) / [pypi](https://pypi.org/project/sentence-splitter/) |
 | spaCy-sentencizer | Rule-based pipeline component, 75+ langs. No dependency parser needed. | [GitHub](https://github.com/explosion/spaCy/blob/master/spacy/pipeline/sentencizer.pyx) / [pypi](https://pypi.org/project/spacy/) |
-| yasbd | Pure Python, 32+ langs. Pointer-based SBD with pysbd adapter. | *(this repo)* |
+| yasbd | Pure Python, 39 langs. Pointer-based SBD with pysbd adapter. | *(this repo)* |
 
 Not every library supports every language. We picked multiple languages that stress different weaknesses.
 
