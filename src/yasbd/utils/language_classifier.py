@@ -61,7 +61,7 @@ def classify_language(text: str) -> tuple[str, float]:
     if not candidates:
         candidates = ranks  # pragma: no cover
 
-    # -- Compute a numerically stable softmax. --
+    # Compute a numerically stable softmax.
     max_score = max(score for _, score in candidates)
     total = sum(math.exp(score - max_score) for _, score in candidates)
 
