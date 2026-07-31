@@ -1,4 +1,5 @@
 from collections.abc import Iterable
+from itertools import chain, pairwise
 from types import SimpleNamespace
 
 from yasbd import BoundaryDetector
@@ -111,13 +112,10 @@ class Segmenter:
         """Detect sentence boundaries in text."""
         if self.char_span:
             boundaries = list(self._detector.detect(text))
-
-            res = []
-            start = 0
-            for end in boundaries:
-                res.append(TextSpan(text[start:end], start, end))
-                start = end
-            return res
+            return [
+                TextSpan(text[start:end], start, end)
+                for start, end in pairwise(chain((0,), boundaries))
+            ]
 
         if self.clean:
             return list(self._detector.segment(text))
