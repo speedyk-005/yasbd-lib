@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from collections.abc import Generator, Iterable
 from io import TextIOBase
-from itertools import chain, tee
+from itertools import chain, pairwise, tee
 
 from yasbd.exceptions import InvalidInputError
 from yasbd.rules import get_supported_langs, load_rule
@@ -125,8 +125,7 @@ class BoundaryDetector:
                 boundaries = [0, len(para)]
             else:
                 boundaries = rule.apply(para, self.preserve_quote_and_paren)
-
-            yield from ((boundaries[i], boundaries[i + 1]) for i in range(len(boundaries) - 1))
+            yield from pairwise(boundaries)
 
     @validate_input
     def detect(
