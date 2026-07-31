@@ -146,6 +146,8 @@ All public interface controls must be documented using Google-style docstrings. 
 
 ## Pull Request Template
 
+If multiple pull requests address the same issue, we will evaluate them based on code quality and test coverage. If the implementations are structurally identical, we will merge the earliest submission.
+
 See [PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md) for the full template to use when submitting modifications.
 
 ## Conduct
