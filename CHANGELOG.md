@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Trie pattern builder moved to utils and renamed** ([#230](https://github.com/speedyk-005/yasbd-lib/pull/230)): `build_abbr_pattern` moved from `yasbd.rules.base` to a new `yasbd.utils.trie` module and renamed to `build_optimized_pattern`. The old name stays as a backwards-compatible alias, and language rule files now import it from `yasbd.utils.trie`.
 
+### Fixed
+
+- **Hyphens dropped at line breaks in hyphenated compounds** ([#231](https://github.com/speedyk-005/yasbd-lib/pull/231)): StreamCleaner removed the hyphen when a line broke at a legitimate hyphenated compound, turning `state-of-the-\nart` into `state-of-theart`. Now only known prefixes/suffixes join across line breaks; all other cases keep the hyphen. Unicode hyphen variants are normalized to ASCII first.
+
 ### [0.13.1] - 2026-07-18
 
 ### Fixed
