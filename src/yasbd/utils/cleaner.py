@@ -22,12 +22,11 @@ PREFIXES = {
 
 # https://regex101.com/r/csjyrs/2/substitution
 _vowels_pattern = "aeiouyæœ"
-_suffix_pattern = "|".join(PREFIXES)
+_preffix_pattern = "|".join(PREFIXES)
 HYPHENATED_WORD_FINDER = re2.compile(
     rf"""
-    (?<=[{_vowels_pattern}]\p{{M}}?-)\s+(?=[{_vowels_pattern}])|
-    (?<=(?:{_suffix_pattern})-)\s|
-    (?<!(?:{_suffix_pattern}))-\s|
+    (?<=[{_vowels_pattern}]\p{{M}}?-)\R+(?=[{_vowels_pattern}])|
+    (?<=(?:{_preffix_pattern})-)\R
 """,
     re2.X,
 )
@@ -130,6 +129,8 @@ class StreamCleaner(StreamCleanerStub):
         ['WORD']
         >>> list(StreamCleaner("An hyphe-\\nnated sentence"))
         ['An hyphenated sentence']
+        >>> list(StreamCleaner("state-of-the-\\nart"))
+        ['state-of-the-art']
         >>> list(StreamCleaner("Don't be naï-\\nve"))
         ["Don't be naïve"]
         >>> list(StreamCleaner(""))

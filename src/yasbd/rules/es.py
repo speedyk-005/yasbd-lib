@@ -1,6 +1,7 @@
 import regex as re
 
-from yasbd.rules.base import Rules, build_abbr_pattern
+from yasbd.rules.base import Rules
+from yasbd.utils.trie import build_optimized_pattern
 
 
 # fmt: off
@@ -95,7 +96,7 @@ class EsRules(Rules):
         # Resolves the ambiguity "Ud. Marco" vs "Ud. Mañana".
         cls.MID_SENTENCE_FINDER_LST.append(
             re.compile(rf"""
-                \b(?i:{build_abbr_pattern({"ud", "uds", "vd", "vds"})})\.
+                \b(?i:{build_optimized_pattern({"ud", "uds", "vd", "vds"})})\.
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
             """, re.X)
         )
