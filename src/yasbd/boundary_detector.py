@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from collections.abc import Generator, Iterable
+from collections.abc import Callable, Generator, Iterable
 from io import TextIOBase
 from itertools import chain, pairwise, tee
 
@@ -30,6 +30,7 @@ class BoundaryDetector:
         *,
         preserve_quote_and_paren: bool = True,
         verbose: bool = False,
+        hook: Callable[[dict[str, object]], None] | None = None,
     ):
         """Initialize the boundary detector.
 
@@ -41,9 +42,14 @@ class BoundaryDetector:
             preserve_quote_and_paren: Do not split on terminators inside
                 quoted or parenthesised text.
             verbose: Enable verbose logging.
+            hook: Optional per-paragraph post-processing callback. Receives
+                a dict with ``text``, ``lang`` and ``boundaries`` keys;
+                mutate ``boundaries`` (a list of paragraph-relative offsets)
+                in place to add or remove sentence boundaries.
         """
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
+        self.hook = hook
         self._rule_cache: OrderedDict[str, object] = OrderedDict()
 
         if not lang:
@@ -112,6 +118,22 @@ class BoundaryDetector:
 
         return rule
 
+    def _run_hook(self, text: str, boundaries: list[int]) -> list[int]:
+        """Run the user hook on *boundaries* for *text*, if configured.
+
+        The hook mutates ``boundaries`` in place. Returns the (possibly
+        re-sorted) list.
+        """
+        if self.hook is None:
+            return boundaries
+        ctx: dict[str, object] = {
+            "text": text,
+            "lang": self._lang,
+            "boundaries": boundaries,
+        }
+        self.hook(ctx)
+        return sorted(ctx["boundaries"])
+
     def _detect_relative_spans(
         self,
         para_iter: Iterable[str],
@@ -125,6 +147,7 @@ class BoundaryDetector:
                 boundaries = [0, len(para)]
             else:
                 boundaries = rule.apply(para, self.preserve_quote_and_paren)
+                boundaries = self._run_hook(para, boundaries)
             yield from pairwise(boundaries)
 
     @validate_input
@@ -181,7 +204,9 @@ class BoundaryDetector:
                 yield ParagraphEOF
             is_first_para = False
 
-            boundaries = rule.apply(para.rstrip(), self.preserve_quote_and_paren)
+            stripped = para.rstrip()
+            boundaries = rule.apply(stripped, self.preserve_quote_and_paren)
+            boundaries = self._run_hook(stripped, boundaries)
 
             for pos in boundaries[1:]:
                 yield offset + pos
