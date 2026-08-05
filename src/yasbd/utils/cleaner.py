@@ -20,6 +20,9 @@ PREFIXES = {
 }
 # fmt: on
 
+# https://regex101.com/r/dL1zCM/1
+DIFFERENT_HYPENS_FINDER = re.compile(r"[\u2010\u2011\u2012\u2013]")
+
 # https://regex101.com/r/csjyrs/2/substitution
 _vowels_pattern = "aeiouyæœ"
 _suffix_pattern = "|".join(PREFIXES)
@@ -96,6 +99,7 @@ def _clean_ocr_text(text: str) -> str:
     cleaned_text = HEADING_OR_LIST_FINDER.sub(" ", cleaned_text)
     cleaned_text = NO_SPACE_BETWEEN_SENTENCES_FINDER.sub(" ", cleaned_text)
     cleaned_text = ARTIFACT_FINDER.sub("", cleaned_text)
+    cleaned_text = DIFFERENT_HYPENS_FINDER.sub("-", cleaned_text)
     cleaned_text = HYPHENATED_WORD_FINDER.sub("", cleaned_text)
     return PAGE_FINDER.sub("", cleaned_text)
 
