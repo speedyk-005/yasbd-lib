@@ -1,6 +1,7 @@
 import re
 
-from yasbd.rules.base import Rules, build_abbr_pattern
+from yasbd.rules.base import Rules
+from yasbd.utils.trie import build_optimized_pattern
 
 
 # fmt: off
@@ -77,7 +78,7 @@ class MyRules(Rules):
         super()._compile_regex_dynamically()
 
         cls.FINAL_PARTICLES_FINDER = re.compile(
-            rf"{build_abbr_pattern(cls.DISCOURSE_FINAL_PARTICLES)}(?!\s*[.?!;:။၏])"
+            rf"{build_optimized_pattern(cls.DISCOURSE_FINAL_PARTICLES)}(?!\s*[.?!;:။၏])"
         )
 
     def post_process_boundaries(

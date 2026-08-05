@@ -1,6 +1,7 @@
 import re
 
-from yasbd.rules.base import Rules, build_abbr_pattern
+from yasbd.rules.base import Rules
+from yasbd.utils.trie import build_optimized_pattern
 
 
 # fmt: off
@@ -124,7 +125,7 @@ class DeRules(Rules):
             re.compile(rf"""
                 (?:\d\.|(?:(?<=\d)|\b)(?i:[ap]\.m\.))
                 (?=
-                    \s+(?i:{build_abbr_pattern(cls.DATE_ABBRVS | cls.DATE_WORDS)})
+                    \s+(?i:{build_optimized_pattern(cls.DATE_ABBRVS | cls.DATE_WORDS)})
                     (?:\.|\s|$)
                 )
             """, re.X),
@@ -132,7 +133,7 @@ class DeRules(Rules):
 
         # Street abbrv followed by a common starters
         cls.ENDING_STREET_ABBRVS_FINDER = re.compile(rf"""
-            (?:\b(?i:{build_abbr_pattern(cls.STREET_ABBRVS)})\.)
+            (?:\b(?i:{build_optimized_pattern(cls.STREET_ABBRVS)})\.)
             (?=\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
            """, re.X
         )

@@ -2,20 +2,11 @@ import re  # For simpler patterns
 from itertools import pairwise
 
 import regex as re2
-from retrie.trie import Trie
 
+from yasbd.utils.trie import build_optimized_pattern
 
-def build_abbr_pattern(options: set[str]) -> str:
-    """Build an optimised and escaped regex alternation pattern.
-
-    Returns a never-match pattern if no valid options exist.
-    Ref: https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything?
-    """
-    if not options:
-        return r"(?!)"
-
-    trie = Trie()
-    return trie.add(*options).pattern()
+# Backwards-compat alias for the pre-rename public API name.
+build_abbr_pattern = build_optimized_pattern
 
 
 class CJK:
@@ -221,9 +212,9 @@ class Rules:
         """Compile language-specific regex patterns."""
         cls.TERMINATORS_PATTERN = f"[{''.join(cls.TERMINATORS)}]"
         cls.DOTS_PATTERN = r"[.．]"
-        cls.TITLE_ABBRVS_PATTERN = build_abbr_pattern(cls.TITLE_ABBRVS)
-        cls.DOTTED_GEOPOL_ABBRVS_PATTERN = build_abbr_pattern(cls.DOTTED_GEOPOL_ABBRVS)
-        cls.COMMON_STARTERS_PATTERN = build_abbr_pattern(cls.COMMON_SENT_STARTERS)
+        cls.TITLE_ABBRVS_PATTERN = build_optimized_pattern(cls.TITLE_ABBRVS)
+        cls.DOTTED_GEOPOL_ABBRVS_PATTERN = build_optimized_pattern(cls.DOTTED_GEOPOL_ABBRVS)
+        cls.COMMON_STARTERS_PATTERN = build_optimized_pattern(cls.COMMON_SENT_STARTERS)
 
         # https://regex101.com/r/qBSyU5/19
         # Handle flattened lists due to messy OCR.
@@ -291,19 +282,19 @@ class Rules:
 
             # Abbrv that NEVER ends a sentence
             re.compile(
-               rf"\b(?i:{build_abbr_pattern(cls.INLINE_ONLY_ABBRVS)}){cls.DOTS_PATTERN}"
+               rf"\b(?i:{build_optimized_pattern(cls.INLINE_ONLY_ABBRVS)}){cls.DOTS_PATTERN}"
             ),
 
             # References abbrv + number/letter/bracket (e.g., p. 55, app. A, et al. [2004])
             re2.compile(rf"""
-                \b(?i:{build_abbr_pattern(cls.REFERENCE_ABBRVS)}){cls.DOTS_PATTERN}
+                \b(?i:{build_optimized_pattern(cls.REFERENCE_ABBRVS)}){cls.DOTS_PATTERN}
                 (?=\s+(?:\(|\[|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))
                 """, re2.X
             ),
 
             # Date abbrv followed by a number
             re2.compile(
-                rf"\b(?i:{build_abbr_pattern(cls.DATE_ABBRVS)}){cls.DOTS_PATTERN}(?=\s+\p{{N}})"
+                rf"\b(?i:{build_optimized_pattern(cls.DATE_ABBRVS)}){cls.DOTS_PATTERN}(?=\s+\p{{N}})"
             ),
 
             # A dot followed by an superscript indicator (e.g. n.º, ​1.º)
@@ -323,14 +314,14 @@ class Rules:
                 """, re2.X
             ),
             re.compile(rf"""
-                (?:(?i:{build_abbr_pattern(cls.NAMES_WITH_EXCLAMATION)})[! ！‼])
+                (?:(?i:{build_optimized_pattern(cls.NAMES_WITH_EXCLAMATION)})[! ！‼])
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                """, re.X
             ),
 
             # structural headings (e.g., "Section 1. The Beginning.")
             re.compile(rf"""
-                \b(?:{build_abbr_pattern(cls.SECTION_MARKERS)})\s+
+                \b(?:{build_optimized_pattern(cls.SECTION_MARKERS)})\s+
                 (?:[\dIVXLCDM]+{cls.DOTS_PATTERN}){{1,3}}
                 """, re.X
             )
@@ -345,7 +336,7 @@ class Rules:
             )
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
                 \s*[\p{{Po}}\p{{Ll}}\p{{Pe}}]|
-                {build_abbr_pattern(cls.POST_QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}
+                {build_optimized_pattern(cls.POST_QUOTATIVE_PARTICLES | cls.REPORTING_WORDS)}
             )
             """,
             re2.X,
