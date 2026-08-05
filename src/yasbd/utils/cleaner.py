@@ -10,28 +10,36 @@ from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
 from yasbd.utils.logger import log_info
 from yasbd.utils.paragraph_stream import ParagraphStream
+from yasbd.utils.trie import build_optimized_pattern
 
 # fmt: off
 PREFIXES = {
-    "hyper", "ultra", "super", "extra", "semi", "multi", "pre", "post",
-    "ex", "cross", "inter", "trans", "anti", "counter", "non", "quasi",
-    "self", "auto", "cyber", "techno", "electro", "high", "low", "open",
-    "closed", "up", "down", "off", "mid", "vice",
+    "anti", "auto", "bi", "counter", "cyber", "de", "dis", "electro", "extra",
+    "geo", "hetero", "homo", "hyper", "hypo", "infra", "inter", "intra", "up",
+    "macro", "mega", "meta", "micro", "mini", "mis", "mono", "multi", "neo",
+    "omni", "pan", "para", "peri", "poly", "pre", "pro", "proto", "post",
+    "pseudo", "quasi", "re", "retro", "semi", "sub", "super", "supra",
+    "tele", "trans", "tri", "ultra", "un", "uni", "phe", "ani",
 }
+SUFFIXES = {"sis", "tion", "ry", "nal", "mal", "no", "té"}
 # fmt: on
 
 # https://regex101.com/r/dL1zCM/1
 DIFFERENT_HYPENS_FINDER = re.compile(r"[\u2010\u2011\u2012\u2013]")
 
-# https://regex101.com/r/csjyrs/2/substitution
-_vowels_pattern = "aeiouyæœ"
-_suffix_pattern = "|".join(PREFIXES)
+# https://regex101.com/r/csjyrs/3/substitution
+_preffixes_pattern = build_optimized_pattern(PREFIXES)
+_suffixes_pattern = build_optimized_pattern(SUFFIXES)
 HYPHENATED_WORD_FINDER = re2.compile(
     rf"""
-    (?<=[{_vowels_pattern}]\p{{M}}?-)\s+(?=[{_vowels_pattern}])|
-    (?<=(?:{_suffix_pattern})-)\s|
-    (?<!(?:{_suffix_pattern}))-\s|
-""",
+    \u00ad\n|   # Soft hyphens are invisible hints
+
+    # Common pre/sufixes that are ussualy not hyphenated
+    (?<=(?:{_preffixes_pattern}))-\R|
+    -\R(?=(?:{_suffixes_pattern}))|
+
+    (?<=-)\R   # Any hyphen + Vertical space
+    """,
     re2.X,
 )
 
@@ -134,6 +142,8 @@ class StreamCleaner(StreamCleanerStub):
         ['WORD']
         >>> list(StreamCleaner("An hyphe-\\nnated sentence"))
         ['An hyphenated sentence']
+        >>> list(StreamCleaner("state-of-the-\\nart"))
+        ['state-of-the-art']
         >>> list(StreamCleaner("Don't be naï-\\nve"))
         ["Don't be naïve"]
         >>> list(StreamCleaner(""))
