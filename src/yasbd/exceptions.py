@@ -16,3 +16,7 @@ class LangPackError(YasbdError):
 
 class CleanStepError(YasbdError, TypeError):
     """Raised when a StreamCleaner extra step fails (non-callable or non-str return)."""
+
+
+class HookError(YasbdError, TypeError):
+    """Raised when a post-processing hook fails or leaves invalid boundaries."""

@@ -3,7 +3,7 @@ from collections.abc import Callable, Generator, Iterable
 from io import TextIOBase
 from itertools import chain, pairwise, tee
 
-from yasbd.exceptions import InvalidInputError
+from yasbd.exceptions import HookError, InvalidInputError
 from yasbd.rules import get_supported_langs, load_rule
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
@@ -131,8 +131,22 @@ class BoundaryDetector:
             "lang": self._lang,
             "boundaries": boundaries,
         }
-        self.hook(ctx)
-        return sorted(ctx["boundaries"])
+        try:
+            self.hook(ctx)
+        except Exception as exc:
+            raise HookError(
+                f"post-processing hook raised an error: {exc!r}"
+            ) from exc
+
+        result = ctx["boundaries"]
+        if not isinstance(result, list) or not all(
+            isinstance(pos, int) and 0 <= pos <= len(text) for pos in result
+        ):
+            raise HookError(
+                "post-processing hook must leave 'boundaries' as a list of "
+                "int offsets within the paragraph"
+            )
+        return sorted(result)
 
     def _detect_relative_spans(
         self,
