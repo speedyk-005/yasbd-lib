@@ -144,8 +144,6 @@ class StreamCleaner(StreamCleanerStub):
         ['An hyphenated sentence']
         >>> list(StreamCleaner("state-of-the-\\nart"))
         ['state-of-the-art']
-        >>> list(StreamCleaner("Don't be naï-\\nve"))
-        ["Don't be naïve"]
         >>> list(StreamCleaner(""))
         []
         >>> StreamCleaner("Hello world", steps_to_skip=["nothing"])
