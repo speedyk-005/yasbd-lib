@@ -204,3 +204,17 @@ def test_universal_regression(en_detector, marked_text):
 
     result = list(en_detector.segment(input_text))
     assert result == expected, f"Input: {input_text}"
+
+
+def test_post_processing_hook():
+    """test that a hook can remove and add boundaries in place."""
+
+    def tweak(ctx):
+        # Remove the boundary after "Hi." (join) and add one after "There" (split)
+        ctx["boundaries"] = [
+            pos for pos in ctx["boundaries"] if pos != 3
+        ] + [10]
+
+    detector = BoundaryDetector(lang="en", hook=tweak)
+    assert list(detector.segment("Hi. There world.")) == ["Hi. There", "world."]
+    assert list(detector.detect("Hi. There world.")) == [10, 16]
