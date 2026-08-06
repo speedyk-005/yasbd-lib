@@ -99,10 +99,12 @@ NO_SPACE_BETWEEN_SENTENCES_FINDER = re.compile(r"(?<=\w\.)(?=[A-Z][a-z])")
 # https://regex101.com/r/Nw2I67/1
 CONSECUTIVE_FORWARD_SLASH_FINDER = re.compile(r"\/{3}")
 
+NEWLINE_NORMALIZER = re.compile(r"\r\n|\r")
+
 
 def normalize_newlines(text: str) -> str:
     """Normalize Windows (\r\n) and Classic Mac (\r) line endings to Unix (\n)."""
-    return text.replace("\r\n", "\n").replace("\r", "\n")
+    return NEWLINE_NORMALIZER.sub("\n", text)
 
 
 def _clean_ocr_text(text: str) -> str:
@@ -130,7 +132,7 @@ DEFAULT_CLEANING_PIPELINE = {
 
 
 class StreamCleaner(StreamCleanerStub):
-    """Normalize and clean noisy text by applying ``ftfy``, HTML sanitization,
+    """Normalize line endings, clean noisy text by applying ``ftfy``, HTML sanitization,
     and various regex cleanup rules across paragraphs.
 
     Examples:
