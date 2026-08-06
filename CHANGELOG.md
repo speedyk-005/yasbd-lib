@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **Hyphens dropped at line breaks in hyphenated compounds** ([#231](https://github.com/speedyk-005/yasbd-lib/pull/231)): StreamCleaner removed the hyphen when a line broke at a legitimate hyphenated compound, turning `state-of-the-\nart` into `state-of-theart`. Now only known prefixes/suffixes join across line breaks; all other cases keep the hyphen. Unicode hyphen variants are normalized to ASCII first.
+- **Absolute offsets ignore leading blank lines** ([#236](https://github.com/speedyk-005/yasbd-lib/pull/236)): `detect()` skipped whitespace-only paragraphs before accumulating the offset, so text starting with blank lines produced offsets relative to the first non-whitespace paragraph. Whitespace paragraphs now advance the offset.
 
 ### [0.13.1] - 2026-07-18
 
