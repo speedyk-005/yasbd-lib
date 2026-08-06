@@ -236,6 +236,12 @@ detector = BoundaryDetector(
 
     # Enable verbose logging. Defaults to `False`.
     verbose=True,
+
+    # Optional per-paragraph post-processing callback.
+    # Receives a dict with `text`, `lang`, and `boundaries` keys.
+    # Mutate `boundaries` (list of paragraph-relative offsets) in place
+    # to add or remove sentence boundaries. Defaults to `None`.
+    hook=lambda ctx: ...,
 )
 ```
 
