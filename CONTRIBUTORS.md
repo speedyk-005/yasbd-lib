@@ -5,6 +5,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | Name | Role |
 |------|------|
 | **[@speedyk-005](https://github.com/speedyk-005)** | Maintainer & Creator |
+| **[@AshSgDe29071999](https://github.com/AshSgDe29071999)** | Combined same-module imports in `__init__.py` |
 | **[@1cbyc](https://github.com/1cbyc)** | Coordinate direction abbreviation fix |
 | **[@cnaples79](https://github.com/cnaples79)** | Missing comma in set literals fix |
 | **[@ddelrio1986](https://github.com/ddelrio1986)** | Spelling and grammar fixes in docs |
