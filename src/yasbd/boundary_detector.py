@@ -136,9 +136,7 @@ class BoundaryDetector:
         try:
             self.hook(ctx)
         except Exception as exc:
-            raise HookError(
-                f"post-processing hook raised an error: {exc!r}"
-            ) from exc
+            raise HookError(f"post-processing hook raised an error: {exc!r}") from exc
 
         result = ctx["boundaries"]
         if not isinstance(result, list) or not all(
