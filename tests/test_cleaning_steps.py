@@ -76,9 +76,9 @@ class TestNormalizeSlashes:
         assert result == ""
 
     def test_only_slashes(self):
-        """String of triple slashes should become empty."""
+        """String of triple slashes should become single slash."""
         result = normalize_slashes("///")
-        assert result == ""
+        assert result == "/"
 
     def test_guarded_path_no_triple_slashes(self):
         """Guarded path: text without '///'."""
@@ -105,10 +105,9 @@ class TestNormalizeSpaces:
         assert result == "Hello world test"
 
     def test_leading_trailing_space(self):
-        """Leading and trailing spaces should be handled by caller, not here."""
-        # normalize_spaces only handles consecutive spaces internally
+        """Leading and trailing spaces are also normalized internally."""
         result = normalize_spaces("  Hello world  ")
-        assert result == "  Hello world  "
+        assert result == " Hello world "
 
     def test_empty_string(self):
         """Empty string should return empty string."""

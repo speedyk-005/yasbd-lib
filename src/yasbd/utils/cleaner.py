@@ -136,7 +136,7 @@ def normalize_slashes(text: str) -> str:
     Returns:
         Text with triple slashes (///) replaced by single slashes.
     """
-    return text if "///" not in text else CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", text)
+    return text if "///" not in text else CONSECUTIVE_FORWARD_SLASH_FINDER.sub("/", text)
 
 
 def normalize_spaces(text: str) -> str:
