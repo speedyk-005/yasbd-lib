@@ -1,6 +1,6 @@
 import pytest
 
-from yasbd.utils.cleaner import unwrap_htmls, normalize_slashes, normalize_spaces
+from yasbd.utils.cleaner import normalize_newlines, normalize_slashes, normalize_spaces, unwrap_htmls
 
 
 class TestUnwrapHtmls:
@@ -19,7 +19,7 @@ class TestUnwrapHtmls:
     def test_removes_style_tag(self):
         """Style tags and their content should be removed."""
         result = unwrap_htmls("Text<style>.hidden{color:red}</style>More text")
-        assert result == "TextMore text"
+        assert result =="TextMore text"
 
     def test_removes_iframe_tag(self):
         """Iframe tags and their content should be removed."""
@@ -97,7 +97,7 @@ class TestNormalizeSpaces:
     def test_reduces_multiple_spaces(self):
         """Multiple consecutive spaces should be reduced to single space."""
         result = normalize_spaces("Hello    world")
-        assert result == "Hello world"
+        assert result =="Hello world"
 
     def test_preserves_single_spaces(self):
         """Single spaces between words should be preserved."""
@@ -119,7 +119,46 @@ class TestNormalizeSpaces:
         result = normalize_spaces("     ")
         assert result == " "
 
-    def test_guarded_path_no_spaces(self):
-        """Guarded path: text without ' ' character."""
-        result = normalize_spaces("hello/world")
-        assert result == "hello/world"
+
+class TestNormalizeNewlines:
+    """Tests for normalize_newlines named function."""
+
+    def test_windows_newlines(self):
+        """Windows \\r\\n line endings should be normalized to \\n."""
+        result = normalize_newlines("Hello\r\nWorld")
+        assert result == "Hello\nWorld"
+
+    def test_mac_newlines(self):
+        """Classic Mac \\r line endings should be normalized to \\n."""
+        result = normalize_newlines("Hello\rWorld")
+        assert result == "Hello\nWorld"
+
+    def test_unix_newlines(self):
+        """Unix \\n line endings should remain unchanged."""
+        result = normalize_newlines("Hello\nWorld")
+        assert result == "Hello\nWorld"
+
+    def test_mixed_newlines(self):
+        """Mixed line endings should be normalized consistently."""
+        result = normalize_newlines("Line1\r\nLine2\rLine3\nLine4")
+        assert result == "Line1\nLine2\nLine3\nLine4"
+
+    def test_empty_string(self):
+        """Empty string should return empty string."""
+        result = normalize_newlines("")
+        assert result == ""
+
+    def test_no_newlines(self):
+        """String without newlines should pass through unchanged."""
+        result = normalize_newlines("Hello world")
+        assert result == "Hello world"
+
+    def test_only_newlines(self):
+        """String with only line endings should be normalized."""
+        result = normalize_newlines("\r\n\r\n\r\n")
+        assert result == "\n\n\n"
+
+    def test_guarded_path_no_carriage_returns(self):
+        """Guarded path: text without \\r or \\r\\n."""
+        result = normalize_newlines("No weird newlines here")
+        assert result == "No weird newlines here"

@@ -112,6 +112,21 @@ def _clean_ocr_text(text: str) -> str:
     return PAGE_FINDER.sub("", cleaned_text)
 
 
+def normalize_newlines(text: str) -> str:
+    """Normalize line endings to Unix-style ``\\n``.
+
+    Windows ``\\r\\n`` and classic Mac ``\\r`` line endings are converted
+    to ``\\n``. Existing Unix ``\\n`` line endings are left unchanged.
+
+    Args:
+        text: Input text that may contain mixed line endings.
+
+    Returns:
+        Text with all line endings normalized to ``\\n``.
+    """
+    return text.replace("\r\n", "\n").replace("\r", "\n")
+
+
 def unwrap_htmls(text: str) -> str:
     """Remove HTML tags from text, preserving lightweight formatting tags.
 
@@ -155,6 +170,7 @@ DEFAULT_CLEANING_PIPELINE = {
     "fix_mojibake": ftfy.fix_text,
     "fix_ocr_text": _clean_ocr_text,
     "unwrap_htmls": unwrap_htmls,
+    "normalize_newlines": normalize_newlines,
     "normalize_slashes": normalize_slashes,
     "normalize_spaces": normalize_spaces,
 }
