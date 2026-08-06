@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Post-processing hook on BoundaryDetector** ([#234](https://github.com/speedyk-005/yasbd-lib/pull/234)): `BoundaryDetector` now accepts a `hook` callback that runs per paragraph after the language rules apply. It receives a dict with `text`, `lang`, `boundaries` and `paragraph_index` keys and can add or remove sentence boundaries in place. A new `HookError` is raised if the hook fails or leaves invalid boundaries. This replaces monkey-patching rule internals for custom boundary logic (e.g. OpenMed's `_split_yasbd_chinese_semicolons` hack).
+
 ### Changed
 
 - **Trie pattern builder moved to utils and renamed** ([#230](https://github.com/speedyk-005/yasbd-lib/pull/230)): `build_abbr_pattern` moved from `yasbd.rules.base` to a new `yasbd.utils.trie` module and renamed to `build_optimized_pattern`. The old name stays as a backwards-compatible alias, and language rule files now import it from `yasbd.utils.trie`.
