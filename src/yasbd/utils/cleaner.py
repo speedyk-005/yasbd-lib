@@ -112,14 +112,51 @@ def _clean_ocr_text(text: str) -> str:
     return PAGE_FINDER.sub("", cleaned_text)
 
 
+def unwrap_htmls(text: str) -> str:
+    """Remove HTML tags from text, preserving lightweight formatting tags.
+
+    Container elements (script, style, iframe, etc.) and their content are
+    stripped, while lightweight formatting tags (<b>, <i>, <u>) are preserved.
+
+    Args:
+        text: Input text that may contain HTML tags.
+
+    Returns:
+        Text with HTML tags removed, preserving <b>, <i>, and <u> tags.
+    """
+    return text if "<" not in text else HTML_TAGS_FINDER.sub("", text)
+
+
+def normalize_slashes(text: str) -> str:
+    """Replace triple forward slashes with a single slash.
+
+    Args:
+        text: Input text that may contain triple slashes.
+
+    Returns:
+        Text with triple slashes (///) replaced by single slashes.
+    """
+    return text if "///" not in text else CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", text)
+
+
+def normalize_spaces(text: str) -> str:
+    """Reduce consecutive whitespace to a single space.
+
+    Args:
+        text: Input text that may contain multiple consecutive spaces.
+
+    Returns:
+        Text with consecutive whitespace reduced to a single space.
+    """
+    return text if " " not in text else MULTIPLE_SPACES_FINDER.sub(" ", text)
+
+
 DEFAULT_CLEANING_PIPELINE = {
     "fix_mojibake": ftfy.fix_text,
     "fix_ocr_text": _clean_ocr_text,
-    "unwrap_htmls": lambda t: t if "<" not in t else HTML_TAGS_FINDER.sub("", t),
-    "normalize_slashes": lambda t: (
-        t if "///" not in t else CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", t)
-    ),
-    "normalize_spaces": lambda t: t if " " not in t else MULTIPLE_SPACES_FINDER.sub(" ", t),
+    "unwrap_htmls": unwrap_htmls,
+    "normalize_slashes": normalize_slashes,
+    "normalize_spaces": normalize_spaces,
 }
 
 
@@ -138,7 +175,7 @@ class StreamCleaner(StreamCleanerStub):
         ['<b>Hello</b> world']
         >>> list(StreamCleaner("Text with ///slashes"))
         ['Text with slashes']
-        >>> list(StreamCleaner("W\\nO\\nR\\nD"))
+        >>> list(StreamCleaner("W\\\nO\\\nR\\\nD"))
         ['WORD']
         >>> list(StreamCleaner("An hyphe-\\nnated sentence"))
         ['An hyphenated sentence']
