@@ -116,6 +116,21 @@ def test_detect_paragraph_eof_sentinel(en_detector):
     assert result == [6, 15]
 
 
+def test_detect_leading_blank_offset(en_detector):
+    """test that absolute offsets account for leading blank paragraphs."""
+    # Leading blank lines must shift absolute offsets (fix for openmed adapter)
+    result = list(en_detector.detect("\n\n\nOne. Two.\n\nThree."))
+    assert result == [7, 12, 20]
+
+    # Interior blank paragraphs counted too
+    result = list(en_detector.detect("One.\n\n\n\nTwo."))
+    assert result == [4, 12]
+
+    # No blank lines: unchanged
+    result = list(en_detector.detect("One. Two. Three."))
+    assert result == [4, 9, 16]
+
+
 def test_rule_cache_lru(en_detector):
     """test that rule objects are cached (max 5) and reused on lang switch."""
     # Same lang = same cached object
