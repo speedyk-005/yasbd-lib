@@ -239,9 +239,9 @@ detector = BoundaryDetector(
 
     # Optional per-paragraph post-processing callback.
     # Receives a dict with `text`, `lang`, `boundaries`, and
-    # `paragraph_index` keys. Mutate `boundaries` (list of
-    # paragraph-relative offsets) in place to add or remove
-    # sentence boundaries. Defaults to `None`.
+    # `paragraph_index` keys. Mutate `boundaries` in place to add or
+    # remove sentence boundaries; reassigning `ctx["boundaries"]` to a
+    # new list also works, though it isn't recommended. Defaults to `None`.
     hook=lambda ctx: ...,
 )
 ```

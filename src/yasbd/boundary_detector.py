@@ -24,7 +24,9 @@ class HookContext(TypedDict):
         text: The paragraph text being segmented.
         lang: ISO language code of the active rule set.
         boundaries: Paragraph-relative boundary offsets. Mutate this list
-            in place to add or remove sentence boundaries.
+            in place to add or remove sentence boundaries; reassigning
+            ``ctx["boundaries"]`` to a new list also works, though it is
+            not recommended.
         paragraph_index: Zero-based index of the paragraph in the stream.
     """
 
@@ -63,9 +65,10 @@ class BoundaryDetector:
             verbose: Enable verbose logging.
             hook: Optional per-paragraph post-processing callback. Receives
                 a dict with ``text``, ``lang``, ``boundaries`` and
-                ``paragraph_index`` keys; mutate ``boundaries`` (a list of
-                paragraph-relative offsets) in place to add or remove
-                sentence boundaries.
+                ``paragraph_index`` keys; mutate ``boundaries`` in place to
+                add or remove sentence boundaries. Reassigning
+                ``ctx["boundaries"]`` to a new list also works, though
+                in-place mutation is recommended.
         """
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
@@ -141,8 +144,9 @@ class BoundaryDetector:
     def _run_hook(self, text: str, boundaries: list[int], para_index: int) -> list[int]:
         """Run the user hook on *boundaries* for *text*, if configured.
 
-        The hook mutates ``boundaries`` in place. Returns the (possibly
-        re-sorted) list.
+        The hook may mutate the list in place or reassign
+        ``ctx["boundaries"]`` to a new list. The final value is validated
+        and returned (re-sorted).
         """
         if self.hook is None:
             return boundaries
