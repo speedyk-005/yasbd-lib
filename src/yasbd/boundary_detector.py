@@ -2,6 +2,7 @@ from collections import OrderedDict
 from collections.abc import Callable, Generator, Iterable
 from io import TextIOBase
 from itertools import chain, pairwise, tee
+from typing import TypedDict
 
 from yasbd.exceptions import HookError, InvalidInputError
 from yasbd.rules import get_supported_langs, load_rule
@@ -14,6 +15,24 @@ from yasbd.utils.paragraph_stream import ParagraphStream
 # Signals transition between paragraphs in relative mode
 # during boundary detection
 ParagraphEOF = type("_ParagraphEOF", (), {"__repr__": lambda _: "ParagraphEOF"})()
+
+
+class HookContext(TypedDict):
+    """Per-paragraph context passed to a post-processing hook.
+
+    Keys:
+        text: The paragraph text being segmented.
+        lang: ISO language code of the active rule set.
+        boundaries: Paragraph-relative boundary offsets. Mutate this list
+            in place to add or remove sentence boundaries.
+        paragraph_index: Zero-based index of the paragraph in the stream.
+    """
+
+    text: str
+    lang: str
+    boundaries: list[int]
+    paragraph_index: int
+
 
 # Confidence threshold for auto language detection
 _MIN_CONFIDENCE = 0.8
@@ -30,7 +49,7 @@ class BoundaryDetector:
         *,
         preserve_quote_and_paren: bool = True,
         verbose: bool = False,
-        hook: Callable[[dict[str, object]], None] | None = None,
+        hook: Callable[[HookContext], None] | None = None,
     ):
         """Initialize the boundary detector.
 
@@ -127,7 +146,7 @@ class BoundaryDetector:
         """
         if self.hook is None:
             return boundaries
-        ctx: dict[str, object] = {
+        ctx: HookContext = {
             "text": text,
             "lang": self._lang,
             "boundaries": boundaries,
