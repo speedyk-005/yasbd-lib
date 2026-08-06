@@ -141,7 +141,7 @@ class BoundaryDetector:
 
         return rule
 
-    def _run_hook(self, text: str, boundaries: list[int], para_index: int) -> list[int]:
+    def _run_hook(self, text: str, boundaries: list[int], index: int) -> list[int]:
         """Run the user hook on *boundaries* for *text*, if configured.
 
         The hook may mutate the list in place or reassign
@@ -154,7 +154,7 @@ class BoundaryDetector:
             "text": text,
             "lang": self._lang,
             "boundaries": boundaries,
-            "paragraph_index": para_index,
+            "paragraph_index": index,
         }
         try:
             self.hook(ctx)
@@ -185,12 +185,12 @@ class BoundaryDetector:
         first_para = next(para_iter, "")  # Needed for auto
         rule = self._get_rule(self._lang, first_para)
 
-        for para_index, para in enumerate(chain([first_para], para_iter)):
+        for index, para in enumerate(chain([first_para], para_iter)):
             if not para or para.isspace():
                 boundaries = [0, len(para)]
             else:
                 boundaries = rule.apply(para, self.preserve_quote_and_paren)
-                boundaries = self._run_hook(para, boundaries, para_index)
+                boundaries = self._run_hook(para, boundaries, index)
             yield from pairwise(boundaries)
 
     @validate_input
@@ -239,7 +239,7 @@ class BoundaryDetector:
 
         rule = self._get_rule(self._lang, first_para)
 
-        for para_index, para in enumerate(chain([first_para], para_iter)):
+        for index, para in enumerate(chain([first_para], para_iter)):
             if para.isspace():
                 continue
 
@@ -249,7 +249,7 @@ class BoundaryDetector:
 
             stripped = para.rstrip()
             boundaries = rule.apply(stripped, self.preserve_quote_and_paren)
-            boundaries = self._run_hook(stripped, boundaries, para_index)
+            boundaries = self._run_hook(stripped, boundaries, index)
 
             for pos in boundaries[1:]:
                 yield offset + pos
