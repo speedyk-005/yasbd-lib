@@ -175,6 +175,8 @@ class BoundaryDetector:
 
         for para in chain([first_para], para_iter):
             if para.isspace():
+                if not relative:
+                    offset += len(para)
                 continue
 
             if relative and not is_first_para:
