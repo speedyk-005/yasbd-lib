@@ -116,6 +116,21 @@ def test_detect_paragraph_eof_sentinel(en_detector):
     assert result == [6, 15]
 
 
+def test_detect_leading_blank_offset(en_detector):
+    """test that absolute offsets account for leading blank paragraphs."""
+    # Leading blank lines must shift absolute offsets (fix for openmed adapter)
+    result = list(en_detector.detect("\n\n\nOne. Two.\n\nThree."))
+    assert result == [7, 12, 20]
+
+    # Interior blank paragraphs counted too
+    result = list(en_detector.detect("One.\n\n\n\nTwo."))
+    assert result == [4, 12]
+
+    # No blank lines: unchanged
+    result = list(en_detector.detect("One. Two. Three."))
+    assert result == [4, 9, 16]
+
+
 def test_rule_cache_lru(en_detector):
     """test that rule objects are cached (max 5) and reused on lang switch."""
     # Same lang = same cached object
@@ -204,3 +219,17 @@ def test_universal_regression(en_detector, marked_text):
 
     result = list(en_detector.segment(input_text))
     assert result == expected, f"Input: {input_text}"
+
+
+def test_post_processing_hook():
+    """test that a hook can remove and add boundaries in place."""
+
+    def tweak(ctx):
+        # Remove the boundary after "Hi." (join) and add one after "There" (split)
+        ctx["boundaries"] = [
+            pos for pos in ctx["boundaries"] if pos != 3
+        ] + [10]
+
+    detector = BoundaryDetector(lang="en", hook=tweak)
+    assert list(detector.segment("Hi. There world.")) == ["Hi. There", "world."]
+    assert list(detector.detect("Hi. There world.")) == [10, 16]

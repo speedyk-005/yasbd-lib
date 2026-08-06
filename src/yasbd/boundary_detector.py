@@ -1,9 +1,10 @@
 from collections import OrderedDict
-from collections.abc import Generator, Iterable
+from collections.abc import Callable, Generator, Iterable
 from io import TextIOBase
 from itertools import chain, pairwise, tee
+from typing import TypedDict
 
-from yasbd.exceptions import InvalidInputError
+from yasbd.exceptions import HookError, InvalidInputError
 from yasbd.rules import get_supported_langs, load_rule
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
@@ -14,6 +15,26 @@ from yasbd.utils.paragraph_stream import ParagraphStream
 # Signals transition between paragraphs in relative mode
 # during boundary detection
 ParagraphEOF = type("_ParagraphEOF", (), {"__repr__": lambda _: "ParagraphEOF"})()
+
+
+class HookContext(TypedDict):
+    """Per-paragraph context passed to a post-processing hook.
+
+    Keys:
+        text: The paragraph text being segmented.
+        lang: ISO language code of the active rule set.
+        boundaries: Paragraph-relative boundary offsets. Mutate this list
+            in place to add or remove sentence boundaries; reassigning
+            ``ctx["boundaries"]`` to a new list also works, though it is
+            not recommended.
+        paragraph_index: Zero-based index of the paragraph in the stream.
+    """
+
+    text: str
+    lang: str
+    boundaries: list[int]
+    paragraph_index: int
+
 
 # Confidence threshold for auto language detection
 _MIN_CONFIDENCE = 0.8
@@ -30,6 +51,7 @@ class BoundaryDetector:
         *,
         preserve_quote_and_paren: bool = True,
         verbose: bool = False,
+        hook: Callable[[HookContext], None] | None = None,
     ):
         """Initialize the boundary detector.
 
@@ -41,9 +63,16 @@ class BoundaryDetector:
             preserve_quote_and_paren: Do not split on terminators inside
                 quoted or parenthesised text.
             verbose: Enable verbose logging.
+            hook: Optional per-paragraph post-processing callback. Receives
+                a dict with ``text``, ``lang``, ``boundaries`` and
+                ``paragraph_index`` keys; mutate ``boundaries`` in place to
+                add or remove sentence boundaries. Reassigning
+                ``ctx["boundaries"]`` to a new list also works, though
+                in-place mutation is recommended.
         """
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
+        self.hook = hook
         self._rule_cache: OrderedDict[str, object] = OrderedDict()
 
         if not lang:
@@ -112,6 +141,42 @@ class BoundaryDetector:
 
         return rule
 
+    def _run_hook(self, text: str, boundaries: list[int], index: int) -> list[int]:
+        """Run the user hook on *boundaries* for *text*, if configured.
+
+        The hook may mutate the list in place or reassign
+        ``ctx["boundaries"]`` to a new list. The final value is validated
+        and returned (re-sorted).
+        """
+        if self.hook is None:
+            return boundaries
+        ctx: HookContext = {
+            "text": text,
+            "lang": self._lang,
+            "boundaries": boundaries,
+            "paragraph_index": index,
+        }
+        try:
+            self.hook(ctx)
+        except Exception as exc:
+            raise HookError(f"post-processing hook raised an error: {exc!r}") from exc
+
+        result = ctx["boundaries"]
+        if not isinstance(result, list) or not all(
+            isinstance(pos, int) and 0 <= pos <= len(text) for pos in result
+        ):
+            raise HookError(
+                "post-processing hook must leave 'boundaries' as a list of "
+                "int offsets within the paragraph"
+            )
+        if 0 not in result or len(text) not in result:
+            raise HookError(
+                "post-processing hook must keep both the paragraph start (0) "
+                "and end offset; use [0, len(text)] to merge the whole "
+                "paragraph into one sentence"
+            )
+        return sorted(result)
+
     def _detect_relative_spans(
         self,
         para_iter: Iterable[str],
@@ -120,11 +185,12 @@ class BoundaryDetector:
         first_para = next(para_iter, "")  # Needed for auto
         rule = self._get_rule(self._lang, first_para)
 
-        for para in chain([first_para], para_iter):
+        for index, para in enumerate(chain([first_para], para_iter)):
             if not para or para.isspace():
                 boundaries = [0, len(para)]
             else:
                 boundaries = rule.apply(para, self.preserve_quote_and_paren)
+                boundaries = self._run_hook(para, boundaries, index)
             yield from pairwise(boundaries)
 
     @validate_input
@@ -173,15 +239,19 @@ class BoundaryDetector:
 
         rule = self._get_rule(self._lang, first_para)
 
-        for para in chain([first_para], para_iter):
+        for index, para in enumerate(chain([first_para], para_iter)):
             if para.isspace():
+                if not relative:
+                    offset += len(para)
                 continue
 
             if relative and not is_first_para:
                 yield ParagraphEOF
             is_first_para = False
 
-            boundaries = rule.apply(para.rstrip(), self.preserve_quote_and_paren)
+            stripped = para.rstrip()
+            boundaries = rule.apply(stripped, self.preserve_quote_and_paren)
+            boundaries = self._run_hook(stripped, boundaries, index)
 
             for pos in boundaries[1:]:
                 yield offset + pos

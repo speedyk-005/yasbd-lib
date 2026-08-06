@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Line ending normalization in default cleaning pipeline** ([#232](https://github.com/speedyk-005/yasbd-lib/issues/232)): Added `normalize_newlines` to `src/yasbd/utils/cleaner.py` and registered it in `DEFAULT_CLEANING_PIPELINE` to normalize `\r\n` and `\r` line endings to `\n`.
+- **Post-processing hook on BoundaryDetector** ([#234](https://github.com/speedyk-005/yasbd-lib/pull/234)): `BoundaryDetector` now accepts a `hook` callback that runs per paragraph after the language rules apply. It receives a dict with `text`, `lang`, `boundaries` and `paragraph_index` keys and can add or remove sentence boundaries in place. A new `HookError` is raised if the hook fails or leaves invalid boundaries. This replaces monkey-patching rule internals for custom boundary logic (e.g. OpenMed's `_split_yasbd_chinese_semicolons` hack).
 
 ### Changed
 
@@ -20,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **Hyphens dropped at line breaks in hyphenated compounds** ([#231](https://github.com/speedyk-005/yasbd-lib/pull/231)): StreamCleaner removed the hyphen when a line broke at a legitimate hyphenated compound, turning `state-of-the-\nart` into `state-of-theart`. Now only known prefixes/suffixes join across line breaks; all other cases keep the hyphen. Unicode hyphen variants are normalized to ASCII first.
+- **Absolute offsets ignore leading blank lines** ([#236](https://github.com/speedyk-005/yasbd-lib/pull/236)): `detect()` skipped whitespace-only paragraphs before accumulating the offset, so text starting with blank lines produced offsets relative to the first non-whitespace paragraph. Whitespace paragraphs now advance the offset.
 
 ### [0.13.1] - 2026-07-18
 

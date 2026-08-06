@@ -2,8 +2,10 @@ from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
 from yasbd.boundary_detector import BoundaryDetector
+from yasbd.boundary_detector import HookContext
 from yasbd.boundary_detector import ParagraphEOF
 from yasbd.exceptions import CleanStepError
+from yasbd.exceptions import HookError
 from yasbd.exceptions import InvalidInputError
 from yasbd.exceptions import UnsupportedLanguageError
 from yasbd.exceptions import YasbdError
@@ -43,6 +45,8 @@ if _utils_path not in __path__:
 __all__ = [
     "BoundaryDetector",
     "CleanStepError",
+    "HookContext",
+    "HookError",
     "InvalidInputError",
     "ParagraphEOF",
     "UnsupportedLanguageError",

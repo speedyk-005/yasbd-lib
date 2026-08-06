@@ -1,6 +1,7 @@
 # Table of Contents
 
 * [yasbd.boundary\_detector](#yasbd.boundary_detector)
+  * [HookContext](#yasbd.boundary_detector.HookContext)
   * [BoundaryDetector](#yasbd.boundary_detector.BoundaryDetector)
     * [\_\_init\_\_](#yasbd.boundary_detector.BoundaryDetector.__init__)
     * [lang](#yasbd.boundary_detector.BoundaryDetector.lang)
@@ -20,6 +21,12 @@
   * [CleanStepError](#yasbd.exceptions.CleanStepError)
 * [yasbd](#yasbd)
   * [register\_spacy\_component](#yasbd.register_spacy_component)
+  * [HookError](#yasbd.exceptions.HookError)
+* [yasbd.rules](#yasbd.rules)
+  * [register\_lang\_packs](#yasbd.rules.register_lang_packs)
+  * [clear\_lang\_packs](#yasbd.rules.clear_lang_packs)
+  * [get\_supported\_langs](#yasbd.rules.get_supported_langs)
+  * [load\_rule](#yasbd.rules.load_rule)
 * [yasbd.rules.af](#yasbd.rules.af)
 * [yasbd.rules.am](#yasbd.rules.am)
 * [yasbd.rules.ar](#yasbd.rules.ar)
@@ -101,9 +108,53 @@
 * [yasbd.utils.trie](#yasbd.utils.trie)
   * [build\_optimized\_pattern](#yasbd.utils.trie.build_optimized_pattern)
 
+<a id="yasbd"></a>
+
+# yasbd
+
+<a id="yasbd.register_spacy_component"></a>
+
+#### register\_spacy\_component
+
+```python
+def register_spacy_component()
+```
+
+Register the yasbd spaCy pipeline component on demand.
+
+Call this to add the ``yasbd`` component factory to spaCy's registry.
+Requires spaCy v3+ to be installed.
+
+Examples
+--------
+>>> import spacy
+>>> from yasbd import register_spacy_component
+>>> register_spacy_component()
+>>> nlp = spacy.blank("en")
+>>> nlp.add_pipe("yasbd", first=True, config={"lang": "en"})
+
 <a id="yasbd.boundary_detector"></a>
 
 # yasbd.boundary\_detector
+
+<a id="yasbd.boundary_detector.HookContext"></a>
+
+## HookContext Objects
+
+```python
+class HookContext(TypedDict)
+```
+
+Per-paragraph context passed to a post-processing hook.
+
+Keys:
+    text: The paragraph text being segmented.
+    lang: ISO language code of the active rule set.
+    boundaries: Paragraph-relative boundary offsets. Mutate this list
+        in place to add or remove sentence boundaries; reassigning
+        ``ctx["boundaries"]`` to a new list also works, though it is
+        not recommended.
+    paragraph_index: Zero-based index of the paragraph in the stream.
 
 <a id="yasbd.boundary_detector.BoundaryDetector"></a>
 
@@ -122,7 +173,8 @@ class BoundaryDetector()
 def __init__(lang: str | None = None,
              *,
              preserve_quote_and_paren: bool = True,
-             verbose: bool = False)
+             verbose: bool = False,
+             hook: Callable[[HookContext], None] | None = None)
 ```
 
 Initialize the boundary detector.
@@ -136,6 +188,12 @@ Initialize the boundary detector.
 - `preserve_quote_and_paren` - Do not split on terminators inside
   quoted or parenthesised text.
 - `verbose` - Enable verbose logging.
+- `hook` - Optional per-paragraph post-processing callback. Receives
+  a dict with ``text``, ``lang``, ``boundaries`` and
+  ``paragraph_index`` keys; mutate ``boundaries`` in place to
+  add or remove sentence boundaries. Reassigning
+  ``ctx["boundaries"]`` to a new list also works, though
+  in-place mutation is recommended.
 
 <a id="yasbd.boundary_detector.BoundaryDetector.lang"></a>
 
@@ -393,6 +451,74 @@ class CleanStepError(YasbdError, TypeError)
 Raised when a StreamCleaner extra step fails (non-callable or non-str return).
 
 <a id="yasbd"></a>
+<a id="yasbd.exceptions.HookError"></a>
+
+## HookError Objects
+
+```python
+class HookError(YasbdError, RuntimeError)
+```
+
+Raised when a post-processing hook fails or leaves invalid boundaries.
+
+<a id="yasbd.rules"></a>
+
+# yasbd.rules
+
+<a id="yasbd.rules.register_lang_packs"></a>
+
+#### register\_lang\_packs
+
+```python
+@validate_input
+def register_lang_packs(names: list[str]) -> list[str]
+```
+
+Import and validate external language pack modules.
+
+Each module must expose a ``PROFILES`` list of ``Rules`` subclasses.
+All validated profiles are stored in ``_LANG_PACK_REGISTRY``.
+
+Caution:
+This function imports arbitrary Python modules by name. Only load lang
+packs from sources you trust — an untrusted module can execute
+arbitrary code at import time.
+
+**Arguments**:
+
+- `names` - Module names resolvable from the Python path
+  (e.g. ``["yasbd_indic", "yasbd_legal"]``).
+  
+
+**Returns**:
+
+  List of registered language codes (e.g. ``["xx", "eo"]``).
+  
+
+**Raises**:
+
+- `LangPackError` - If a language pack module cannot be imported.
+
+<a id="yasbd.rules.clear_lang_packs"></a>
+
+#### clear\_lang\_packs
+
+```python
+def clear_lang_packs() -> None
+```
+
+Remove all registered language packs and reset the supported-languages cache.
+
+<a id="yasbd.rules.get_supported_langs"></a>
+
+#### get\_supported\_langs
+
+```python
+@cache
+def get_supported_langs() -> list[str]
+```
+
+Discover and cache supported language codes.
 
 # yasbd
 
@@ -745,7 +871,8 @@ def normalize_newlines(text: str) -> str
 ```
 
 Normalize Windows (
-) and Classic Mac () line endings to Unix (
+) and Classic Mac (
+) line endings to Unix (
 ).
 
 <a id="yasbd.utils.cleaner.StreamCleaner"></a>
