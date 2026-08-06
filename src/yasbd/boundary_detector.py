@@ -169,6 +169,12 @@ class BoundaryDetector:
                 "post-processing hook must leave 'boundaries' as a list of "
                 "int offsets within the paragraph"
             )
+        if 0 not in result or len(text) not in result:
+            raise HookError(
+                "post-processing hook must keep both the paragraph start (0) "
+                "and end offset; use [0, len(text)] to merge the whole "
+                "paragraph into one sentence"
+            )
         return sorted(result)
 
     def _detect_relative_spans(
