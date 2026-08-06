@@ -15,6 +15,7 @@
 ![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=flat&logo=reddit&logoColor=white)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/speedyk-005/yasbd-lib)
 
+> If you like this project, a star ⭐️ would mean a lot :)
 
 ---
 
