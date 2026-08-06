@@ -3,6 +3,7 @@
 * [yasbd](#yasbd)
   * [register\_spacy\_component](#yasbd.register_spacy_component)
 * [yasbd.boundary\_detector](#yasbd.boundary_detector)
+  * [HookContext](#yasbd.boundary_detector.HookContext)
   * [BoundaryDetector](#yasbd.boundary_detector.BoundaryDetector)
     * [\_\_init\_\_](#yasbd.boundary_detector.BoundaryDetector.__init__)
     * [lang](#yasbd.boundary_detector.BoundaryDetector.lang)
@@ -20,6 +21,7 @@
   * [InvalidInputError](#yasbd.exceptions.InvalidInputError)
   * [LangPackError](#yasbd.exceptions.LangPackError)
   * [CleanStepError](#yasbd.exceptions.CleanStepError)
+  * [HookError](#yasbd.exceptions.HookError)
 * [yasbd.rules](#yasbd.rules)
   * [register\_lang\_packs](#yasbd.rules.register_lang_packs)
   * [clear\_lang\_packs](#yasbd.rules.clear_lang_packs)
@@ -29,7 +31,6 @@
 * [yasbd.rules.am](#yasbd.rules.am)
 * [yasbd.rules.ar](#yasbd.rules.ar)
 * [yasbd.rules.base](#yasbd.rules.base)
-  * [build\_abbr\_pattern](#yasbd.rules.base.build_abbr_pattern)
   * [CJK](#yasbd.rules.base.CJK)
   * [Rules](#yasbd.rules.base.Rules)
     * [\_\_init\_\_](#yasbd.rules.base.Rules.__init__)
@@ -98,6 +99,8 @@
   * [YasbdComponent](#yasbd.utils.spacy_component.YasbdComponent)
     * [\_\_call\_\_](#yasbd.utils.spacy_component.YasbdComponent.__call__)
   * [create\_yasbd](#yasbd.utils.spacy_component.create_yasbd)
+* [yasbd.utils.trie](#yasbd.utils.trie)
+  * [build\_optimized\_pattern](#yasbd.utils.trie.build_optimized_pattern)
 
 <a id="yasbd"></a>
 
@@ -128,6 +131,25 @@ Examples
 
 # yasbd.boundary\_detector
 
+<a id="yasbd.boundary_detector.HookContext"></a>
+
+## HookContext Objects
+
+```python
+class HookContext(TypedDict)
+```
+
+Per-paragraph context passed to a post-processing hook.
+
+Keys:
+    text: The paragraph text being segmented.
+    lang: ISO language code of the active rule set.
+    boundaries: Paragraph-relative boundary offsets. Mutate this list
+        in place to add or remove sentence boundaries; reassigning
+        ``ctx["boundaries"]`` to a new list also works, though it is
+        not recommended.
+    paragraph_index: Zero-based index of the paragraph in the stream.
+
 <a id="yasbd.boundary_detector.BoundaryDetector"></a>
 
 ## BoundaryDetector Objects
@@ -145,7 +167,8 @@ class BoundaryDetector()
 def __init__(lang: str | None = None,
              *,
              preserve_quote_and_paren: bool = True,
-             verbose: bool = False)
+             verbose: bool = False,
+             hook: Callable[[HookContext], None] | None = None)
 ```
 
 Initialize the boundary detector.
@@ -159,6 +182,12 @@ Initialize the boundary detector.
 - `preserve_quote_and_paren` - Do not split on terminators inside
   quoted or parenthesised text.
 - `verbose` - Enable verbose logging.
+- `hook` - Optional per-paragraph post-processing callback. Receives
+  a dict with ``text``, ``lang``, ``boundaries`` and
+  ``paragraph_index`` keys; mutate ``boundaries`` in place to
+  add or remove sentence boundaries. Reassigning
+  ``ctx["boundaries"]`` to a new list also works, though
+  in-place mutation is recommended.
 
 <a id="yasbd.boundary_detector.BoundaryDetector.lang"></a>
 
@@ -415,6 +444,16 @@ class CleanStepError(YasbdError, TypeError)
 
 Raised when a StreamCleaner extra step fails (non-callable or non-str return).
 
+<a id="yasbd.exceptions.HookError"></a>
+
+## HookError Objects
+
+```python
+class HookError(YasbdError, RuntimeError)
+```
+
+Raised when a post-processing hook fails or leaves invalid boundaries.
+
 <a id="yasbd.rules"></a>
 
 # yasbd.rules
@@ -513,19 +552,6 @@ Checks the language pack registry first; falls back to the built-in rules direct
 <a id="yasbd.rules.base"></a>
 
 # yasbd.rules.base
-
-<a id="yasbd.rules.base.build_abbr_pattern"></a>
-
-#### build\_abbr\_pattern
-
-```python
-def build_abbr_pattern(options: set[str]) -> str
-```
-
-Build an optimised and escaped regex alternation pattern.
-
-Returns a never-match pattern if no valid options exist.
-Ref: https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything?
 
 <a id="yasbd.rules.base.CJK"></a>
 
@@ -778,8 +804,8 @@ and various regex cleanup rules across paragraphs.
   ['WORD']
   >>> list(StreamCleaner("An hyphe-\nnated sentence"))
   ['An hyphenated sentence']
-  >>> list(StreamCleaner("Don't be naï-\nve"))
-  ["Don't be naïve"]
+  >>> list(StreamCleaner("state-of-the-\nart"))
+  ['state-of-the-art']
   >>> list(StreamCleaner(""))
   []
   >>> StreamCleaner("Hello world", steps_to_skip=["nothing"])
@@ -1180,4 +1206,21 @@ def create_yasbd(nlp: Language, name: str, lang: str | None,
 ```
 
 Create a spaCy component powered by yasbd.
+
+<a id="yasbd.utils.trie"></a>
+
+# yasbd.utils.trie
+
+<a id="yasbd.utils.trie.build_optimized_pattern"></a>
+
+#### build\_optimized\_pattern
+
+```python
+def build_optimized_pattern(options: set[str]) -> str
+```
+
+Build an optimised and escaped regex alternation pattern.
+
+Returns a never-match pattern if no valid options exist.
+Ref: https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything?
 
