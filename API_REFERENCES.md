@@ -1,7 +1,5 @@
 # Table of Contents
 
-* [yasbd](#yasbd)
-  * [register\_spacy\_component](#yasbd.register_spacy_component)
 * [yasbd.boundary\_detector](#yasbd.boundary_detector)
   * [BoundaryDetector](#yasbd.boundary_detector.BoundaryDetector)
     * [\_\_init\_\_](#yasbd.boundary_detector.BoundaryDetector.__init__)
@@ -20,16 +18,12 @@
   * [InvalidInputError](#yasbd.exceptions.InvalidInputError)
   * [LangPackError](#yasbd.exceptions.LangPackError)
   * [CleanStepError](#yasbd.exceptions.CleanStepError)
-* [yasbd.rules](#yasbd.rules)
-  * [register\_lang\_packs](#yasbd.rules.register_lang_packs)
-  * [clear\_lang\_packs](#yasbd.rules.clear_lang_packs)
-  * [get\_supported\_langs](#yasbd.rules.get_supported_langs)
-  * [load\_rule](#yasbd.rules.load_rule)
+* [yasbd](#yasbd)
+  * [register\_spacy\_component](#yasbd.register_spacy_component)
 * [yasbd.rules.af](#yasbd.rules.af)
 * [yasbd.rules.am](#yasbd.rules.am)
 * [yasbd.rules.ar](#yasbd.rules.ar)
 * [yasbd.rules.base](#yasbd.rules.base)
-  * [build\_abbr\_pattern](#yasbd.rules.base.build_abbr_pattern)
   * [CJK](#yasbd.rules.base.CJK)
   * [Rules](#yasbd.rules.base.Rules)
     * [\_\_init\_\_](#yasbd.rules.base.Rules.__init__)
@@ -49,6 +43,11 @@
 * [yasbd.rules.ht](#yasbd.rules.ht)
 * [yasbd.rules.hy](#yasbd.rules.hy)
 * [yasbd.rules.id](#yasbd.rules.id)
+* [yasbd.rules](#yasbd.rules)
+  * [register\_lang\_packs](#yasbd.rules.register_lang_packs)
+  * [clear\_lang\_packs](#yasbd.rules.clear_lang_packs)
+  * [get\_supported\_langs](#yasbd.rules.get_supported_langs)
+  * [load\_rule](#yasbd.rules.load_rule)
 * [yasbd.rules.it](#yasbd.rules.it)
 * [yasbd.rules.ja](#yasbd.rules.ja)
 * [yasbd.rules.kk](#yasbd.rules.kk)
@@ -71,10 +70,11 @@
 * [yasbd.rules.ur](#yasbd.rules.ur)
 * [yasbd.rules.vi](#yasbd.rules.vi)
 * [yasbd.rules.zh](#yasbd.rules.zh)
-* [yasbd.utils](#yasbd.utils)
 * [yasbd.utils.cleaner](#yasbd.utils.cleaner)
+  * [normalize\_newlines](#yasbd.utils.cleaner.normalize_newlines)
   * [StreamCleaner](#yasbd.utils.cleaner.StreamCleaner)
     * [\_\_init\_\_](#yasbd.utils.cleaner.StreamCleaner.__init__)
+* [yasbd.utils](#yasbd.utils)
 * [yasbd.utils.input\_validator](#yasbd.utils.input_validator)
   * [validate\_input](#yasbd.utils.input_validator.validate_input)
 * [yasbd.utils.lang\_code\_normalizer](#yasbd.utils.lang_code_normalizer)
@@ -98,31 +98,8 @@
   * [YasbdComponent](#yasbd.utils.spacy_component.YasbdComponent)
     * [\_\_call\_\_](#yasbd.utils.spacy_component.YasbdComponent.__call__)
   * [create\_yasbd](#yasbd.utils.spacy_component.create_yasbd)
-
-<a id="yasbd"></a>
-
-# yasbd
-
-<a id="yasbd.register_spacy_component"></a>
-
-#### register\_spacy\_component
-
-```python
-def register_spacy_component()
-```
-
-Register the yasbd spaCy pipeline component on demand.
-
-Call this to add the ``yasbd`` component factory to spaCy's registry.
-Requires spaCy v3+ to be installed.
-
-Examples
---------
->>> import spacy
->>> from yasbd import register_spacy_component
->>> register_spacy_component()
->>> nlp = spacy.blank("en")
->>> nlp.add_pipe("yasbd", first=True, config={"lang": "en"})
+* [yasbd.utils.trie](#yasbd.utils.trie)
+  * [build\_optimized\_pattern](#yasbd.utils.trie.build_optimized_pattern)
 
 <a id="yasbd.boundary_detector"></a>
 
@@ -415,88 +392,30 @@ class CleanStepError(YasbdError, TypeError)
 
 Raised when a StreamCleaner extra step fails (non-callable or non-str return).
 
-<a id="yasbd.rules"></a>
+<a id="yasbd"></a>
 
-# yasbd.rules
+# yasbd
 
-<a id="yasbd.rules.register_lang_packs"></a>
+<a id="yasbd.register_spacy_component"></a>
 
-#### register\_lang\_packs
-
-```python
-@validate_input
-def register_lang_packs(names: list[str]) -> list[str]
-```
-
-Import and validate external language pack modules.
-
-Each module must expose a ``PROFILES`` list of ``Rules`` subclasses.
-All validated profiles are stored in ``_LANG_PACK_REGISTRY``.
-
-Caution:
-This function imports arbitrary Python modules by name. Only load lang
-packs from sources you trust — an untrusted module can execute
-arbitrary code at import time.
-
-**Arguments**:
-
-- `names` - Module names resolvable from the Python path
-  (e.g. ``["yasbd_indic", "yasbd_legal"]``).
-  
-
-**Returns**:
-
-  List of registered language codes (e.g. ``["xx", "eo"]``).
-  
-
-**Raises**:
-
-- `LangPackError` - If a language pack module cannot be imported.
-
-<a id="yasbd.rules.clear_lang_packs"></a>
-
-#### clear\_lang\_packs
+#### register\_spacy\_component
 
 ```python
-def clear_lang_packs() -> None
+def register_spacy_component()
 ```
 
-Remove all registered language packs and reset the supported-languages cache.
+Register the yasbd spaCy pipeline component on demand.
 
-<a id="yasbd.rules.get_supported_langs"></a>
+Call this to add the ``yasbd`` component factory to spaCy's registry.
+Requires spaCy v3+ to be installed.
 
-#### get\_supported\_langs
-
-```python
-@cache
-def get_supported_langs() -> list[str]
-```
-
-Discover and cache supported language codes.
-
-Returns a sorted list of ``auto`` plus all language codes from
-the built-in rules directory and any registered language packs.
-
-<a id="yasbd.rules.load_rule"></a>
-
-#### load\_rule
-
-```python
-def load_rule(lang: str, *, verbose: bool = False) -> Rules
-```
-
-Import and instantiate the rule module for *lang*.
-
-Checks the language pack registry first; falls back to the built-in rules directory.
-
-**Returns**:
-
-  The instantiated rule object.
-  
-
-**Raises**:
-
-- `UnsupportedLanguageError` - If no rule module exists for *lang*.
+Examples
+--------
+>>> import spacy
+>>> from yasbd import register_spacy_component
+>>> register_spacy_component()
+>>> nlp = spacy.blank("en")
+>>> nlp.add_pipe("yasbd", first=True, config={"lang": "en"})
 
 <a id="yasbd.rules.af"></a>
 
@@ -513,19 +432,6 @@ Checks the language pack registry first; falls back to the built-in rules direct
 <a id="yasbd.rules.base"></a>
 
 # yasbd.rules.base
-
-<a id="yasbd.rules.base.build_abbr_pattern"></a>
-
-#### build\_abbr\_pattern
-
-```python
-def build_abbr_pattern(options: set[str]) -> str
-```
-
-Build an optimised and escaped regex alternation pattern.
-
-Returns a never-match pattern if no valid options exist.
-Ref: https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything?
 
 <a id="yasbd.rules.base.CJK"></a>
 
@@ -655,6 +561,89 @@ quote/paren spans, list markers).
 
 # yasbd.rules.id
 
+<a id="yasbd.rules"></a>
+
+# yasbd.rules
+
+<a id="yasbd.rules.register_lang_packs"></a>
+
+#### register\_lang\_packs
+
+```python
+@validate_input
+def register_lang_packs(names: list[str]) -> list[str]
+```
+
+Import and validate external language pack modules.
+
+Each module must expose a ``PROFILES`` list of ``Rules`` subclasses.
+All validated profiles are stored in ``_LANG_PACK_REGISTRY``.
+
+Caution:
+This function imports arbitrary Python modules by name. Only load lang
+packs from sources you trust — an untrusted module can execute
+arbitrary code at import time.
+
+**Arguments**:
+
+- `names` - Module names resolvable from the Python path
+  (e.g. ``["yasbd_indic", "yasbd_legal"]``).
+  
+
+**Returns**:
+
+  List of registered language codes (e.g. ``["xx", "eo"]``).
+  
+
+**Raises**:
+
+- `LangPackError` - If a language pack module cannot be imported.
+
+<a id="yasbd.rules.clear_lang_packs"></a>
+
+#### clear\_lang\_packs
+
+```python
+def clear_lang_packs() -> None
+```
+
+Remove all registered language packs and reset the supported-languages cache.
+
+<a id="yasbd.rules.get_supported_langs"></a>
+
+#### get\_supported\_langs
+
+```python
+@cache
+def get_supported_langs() -> list[str]
+```
+
+Discover and cache supported language codes.
+
+Returns a sorted list of ``auto`` plus all language codes from
+the built-in rules directory and any registered language packs.
+
+<a id="yasbd.rules.load_rule"></a>
+
+#### load\_rule
+
+```python
+def load_rule(lang: str, *, verbose: bool = False) -> Rules
+```
+
+Import and instantiate the rule module for *lang*.
+
+Checks the language pack registry first; falls back to the built-in rules directory.
+
+**Returns**:
+
+  The instantiated rule object.
+  
+
+**Raises**:
+
+- `UnsupportedLanguageError` - If no rule module exists for *lang*.
+
 <a id="yasbd.rules.it"></a>
 
 # yasbd.rules.it
@@ -743,13 +732,21 @@ quote/paren spans, list markers).
 
 # yasbd.rules.zh
 
-<a id="yasbd.utils"></a>
-
-# yasbd.utils
-
 <a id="yasbd.utils.cleaner"></a>
 
 # yasbd.utils.cleaner
+
+<a id="yasbd.utils.cleaner.normalize_newlines"></a>
+
+#### normalize\_newlines
+
+```python
+def normalize_newlines(text: str) -> str
+```
+
+Normalize Windows (
+) and Classic Mac () line endings to Unix (
+).
 
 <a id="yasbd.utils.cleaner.StreamCleaner"></a>
 
@@ -778,8 +775,8 @@ and various regex cleanup rules across paragraphs.
   ['WORD']
   >>> list(StreamCleaner("An hyphe-\nnated sentence"))
   ['An hyphenated sentence']
-  >>> list(StreamCleaner("Don't be naï-\nve"))
-  ["Don't be naïve"]
+  >>> list(StreamCleaner("state-of-the-\nart"))
+  ['state-of-the-art']
   >>> list(StreamCleaner(""))
   []
   >>> StreamCleaner("Hello world", steps_to_skip=["nothing"])
@@ -814,6 +811,7 @@ Implements the iterator protocol. Yields cleaned paragraph strings.
 - `source` - Plain text string or open text stream (e.g., ``StringIO``).
 - `steps_to_skip` - A collection of steps to ignore. All steps will run if not provided.
   choices are:
+  - normalize_newlines
   - fix_mojibake
   - fix_ocr_text
   - unwrap_htmls
@@ -822,6 +820,10 @@ Implements the iterator protocol. Yields cleaned paragraph strings.
 - `extra_steps` - Optional user-defined cleaning functions, run after built-in steps.
   Each function must accept and return ``str``.
 - `verbose` - Enable verbose logging.
+
+<a id="yasbd.utils"></a>
+
+# yasbd.utils
 
 <a id="yasbd.utils.input_validator"></a>
 
@@ -1180,4 +1182,21 @@ def create_yasbd(nlp: Language, name: str, lang: str | None,
 ```
 
 Create a spaCy component powered by yasbd.
+
+<a id="yasbd.utils.trie"></a>
+
+# yasbd.utils.trie
+
+<a id="yasbd.utils.trie.build_optimized_pattern"></a>
+
+#### build\_optimized\_pattern
+
+```python
+def build_optimized_pattern(options: set[str]) -> str
+```
+
+Build an optimised and escaped regex alternation pattern.
+
+Returns a never-match pattern if no valid options exist.
+Ref: https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything?
 

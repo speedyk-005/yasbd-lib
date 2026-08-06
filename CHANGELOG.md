@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Line ending normalization in default cleaning pipeline** ([#232](https://github.com/speedyk-005/yasbd-lib/issues/232)): Added `normalize_newlines` to `src/yasbd/utils/cleaner.py` and registered it in `DEFAULT_CLEANING_PIPELINE` to normalize `\r\n` and `\r` line endings to `\n`.
+
 ### Changed
 
 - **Trie pattern builder moved to utils and renamed** ([#230](https://github.com/speedyk-005/yasbd-lib/pull/230)): `build_abbr_pattern` moved from `yasbd.rules.base` to a new `yasbd.utils.trie` module and renamed to `build_optimized_pattern`. The old name stays as a backwards-compatible alias, and language rule files now import it from `yasbd.utils.trie`.
