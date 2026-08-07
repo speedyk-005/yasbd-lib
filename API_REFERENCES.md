@@ -22,11 +22,8 @@
 * [yasbd](#yasbd)
   * [register\_spacy\_component](#yasbd.register_spacy_component)
   * [HookError](#yasbd.exceptions.HookError)
-* [yasbd.rules](#yasbd.rules)
-  * [register\_lang\_packs](#yasbd.rules.register_lang_packs)
-  * [clear\_lang\_packs](#yasbd.rules.clear_lang_packs)
-  * [get\_supported\_langs](#yasbd.rules.get_supported_langs)
-  * [load\_rule](#yasbd.rules.load_rule)
+* [yasbd](#yasbd)
+  * [register\_spacy\_component](#yasbd.register_spacy_component)
 * [yasbd.rules.af](#yasbd.rules.af)
 * [yasbd.rules.am](#yasbd.rules.am)
 * [yasbd.rules.ar](#yasbd.rules.ar)
@@ -107,31 +104,6 @@
   * [create\_yasbd](#yasbd.utils.spacy_component.create_yasbd)
 * [yasbd.utils.trie](#yasbd.utils.trie)
   * [build\_optimized\_pattern](#yasbd.utils.trie.build_optimized_pattern)
-
-<a id="yasbd"></a>
-
-# yasbd
-
-<a id="yasbd.register_spacy_component"></a>
-
-#### register\_spacy\_component
-
-```python
-def register_spacy_component()
-```
-
-Register the yasbd spaCy pipeline component on demand.
-
-Call this to add the ``yasbd`` component factory to spaCy's registry.
-Requires spaCy v3+ to be installed.
-
-Examples
---------
->>> import spacy
->>> from yasbd import register_spacy_component
->>> register_spacy_component()
->>> nlp = spacy.blank("en")
->>> nlp.add_pipe("yasbd", first=True, config={"lang": "en"})
 
 <a id="yasbd.boundary_detector"></a>
 
@@ -461,64 +433,7 @@ class HookError(YasbdError, RuntimeError)
 
 Raised when a post-processing hook fails or leaves invalid boundaries.
 
-<a id="yasbd.rules"></a>
-
-# yasbd.rules
-
-<a id="yasbd.rules.register_lang_packs"></a>
-
-#### register\_lang\_packs
-
-```python
-@validate_input
-def register_lang_packs(names: list[str]) -> list[str]
-```
-
-Import and validate external language pack modules.
-
-Each module must expose a ``PROFILES`` list of ``Rules`` subclasses.
-All validated profiles are stored in ``_LANG_PACK_REGISTRY``.
-
-Caution:
-This function imports arbitrary Python modules by name. Only load lang
-packs from sources you trust — an untrusted module can execute
-arbitrary code at import time.
-
-**Arguments**:
-
-- `names` - Module names resolvable from the Python path
-  (e.g. ``["yasbd_indic", "yasbd_legal"]``).
-  
-
-**Returns**:
-
-  List of registered language codes (e.g. ``["xx", "eo"]``).
-  
-
-**Raises**:
-
-- `LangPackError` - If a language pack module cannot be imported.
-
-<a id="yasbd.rules.clear_lang_packs"></a>
-
-#### clear\_lang\_packs
-
-```python
-def clear_lang_packs() -> None
-```
-
-Remove all registered language packs and reset the supported-languages cache.
-
-<a id="yasbd.rules.get_supported_langs"></a>
-
-#### get\_supported\_langs
-
-```python
-@cache
-def get_supported_langs() -> list[str]
-```
-
-Discover and cache supported language codes.
+<a id="yasbd"></a>
 
 # yasbd
 
@@ -896,8 +811,6 @@ and various regex cleanup rules across paragraphs.
   ['clean text']
   >>> list(StreamCleaner("<b>Hello</b> world", steps_to_skip=["unwrap_htmls"]))
   ['<b>Hello</b> world']
-  >>> list(StreamCleaner("Text with ///slashes"))
-  ['Text with slashes']
   >>> list(StreamCleaner("W\nO\nR\nD"))
   ['WORD']
   >>> list(StreamCleaner("An hyphe-\nnated sentence"))
@@ -942,7 +855,6 @@ Implements the iterator protocol. Yields cleaned paragraph strings.
   - fix_mojibake
   - fix_ocr_text
   - unwrap_htmls
-  - normalize_slashes
   - normalize_spaces
 - `extra_steps` - Optional user-defined cleaning functions, run after built-in steps.
   Each function must accept and return ``str``.
