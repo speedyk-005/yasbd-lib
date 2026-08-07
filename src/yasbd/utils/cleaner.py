@@ -112,17 +112,20 @@ def _clean_ocr_text(text: str) -> str:
     return PAGE_FINDER.sub("", cleaned_text)
 
 
-
 def unwrap_htmls(text: str) -> str:
+    """Strip HTML tags only when the text actually contains angle brackets."""
     return text if "<" not in text else HTML_TAGS_FINDER.sub("", text)
 
 
 def normalize_slashes(text: str) -> str:
+    """Collapse runaway forward-slash runs used as OCR/layout artifacts."""
     return text if "///" not in text else CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", text)
 
 
 def normalize_spaces(text: str) -> str:
+    """Collapse repeated spaces when present; skip the regex otherwise."""
     return text if " " not in text else MULTIPLE_SPACES_FINDER.sub(" ", text)
+
 
 DEFAULT_CLEANING_PIPELINE = {
     "fix_mojibake": ftfy.fix_text,
