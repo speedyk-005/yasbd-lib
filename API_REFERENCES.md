@@ -19,6 +19,8 @@
   * [InvalidInputError](#yasbd.exceptions.InvalidInputError)
   * [LangPackError](#yasbd.exceptions.LangPackError)
   * [CleanStepError](#yasbd.exceptions.CleanStepError)
+* [yasbd](#yasbd)
+  * [register\_spacy\_component](#yasbd.register_spacy_component)
   * [HookError](#yasbd.exceptions.HookError)
 * [yasbd](#yasbd)
   * [register\_spacy\_component](#yasbd.register_spacy_component)
@@ -73,6 +75,7 @@
 * [yasbd.rules.vi](#yasbd.rules.vi)
 * [yasbd.rules.zh](#yasbd.rules.zh)
 * [yasbd.utils.cleaner](#yasbd.utils.cleaner)
+  * [normalize\_newlines](#yasbd.utils.cleaner.normalize_newlines)
   * [StreamCleaner](#yasbd.utils.cleaner.StreamCleaner)
     * [\_\_init\_\_](#yasbd.utils.cleaner.StreamCleaner.__init__)
 * [yasbd.utils](#yasbd.utils)
@@ -419,6 +422,7 @@ class CleanStepError(YasbdError, TypeError)
 
 Raised when a StreamCleaner extra step fails (non-callable or non-str return).
 
+<a id="yasbd"></a>
 <a id="yasbd.exceptions.HookError"></a>
 
 ## HookError Objects
@@ -773,6 +777,19 @@ Checks the language pack registry first; falls back to the built-in rules direct
 
 # yasbd.utils.cleaner
 
+<a id="yasbd.utils.cleaner.normalize_newlines"></a>
+
+#### normalize\_newlines
+
+```python
+def normalize_newlines(text: str) -> str
+```
+
+Normalize Windows (
+) and Classic Mac (
+) line endings to Unix (
+).
+
 <a id="yasbd.utils.cleaner.StreamCleaner"></a>
 
 ## StreamCleaner Objects
@@ -781,7 +798,7 @@ Checks the language pack registry first; falls back to the built-in rules direct
 class StreamCleaner(StreamCleanerStub)
 ```
 
-Normalize and clean noisy text by applying ``ftfy``, HTML sanitization,
+Normalize line endings, clean noisy text by applying ``ftfy``, HTML sanitization,
 and various regex cleanup rules across paragraphs.
 
 **Examples**:
@@ -834,6 +851,7 @@ Implements the iterator protocol. Yields cleaned paragraph strings.
 - `source` - Plain text string or open text stream (e.g., ``StringIO``).
 - `steps_to_skip` - A collection of steps to ignore. All steps will run if not provided.
   choices are:
+  - normalize_newlines
   - fix_mojibake
   - fix_ocr_text
   - unwrap_htmls

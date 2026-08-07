@@ -97,6 +97,14 @@ NEWLINE_FOLLOWED_BY_PERIOD_FINDER = re.compile(r"\n(?=\.(?=\s))")
 NO_SPACE_BETWEEN_SENTENCES_FINDER = re.compile(r"(?<=\w\.)(?=[A-Z][a-z])")
 
 
+NEWLINE_NORMALIZER = re.compile(r"\r\n|\r")
+
+
+def normalize_newlines(text: str) -> str:
+    """Normalize Windows (\r\n) and Classic Mac (\r) line endings to Unix (\n)."""
+    return NEWLINE_NORMALIZER.sub("\n", text)
+
+
 def _clean_ocr_text(text: str) -> str:
     cleaned_text = text.replace("''", '"')
     cleaned_text = NEWLINE_BETWEEN_WORD_CHARS.sub("", cleaned_text)
@@ -110,6 +118,7 @@ def _clean_ocr_text(text: str) -> str:
 
 
 DEFAULT_CLEANING_PIPELINE = {
+    "normalize_newlines": normalize_newlines,
     "fix_mojibake": ftfy.fix_text,
     "fix_ocr_text": _clean_ocr_text,
     "unwrap_htmls": lambda t: t if "<" not in t else HTML_TAGS_FINDER.sub("", t),
@@ -118,7 +127,7 @@ DEFAULT_CLEANING_PIPELINE = {
 
 
 class StreamCleaner(StreamCleanerStub):
-    """Normalize and clean noisy text by applying ``ftfy``, HTML sanitization,
+    """Normalize line endings, clean noisy text by applying ``ftfy``, HTML sanitization,
     and various regex cleanup rules across paragraphs.
 
     Examples:
@@ -166,6 +175,7 @@ class StreamCleaner(StreamCleanerStub):
             source: Plain text string or open text stream (e.g., ``StringIO``).
             steps_to_skip: A collection of steps to ignore. All steps will run if not provided.
                 choices are:
+                    - normalize_newlines
                     - fix_mojibake
                     - fix_ocr_text
                     - unwrap_htmls

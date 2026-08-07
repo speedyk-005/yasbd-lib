@@ -1,14 +1,14 @@
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
-from yasbd.boundary_detector import BoundaryDetector
-from yasbd.boundary_detector import HookContext
-from yasbd.boundary_detector import ParagraphEOF
-from yasbd.exceptions import CleanStepError
-from yasbd.exceptions import HookError
-from yasbd.exceptions import InvalidInputError
-from yasbd.exceptions import UnsupportedLanguageError
-from yasbd.exceptions import YasbdError
+from yasbd.boundary_detector import BoundaryDetector, HookContext, ParagraphEOF
+from yasbd.exceptions import (
+    CleanStepError,
+    HookError,
+    InvalidInputError,
+    UnsupportedLanguageError,
+    YasbdError,
+)
 from yasbd.rules import clear_lang_packs, get_supported_langs, register_lang_packs
 
 try:
