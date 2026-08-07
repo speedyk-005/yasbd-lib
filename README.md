@@ -416,6 +416,7 @@ Available built-in steps:
 | `unwrap_htmls` | Removes most HTML markup while preserving visible text. `<b>`, `<i>`, and `<u>` tags are preserved |
 | `normalize_slashes` | Collapses `///` triple slashes |
 | `normalize_spaces` | Collapses multiple spaces into one |
+| `normalize_newlines` | Converts Windows `\\r\\n` and classic Mac `\\r` line endings to Unix `\\n` line endings |
 
 ### CLI ([API](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbdcli))
 
