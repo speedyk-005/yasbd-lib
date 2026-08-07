@@ -883,7 +883,7 @@ Normalize Windows (
 class StreamCleaner(StreamCleanerStub)
 ```
 
-Normalize and clean noisy text by applying ``ftfy``, HTML sanitization,
+Normalize line endings, clean noisy text by applying ``ftfy``, HTML sanitization,
 and various regex cleanup rules across paragraphs.
 
 **Examples**:
