@@ -121,19 +121,16 @@ def _clean_ocr_text(text: str) -> str:
 
 def unwrap_htmls(text: str) -> str:
     """Strip HTML tags only when the text actually contains angle brackets."""
-    # Fast path: skip the HTML regex when no tags can be present.
     return text if "<" not in text else HTML_TAGS_FINDER.sub("", text)
 
 
 def normalize_slashes(text: str) -> str:
     """Collapse runaway forward-slash runs used as OCR/layout artifacts."""
-    # Only run the slash regex when a triple-slash run is present.
     return text if "///" not in text else CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", text)
 
 
 def normalize_spaces(text: str) -> str:
     """Collapse repeated spaces when present; skip the regex otherwise."""
-    # Avoid the multi-space regex when the text has no spaces at all.
     return text if " " not in text else MULTIPLE_SPACES_FINDER.sub(" ", text)
 
 
