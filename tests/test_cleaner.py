@@ -4,31 +4,30 @@ from yasbd.utils.cleaner import (
     StreamCleaner,
     normalize_newlines,
     unwrap_htmls,
-    normalize_slashes,
     normalize_spaces,
 )
 
 
 def test_normalize_newlines_windows():
-    """Verify Windows (\r\n) line endings are normalized to \n."""
+    """Verify Windows (\\r\\n) line endings are normalized to \\n."""
     assert normalize_newlines("hello\r\nworld") == "hello\nworld"
     assert normalize_newlines("line1\r\nline2\r\nline3") == "line1\nline2\nline3"
 
 
 def test_normalize_newlines_mac():
-    """Verify Classic Mac (\r) line endings are normalized to \n."""
+    """Verify Classic Mac (\\r) line endings are normalized to \\n."""
     assert normalize_newlines("hello\rworld") == "hello\nworld"
     assert normalize_newlines("line1\rline2\rline3") == "line1\nline2\nline3"
 
 
 def test_normalize_newlines_unix():
-    """Verify Unix (\n) line endings remain unchanged."""
+    """Verify Unix (\\n) line endings remain unchanged."""
     assert normalize_newlines("hello\nworld") == "hello\nworld"
     assert normalize_newlines("line1\nline2\nline3") == "line1\nline2\nline3"
 
 
 def test_normalize_newlines_mixed():
-    """Verify mixed line endings are all normalized to \n."""
+    """Verify mixed line endings are all normalized to \\n."""
     assert (
         normalize_newlines("line1\r\nline2\rline3\nline4")
         == "line1\nline2\nline3\nline4"
@@ -65,25 +64,6 @@ def test_unwrap_htmls_guarded_paths():
     assert unwrap_htmls("<p>paragraph</p>") == "paragraph"
 
 
-def test_normalize_slashes_replaces_triple_slashes():
-    """Verify normalize_slashes replaces triple consecutive forward slashes with empty string."""
-    assert normalize_slashes("text///with///slashes") == "textwithslashes"
-    assert normalize_slashes("text///") == "text"
-    assert normalize_slashes("text") == "text"
-    assert normalize_slashes("///") == ""
-    assert normalize_slashes("a///b///c") == "abc"
-
-
-def test_normalize_slashes_guarded_and_unguarded():
-    """Verify normalize_slashes handles both guarded and unguarded paths."""
-    # Guarded: no triple slashes
-    assert normalize_slashes("a/b/c") == "a/b/c"
-    assert normalize_slashes("no slashes") == "no slashes"
-    # Unguarded: has triple slashes
-    assert normalize_slashes("a///b") == "ab"
-    assert normalize_slashes("start///end") == "startend"
-
-
 def test_normalize_spaces_replaces_multiple_spaces():
     """Verify normalize_spaces replaces multiple consecutive spaces."""
     assert normalize_spaces("hello  world") == "hello world"
@@ -105,6 +85,21 @@ def test_normalize_spaces_guarded_and_unguarded():
     assert normalize_spaces("a   b") == "a b"
 
 
+def test_stream_cleaner_preserves_consecutive_slashes():
+    """Verify StreamCleaner does not delete /// slashes or glue words together."""
+    text1 = "a///b"
+    assert list(StreamCleaner(text1)) == ["a///b"]
+
+    text2 = "Text with ///slashes"
+    assert list(StreamCleaner(text2)) == ["Text with ///slashes"]
+
+    url_text = "file:///C:/Users/test/doc.txt"
+    assert list(StreamCleaner(url_text)) == ["file:///C:/Users/test/doc.txt"]
+
+    rust_doc = "/// This is a Rust doc comment"
+    assert list(StreamCleaner(rust_doc)) == ["/// This is a Rust doc comment"]
+
+
 def test_cleaner_pipeline_integration():
     """Verify the full pipeline works with the new named functions."""
     # Test normalize_newlines with punctuation (not between word chars)
@@ -115,15 +110,11 @@ def test_cleaner_pipeline_integration():
     cleaner = StreamCleaner("<p>Hello</p>")
     assert list(cleaner) == ["Hello"]
 
-    # Test normalize_slashes
-    cleaner = StreamCleaner("test///value")
-    assert list(cleaner) == ["testvalue"]
-
     # Test normalize_spaces
     cleaner = StreamCleaner("hello  world")
     assert list(cleaner) == ["hello world"]
 
-    # Test combined: HTML with spaces and slashes
+    # Test combined: HTML with spaces (slashes preserved)
     cleaner = StreamCleaner("  <p>test  ///  value</p>  ")
     result = list(cleaner)[0]
-    assert result == "test value"
+    assert result == "test /// value"

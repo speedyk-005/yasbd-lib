@@ -414,7 +414,6 @@ Available built-in steps:
 | `fix_mojibake` | Fixes Unicode mojibake via ftfy |
 | `fix_ocr_text` | Repairs OCR artifacts, rejoins hyphenated words, removes page markers |
 | `unwrap_htmls` | Removes most HTML markup while preserving visible text. `<b>`, `<i>`, and `<u>` tags are preserved |
-| `normalize_slashes` | Collapses `///` triple slashes |
 | `normalize_spaces` | Collapses multiple spaces into one |
 | `normalize_newlines` | Converts Windows `\\r\\n` and classic Mac `\\r` line endings to Unix `\\n` line endings |
 
