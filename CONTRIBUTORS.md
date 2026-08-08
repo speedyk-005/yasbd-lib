@@ -10,7 +10,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@ddelrio1986](https://github.com/ddelrio1986)** | Spelling and grammar fixes in docs |
 | **[@hkJerryLeung](https://github.com/hkJerryLeung)** | French `est` abbreviation fix |
 | **[@hongquan](https://github.com/hongquan)** | `py.typed` marker for PEP 561 compliance |
-| **[@HeaTTap](https://github.com/HeaTTap)** | Line ending normalization in default cleaning pipeline |
+| **[@HeaTTap](https://github.com/HeaTTap)** | Line ending normalization in default cleaning pipeline, Removed destructive normalize_slashes step |
 | **[@Jah-yee](https://github.com/Jah-yee)** | Reference abbreviation bracketed citation fix |
 | **[@JheanLL](https://github.com/JheanLL)** | Trie prototype design & Spanish rule contributions |
 | **[@JosephM961](https://github.com/JosephM961)** | Documentation additions and typo fixes |
