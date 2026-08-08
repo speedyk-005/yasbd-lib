@@ -942,7 +942,6 @@ Implements the iterator protocol. Yields cleaned paragraph strings.
   - fix_mojibake
   - fix_ocr_text
   - unwrap_htmls
-  - normalize_slashes
   - normalize_spaces
 - `extra_steps` - Optional user-defined cleaning functions, run after built-in steps.
   Each function must accept and return ``str``.

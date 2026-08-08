@@ -229,15 +229,13 @@ detector = BoundaryDetector(lang="en")
 
 # With all options (so far.)
 detector = BoundaryDetector(
-	# ISO 639 code (e.g., en, fr, es, ...). Required.
-	# Use "auto" for automatic detection.
-	# https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
+    # ISO 639 code (e.g., en, fr, es, ...). Required.
+    # Use "auto" for automatic detection.
+    # https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
     lang="fr",
-
     # Don't split inside them. (It won't protect block quotes) Defaults to `True`.
     # https://en.wikipedia.org/wiki/Block_quotation
     preserve_quote_and_paren=True,
-
     # Enable verbose logging. Defaults to `False`.
     verbose=True,
 )
@@ -294,16 +292,20 @@ Two detection modes:
 
 ```python
 # absolute mode (default)
-res= list(detector.detect('She turned to him, "This is great." She held the book out to show him.'))
+res = list(
+    detector.detect('She turned to him, "This is great." She held the book out to show him.')
+)
 print(res)
 # [35, 70]
 
 # relative mode with paragraph break
 detector.lang = "es"
-res = list(detector.detect(
-	"El Sr. García llegó ayer. La Sra. López también.\n\nVéase la pág. 55 del libro.",
-	relative=True,
-))
+res = list(
+    detector.detect(
+        "El Sr. García llegó ayer. La Sra. López también.\n\nVéase la pág. 55 del libro.",
+        relative=True,
+    )
+)
 print(res)
 # [25, 48, ParagraphEOF, 27]
 ```
@@ -321,10 +323,12 @@ print(res)
 # ['Hello world.', 'How are you?', 'I am fine.']
 
 # Multi-paragraph with whitespace preserved
-res = list(detector.segment(
-    "First para.\nStill first.\n\nSecond para.\nFinished.",
-    preserve_whitespace=True,
-))
+res = list(
+    detector.segment(
+        "First para.\nStill first.\n\nSecond para.\nFinished.",
+        preserve_whitespace=True,
+    )
+)
 print(res)
 # ['First para.', '\nStill first.', '\n\n', 'Second para.', '\nFinished.']
 ```
@@ -408,8 +412,8 @@ Available built-in steps:
 | `fix_mojibake` | Fixes Unicode mojibake via ftfy |
 | `fix_ocr_text` | Repairs OCR artifacts, rejoins hyphenated words, removes page markers |
 | `unwrap_htmls` | Removes most HTML markup while preserving visible text. `<b>`, `<i>`, and `<u>` tags are preserved |
-| `normalize_slashes` | Collapses `///` triple slashes |
 | `normalize_spaces` | Collapses multiple spaces into one |
+| `normalize_newlines` | Converts Windows `\\r\\n` and classic Mac `\\r` line endings to Unix `\\n` line endings |
 
 ### CLI ([API](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbdcli))
 
@@ -497,7 +501,9 @@ from yasbd.utils.pysbd_adapter import Segmenter
 # Or from yasbd.Pysbd_adapter import Segmenter
 
 seg = Segmenter(language="ja")
-res = seg.segment('田中さんは「準備は完了しました」そう言って部屋を出た。U.S.A.の経済政策は非常に複雑です。')
+res = seg.segment(
+    "田中さんは「準備は完了しました」そう言って部屋を出た。U.S.A.の経済政策は非常に複雑です。"
+)
 print(res)
 # ['田中さんは「準備は完了しました」そう言って部屋を出た。', 'U.S.A.の経済政策は非常に複雑です。']
 ```
