@@ -329,3 +329,8 @@ Initial release.
 - **Drop-in PySBD compatibility**: Included a drop-in `Segmenter` adapter that mirrors `pysbd`'s API interface, exposing `segment()`, `clean`, and `char_span` capabilities.
 - **Flexible dual-mode API**: Exposes `detect()` for retrieving raw boundary offset slices and `segment()` for producing rich text string spans.
 - **Comprehensive benchmarking harness**: Bundles comparative analysis scripts comparing seven libraries across seven distinct edge-case scenarios.
+
+## [Unreleased]
+
+### Added
+- Expanded SUFFIXES in HYPHENATED_WORD_FINDER with common English suffixes (able, ed, ing, ive, ly, ment, ness, ous, ve)

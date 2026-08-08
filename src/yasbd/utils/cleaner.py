@@ -21,7 +21,10 @@ PREFIXES = {
     "pseudo", "quasi", "re", "retro", "semi", "sub", "super", "supra",
     "tele", "trans", "tri", "ultra", "un", "uni", "phe", "ani",
 }
-SUFFIXES = {"sis", "tion", "ry", "nal", "mal", "no", "té"}
+SUFFIXES = {
+    "able", "ed", "ing", "ive", "ly", "ment", "ness", "ous", "tion",
+    "ve", "sis", "ry", "nal", "mal", "no", "té",
+}
 # fmt: on
 
 # https://regex101.com/r/dL1zCM/1
