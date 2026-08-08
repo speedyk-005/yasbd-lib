@@ -9,12 +9,16 @@
 [![Coverage Status](https://coveralls.io/repos/github/speedyk-005/yasbd-lib/badge.svg?branch=main&kill_cache=1)](https://coveralls.io/github/speedyk-005/yasbd-lib?branch=main)
 [![Stability](https://img.shields.io/badge/stability-beta-yellow)](https://github.com/speedyk-005/yasbd-lib)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](https://github.com/speedyk-005/yasbd-lib/actions)
+[![lint](https://github.com/speedyk-005/yasbd-lib/actions/workflows/lint.yml/badge.svg)](https://github.com/speedyk-005/yasbd-lib/actions/workflows/lint.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/speedyk-005/yasbd-lib/badge)](https://www.codefactor.io/repository/github/speedyk-005/yasbd-lib)
+
+
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 ![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=flat&logo=reddit&logoColor=white)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/speedyk-005/yasbd-lib)
 
+> If you like this project, a star ⭐️ would mean a lot :)
 
 ---
 
@@ -236,13 +240,6 @@ detector = BoundaryDetector(
 
     # Enable verbose logging. Defaults to `False`.
     verbose=True,
-
-    # Optional per-paragraph post-processing callback.
-    # Receives a dict with `text`, `lang`, `boundaries`, and
-    # `paragraph_index` keys. Mutate `boundaries` in place to add or
-    # remove sentence boundaries; reassigning `ctx["boundaries"]` to a
-    # new list also works, though it isn't recommended. Defaults to `None`.
-    hook=lambda ctx: ...,
 )
 ```
 
@@ -370,6 +367,7 @@ with open("document.txt", encoding="utf-8") as f:
 
 Common cleanup operations include:
 
+- Normalizing line endings (`\r\n` and `\r` to `\n`)
 - Fixing mojibake and OCR artifacts
 - Removing HTML markup (lightweight preprocessor, not a full HTML parser)
 - Normalizing whitespace and repeated slashes
@@ -406,6 +404,7 @@ Available built-in steps:
 
 | Step | What it does |
 |------|-------------|
+| `normalize_newlines` | Normalizes Windows (`\r\n`) and Mac (`\r`) line endings to Unix (`\n`) |
 | `fix_mojibake` | Fixes Unicode mojibake via ftfy |
 | `fix_ocr_text` | Repairs OCR artifacts, rejoins hyphenated words, removes page markers |
 | `unwrap_htmls` | Removes most HTML markup while preserving visible text. `<b>`, `<i>`, and `<u>` tags are preserved |
