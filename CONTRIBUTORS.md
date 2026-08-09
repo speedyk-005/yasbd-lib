@@ -5,22 +5,21 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | Name | Role |
 |------|------|
 | **[@speedyk-005](https://github.com/speedyk-005)** | Maintainer & Creator |
-| **[@AshSgDe29071999](https://github.com/AshSgDe29071999)** | Combined same-module imports in `__init__.py` |
 | **[@1cbyc](https://github.com/1cbyc)** | Coordinate direction abbreviation fix |
+| **[@AshSgDe29071999](https://github.com/AshSgDe29071999)** | Combined same-module imports in `__init__.py`; named cleaning-pipeline helpers for testability |
 | **[@cnaples79](https://github.com/cnaples79)** | Missing comma in set literals fix |
 | **[@ddelrio1986](https://github.com/ddelrio1986)** | Spelling and grammar fixes in docs |
-| **[@HeaTTap](https://github.com/HeaTTap)** | Removed destructive slash normalization from StreamCleaner |
+| **[@HeaTTap](https://github.com/HeaTTap)** | Line ending normalization in default cleaning pipeline; removed destructive slash normalization from StreamCleaner |
 | **[@hkJerryLeung](https://github.com/hkJerryLeung)** | French `est` abbreviation fix |
 | **[@hongquan](https://github.com/hongquan)** | `py.typed` marker for PEP 561 compliance |
-| **[@HeaTTap](https://github.com/HeaTTap)** | Line ending normalization in default cleaning pipeline |
 | **[@Jah-yee](https://github.com/Jah-yee)** | Reference abbreviation bracketed citation fix |
 | **[@JheanLL](https://github.com/JheanLL)** | Trie prototype design & Spanish rule contributions |
 | **[@JosephM961](https://github.com/JosephM961)** | Documentation additions and typo fixes |
 | **[@k-anushka14](https://github.com/k-anushka14)** | Removed unused timeout parameter from external cleaner; merged Pronouns & Demonstratives header into Pronouns |
 | **[@kernelpanic888](https://github.com/kernelpanic888)** | Non-German ordinal boundary inheritance fix |
-| **[@MohammedAnasNathani](https://github.com/MohammedAnasNathani)** | Documentation for built-in language freeze |
-| **[@Mayankshrey438](https://github.com/Mayankshrey438)** | Armenian language support & flattened list heuristic |
 | **[@MasRama](https://github.com/MasRama)** | Double boundary for `.\n` fix |
+| **[@Mayankshrey438](https://github.com/Mayankshrey438)** | Armenian language support & flattened list heuristic |
+| **[@MohammedAnasNathani](https://github.com/MohammedAnasNathani)** | Documentation for built-in language freeze |
 | **[@Rajesh270712](https://github.com/Rajesh270712)** | Base + English rule contributions |
 | **[@sanmaxdev](https://github.com/sanmaxdev)** | Language tag normalization helper |
 | **[@terminalchai](https://github.com/terminalchai)** | Burmese and Thai reporting words fix |
