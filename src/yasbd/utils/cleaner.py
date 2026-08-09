@@ -103,9 +103,6 @@ NEWLINE_FOLLOWED_BY_PERIOD_FINDER = re.compile(r"\n(?=\.(?=\s))")
 # https://regex101.com/r/xN77B6/2/substitution
 NO_SPACE_BETWEEN_SENTENCES_FINDER = re.compile(r"(?<=\w\.)(?=[A-Z][a-z])")
 
-# https://regex101.com/r/Nw2I67/1
-CONSECUTIVE_FORWARD_SLASH_FINDER = re.compile(r"\/{3}")
-
 
 def normalize_newlines(text: str) -> str:
     """Normalize Windows (\r\n) and Classic Mac (\r) line endings to Unix (\n)."""
@@ -129,11 +126,6 @@ def unwrap_htmls(text: str) -> str:
     return text if "<" not in text else HTML_TAGS_FINDER.sub("", text)
 
 
-def normalize_slashes(text: str) -> str:
-    """Collapse runaway forward-slash runs used as OCR/layout artifacts."""
-    return text if "///" not in text else CONSECUTIVE_FORWARD_SLASH_FINDER.sub("", text)
-
-
 def normalize_spaces(text: str) -> str:
     """Collapse repeated spaces when present; skip the regex otherwise."""
     return text if " " not in text else MULTIPLE_SPACES_FINDER.sub(" ", text)
@@ -144,7 +136,6 @@ DEFAULT_CLEANING_PIPELINE = {
     "fix_mojibake": ftfy.fix_text,
     "fix_ocr_text": _clean_ocr_text,
     "unwrap_htmls": unwrap_htmls,
-    "normalize_slashes": normalize_slashes,
     "normalize_spaces": normalize_spaces,
 }
 
@@ -162,8 +153,6 @@ class StreamCleaner(StreamCleanerStub):
         ['clean text']
         >>> list(StreamCleaner("<b>Hello</b> world", steps_to_skip=["unwrap_htmls"]))
         ['<b>Hello</b> world']
-        >>> list(StreamCleaner("Text with ///slashes"))
-        ['Text with slashes']
         >>> list(StreamCleaner("W\\nO\\nR\\nD"))
         ['WORD']
         >>> list(StreamCleaner("An hyphe-\\nnated sentence"))
@@ -204,7 +193,6 @@ class StreamCleaner(StreamCleanerStub):
                     - fix_mojibake
                     - fix_ocr_text
                     - unwrap_htmls
-                    - normalize_slashes
                     - normalize_spaces
             extra_steps: Optional user-defined cleaning functions, run after built-in steps.
                 Each function must accept and return ``str``.
