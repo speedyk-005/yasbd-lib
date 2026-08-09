@@ -9,6 +9,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@1cbyc](https://github.com/1cbyc)** | Coordinate direction abbreviation fix |
 | **[@cnaples79](https://github.com/cnaples79)** | Missing comma in set literals fix |
 | **[@ddelrio1986](https://github.com/ddelrio1986)** | Spelling and grammar fixes in docs |
+| **[@HeaTTap](https://github.com/HeaTTap)** | Removed destructive slash normalization from StreamCleaner |
 | **[@hkJerryLeung](https://github.com/hkJerryLeung)** | French `est` abbreviation fix |
 | **[@hongquan](https://github.com/hongquan)** | `py.typed` marker for PEP 561 compliance |
 | **[@HeaTTap](https://github.com/HeaTTap)** | Line ending normalization in default cleaning pipeline |
