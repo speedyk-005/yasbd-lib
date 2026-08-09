@@ -85,6 +85,10 @@ HTML_TAGS_FINDER = re.compile(
     re.X | re.I | re.S,
 )
 
+# https://regex101.com/r/C9ERdi/1/substitution
+LINE_ENDING_FINDER = re.compile(r"\r\n?")
+
+
 # -- Regex ported from pysbd --
 
 # https://regex101.com/r/0dTHBO/4/substitution
@@ -97,12 +101,10 @@ NEWLINE_FOLLOWED_BY_PERIOD_FINDER = re.compile(r"\n(?=\.(?=\s))")
 NO_SPACE_BETWEEN_SENTENCES_FINDER = re.compile(r"(?<=\w\.)(?=[A-Z][a-z])")
 
 
-NEWLINE_NORMALIZER = re.compile(r"\r\n|\r")
-
 
 def normalize_newlines(text: str) -> str:
     """Normalize Windows (\r\n) and Classic Mac (\r) line endings to Unix (\n)."""
-    return NEWLINE_NORMALIZER.sub("\n", text)
+    return LINE_ENDING_FINDER.sub("\n", text)
 
 
 def _clean_ocr_text(text: str) -> str:
@@ -117,12 +119,22 @@ def _clean_ocr_text(text: str) -> str:
     return PAGE_FINDER.sub("", cleaned_text)
 
 
+def unwrap_htmls(text: str) -> str:
+    """Strip HTML tags only when the text actually contains angle brackets."""
+    return text if "<" not in text else HTML_TAGS_FINDER.sub("", text)
+
+
+def normalize_spaces(text: str) -> str:
+    """Collapse repeated spaces when present; skip the regex otherwise."""
+    return text if " " not in text else MULTIPLE_SPACES_FINDER.sub(" ", text)
+
+
 DEFAULT_CLEANING_PIPELINE = {
     "normalize_newlines": normalize_newlines,
     "fix_mojibake": ftfy.fix_text,
     "fix_ocr_text": _clean_ocr_text,
-    "unwrap_htmls": lambda t: t if "<" not in t else HTML_TAGS_FINDER.sub("", t),
-    "normalize_spaces": lambda t: t if " " not in t else MULTIPLE_SPACES_FINDER.sub(" ", t),
+    "unwrap_htmls": unwrap_htmls,
+    "normalize_spaces": normalize_spaces,
 }
 
 

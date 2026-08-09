@@ -146,9 +146,13 @@ All public interface controls must be documented using Google-style docstrings. 
 
 ## Pull Request Template
 
-If multiple pull requests address the same issue, we will evaluate them based on code quality and test coverage. If the implementations are structurally identical, we will merge the earliest submission.
+A few rules keep the review queue running smoothly:
 
-See [PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md) for the full template to use when submitting modifications.
+- If multiple pull requests address the same issue, we evaluate them based on code quality and test coverage. If the implementations are structurally identical, we merge the earliest submission.
+- Use the [PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md) when submitting.
+- Include a row for yourself in [CONTRIBUTORS.md](CONTRIBUTORS.md) in the same PR that contains your contribution: your GitHub handle and a short note on what you did. Already on the list? Update your existing row instead of adding a duplicate.
+- Prefer extending existing test files and doctests over adding new test files. A new test file for a small change adds review overhead and fragments coverage; add cases to the tests that already cover the module instead.
+- Start PR branches from a clean `main`, not from a branch that carries changes from past edits or other PRs. A branch polluted with unrelated commits makes the diff noisy and hard to review.
 
 ## Conduct
 
