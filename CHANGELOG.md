@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Expanded SUFFIXES in hyphenated word finder** ([#249](https://github.com/speedyk-005/yasbd-lib/pull/249)): Added common Latin inflectional and derivational suffixes to the `SUFFIXES` set used by `HYPHENATED_WORD_FINDER`, so wrap-around line breaks like `work-\ning` join correctly to `working`.
 - **Line ending normalization in default cleaning pipeline** ([#232](https://github.com/speedyk-005/yasbd-lib/issues/232)): Added `normalize_newlines` to `src/yasbd/utils/cleaner.py` and registered it in `DEFAULT_CLEANING_PIPELINE` to normalize `\r\n` and `\r` line endings to `\n`.
 - **Post-processing hook on BoundaryDetector** ([#234](https://github.com/speedyk-005/yasbd-lib/pull/234)): `BoundaryDetector` now accepts a `hook` callback that runs per paragraph after the language rules apply. It receives a dict with `text`, `lang`, `boundaries` and `paragraph_index` keys and can add or remove sentence boundaries in place. A new `HookError` is raised if the hook fails or leaves invalid boundaries. This replaces monkey-patching rule internals for custom boundary logic (e.g. OpenMed's `_split_yasbd_chinese_semicolons` hack).
 
