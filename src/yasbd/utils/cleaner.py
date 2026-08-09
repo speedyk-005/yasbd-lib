@@ -101,7 +101,6 @@ NEWLINE_FOLLOWED_BY_PERIOD_FINDER = re.compile(r"\n(?=\.(?=\s))")
 NO_SPACE_BETWEEN_SENTENCES_FINDER = re.compile(r"(?<=\w\.)(?=[A-Z][a-z])")
 
 
-
 def normalize_newlines(text: str) -> str:
     """Normalize Windows (\r\n) and Classic Mac (\r) line endings to Unix (\n)."""
     return LINE_ENDING_FINDER.sub("\n", text)
