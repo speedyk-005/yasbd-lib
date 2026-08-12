@@ -1007,6 +1007,7 @@ selected candidates.
 
 **Raises**:
 
+- `ImportError` - If ``py3langid`` is not installed.
 - `ValueError` - If the detector returns no language scores.
 
 <a id="yasbd.utils.logger"></a>
