@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **Words concatenated across line breaks** ([#254](https://github.com/speedyk-005/yasbd-lib/issues/254)): StreamCleaner now replaces newlines between word characters with a space, preserving word boundaries in OCR text.
+- **Words concatenated across line breaks** ([#255](https://github.com/speedyk-005/yasbd-lib/pull/255)): StreamCleaner now replaces newlines between word characters with a space, preserving word boundaries in OCR text.
 
 ## [0.14.0] - 2026-08-09
 
