@@ -111,7 +111,7 @@ def normalize_newlines(text: str) -> str:
 
 def _clean_ocr_text(text: str) -> str:
     cleaned_text = text.replace("''", '"')
-    cleaned_text = NEWLINE_BETWEEN_WORD_CHARS.sub("", cleaned_text)
+    cleaned_text = NEWLINE_BETWEEN_WORD_CHARS.sub(" ", cleaned_text)
     cleaned_text = NEWLINE_FOLLOWED_BY_PERIOD_FINDER.sub("", cleaned_text)
     cleaned_text = HEADING_OR_LIST_FINDER.sub(" ", cleaned_text)
     cleaned_text = NO_SPACE_BETWEEN_SENTENCES_FINDER.sub(" ", cleaned_text)
@@ -154,7 +154,9 @@ class StreamCleaner(StreamCleanerStub):
         >>> list(StreamCleaner("<b>Hello</b> world", steps_to_skip=["unwrap_htmls"]))
         ['<b>Hello</b> world']
         >>> list(StreamCleaner("W\\nO\\nR\\nD"))
-        ['WORD']
+        ['W O R D']
+        >>> list(StreamCleaner("I am a good\\nman"))
+        ['I am a good man']
         >>> list(StreamCleaner("An hyphe-\\nnated sentence"))
         ['An hyphenated sentence']
         >>> list(StreamCleaner("state-of-the-\\nart"))

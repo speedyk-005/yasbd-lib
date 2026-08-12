@@ -372,7 +372,7 @@ Common cleanup operations include:
 - Removing HTML markup (lightweight preprocessor, not a full HTML parser)
 - Normalizing whitespace
 - Rejoining hyphenated words split across lines
-- Merging vertically stacked characters
+- Preserving word boundaries across single line breaks
 
 **Skip** built-in steps you don't want:
 

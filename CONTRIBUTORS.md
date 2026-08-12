@@ -8,6 +8,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@1cbyc](https://github.com/1cbyc)** | Coordinate direction abbreviation fix |
 | **[@AshSgDe29071999](https://github.com/AshSgDe29071999)** | Combined same-module imports in `__init__.py`; named cleaning-pipeline helpers for testability |
 | **[@cnaples79](https://github.com/cnaples79)** | Missing comma in set literals fix |
+| **[@ColumbusLabs](https://github.com/ColumbusLabs)** | Preserve word boundaries across StreamCleaner line breaks |
 | **[@ddelrio1986](https://github.com/ddelrio1986)** | Spelling and grammar fixes in docs |
 | **[@HeaTTap](https://github.com/HeaTTap)** | Line ending normalization in default cleaning pipeline; removed destructive slash normalization from StreamCleaner |
 | **[@hkJerryLeung](https://github.com/hkJerryLeung)** | French `est` abbreviation fix |

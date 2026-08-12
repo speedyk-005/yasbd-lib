@@ -834,7 +834,9 @@ and various regex cleanup rules across paragraphs.
   >>> list(StreamCleaner("<b>Hello</b> world", steps_to_skip=["unwrap_htmls"]))
   ['<b>Hello</b> world']
   >>> list(StreamCleaner("W\nO\nR\nD"))
-  ['WORD']
+  ['W O R D']
+  >>> list(StreamCleaner("I am a good\nman"))
+  ['I am a good man']
   >>> list(StreamCleaner("An hyphe-\nnated sentence"))
   ['An hyphenated sentence']
   >>> list(StreamCleaner("state-of-the-\nart"))
