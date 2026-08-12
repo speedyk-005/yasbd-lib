@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Language auto-detection is now opt-in** ([#256](https://github.com/speedyk-005/yasbd-lib/pull/256)): `py3langid` is no longer a core dependency. It is imported lazily inside `classify_language()`, so `import yasbd` no longer pulls in numpy for users who never use `lang="auto"`. If you need auto-detection, install it separately with `pip install py3langid`; otherwise you get a clear error.
 
+### Fixed
+
+- **Words concatenated across line breaks** ([#255](https://github.com/speedyk-005/yasbd-lib/pull/255)): StreamCleaner now replaces newlines between word characters with a space, preserving word boundaries in OCR text.
+
+---
+
 ## [0.14.0] - 2026-08-09
 
 ### Added
@@ -60,6 +66,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Unused timeout parameter from `_create_external_cleaner`** ([#193](https://github.com/speedyk-005/yasbd-lib/pull/193)).
 
+---
+
 ## [0.12.0] - 2026-07-18
 
 ### Added
@@ -84,6 +92,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Flattened list heuristic** ([#169](https://github.com/speedyk-005/yasbd-lib/pull/169)): pairwise proximity check prevents false positives from randomly spaced horizontal markers.
 - **Removed ambiguous shared abbreviations** ([#166](https://github.com/speedyk-005/yasbd-lib/pull/166)): `est`, `dist`, `misc`, `tel` removed from base `INLINE_ONLY_ABBRVS`. French also excludes `est` from reference abbreviations.
 - **HTML markup leaking through cleaner** ([#162](https://github.com/speedyk-005/yasbd-lib/pull/162)): doctype declarations, comments, and processing instructions no longer pass through. Void elements removed from content-stripping group. Math expressions like `x < 5 and y > 3` no longer mangled.
+
+---
 
 ## [0.10.0] - 2026-07-09
 
@@ -111,6 +121,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Nested quote boundary leak** ([#156](https://github.com/speedyk-005/yasbd-lib/pull/156)): prevent inner single quotes inside double quotes from creating false sentence boundaries.
 - **`&` after title abbreviation** ([#157](https://github.com/speedyk-005/yasbd-lib/pull/157)): prevent & from triggering false sentence boundary after Com. or similar title abbreviations.
 - **Name initials at start of text** ([#160](https://github.com/speedyk-005/yasbd-lib/pull/160)): prevent `A. B. Smith` from being split by horizontal list marker pattern.
+
+---
 
 ## [0.9.0] - 2026-07-03
 
@@ -222,6 +234,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Restructured `detect()` loop with first paragraph peeked before loop, uses `chain()` to rejoin — cleaner separation of EOF logic from content processing.
 - **`NEWLINE_IN_MIDDLE_OF_WORD_FINDER` renamed to `NEWLINE_BETWEEN_WORD_CHARS`** and expanded pattern from `(?<=\b[a-zA-Z]{1,2})\n` to `(?<=\w)\n(?=\w)` to join mid-word newlines at any word-character boundary.
 
+---
+
 ## [0.4.0] - 2026-06-10
 
 ### Added
@@ -246,6 +260,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `GEOPOLITICAL_ABBRVS` => `DOTTED_GEOPOL_ABBRVS`
 - **Spanish `COMMON_SENT_STARTERS` cleaned**: Removed 15 prepositions (En, Por, Para, De, etc.) and 15 verbs (Es, Son, Fue, Hay, etc.) that caused false sentence boundaries after `Ud.`/`Vd.` abbreviations.
 
+---
+
 ## [0.3.0] - 2026-06-08
 
 ### Added
@@ -266,6 +282,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Em-dash quoted text splitting**: Added em-dash pattern to `QUOTE_AND_PAREN_FINDER` so dialogue quoted with dashes (`—text! —`) is no longer split prematurely.
 - **Newline boundary handling** ([#64](https://github.com/speedyk-005/yasbd-lib/pull/64)): Added `\n` to `NAIVE_BOUNDARY_FINDER` and updated `NEWLINE_INSIDE_SENTENCE_FINDER` to recognize `>` continuation, preventing markdown heading merging.
 - **Single-letter list marker false splits** ([#71](https://github.com/speedyk-005/yasbd-lib/pull/71)): Added context-aware heuristic to `_adjust_list_boundaries` so standalone "A." or "B." in prose are no longer split as list items.
+
+---
 
 ## [0.2.0] - 2026-06-04
 
@@ -288,10 +306,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Reference abbreviation bracket edge case** ([#35](https://github.com/speedyk-005/yasbd-lib/pull/35)): Added `[` to lookahead set to prevent false boundary triggers.
 - **Time-date pipeline cleanup (English-specific logic)** ([#40](https://github.com/speedyk-005/yasbd-lib/pull/40)): Ensures time/date handling is isolated to English rules without affecting other languages.
 
+---
+
 ## [0.1.3] - 2026-06-01
 
 ### Fixed
 - **Horizontal list finder over-match safety**: Restricts single-letter abbreviations (`p.`, `h.`, `s.`) from being incorrectly identified as alphabetic list markers by capping the range to `[a-eA-E]`.
+
+---
 
 ## [0.1.2] - 2026-06-01
 
