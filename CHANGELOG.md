@@ -36,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Hyphens dropped at line breaks in hyphenated compounds** ([#231](https://github.com/speedyk-005/yasbd-lib/pull/231)): StreamCleaner removed the hyphen when a line broke at a legitimate hyphenated compound, turning `state-of-the-\nart` into `state-of-theart`. Now only known prefixes/suffixes join across line breaks; all other cases keep the hyphen. Unicode hyphen variants are normalized to ASCII first.
 - **Absolute offsets ignore leading blank lines** ([#236](https://github.com/speedyk-005/yasbd-lib/pull/236)): `detect()` skipped whitespace-only paragraphs before accumulating the offset, so text starting with blank lines produced offsets relative to the first non-whitespace paragraph. Whitespace paragraphs now advance the offset.
 
+---
+
 ### [0.13.1] - 2026-07-18
 
 ### Fixed
@@ -298,7 +300,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Geopolitical abbreviations normalization**: Standardized casing across languages for consistent detection behavior.
 
 ### Fixed
-- **Multilingual structural heading detection** ([#44](https://github.com/speedyk-005/yasbd-lib/pull/44)): Prevents structural headings from triggering false sentence splits in EN, ES, FR, and HT context. Fixes [#36](https://github.com/speedyk-005/yasbd-lib/issues/36).
+- **Multilingual structural heading detection** ([#44](https://github.com/speedyk-005/yasbd-lib/pull/44)): Prevents structural headings from triggering false sentence splits in EN, ES, FR, and HT context.
 - **Sentence splitting after mixed-case scientific units** ([#42](https://github.com/speedyk-005/yasbd-lib/pull/42)): Fixes boundary suppression caused by treating mixed-case units (e.g., `meV.`, `kV.`) as standard abbreviations. Fixes [#33](https://github.com/speedyk-005/yasbd-lib/issues/33).
 - **Sentence splitting bug after `a.m./p.m.` + date tokens** ([#40](https://github.com/speedyk-005/yasbd-lib/pull/40)): Prevented incorrect segmentation when time tokens precede month/day expressions.
 - **Japanese over-matching boundary logic**: Removed invalid `\b` dependency in CJK context.
@@ -337,7 +339,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.1] - 2026-05-30
 
 ### Fixed
-- **Single-quote dialogue split bug** ([#23](https://github.com/speedyk-005/yasbd-lib/issues/34)): Fixed issues where the engine split text prematurely before a trailing dialogue tag (e.g., `'Is this great?' she said.`).
+- **Single-quote dialogue split bug** ([#35](https://github.com/speedyk-005/yasbd-lib/pull/35)): Fixed issues where the engine split text prematurely before a trailing dialogue tag (e.g., `'Is this great?' she said.`).
 - **Ellipsis split suppression**: Prevented three-dot ellipsis (`...`) from acting as a terminal boundary, reserving splits strictly for four-dot boundaries.
 - **Roman numeral initialism protection**: Stopped the pronoun `I` from triggering false sentence breaks in name strings like `Albert I. Jones`.
 - **Numero reference split suppression**: Added `N°.` to the reference abbreviation lexicon to prevent false breaks.
