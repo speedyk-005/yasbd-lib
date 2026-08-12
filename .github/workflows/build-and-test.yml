@@ -31,7 +31,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        uv pip install -e ".[dev]" spacy langcodes
+        uv pip install -e ".[dev]" spacy langcodes py3langid
     - name: Test with Pytest
       run: |
         uv run pytest -v --tb=short
