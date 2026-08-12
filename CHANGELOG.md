@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **Language auto-detection is now opt-in** ([#256](https://github.com/speedyk-005/yasbd-lib/pull/256)): `py3langid` is no longer a core dependency. It is imported lazily inside `classify_language()`, so `import yasbd` no longer pulls in numpy for users who never use `lang="auto"`. If you need auto-detection, install it separately with `pip install py3langid`; otherwise you get a clear error.
+- **Language auto-detection is now opt-in** ([#256](https://github.com/speedyk-005/yasbd-lib/pull/256)): `py3langid` is no longer a core dependency. It is imported lazily inside `classify_language()`, so `import yasbd` no longer pulls in numpy for users who never use `lang="auto"`. It must be installed separately.
 
 ### Fixed
 
