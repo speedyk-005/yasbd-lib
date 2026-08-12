@@ -1,8 +1,6 @@
 import math
 from functools import lru_cache
 
-import py3langid as langid
-
 from yasbd.rules import get_supported_langs
 
 PREFERRED = get_supported_langs()
@@ -46,8 +44,17 @@ def classify_language(text: str) -> tuple[str, float]:
         True
 
     Raises:
+        ImportError: If ``py3langid`` is not installed.
         ValueError: If the detector returns no language scores.
     """
+    try:
+        import py3langid as langid
+    except ImportError:  # pragma: no cover
+        raise ImportError(
+            "py3langid is required for language auto-detection. "
+            "Install it with: pip install py3langid"
+        ) from None
+
     ranks = langid.rank(text)
     _, top_score = ranks[0]
 

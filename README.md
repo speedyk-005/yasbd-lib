@@ -268,6 +268,8 @@ Each language rule loads once into a 5-slot cache. Once loaded, a language stays
 >
 > Pass `lang="auto"` if you want the system to figure out the language for you.
 > I wouldn't lean on it too hard though — it's a bit slower, and short phrases can throw it off sometimes.
+>
+> Requires the `py3langid` package. Install it separately: `pip install py3langid`
 
 ### Core Methods
 The two primary APIs are detect() and segment().
