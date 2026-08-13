@@ -38,7 +38,7 @@ class Rules:
 
         # Global Social
         "br", "fr", "messrs", "mlle", "mme", "mmes", "mr",
-        "mrs", "ms", "mssrs", "st",
+        "mrs", "ms", "mssrs", "st", "sr", "jr",
 
         # Military (NATO/International Standardized Ranks)
         "adm", "brig", "capt", "cmdr", "col", "comdr", "commr",
