@@ -11,11 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **Language auto-detection is now opt-in** ([#256](https://github.com/speedyk-005/yasbd-lib/pull/256)): `py3langid` is no longer a core dependency. It is imported lazily inside `classify_language()`, so `import yasbd` no longer pulls in numpy for users who never use `lang="auto"`. It must be installed separately.
+- **Language auto-detection is now opt-in** ([#256](https://github.com/speedyk-005/yasbd-lib/pull/256)): `py3langid` is no longer a core dependency. It is imported lazily inside `classify_language()`, so `import yasbd` no longer pulls in numpy for users who never use `lang="auto"`. It must be installed separately.[span_0](start_span)[span_0](end_span)
 
 ### Fixed
 
-- **Words concatenated across line breaks** ([#255](https://github.com/speedyk-005/yasbd-lib/pull/255)): StreamCleaner now replaces newlines between word characters with a space, preserving word boundaries in OCR text.
+- **Words concatenated across line breaks** ([#255](https://github.com/speedyk-005/yasbd-lib/pull/255)): StreamCleaner now replaces newlines between word characters with a space, preserving word boundaries in OCR text.[span_1](start_span)[span_1](end_span)
+- **False sentence splits after geopolitical abbreviations** ([#257](https://github.com/speedyk-005/yasbd-lib/pull/257)): Expanded `ORG_PROPER_NOUNS` in English rules to prevent premature sentence breaks when abbreviations like `U.S.` or `U.K.` precede common government and organizational nouns (e.g., `Government`, `Department`, `Persons`). Fixes [#253](https://github.com/speedyk-005/yasbd-lib/issues/253).
 
 ---
 

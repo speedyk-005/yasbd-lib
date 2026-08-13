@@ -8,7 +8,7 @@ TEST_DATA = [
     "Her email is Jane.Doe@example.com.| I sent her an email.",
     "The site is: https://www.example.50.com/new-site/awesome_content.html.| Please check it out.",
 
-    # Abbreviations
+    # -- Abbreviations --
     "My name is Jonas E. Smith.",
     "A. B. Smith graduated from Harvard.| He then worked from IBM Corp.",
     "Please turn to p. 55.",
@@ -19,9 +19,6 @@ TEST_DATA = [
     "St. Michael's Church is on 5th st. near the light.",
     "That is JFK Jr.'s book.",
     "I visited the U.S.A. last year.",
-    "I live in the E.U.| How about you?",
-    "He serves in the U.S. Army.",
-    "The U.S. government passed a new law.",
     "I have lived in the U.S. for 20 years.",
     "She has $100.00 in her bag.",
     "She has $100.00.| It is in her bag.",
@@ -40,6 +37,13 @@ TEST_DATA = [
     "We make a good team, you and I.| Did you see Albert I. Jones yesterday?",
     "He left the bank at 6 P.M.| Mr. Smith then went to the store.",
     "The little boy turned off the TV.| He then closed the door.",
+    # Geopolitical abbrv + Captitalized word (fix for #253)
+    "This role requires U.S. Government security clearance.",
+    "This job is open to U.S. Persons only per export law.",
+    "The contract applies to U.K. Government employees.",
+    "I live in the E.U.| How about you?",
+    "He serves in the U.S. Army.",
+    "The U.S. government passed a new law.",
 
     # structural headings (fix for #36)
     "Chapter 1. The Beginning.| It was dark and quiet in the room. | Nothing moved.",
