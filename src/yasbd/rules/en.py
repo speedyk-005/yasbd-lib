@@ -68,6 +68,12 @@ class EnRules(Rules):
         "Cabinet", "Commons", "Congress",
         "House of Representatives", "Parliament", "Senate",
         "Supreme Court",
+
+        # Government bodies and agencies
+        "Government", "Persons", "Department", "Agency", "Customs",
+        "Embassy", "Consulate", "Administration", "Commission",
+        "Authority", "Bureau", "Office", "Service", "Committee",
+        "Board", "Council", "Institute",
     }
 
     DATE_WORDS = {
