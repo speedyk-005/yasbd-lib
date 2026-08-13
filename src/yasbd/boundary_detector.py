@@ -175,7 +175,7 @@ class BoundaryDetector:
                 "and end offset; use [0, len(text)] to merge the whole "
                 "paragraph into one sentence"
             )
-        return sorted(result)
+        return sorted(set(result))
 
     def _detect_relative_spans(
         self,
