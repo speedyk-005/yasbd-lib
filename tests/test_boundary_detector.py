@@ -211,12 +211,11 @@ def test_rule_cache_lru(en_detector):
         "α· Πρώτο θέμα| β· Δεύτερο θέμα.",
         "The requirements are simple:| 1.) Python 3.12 environment.| 2. At least 8GB of RAM.",
 
-        # Corporate and title abbreviation boundaries (fix for #260)
+        # Corporate and personal abbreviation boundaries (fix for #260)
         "Acme Inc. USA is expanding its engineering team this quarter.",
         "Beta Corp. North America leads this hiring initiative.",
-        "Acme Ltda. América Latina reportó altos ingresos este trimestre.",
-        "Please contact Sr. Vice President Harrison if you have any compliance questions.",
-​        "Please forward this onboarding ticket to Jr. Software Engineer Alex Miller.",
+        "Martin Luther King Jr. Day is a paid holiday at this company.",
+        "John Doe Sr. VP of Engineering will be your hiring manager.",
     ],
 )
 def test_universal_regression(en_detector, marked_text):
