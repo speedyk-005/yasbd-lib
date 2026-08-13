@@ -71,6 +71,10 @@ class Rules:
         "D.P.R.K", "R.O.C", "R.S.A", "D.R.C",
     }
 
+    CORP_ENTITY_ABBRVS = {
+        "assoc", "mfg", "inc", "corp", "ltd", "ltda", "co",
+    }
+
     REFERENCE_ABBRVS = {
         # Publishing / Documents / Manuscripts
         "app", "apps", "cf", "cod", "diag", "ext", "fig",
@@ -115,9 +119,6 @@ class Rules:
     }
 
     INLINE_ONLY_ABBRVS = {
-        # Business entity bridges
-        "assoc", "mfg", "inc", "corp", "ltd", "co",
-
         # Bridge/connectors
         "a.k.a", "ca", "cf", "e.g", "eg", "i.c", "i.e", "i.q",
         "ibid", "ie", "sc", "v", "viz", "vs",
@@ -314,7 +315,10 @@ class Rules:
                 """, re2.X
             ),
             re.compile(rf"""
-                (?:(?i:{build_optimized_pattern(cls.NAMES_WITH_EXCLAMATION)})[! ！‼])
+                (?:(?i:
+                    {build_optimized_pattern(cls.CORP_ENTITY_ABBRVS)}\.|
+                    {build_optimized_pattern(cls.NAMES_WITH_EXCLAMATION)}[! ！‼]
+                ))
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                """, re.X
             ),

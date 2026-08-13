@@ -27,6 +27,10 @@ class IdRules(Rules):
         "R.I",
     }
 
+    CORP_ENTITY_ABBRVS = Rules.CORP_ENTITY_ABBRVS | {
+        "pte", "bhd", "sdn",
+    }
+
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         "hlm", "hal", "bab", "jil", "lamp", "ttd", "stt",
         "cet", "terj", "dok", "pas",
@@ -38,9 +42,6 @@ class IdRules(Rules):
     }
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
-        # Business entity bridges
-        "pte", "bhd", "sdn",
-
         # Administrative & Postal Connectors
         "a.n", "u.b", "d.a",
 

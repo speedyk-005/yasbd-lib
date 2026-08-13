@@ -20,6 +20,10 @@ class PlRules(Rules):
         "R.P", "P.N.E",
     }
 
+    CORP_ENTITY_ABBRVS = Rules.CORP_ENTITY_ABBRVS | {
+        "sp", "spol",
+    }
+
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         "art", "ust", "par", "ptk", "dz", "poz", "sygn",
         "t", "cz", "rozdz", "wyd", "rys", "tab", "zob",
@@ -28,8 +32,8 @@ class PlRules(Rules):
     }
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
-        "np", "tzw", "tj", "tzn", "ww", "b.z", "pt", "jw", "sp",
-        "spol", "os", "ul", "al", "pl", "skw", "bulw", "boul",
+        "np", "tzw", "tj", "tzn", "ww", "b.z", "pt", "jw",
+        "os", "ul", "al", "pl", "skw", "bulw", "boul",
     }
 
     SECTION_MARKERS = Rules.SECTION_MARKERS | {

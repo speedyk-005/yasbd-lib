@@ -21,6 +21,10 @@ class DeRules(Rules):
         "D.H", "E.V", "G.M.B.H", "I.G", "A.D", "K.U.K"
     }
 
+    CORP_ENTITY_ABBRVS = Rules.CORP_ENTITY_ABBRVS | {
+        "e.V.", "KGaA", "A/S", "A/B",
+    }
+
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         # Bibliographical and Document References
         "abb", "anm", "bd", "bzw", "cap", "ed", "hrsg", "kap", "nr",
@@ -41,9 +45,6 @@ class DeRules(Rules):
     # are removed from this literal set. They are caught dynamically later
     # in the pipeline by the cls.MID_SENTENCE_FINDER_LST regex rule.
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
-        # Business entity bridges
-        "e.V.", "KGaA", "A/S", "A/B",
-
         # Bridge / Logical connectors
         "bzw", "evtl", "ggf", "ggfs", "inkl", "sog",
         "zzgl", "bspw", "insb", "ca", "bsp",

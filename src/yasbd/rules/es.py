@@ -36,7 +36,7 @@ class EsRules(Rules):
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS - {"ave"} | {
         "ej", "p.ej", "vid", "cll", "cra", "diag", "transv", "mz", "mza", "lt",
         "urb", "asent", "dpto", "prov", "mnpio", "conj", "edif", "ofic", "km",
-        "av", "avd", "c", "pso", "ctra", "pl", "blvr", "ltda",
+        "av", "avd", "c", "pso", "ctra", "pl", "blvr",
     }
 
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {

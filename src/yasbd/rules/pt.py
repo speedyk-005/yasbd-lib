@@ -31,7 +31,7 @@ class PtRules(Rules):
 
     INLINE_ONLY_ABBRVS = (Rules.INLINE_ONLY_ABBRVS - {"ave"}) | {
         # Business entity bridges
-        "ltda",
+        "assoc",
 
         # Bridge / connectors / text notes
         "ex", "p.ex", "vid", "vd", "of",
