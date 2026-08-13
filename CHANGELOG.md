@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+[Unreleased]
+
+### Fixed
+
+- **False sentence splits on corporate abbreviations** ([#262](https://github.com/speedyk-005/yasbd-lib/pull/262)): Updated rules and boundary detector regex to prevent premature splits when corporate entities precede capitalized names or titles.
+
+---
+
 ## [0.15.0] - 2026-08-13
 
 ### Changed
