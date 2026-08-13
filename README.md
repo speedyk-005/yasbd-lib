@@ -25,13 +25,13 @@
 <details>
 <summary>📑 Table of Contents (Click me!)</summary>
 
-- [🎬 Manifesto](#-manifesto)
+- [📝 Manifesto](#-manifesto)
   - [✂ Why do I need a pair of "smart scissors" for text?](#-why-do-i-need-a-pair-of-smart-scissors-for-text)
   - [🔪 Are these shears just a rusty regex loop spray-painted in carbon fiber?](#-are-these-shears-just-a-rusty-regex-loop-spray-painted-in-carbon-fiber)
 - [🌐 Supported Languages](#-supported-languages)
   - [How Language Profiles Are Built](#how-language-profiles-are-built)
-- [🏁 Benchmarks](#-benchmarks)
-- [📦 Installation](#-installation)
+- [📊 Benchmarks](#-benchmarks)
+- [📥 Installation](#-installation)
   - [The Quick & Easy Way](#the-quick--easy-way)
   - [The From-Source Way](#the-from-source-way)
   - [Want to Help Make yasbd Even Better?](#want-to-help-make-yasbd-even-better)
@@ -45,7 +45,8 @@
     - [About JSONL](#about-jsonl)
   - [Adapter](#adapter)
   - [spaCy component](#spacy-component)
-- [🔌 Lang Packs](#-lang-packs)
+- [​🔗 Integrations & Ecosystem](#-integrations--ecosystem)
+- [📦 Lang Packs](#-lang-packs)
 - [🤝 Contributors](#-contributors)
 - [📜 Last note](#-last-note)
 
@@ -53,7 +54,7 @@
 
 ---
 
-## 🎬 Manifesto
+## 📝 Manifesto
 
 **Y**et **A**nother **S**entence **B**oundary **D**etector is a pair of smart scissors for text. Pointer-based, from-scratch [SBD](https://en.wikipedia.org/wiki/Sentence_boundary_disambiguation) for production NLP pipelines. Features a drop-in adapter for pysbd to fix edge cases without heavy refactoring.
 
@@ -162,7 +163,7 @@ Candidate abbreviations are collected from all sources, classified by type (`TIT
 
 ---
 
-## 🏁 Benchmarks
+## 📊 Benchmarks
 
 Tested against 7 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, sentence-splitter, spaCy-sentencizer) across multiple languages and 7 edge cases: compound abbreviations, CJK quotes, newline wrapping, chat logs, URLs, decimals, and nested punctuation.
 
@@ -178,7 +179,7 @@ Full results, terminal output, and a performance graph can be found in **[benchm
 
 ---
 
-## 📦 Installation
+## 📥 Installation
 
 Ready to do some cybernetic boundary shearing? Let's get you set up quickly and painlessly.
 
@@ -556,7 +557,7 @@ pipe.preserve_quote_and_paren = False
 
 ---
 
-## 🔌 Lang Packs ([API](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbdrules))
+## 📦 Lang Packs ([API](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbdrules))
 
 Need support for a language that isn't built in? Plug in your own lang pack. A lang pack is simply a Python module that exposes a `PROFILES` list of `Rules` subclasses.
 
@@ -588,6 +589,15 @@ Want to build a lang pack? Start with the [language template](https://github.com
 |---------|-----------|-------------|
 | [`yasbd-auxlang`](https://github.com/speedyk-005/yasbd-auxlang) | `eo`, `ia`, `ie`, `io` | Esperanto, Interlingua, Interlingue, Ido — constructed auxiliary languages |
 | [`yasbd-union`](https://github.com/speedyk-005/yasbd-union) | `xx` | Experimental multi-language profile for mixed-text segmentation without language constraints |
+
+---
+
+## 🔗 Integrations & Ecosystem
+
+* 🔵 **[spaCy Component](#spacy-component):** Plug `yasbd` straight into any spaCy v3+ pipeline as a fast sentence segmenter.
+* 📦 **[Lang Packs](#-lang-packs):** Plug in modular rule sets (like `yasbd-auxlang`) for extended language support.
+* 🧩 **[chunklet-py](https://speedyk-005.github.io/chunklet-py/latest/supported-languages/):** Powers polyglot RAG document chunking as the core SBD workhorse.
+* 🏥 **[OpenMed](https://github.com/maziyarpanahi/openmed/blob/master/docs/analyze-text.md):** Integrates `yasbd` as a specialized backend for medical text segmentation.
 
 ---
 
