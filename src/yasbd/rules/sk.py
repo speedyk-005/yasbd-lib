@@ -26,7 +26,7 @@ class SkRules(Rules):
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
         "napr", "tzv", "t.j", "príp", "resp", "tzn",
-        "viď", "cca",
+        "viď", "cca", "sp", "spol",
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {

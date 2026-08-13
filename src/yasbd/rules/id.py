@@ -38,6 +38,9 @@ class IdRules(Rules):
     }
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
+        # Business entity bridges
+        "pte", "bhd", "sdn",
+
         # Administrative & Postal Connectors
         "a.n", "u.b", "d.a",
 

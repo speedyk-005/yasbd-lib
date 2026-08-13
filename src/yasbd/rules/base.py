@@ -116,7 +116,7 @@ class Rules:
 
     INLINE_ONLY_ABBRVS = {
         # Business entity bridges
-        "assoc", "mfg",
+        "assoc", "mfg", "inc", "corp", "ltd", "co",
 
         # Bridge/connectors
         "a.k.a", "ca", "cf", "e.g", "eg", "i.c", "i.e", "i.q",
