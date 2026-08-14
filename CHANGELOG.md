@@ -7,10 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased]
+[Unreleased]
 
 ### Fixed
+
 - **Duplicate boundary offsets** ([#261](https://github.com/speedyk-005/yasbd-lib/pull/261)): Ensure that offsets are deduplicated prior to sorting in `BoundaryDetector._run_hook()` to guarantee the uniqueness of the final boundaries.
+- **False sentence splits on corporate abbreviations** ([#262](https://github.com/speedyk-005/yasbd-lib/pull/262)): Updated rules and boundary detector regex to prevent premature splits when corporate entities precede capitalized names or titles.
+
+---
 
 ## [0.15.0] - 2026-08-13
 

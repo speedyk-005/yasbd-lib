@@ -13,6 +13,10 @@ class SkRules(Rules):
         "S.R", "E.Ú", "O.S.N",
     }
 
+    CORP_ENTITY_ABBRVS = Rules.CORP_ENTITY_ABBRVS | {
+        "sp", "spol",
+    }
+
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         "s", "č", "zv", "vyd", "roč", "čís", "ods", "písm",
         "par", "obr", "obv", "odd", "pok", "pozn",

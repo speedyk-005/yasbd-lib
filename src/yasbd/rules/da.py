@@ -21,8 +21,7 @@ class DaRules(SvRules):
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
-        "febr", "man", "tir", "ons", "tor",
-        "fre", "lør", "søn",
+        "febr", "man", "tir", "ons", "tor", "fre", "lør", "søn",
     }
 
     INLINE_ONLY_ABBRVS = SvRules.INLINE_ONLY_ABBRVS | {

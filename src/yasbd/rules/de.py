@@ -21,6 +21,10 @@ class DeRules(Rules):
         "D.H", "E.V", "G.M.B.H", "I.G", "A.D", "K.U.K"
     }
 
+    CORP_ENTITY_ABBRVS = Rules.CORP_ENTITY_ABBRVS | {
+        "e.V.", "KGaA", "A/S", "A/B",
+    }
+
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         # Bibliographical and Document References
         "abb", "anm", "bd", "bzw", "cap", "ed", "hrsg", "kap", "nr",

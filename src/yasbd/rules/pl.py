@@ -20,6 +20,10 @@ class PlRules(Rules):
         "R.P", "P.N.E",
     }
 
+    CORP_ENTITY_ABBRVS = Rules.CORP_ENTITY_ABBRVS | {
+        "sp", "spol",
+    }
+
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         "art", "ust", "par", "ptk", "dz", "poz", "sygn",
         "t", "cz", "rozdz", "wyd", "rys", "tab", "zob",

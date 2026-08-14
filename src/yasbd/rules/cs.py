@@ -23,6 +23,10 @@ class CsRules(Rules):
         "Č.R", "Č.S.R", "P.N.E", "N.E",
     }
 
+    CORP_ENTITY_ABBRVS = Rules.CORP_ENTITY_ABBRVS | {
+        "sp", "spol",
+    }
+
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         # Layout, Citations & Document Hierarchy
         "odst", "par", "čl", "č", "čj", "s", "str",

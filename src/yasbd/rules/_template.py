@@ -29,6 +29,9 @@ class LangRules(Rules):
     # Country and regional abbreviations written with periods (U.S., E.U., etc.).
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {...}
 
+    # Language-specific corporate abbreviations (e.g., Inc., Corp.)
+    CORP_ENTITY_ABBRVS = Rules.CORP_ENTITY_ABBRVS | {...}
+
     # Citation and reference abbreviations commonly used mid-text.
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {...}
 

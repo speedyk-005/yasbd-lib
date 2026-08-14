@@ -38,7 +38,7 @@ class Rules:
 
         # Global Social
         "br", "fr", "messrs", "mlle", "mme", "mmes", "mr",
-        "mrs", "ms", "mssrs", "st",
+        "mrs", "ms", "mssrs", "st", "sr", "jr",
 
         # Military (NATO/International Standardized Ranks)
         "adm", "brig", "capt", "cmdr", "col", "comdr", "commr",
@@ -69,6 +69,10 @@ class Rules:
 
         # Other sovereign states
         "D.P.R.K", "R.O.C", "R.S.A", "D.R.C",
+    }
+
+    CORP_ENTITY_ABBRVS = {
+        "assoc", "mfg", "inc", "corp", "ltd", "ltda", "co",
     }
 
     REFERENCE_ABBRVS = {
@@ -115,9 +119,6 @@ class Rules:
     }
 
     INLINE_ONLY_ABBRVS = {
-        # Business entity bridges
-        "assoc", "mfg",
-
         # Bridge/connectors
         "a.k.a", "ca", "cf", "e.g", "eg", "i.c", "i.e", "i.q",
         "ibid", "ie", "sc", "v", "viz", "vs",
@@ -314,7 +315,10 @@ class Rules:
                 """, re2.X
             ),
             re.compile(rf"""
-                (?:(?i:{build_optimized_pattern(cls.NAMES_WITH_EXCLAMATION)})[! ！‼])
+                (?:(?i:
+                    {build_optimized_pattern(cls.CORP_ENTITY_ABBRVS)}\.|
+                    {build_optimized_pattern(cls.NAMES_WITH_EXCLAMATION)}[! ！‼]
+                ))
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                """, re.X
             ),

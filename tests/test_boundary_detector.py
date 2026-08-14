@@ -210,6 +210,12 @@ def test_rule_cache_lru(en_detector):
         "• 9. The first item.| • 10. The second item",
         "α· Πρώτο θέμα| β· Δεύτερο θέμα.",
         "The requirements are simple:| 1.) Python 3.12 environment.| 2. At least 8GB of RAM.",
+
+        # Corporate and personal abbreviation boundaries (fix for #260)
+        "Acme Inc. USA is expanding its engineering team this quarter.",
+        "Beta Corp. North America leads this hiring initiative.",
+        "Martin Luther King Jr. Day is a paid holiday at this company.",
+        "John Doe Sr. VP of Engineering will be your hiring manager.",
     ],
 )
 def test_universal_regression(en_detector, marked_text):
