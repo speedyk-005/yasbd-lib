@@ -42,6 +42,17 @@ _MIN_CONFIDENCE = 0.8
 # Maximum number of rule instances to keep in cache
 _MAX_CACHED_RULES = 5
 
+# Offending offsets listed in a HookError before eliding the rest. A hook can
+# hand back thousands of values; the first few identify the mistake.
+_MAX_REPORTED_OFFSETS = 5
+
+
+def _describe_offsets(offsets: list[object]) -> str:
+    """Render offending offsets for a HookError, eliding a long tail."""
+    shown = ", ".join(repr(pos) for pos in offsets[:_MAX_REPORTED_OFFSETS])
+    extra = len(offsets) - _MAX_REPORTED_OFFSETS
+    return f"{shown} (and {extra} more)" if extra > 0 else shown
+
 
 class BoundaryDetector:
     @validate_input
@@ -162,12 +173,26 @@ class BoundaryDetector:
             raise HookError(f"post-processing hook raised an error: {exc!r}") from exc
 
         result = ctx["boundaries"]
-        if not isinstance(result, list) or not all(
-            isinstance(pos, int) and 0 <= pos <= len(text) for pos in result
-        ):
+        # Type and bounds are checked separately: a hook that returned a string
+        # and one that returned an offset past the paragraph end are different
+        # mistakes, and the second is far easier to fix when the offending
+        # values are named.
+        if not isinstance(result, list):
             raise HookError(
-                "post-processing hook must leave 'boundaries' as a list of "
-                "int offsets within the paragraph"
+                "post-processing hook must leave 'boundaries' as a list, got "
+                f"{type(result).__name__}"
+            )
+        non_ints = [pos for pos in result if not isinstance(pos, int)]
+        if non_ints:
+            raise HookError(
+                "post-processing hook must leave 'boundaries' as a list of int "
+                f"offsets; got {_describe_offsets(non_ints)}"
+            )
+        out_of_bounds = [pos for pos in result if not 0 <= pos <= len(text)]
+        if out_of_bounds:
+            raise HookError(
+                "post-processing hook returned offset(s) outside the paragraph "
+                f"bounds [0, {len(text)}]: {_describe_offsets(out_of_bounds)}"
             )
         if 0 not in result or len(text) not in result:
             raise HookError(

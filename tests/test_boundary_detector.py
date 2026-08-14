@@ -7,6 +7,7 @@ import pytest
 from tests import ALL_TEST_DATA
 from yasbd import (
     BoundaryDetector,
+    HookError,
     InvalidInputError,
     ParagraphEOF,
     UnsupportedLanguageError,
@@ -233,3 +234,72 @@ def test_post_processing_hook():
     detector = BoundaryDetector(lang="en", hook=tweak)
     assert list(detector.segment("Hi. There world.")) == ["Hi. There", "world."]
     assert list(detector.detect("Hi. There world.")) == [10, 16]
+
+
+def _detect_with_hook(hook, text="Hi. There world."):
+    """Run a hook that is expected to fail validation, and return the error."""
+    detector = BoundaryDetector(lang="en", hook=hook)
+    with pytest.raises(HookError) as excinfo:
+        list(detector.detect(text))
+    return str(excinfo.value)
+
+
+def test_hook_returning_a_non_list_names_the_type():
+    def bad(ctx):
+        ctx["boundaries"] = "0,16"
+
+    message = _detect_with_hook(bad)
+    assert "must leave 'boundaries' as a list" in message
+    assert "got str" in message
+
+
+def test_hook_returning_non_int_offsets_names_them():
+    def bad(ctx):
+        ctx["boundaries"] = [0, "8", 16.0]
+
+    message = _detect_with_hook(bad)
+    assert "list of int offsets" in message
+    assert "'8'" in message
+    assert "16.0" in message
+    # The type complaint must not be confused with the bounds complaint.
+    assert "outside the paragraph" not in message
+
+
+def test_hook_returning_out_of_bounds_offsets_names_them():
+    def bad(ctx):
+        ctx["boundaries"] = [-1, 500]
+
+    message = _detect_with_hook(bad)
+    assert "outside the paragraph bounds [0, 16]" in message
+    assert "-1" in message
+    assert "500" in message
+    assert "list of int offsets" not in message
+
+
+def test_hook_error_reports_only_the_offending_offsets():
+    """A valid offset alongside a bad one must not be blamed."""
+
+    def bad(ctx):
+        ctx["boundaries"] = [0, 3, 16, 99]
+
+    message = _detect_with_hook(bad)
+    # The listed offsets are exactly the offenders, not the whole boundary list.
+    assert message.endswith(": 99")
+
+
+def test_hook_error_elides_a_long_tail_of_offsets():
+    def bad(ctx):
+        ctx["boundaries"] = [0, 16, *range(100, 120)]
+
+    message = _detect_with_hook(bad)
+    assert "and 15 more" in message
+
+
+def test_hook_offset_at_the_paragraph_end_is_in_bounds():
+    """len(text) is a valid boundary - the check is inclusive at both ends."""
+
+    def keep(ctx):
+        ctx["boundaries"] = [0, 16]
+
+    detector = BoundaryDetector(lang="en", hook=keep)
+    assert list(detector.detect("Hi. There world.")) == [16]
