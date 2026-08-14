@@ -227,7 +227,7 @@ def test_universal_regression(en_detector, marked_text):
     assert result == expected, f"Input: {input_text}"
 
 
-def test_post_processing_hook():
+def test_post_processing_hook_supports_mutation():
     """test that a hook can remove and add boundaries in place."""
 
     def tweak(ctx):
@@ -239,3 +239,13 @@ def test_post_processing_hook():
     detector = BoundaryDetector(lang="en", hook=tweak)
     assert list(detector.segment("Hi. There world.")) == ["Hi. There", "world."]
     assert list(detector.detect("Hi. There world.")) == [10, 16]
+
+def test_post_processing_hook_deduplicates_boundaries():
+    """test that duplicate boundaries from a hook are removed."""
+
+    def tweak(ctx):
+        ctx["boundaries"] = [0, 5, 5, len(ctx["text"])]
+
+    detector = BoundaryDetector(lang="en", hook=tweak)
+
+    assert detector._run_hook("this is a test", [0, 14], 0) == [0, 5, 14]
