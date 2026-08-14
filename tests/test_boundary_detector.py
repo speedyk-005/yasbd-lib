@@ -221,7 +221,7 @@ def test_universal_regression(en_detector, marked_text):
     assert result == expected, f"Input: {input_text}"
 
 
-def test_post_processing_hook():
+def test_post_processing_hook_supports_mutation():
     """test that a hook can remove and add boundaries in place."""
 
     def tweak(ctx):
