@@ -150,6 +150,7 @@ class BoundaryDetector:
         """
         if self.hook is None:
             return boundaries
+
         ctx: HookContext = {
             "text": text,
             "lang": self._lang,
@@ -162,19 +163,32 @@ class BoundaryDetector:
             raise HookError(f"post-processing hook raised an error: {exc!r}") from exc
 
         result = ctx["boundaries"]
-        if not isinstance(result, list) or not all(
-            isinstance(pos, int) and 0 <= pos <= len(text) for pos in result
-        ):
+
+        if not isinstance(result, list):
             raise HookError(
-                "post-processing hook must leave 'boundaries' as a list of "
-                "int offsets within the paragraph"
+                "post-processing hook must leave 'boundaries' as a list, "
+                f"got {type(result).__name__}"
             )
+
+        for pos in result:
+            if type(pos) is not int:
+                raise HookError(
+                    f"post-processing hook must leave 'boundaries' as a list of int offsets; "
+                    f"got {pos!r} ({type(pos).__name__})"
+                )
+            if not (0 <= pos <= len(text)):
+                raise HookError(
+                    f"post-processing hook returned offset {pos} outside paragraph bounds "
+                    f"[0, {len(text)}]"
+                )
+
         if 0 not in result or len(text) not in result:
             raise HookError(
                 "post-processing hook must keep both the paragraph start (0) "
                 "and end offset; use [0, len(text)] to merge the whole "
                 "paragraph into one sentence"
             )
+
         return sorted(set(result))
 
     def _detect_relative_spans(
