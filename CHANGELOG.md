@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Fixed
+- **Duplicate boundary offsets** ([#261](https://github.com/speedyk-005/yasbd-lib/pull/261)): Ensure that offsets are deduplicated prior to sorting in `BoundaryDetector._run_hook()` to guarantee the uniqueness of the final boundaries.
+
 ## [0.15.0] - 2026-08-13
 
 ### Changed
