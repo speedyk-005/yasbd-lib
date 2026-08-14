@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]
+## [Unreleased]
+
+### Changed
+
+- **Separate hook boundary validation** ([#264](https://github.com/speedyk-005/yasbd-lib/pull/264)): Split type and bounds checks in `BoundaryDetector._run_hook()` into single-pass, fast-failing guards with specific error messages.                                 
 
 ### Fixed
 

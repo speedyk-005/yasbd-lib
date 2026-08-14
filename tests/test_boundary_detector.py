@@ -1,5 +1,6 @@
 import io
 import random
+import re
 import string
 
 import pytest
@@ -7,6 +8,7 @@ import pytest
 from tests import ALL_TEST_DATA
 from yasbd import (
     BoundaryDetector,
+    HookError,
     InvalidInputError,
     ParagraphEOF,
     UnsupportedLanguageError,
@@ -240,6 +242,7 @@ def test_post_processing_hook_supports_mutation():
     assert list(detector.segment("Hi. There world.")) == ["Hi. There", "world."]
     assert list(detector.detect("Hi. There world.")) == [10, 16]
 
+
 def test_post_processing_hook_deduplicates_boundaries():
     """test that duplicate boundaries from a hook are removed."""
 
@@ -249,3 +252,23 @@ def test_post_processing_hook_deduplicates_boundaries():
     detector = BoundaryDetector(lang="en", hook=tweak)
 
     assert detector._run_hook("this is a test", [0, 14], 0) == [0, 5, 14]
+
+
+@pytest.mark.parametrize(
+    "invalid_boundaries, expected_message",
+    [
+        ("not a list", "must leave 'boundaries' as a list, got str"),
+        ([0, "5", 14], "must leave 'boundaries' as a list of int offsets; got '5' (str)"),
+        ([-1, 14], "returned offset -1 outside paragraph bounds [0, 14]"),
+    ],
+)
+def test_post_processing_hook_validation_errors(invalid_boundaries, expected_message):
+    """Test that invalid hook return values fail fast with specific HookError messages."""
+
+    def bad_hook(ctx):
+        ctx["boundaries"] = invalid_boundaries
+
+    detector = BoundaryDetector(lang="en", hook=bad_hook)
+
+    with pytest.raises(HookError, match=re.escape(expected_message)):
+        detector._run_hook("this is a test", [0, 14], 0)
