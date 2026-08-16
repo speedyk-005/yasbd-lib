@@ -57,6 +57,7 @@ bench = [
   "nupunkt; python_version >= '3.11'",
   "blingfire",
   "sentence-splitter",
+  "spacy",
   "setuptools<81",
   "matplotlib",
   "rich",
