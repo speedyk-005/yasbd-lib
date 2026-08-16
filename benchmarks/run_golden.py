@@ -3,6 +3,7 @@ from EN_GOLDEN_DATA import GOLDEN_EN_RULES_TEST_CASES
 from rich import box
 from rich.console import Console
 from rich.table import Table
+from scorer import evaluate_segmentation
 
 console = Console()
 
@@ -19,6 +20,7 @@ def _evaluate_segmenter(seg, cases):
     passed = 0
     total = len(cases)
     failures = []
+    tp = fp = fn = 0
     for input_text, expected in cases:
         try:
             result = [s.strip() for s in seg.segment(input_text)]
@@ -28,7 +30,11 @@ def _evaluate_segmenter(seg, cases):
             passed += 1
         else:
             failures.append((input_text, expected, result))
-    return passed, total, failures
+        counts = evaluate_segmentation(result, expected)
+        tp += counts["tp"]
+        fp += counts["fp"]
+        fn += counts["fn"]
+    return passed, total, failures, tp, fp, fn
 
 
 def run_golden_tests():
@@ -46,19 +52,35 @@ def run_golden_tests():
     segmenters = all_segmenters(lang="en")
 
     for name, seg in sorted(segmenters.items()):
-        passed, total, failures = _evaluate_segmenter(seg, GOLDEN_EN_RULES_TEST_CASES)
+        passed, total, failures, tp, fp, fn = _evaluate_segmenter(
+            seg, GOLDEN_EN_RULES_TEST_CASES
+        )
         pct = passed / total * 100
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+        recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+        f1 = (
+            2 * (precision * recall) / (precision + recall)
+            if (precision + recall) > 0
+            else 0.0
+        )
         report.append(
             {
                 "name": name,
                 "passed": passed,
                 "total": total,
                 "pct": pct,
+                "precision": precision,
+                "recall": recall,
+                "f1": f1,
+                "tp": tp,
+                "fp": fp,
+                "fn": fn,
                 "failures": failures,
             }
         )
 
         console.print(f"{name:20s} {passed:2d}/{total} ({pct:5.1f}%)", end="")
+        console.print(f"  P:{precision:5.1%} R:{recall:5.1%} F1:{f1:5.1%}", end="")
         if failures:
             shortest_failure = min(failures, key=lambda f: len(f[0]))
             console.print(f"  worst: {shortest_failure[0][:60]!r}")
@@ -70,6 +92,12 @@ def run_golden_tests():
     table.add_column("Library", style="cyan")
     table.add_column("Passed", justify="right")
     table.add_column("Score", justify="right", style="bold")
+    table.add_column("Precision", justify="right")
+    table.add_column("Recall", justify="right")
+    table.add_column("F1", justify="right", style="bold")
+    table.add_column("TP", justify="right")
+    table.add_column("FP", justify="right")
+    table.add_column("FN", justify="right")
 
     for r in sorted(report, key=lambda x: -x["pct"]):
         color = _score_color(r["pct"])
@@ -77,6 +105,12 @@ def run_golden_tests():
             r["name"],
             f"{r['passed']:2d}/{r['total']}",
             f"[{color}]{r['pct']:5.1f}%[/{color}]",
+            f"{r['precision']:5.1%}",
+            f"{r['recall']:5.1%}",
+            f"{r['f1']:5.1%}",
+            str(r["tp"]),
+            str(r["fp"]),
+            str(r["fn"]),
         )
 
     console.print("\n", table)
