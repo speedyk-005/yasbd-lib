@@ -28,16 +28,29 @@ The format is simple: throw edge cases at each library. Does it split where it s
 
 Aggregate score across all 92 English edge cases in [`EN_GOLDEN_DATA.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/EN_GOLDEN_DATA.py) via [`run_golden.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/run_golden.py). Expanded from pysbd's original 48 to 92 cases: we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, academic citations, and more.
 
-| Library | Score |
-|---|---|
-| **yasbd** | 91/92 (98.9%) |
-| pysbd | 77/92 (83.7%) |
-| sentencex | 76/92 (82.6%) |
-| blingfire | 75/92 (81.5%) |
-| sentsplit | 61/92 (66.3%) |
-| sentence-splitter | 60/92 (65.2%) |
-| nupunkt | 59/92 (64.1%) |
-| spacy-sentencizer | 51/92 (55.4%) |
+The **Passed** column is a strict sentence-string equality check. Alongside it, we report boundary-level **Precision**, **Recall**, and **F1** computed by [`scorer.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/scorer.py).
+
+### Boundary metric methodology
+
+`evaluate_segmentation` scores against the *positions* where sentences end, not the sentence strings themselves, so a boundary that is merely shifted (e.g. trailing whitespace) still counts toward accuracy. Implementation:
+
+1. **Word-level binary arrays.** Every sentence is split into words. The final word of each sentence is marked `1` (a sentence boundary); all other words are marked `0`.
+2. **Alignment.** If the model dropped or added words, the two arrays differ in length. The shorter array is right-justified with `0` padding so both arrays share the final word's boundary marker.
+3. **Confusion counts.** Each aligned word position is a True Positive (`1`/`1`), False Positive (`0`/`1`), or False Negative (`1`/`0`).
+4. **Averages.** TP/FP/FN are summed across all 92 cases, then Precision = TP ÷ (TP+FP), Recall = TP ÷ (TP+FN), and F1 = the harmonic mean of the two.
+
+All three are bounded `[0, 1]`; they fall back to `0.0` when no useful boundary signal exists (e.g. an empty gold).
+
+| Library | Passed | Precision | Recall | F1 |
+|---|---|---|---|---|
+| **yasbd** | 91/92 (98.9%) | 100.0% | 99.3% | 99.7% |
+| pysbd | 77/92 (83.7%) | 90.5% | 97.3% | 93.8% |
+| sentencex | 77/92 (83.7%) | 89.7% | 94.6% | 92.1% |
+| blingfire | 75/92 (81.5%) | 86.7% | 93.2% | 89.8% |
+| sentsplit | 61/92 (66.3%) | 89.9% | 85.0% | 87.4% |
+| sentence-splitter | 60/92 (65.2%) | 80.1% | 90.5% | 85.0% |
+| nupunkt | 59/92 (64.1%) | 77.9% | 91.2% | 84.0% |
+| spacy-sentencizer | 51/92 (55.4%) | 75.7% | 89.1% | 81.9% |
 
 yasbd achieves 91/92 (98.9%). The only failing case is the `Ave.` abbreviation followed by a capitalized new sentence — a known limitation of rule-based abbreviation suppression. 
 
