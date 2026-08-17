@@ -598,6 +598,7 @@ Want to build a lang pack? Start with the [language template](https://github.com
 * 📦 **[Lang Packs](#-lang-packs):** Plug in modular rule sets (like `yasbd-auxlang`) for extended language support.
 * 🧩 **[chunklet-py](https://speedyk-005.github.io/chunklet-py/latest/supported-languages/):** Powers polyglot RAG document chunking as the core SBD workhorse.
 * 🏥 **[OpenMed](https://github.com/maziyarpanahi/openmed/blob/master/docs/analyze-text.md):** Integrates `yasbd` as a specialized backend for medical text segmentation.
+* 🎙 **[LiveTranslate](https://github.com/TheDeathDragon/LiveTranslate/blob/main/i18n/CHANGELOG_en.md#2026-08-17):** Real-time audio translation for Windows using yasbd-lib for incremental ASR sentence segmentation.
 
 ---
 
