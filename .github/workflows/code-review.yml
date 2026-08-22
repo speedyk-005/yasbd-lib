@@ -14,10 +14,14 @@ jobs:
       contains(github.event.comment.body, '/gemini-review')
     steps:
       - name: PR Info
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPOSITORY: ${{ github.repository }}
         run: |
-          echo "Comment: ${{ github.event.comment.body }}"
-          echo "Issue Number: ${{ github.event.issue.number }}"
-          echo "Repository: ${{ github.repository }}"
+          echo "Comment: $COMMENT_BODY"
+          echo "Issue Number: $ISSUE_NUMBER"
+          echo "Repository: $REPOSITORY"
 
       - name: Checkout Repo
         uses: actions/checkout@v7
@@ -26,12 +30,14 @@ jobs:
 
       - name: Get PR Details
         id: pr
-        run: |
-          PR_JSON=$(gh api repos/${{ github.repository }}/pulls/${{ github.event.issue.number }})
-          echo "head_sha=$(echo $PR_JSON | jq -r .head.sha)" >> $GITHUB_OUTPUT
-          echo "base_sha=$(echo $PR_JSON | jq -r .base.sha)" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          PR_JSON=$(gh api "repos/$REPOSITORY/pulls/$ISSUE_NUMBER")
+          echo "head_sha=$(echo "$PR_JSON" | jq -r .head.sha)" >> $GITHUB_OUTPUT
+          echo "base_sha=$(echo "$PR_JSON" | jq -r .base.sha)" >> $GITHUB_OUTPUT
 
       - uses: truongnh1992/gemini-ai-code-reviewer@main
         with:
