@@ -51,8 +51,8 @@ class BoundaryDetector:
         *,
         external_lang_packs: list[str] | None = None,
         preserve_quote_and_paren: bool = True,
-        verbose: bool = False,
         hook: Callable[[HookContext], None] | None = None,
+        verbose: bool = False,
     ):
         """Initialize the boundary detector.
 
@@ -66,13 +66,13 @@ class BoundaryDetector:
                 and stored in a private registry that only this detector uses.
             preserve_quote_and_paren: Do not split on terminators inside
                 quoted or parenthesised text.
-            verbose: Enable verbose logging.
             hook: Optional per-paragraph post-processing callback. Receives
                 a dict with ``text``, ``lang``, ``boundaries`` and
                 ``paragraph_index`` keys; mutate ``boundaries`` in place to
                 add or remove sentence boundaries. Reassigning
                 ``ctx["boundaries"]`` to a new list also works, though
                 in-place mutation is recommended.
+            verbose: Enable verbose logging.
         """
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
