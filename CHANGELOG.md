@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## Unreleased
+
+### Fixed
+
+- **Word boundary for corp entity abbreviations** ([#271](https://github.com/speedyk-005/yasbd-lib/pull/271)): Added `\b` to `CORP_ENTITY_ABBRVS` regex pattern to prevent substring matches (e.g., "co" inside "tobacco" was falsely matching as a corporate abbreviation).
+
+---
+
 ## [0.16.0] - 2026-08-26
 
 ### Changed
