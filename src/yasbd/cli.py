@@ -18,7 +18,6 @@ from yasbd import (
     UnsupportedLanguageError,
     __version__,
     get_supported_langs,
-    register_lang_packs,
 )
 
 cli = Radicli(
@@ -68,14 +67,6 @@ def _stdin_is_pipe() -> bool:
 def _stdout_is_pipe() -> bool:
     """Check if stdout is a pipe (redirected to another process)."""
     return stat.S_ISFIFO(os.fstat(1).st_mode)
-
-
-def _resolve_lang(lang: Optional[str], from_pack: Optional[list[str]]) -> str | None:
-    """Register packs and resolve language. Returns lang or None."""
-    registered = register_lang_packs(from_pack) if from_pack else []
-    if lang is None and len(registered) == 1:
-        lang = registered[0]
-    return lang
 
 
 def _create_external_cleaner(command_str: str) -> Callable[[str], str]:
@@ -241,8 +232,12 @@ def segment(
     Writes enumerated sentences to stdout or JSONL to --destination.
     """
     with _resolve_input(text, file) as input_text:
-        lang = _resolve_lang(lang, from_pack)
-        detector = BoundaryDetector(lang=lang, preserve_quote_and_paren=True, verbose=verbose)
+        detector = BoundaryDetector(
+            lang=lang,
+            external_lang_packs=from_pack,
+            preserve_quote_and_paren=True,
+            verbose=verbose,
+        )
         _output(
             detector.segment(input_text, preserve_whitespace=preserve_whitespace),
             destination,
@@ -276,8 +271,12 @@ def detect(
     Use --relative for per-paragraph offsets (ParagraphEOF marks gaps).
     """
     with _resolve_input(text, file) as input_text:
-        lang = _resolve_lang(lang, from_pack)
-        detector = BoundaryDetector(lang=lang, preserve_quote_and_paren=True, verbose=verbose)
+        detector = BoundaryDetector(
+            lang=lang,
+            external_lang_packs=from_pack,
+            preserve_quote_and_paren=True,
+            verbose=verbose,
+        )
         _output(
             detector.detect(input_text, relative=relative),
             destination,
