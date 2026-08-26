@@ -1,4 +1,5 @@
 import difflib
+import warnings
 from functools import cache
 from importlib import import_module
 from pathlib import Path
@@ -23,7 +24,7 @@ def _validate_profile(profile: type, name: str) -> None:
         raise TypeError(f"Profile {profile.__name__!r} must not override apply().")
 
 
-def load_external_lang_packs(names: list[str]) -> dict:
+def load_external_lang_packs(names: list[str], *, verbose: bool = False) -> dict:
     """Import and validate external language pack modules.
 
     Each module must expose a ``PROFILES`` list of ``Rules`` subclasses.
@@ -36,6 +37,7 @@ def load_external_lang_packs(names: list[str]) -> dict:
     Args:
         names: Module names resolvable from the Python path
             (e.g. ``["yasbd_indic", "yasbd_legal"]``).
+        verbose: Enable verbose logging.
 
     Returns:
         Dict of ``{lang_code: (pack_name, Rules_class)}`` entries.
@@ -65,7 +67,21 @@ def load_external_lang_packs(names: list[str]) -> dict:
             try:
                 _validate_profile(profile, name)
                 lang_code = profile.__name__.removesuffix("Rules").lower()
+                if lang_code in registry:
+                    prev_name, _ = registry[lang_code]
+                    warnings.warn(
+                        f"Language pack {name!r} overrides {prev_name!r}"
+                        f" for lang {lang_code!r}",
+                        stacklevel=2,
+                    )
                 registry[lang_code] = (name, profile)
+                log_info(
+                    verbose,
+                    "Registered {} ({}) from {}",
+                    lang_code,
+                    profile.__name__,
+                    name,
+                )
             except (TypeError, RuntimeError) as e:
                 raise LangPackError(
                     f"Validation failed for {profile.__name__!r} in module {name!r}.\n"
