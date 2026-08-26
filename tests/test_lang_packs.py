@@ -3,13 +3,9 @@ import types
 
 import pytest
 
+from yasbd import BoundaryDetector
 from yasbd.exceptions import LangPackError
-from yasbd.rules import (
-    _LANG_PACK_REGISTRY,
-    clear_lang_packs,
-    load_rule,
-    register_lang_packs,
-)
+from yasbd.rules import load_external_lang_packs, load_rule
 from yasbd.rules.base import Rules
 
 
@@ -24,29 +20,28 @@ def _make_fake_lang_pack(name: str, profiles: list | None = None) -> types.Modul
 
 @pytest.fixture(autouse=True)
 def _cleanup():
-    """Clean up injected modules and registry after each test."""
+    """Clean up injected modules after each test."""
     yield
     for name in list(sys.modules):
         if name.startswith("_test_lang_pack_"):
             del sys.modules[name]
-    clear_lang_packs()
 
 
 def test_import_error():
-    """Test that register_lang_packs raises error for an unresolvable module."""
+    """Test that load_external_lang_packs raises error for an unresolvable module."""
     with pytest.raises(LangPackError, match="could not be imported"):
-        register_lang_packs(["_test_lang_pack_nonexistent"])
+        load_external_lang_packs(["_test_lang_pack_nonexistent"])
 
 
 def test_no_profiles():
-    """Test that register_lang_packs raises error when a module has no PROFILES."""
+    """Test that load_external_lang_packs raises error when a module has no PROFILES."""
     _make_fake_lang_pack("_test_lang_pack_noprofiles")
     with pytest.raises(LangPackError, match="has no PROFILES list"):
-        register_lang_packs(["_test_lang_pack_noprofiles"])
+        load_external_lang_packs(["_test_lang_pack_noprofiles"])
 
 
 def test_non_rules_profile():
-    """Test that register_lang_packs rejects a non-Rules subclass in PROFILES."""
+    """Test that load_external_lang_packs rejects a non-Rules subclass in PROFILES."""
 
     class NotRules:
         def apply(self, text, _preserve_quote_and_paren):
@@ -54,11 +49,11 @@ def test_non_rules_profile():
 
     _make_fake_lang_pack("_test_lang_pack_notrules", profiles=[NotRules])
     with pytest.raises(LangPackError, match="Validation failed for 'NotRules'"):
-        register_lang_packs(["_test_lang_pack_notrules"])
+        load_external_lang_packs(["_test_lang_pack_notrules"])
 
 
 def test_handshake_override_apply():
-    """Test that register_lang_packs rejects a profile overriding apply()."""
+    """Test that load_external_lang_packs rejects a profile overriding apply()."""
 
     class WrongReturn(Rules):
         def apply(self, _text, _preserve_quote_and_paren):
@@ -66,20 +61,20 @@ def test_handshake_override_apply():
 
     _make_fake_lang_pack("_test_lang_pack_wrong_return", profiles=[WrongReturn])
     with pytest.raises(LangPackError, match="must not override apply"):
-        register_lang_packs(["_test_lang_pack_wrong_return"])
+        load_external_lang_packs(["_test_lang_pack_wrong_return"])
 
 
 def test_register_and_load():
-    """Test that register_lang_packs stores a profile and load_rule returns an instance."""
+    """Test that load_external_lang_packs returns a registry and load_rule returns an instance."""
 
     class FakeRules(Rules):
         pass
 
     _make_fake_lang_pack("_test_lang_pack_load", profiles=[FakeRules])
-    register_lang_packs(["_test_lang_pack_load"])
-    assert "fake" in _LANG_PACK_REGISTRY, "Profile not registered"
-    assert _LANG_PACK_REGISTRY["fake"][1] is FakeRules, "Wrong class in registry"
-    instance = load_rule("fake")
+    registry = load_external_lang_packs(["_test_lang_pack_load"])
+    assert "fake" in registry, "Profile not registered"
+    assert registry["fake"][1] is FakeRules, "Wrong class in registry"
+    instance = load_rule("fake", ext_registry=registry)
     assert isinstance(instance, FakeRules), "load_rule returned wrong type"
 
 
@@ -90,19 +85,25 @@ def test_lang_pack_takes_precedence():
         pass
 
     _make_fake_lang_pack("_test_lang_pack_override", profiles=[EnRules])
-    register_lang_packs(["_test_lang_pack_override"])
-    instance = load_rule("en")
+    registry = load_external_lang_packs(["_test_lang_pack_override"])
+    instance = load_rule("en", ext_registry=registry)
     assert isinstance(instance, EnRules), "Lang pack did not override built-in EnRules"
 
 
-def test_clear_lang_packs():
-    """Test that clear_lang_packs empties the registry."""
+def test_returns_empty_dict_for_empty_input():
+    """Test that load_external_lang_packs returns empty dict for empty input."""
+    registry = load_external_lang_packs([])
+    assert registry == {}
+
+
+def test_boundary_detector_with_external_lang_packs():
+    """Test that BoundaryDetector loads external packs via external_lang_packs param."""
 
     class FakeRules(Rules):
         pass
 
-    _make_fake_lang_pack("_test_lang_pack_clear", profiles=[FakeRules])
-    register_lang_packs(["_test_lang_pack_clear"])
-    assert "fake" in _LANG_PACK_REGISTRY
-    clear_lang_packs()
-    assert "fake" not in _LANG_PACK_REGISTRY, "Registry was not cleared"
+    _make_fake_lang_pack("_test_lang_pack_bd", profiles=[FakeRules])
+    detector = BoundaryDetector(lang="fake", external_lang_packs=["_test_lang_pack_bd"])
+    assert detector.lang == "fake"
+    rule = detector._get_rule("fake")
+    assert isinstance(rule, FakeRules), "BoundaryDetector did not load external pack"

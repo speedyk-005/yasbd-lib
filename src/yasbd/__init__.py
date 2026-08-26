@@ -9,7 +9,7 @@ from yasbd.exceptions import (
     UnsupportedLanguageError,
     YasbdError,
 )
-from yasbd.rules import clear_lang_packs, get_supported_langs, register_lang_packs
+from yasbd.rules import get_supported_langs
 
 try:
     __version__ = version("yasbd-lib")
@@ -52,8 +52,6 @@ __all__ = [
     "UnsupportedLanguageError",
     "YasbdError",
     "__version__",
-    "clear_lang_packs",
     "get_supported_langs",
-    "register_lang_packs",
     "register_spacy_component",
 ]

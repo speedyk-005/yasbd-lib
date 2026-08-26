@@ -1,4 +1,5 @@
 import difflib
+import warnings
 from functools import cache
 from importlib import import_module
 from pathlib import Path
@@ -6,11 +7,6 @@ from pathlib import Path
 from yasbd.exceptions import LangPackError, UnsupportedLanguageError
 from yasbd.utils.logger import log_info
 from yasbd.rules.base import Rules
-from yasbd.utils.input_validator import validate_input
-
-# Language packs loaded via register_lang_packs() register their profiles here.
-# Maps language code to (pack name, Rules subclass).
-_LANG_PACK_REGISTRY = {}
 
 
 def _validate_profile(profile: type, name: str) -> None:
@@ -28,12 +24,10 @@ def _validate_profile(profile: type, name: str) -> None:
         raise TypeError(f"Profile {profile.__name__!r} must not override apply().")
 
 
-@validate_input
-def register_lang_packs(names: list[str]) -> list[str]:
+def load_external_lang_packs(names: list[str], *, verbose: bool = False) -> dict:
     """Import and validate external language pack modules.
 
     Each module must expose a ``PROFILES`` list of ``Rules`` subclasses.
-    All validated profiles are stored in ``_LANG_PACK_REGISTRY``.
 
     Caution:
         This function imports arbitrary Python modules by name. Only load lang
@@ -43,23 +37,24 @@ def register_lang_packs(names: list[str]) -> list[str]:
     Args:
         names: Module names resolvable from the Python path
             (e.g. ``["yasbd_indic", "yasbd_legal"]``).
+        verbose: Enable verbose logging.
 
     Returns:
-        List of registered language codes (e.g. ``["xx", "eo"]``).
+        Dict of ``{lang_code: (pack_name, Rules_class)}`` entries.
 
     Raises:
         LangPackError: If a language pack module cannot be imported.
     """
-    registered: list[str] = []
+    registry: dict = {}
     for name in names:
         try:
             mod = import_module(name)
-        except ImportError as e:
+        except ImportError:
             raise LangPackError(
                 f"Language pack module {name!r} could not be imported. "
                 "Make sure it is installed and on the Python path.\n"
                 f"💡 Try: pip install {name}"
-            ) from e
+            ) from None
 
         profiles = getattr(mod, "PROFILES", None)
         if profiles is None:
@@ -72,8 +67,21 @@ def register_lang_packs(names: list[str]) -> list[str]:
             try:
                 _validate_profile(profile, name)
                 lang_code = profile.__name__.removesuffix("Rules").lower()
-                _LANG_PACK_REGISTRY[lang_code] = (name, profile)
-                registered.append(lang_code)
+                if lang_code in registry:
+                    prev_name, _ = registry[lang_code]
+                    warnings.warn(
+                        f"Language pack {name!r} overrides {prev_name!r}"
+                        f" for lang {lang_code!r}",
+                        stacklevel=2,
+                    )
+                registry[lang_code] = (name, profile)
+                log_info(
+                    verbose,
+                    "Registered {} ({}) from {}",
+                    lang_code,
+                    profile.__name__,
+                    name,
+                )
             except (TypeError, RuntimeError) as e:
                 raise LangPackError(
                     f"Validation failed for {profile.__name__!r} in module {name!r}.\n"
@@ -81,13 +89,7 @@ def register_lang_packs(names: list[str]) -> list[str]:
                 ) from e
 
     get_supported_langs.cache_clear()
-    return registered
-
-
-def clear_lang_packs() -> None:
-    """Remove all registered language packs and reset the supported-languages cache."""
-    _LANG_PACK_REGISTRY.clear()
-    get_supported_langs.cache_clear()
+    return registry
 
 
 @cache
@@ -98,19 +100,24 @@ def get_supported_langs() -> list[str]:
     the built-in rules directory and any registered language packs.
     """
     rules_dir = Path(__file__).parent
-    langs = set(_LANG_PACK_REGISTRY.keys())
-    for f in rules_dir.iterdir():
-        if f.stem in ("_template", "base", "__init__"):
-            continue
-        if f.suffix == ".py":
-            langs.add(f.stem)
+    langs = {
+        f.stem
+        for f in rules_dir.iterdir()
+        if f.suffix == ".py" and f.stem not in ("_template", "base", "__init__")
+    }
     return ["auto", *sorted(langs)]
 
 
-def load_rule(lang: str, *, verbose: bool = False) -> Rules:
+def load_rule(lang: str, *, ext_registry: dict, verbose: bool = False) -> Rules:
     """Import and instantiate the rule module for *lang*.
 
-    Checks the language pack registry first; falls back to the built-in rules directory.
+    Checks *ext_registry* first; falls back to the built-in rules directory.
+
+    Args:
+        lang: Language code (e.g. ``"en"``, ``"fr"``).
+        ext_registry: Dict of ``{lang_code: (pack_name, Rules_class)}``
+            entries to check before built-in rules.
+        verbose: Enable verbose logging.
 
     Returns:
         The instantiated rule object.
@@ -118,7 +125,7 @@ def load_rule(lang: str, *, verbose: bool = False) -> Rules:
     Raises:
         UnsupportedLanguageError: If no rule module exists for *lang*.
     """
-    if profile_data := _LANG_PACK_REGISTRY.get(lang):
+    if profile_data := ext_registry.get(lang):
         name, cls = profile_data
         log_info(verbose, "{} ({}) is loaded successfully", lang, name)
         return cls()

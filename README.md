@@ -102,7 +102,7 @@ Regex is how I cut. Not what I am. My brain is a two-pass pipeline:
 > [!NOTE]
 > **v1.x freeze:** The built-in language set is locked for the v1.x series (reached with Armenian; see #132 / #198).
 > New languages are **not** accepted as built-in modules. They should be distributed as external packs.
-> Use [lang packs](#-lang-packs) via `register_lang_packs()` instead. Focus for core
+> Use [lang packs](#-lang-packs) via `BoundaryDetector(external_lang_packs=[...])` instead. Focus for core
 > stays on bug fixes, edge cases, and API stabilization. Non-breaking improvements
 > to *existing* language rules are still welcome.
 
@@ -235,6 +235,11 @@ detector = BoundaryDetector(
 	# https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
     lang="fr",
 
+    # Optional external language pack modules to load. Defaults to `None`.
+    # Each pack is validated and stored in a private registry for this detector only.
+    # Check #-lang-packs for more.
+    external_lang_packs=["yasbd_auxlang"],
+
     # Don't split inside them. (It won't protect block quotes) Defaults to `True`.
     # https://en.wikipedia.org/wiki/Block_quotation
     preserve_quote_and_paren=True,
@@ -243,6 +248,8 @@ detector = BoundaryDetector(
     verbose=True,
 )
 ```
+
+If you want to know more about Lang Packs check the [Lang packs](#-lang-packs) section.
 
 > [!TIP]
 > **Language tag normalization:**
@@ -445,7 +452,7 @@ echo "Hello. World." | yasbd segment | cat
 
 # Load external language pack and segment a mono-profile pack
 pip install yasbd-union
-yasbd segment --from-pack yasbd_union "Hello. World."
+yasbd segment --from-pack yasbd_union --lang xx "Hello. World."
 # [1] 'Hello.'
 # [2] 'World.'
 
@@ -562,24 +569,14 @@ pipe.preserve_quote_and_paren = False
 Need support for a language that isn't built in? Plug in your own lang pack. A lang pack is simply a Python module that exposes a `PROFILES` list of `Rules` subclasses.
 
 ```python
-from yasbd.rules import register_lang_packs
-# Or from yasbd import register_lang_packs
+from yasbd import BoundaryDetector
 
-registered = register_lang_packs(["my_yasbd_pack"])
-print(registered)  # e.g. ["xx", "eo"]
-```
-
-To reset the registry at runtime:
-
-```python
-from yasbd.rules import clear_lang_packs
-# Or from yasbd import clear_lang_packs
-
-clear_lang_packs()
+detector = BoundaryDetector(lang="eo", external_lang_packs=["yasbd_auxlang"])
+detector.segment("Saluton. Kiel vi fartas?")
 ```
 
 > [!CAUTION]
-> **Security**: `register_lang_packs()` imports arbitrary Python modules by name. Only load lang packs from sources you trust — an untrusted module can execute arbitrary code at import time.
+> **Security**: `load_external_lang_packs()` imports arbitrary Python modules by name. Only load lang packs from sources you trust — an untrusted module can execute arbitrary code at import time.
 
 Want to build a lang pack? Start with the [language template](https://github.com/speedyk-005/yasbd-lib/blob/main/src/yasbd/rules/_template.py).
 
