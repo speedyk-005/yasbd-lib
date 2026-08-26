@@ -6,11 +6,6 @@ from pathlib import Path
 from yasbd.exceptions import LangPackError, UnsupportedLanguageError
 from yasbd.utils.logger import log_info
 from yasbd.rules.base import Rules
-from yasbd.utils.input_validator import validate_input
-
-# Language packs loaded via register_lang_packs() register their profiles here.
-# Maps language code to (pack name, Rules subclass).
-_LANG_PACK_REGISTRY = {}
 
 
 def _validate_profile(profile: type, name: str) -> None:
@@ -28,12 +23,11 @@ def _validate_profile(profile: type, name: str) -> None:
         raise TypeError(f"Profile {profile.__name__!r} must not override apply().")
 
 
-@validate_input
-def register_lang_packs(names: list[str]) -> list[str]:
+def load_external_lang_packs(names: list[str], registry: dict | None = None) -> list[str]:
     """Import and validate external language pack modules.
 
     Each module must expose a ``PROFILES`` list of ``Rules`` subclasses.
-    All validated profiles are stored in ``_LANG_PACK_REGISTRY``.
+    If *registry* is provided, validated profiles are stored in it.
 
     Caution:
         This function imports arbitrary Python modules by name. Only load lang
@@ -43,6 +37,8 @@ def register_lang_packs(names: list[str]) -> list[str]:
     Args:
         names: Module names resolvable from the Python path
             (e.g. ``["yasbd_indic", "yasbd_legal"]``).
+        registry: Optional dict to store registered profiles in.
+            If ``None``, profiles are validated but not stored.
 
     Returns:
         List of registered language codes (e.g. ``["xx", "eo"]``).
@@ -72,7 +68,8 @@ def register_lang_packs(names: list[str]) -> list[str]:
             try:
                 _validate_profile(profile, name)
                 lang_code = profile.__name__.removesuffix("Rules").lower()
-                _LANG_PACK_REGISTRY[lang_code] = (name, profile)
+                if registry is not None:
+                    registry[lang_code] = (name, profile)
                 registered.append(lang_code)
             except (TypeError, RuntimeError) as e:
                 raise LangPackError(
@@ -84,12 +81,6 @@ def register_lang_packs(names: list[str]) -> list[str]:
     return registered
 
 
-def clear_lang_packs() -> None:
-    """Remove all registered language packs and reset the supported-languages cache."""
-    _LANG_PACK_REGISTRY.clear()
-    get_supported_langs.cache_clear()
-
-
 @cache
 def get_supported_langs() -> list[str]:
     """Discover and cache supported language codes.
@@ -98,19 +89,24 @@ def get_supported_langs() -> list[str]:
     the built-in rules directory and any registered language packs.
     """
     rules_dir = Path(__file__).parent
-    langs = set(_LANG_PACK_REGISTRY.keys())
-    for f in rules_dir.iterdir():
-        if f.stem in ("_template", "base", "__init__"):
-            continue
-        if f.suffix == ".py":
-            langs.add(f.stem)
+    langs = {
+        f.stem
+        for f in rules_dir.iterdir()
+        if f.suffix == ".py" and f.stem not in ("_template", "base", "__init__")
+    }
     return ["auto", *sorted(langs)]
 
 
-def load_rule(lang: str, *, verbose: bool = False) -> Rules:
+def load_rule(lang: str, *, ext_registry: dict, verbose: bool = False) -> Rules:
     """Import and instantiate the rule module for *lang*.
 
-    Checks the language pack registry first; falls back to the built-in rules directory.
+    Checks *ext_registry* first; falls back to the built-in rules directory.
+
+    Args:
+        lang: Language code (e.g. ``"en"``, ``"fr"``).
+        ext_registry: Dict of ``{lang_code: (pack_name, Rules_class)}``
+            entries to check before built-in rules.
+        verbose: Enable verbose logging.
 
     Returns:
         The instantiated rule object.
@@ -118,7 +114,7 @@ def load_rule(lang: str, *, verbose: bool = False) -> Rules:
     Raises:
         UnsupportedLanguageError: If no rule module exists for *lang*.
     """
-    if profile_data := _LANG_PACK_REGISTRY.get(lang):
+    if profile_data := ext_registry.get(lang):
         name, cls = profile_data
         log_info(verbose, "{} ({}) is loaded successfully", lang, name)
         return cls()
