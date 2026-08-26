@@ -1,5 +1,3 @@
-# Haitian Creole test data for yasbd
-
 ISO_CODE = "ht"
 TEST_DATA = [
     # Basic punctuation
