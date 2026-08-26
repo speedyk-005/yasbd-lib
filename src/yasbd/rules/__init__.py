@@ -23,11 +23,10 @@ def _validate_profile(profile: type, name: str) -> None:
         raise TypeError(f"Profile {profile.__name__!r} must not override apply().")
 
 
-def load_external_lang_packs(names: list[str], registry: dict | None = None) -> list[str]:
+def load_external_lang_packs(names: list[str]) -> dict:
     """Import and validate external language pack modules.
 
     Each module must expose a ``PROFILES`` list of ``Rules`` subclasses.
-    If *registry* is provided, validated profiles are stored in it.
 
     Caution:
         This function imports arbitrary Python modules by name. Only load lang
@@ -37,16 +36,14 @@ def load_external_lang_packs(names: list[str], registry: dict | None = None) -> 
     Args:
         names: Module names resolvable from the Python path
             (e.g. ``["yasbd_indic", "yasbd_legal"]``).
-        registry: Optional dict to store registered profiles in.
-            If ``None``, profiles are validated but not stored.
 
     Returns:
-        List of registered language codes (e.g. ``["xx", "eo"]``).
+        Dict of ``{lang_code: (pack_name, Rules_class)}`` entries.
 
     Raises:
         LangPackError: If a language pack module cannot be imported.
     """
-    registered: list[str] = []
+    registry: dict = {}
     for name in names:
         try:
             mod = import_module(name)
@@ -68,9 +65,7 @@ def load_external_lang_packs(names: list[str], registry: dict | None = None) -> 
             try:
                 _validate_profile(profile, name)
                 lang_code = profile.__name__.removesuffix("Rules").lower()
-                if registry is not None:
-                    registry[lang_code] = (name, profile)
-                registered.append(lang_code)
+                registry[lang_code] = (name, profile)
             except (TypeError, RuntimeError) as e:
                 raise LangPackError(
                     f"Validation failed for {profile.__name__!r} in module {name!r}.\n"
@@ -78,7 +73,7 @@ def load_external_lang_packs(names: list[str], registry: dict | None = None) -> 
                 ) from e
 
     get_supported_langs.cache_clear()
-    return registered
+    return registry
 
 
 @cache

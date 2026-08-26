@@ -78,10 +78,7 @@ class BoundaryDetector:
         self.verbose = verbose
         self.hook = hook
         self._rule_cache: OrderedDict[str, object] = OrderedDict()
-
-        self._ext_registry: dict = {}
-        if external_lang_packs:
-            load_external_lang_packs(external_lang_packs, self._ext_registry)
+        self._ext_registry: dict = load_external_lang_packs(external_lang_packs)
 
         if not lang:
             raise InvalidInputError(
