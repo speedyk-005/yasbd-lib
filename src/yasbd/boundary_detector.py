@@ -5,7 +5,7 @@ from itertools import chain, pairwise, tee
 from typing import TypedDict
 
 from yasbd.exceptions import HookError, InvalidInputError
-from yasbd.rules import get_supported_langs, load_rule
+from yasbd.rules import get_supported_langs, load_external_lang_packs, load_rule
 from yasbd.utils.cleaner_stub import StreamCleanerStub
 from yasbd.utils.input_validator import validate_input
 from yasbd.utils.language_classifier import classify_language
@@ -49,6 +49,7 @@ class BoundaryDetector:
         self,
         lang: str | None = None,
         *,
+        external_lang_packs: list[str] | None = None,
         preserve_quote_and_paren: bool = True,
         verbose: bool = False,
         hook: Callable[[HookContext], None] | None = None,
@@ -60,6 +61,9 @@ class BoundaryDetector:
                 Use 'auto' for automatic language detection via py3langid.
                 Explicit is faster and more reliable; use auto if you don't
                 mind a slight decrease in both.
+            external_lang_packs: Optional list of external language pack module
+                names to load (e.g. ``["yasbd_legal"]``). Each pack is validated
+                and stored in a private registry that only this detector uses.
             preserve_quote_and_paren: Do not split on terminators inside
                 quoted or parenthesised text.
             verbose: Enable verbose logging.
@@ -74,6 +78,10 @@ class BoundaryDetector:
         self.verbose = verbose
         self.hook = hook
         self._rule_cache: OrderedDict[str, object] = OrderedDict()
+
+        self._ext_registry: dict = {}
+        if external_lang_packs:
+            load_external_lang_packs(external_lang_packs, self._ext_registry)
 
         if not lang:
             raise InvalidInputError(
@@ -133,7 +141,7 @@ class BoundaryDetector:
             self._rule_cache.move_to_end(lang)
             return self._rule_cache[lang]
 
-        rule = load_rule(lang, verbose=self.verbose)
+        rule = load_rule(lang, ext_registry=self._ext_registry, verbose=self.verbose)
         self._rule_cache[lang] = rule
 
         if len(self._rule_cache) > _MAX_CACHED_RULES:
