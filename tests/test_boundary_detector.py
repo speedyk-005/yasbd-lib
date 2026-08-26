@@ -218,6 +218,9 @@ def test_rule_cache_lru(en_detector):
         "Beta Corp. North America leads this hiring initiative.",
         "Martin Luther King Jr. Day is a paid holiday at this company.",
         "John Doe Sr. VP of Engineering will be your hiring manager.",
+
+        # CORP_ENTITY_ABBRVS must use word boundary (fix regression)
+        "Kid!| Don't buy tobacco.| Alright!",
     ],
 )
 def test_universal_regression(en_detector, marked_text):
