@@ -50,12 +50,12 @@ def load_external_lang_packs(names: list[str], registry: dict | None = None) -> 
     for name in names:
         try:
             mod = import_module(name)
-        except ImportError as e:
+        except ImportError:
             raise LangPackError(
                 f"Language pack module {name!r} could not be imported. "
                 "Make sure it is installed and on the Python path.\n"
                 f"💡 Try: pip install {name}"
-            ) from e
+            ) from None
 
         profiles = getattr(mod, "PROFILES", None)
         if profiles is None:
