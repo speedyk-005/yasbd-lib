@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## Unreleased
+
+### Changed
+
+- **Per-instance lang pack registry** ([#270](https://github.com/speedyk-005/yasbd-lib/pull/270)): Removed global `_LANG_PACK_REGISTRY`. `BoundaryDetector` now accepts `external_lang_packs` param and manages its own isolated registry. `register_lang_packs` renamed to `load_external_lang_packs`. `clear_lang_packs` removed.
+
+---
+
 ## [0.15.1] - 2026-08-14
 
 ### Changed
