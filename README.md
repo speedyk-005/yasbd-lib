@@ -251,6 +251,7 @@ detector = BoundaryDetector(
 
 If you want to know more about Lang Packs check the [Lang packs](#-lang-packs) section.
 
+FUN FACT:  Creating many 
 > [!TIP]
 > **Language tag normalization:**
 >
@@ -269,7 +270,7 @@ Switching languages at runtime is a property set:
 detector.lang = "es"
 ```
 
-Each language rule loads once into a 5-slot cache. Once loaded, a language stays cached. Switching back is instant.
+**FUN FACT:** Each language rule initialized once globally. Once loaded, a language stays cached. Switching back or creating a new instance is instant.
 
 > [!TIP]
 > **Auto-detect**
