@@ -251,7 +251,8 @@ detector = BoundaryDetector(
 
 If you want to know more about Lang Packs check the [Lang packs](#-lang-packs) section.
 
-FUN FACT:  Creating many 
+**FUN FACT:** Each language rule initialized once globally. Once loaded, a language stays cached. Switching back or creating a new instance is instant.
+
 > [!TIP]
 > **Language tag normalization:**
 >
