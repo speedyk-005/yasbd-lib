@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **German and Dutch unit/reference abbreviations** ([#301](https://github.com/speedyk-005/yasbd-lib/issues/301)): Added `Mio` and `Mrd` to German `INLINE_ONLY_ABBRVS`, and Dutch `mln`, `m.b.t`, `zgn` to `INLINE_ONLY_ABBRVS` and `d.d` to `REFERENCE_ABBRVS` to prevent false sentence splits.
 - **Swahili address and currency abbreviations** ([#310](https://github.com/speedyk-005/yasbd-lib/pull/310)): Added `na` and `tsh` to Swahili `REFERENCE_ABBRVS` so `Na.` (Namba) and `Tsh.` (Tanzanian shilling) do not trigger false sentence splits before numbers and currency amounts.
 
 ---
