@@ -14,7 +14,7 @@ class SwRules(Rules):
     }
 
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
-        "uk", "sur", "jal", "har", "mf", "t.m", "n.k",
+        "uk", "sur", "jal", "har", "mf", "t.m", "n.k", "na", "tsh",
     }
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
