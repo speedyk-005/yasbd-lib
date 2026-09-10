@@ -49,6 +49,9 @@ class DeRules(Rules):
         "bzw", "evtl", "ggf", "ggfs", "inkl", "sog",
         "zzgl", "bspw", "insb", "ca", "bsp",
 
+        # Units and Quantifiers
+        "Mio", "Mrd",
+
         # Business/Commercial
         "fa",
     }

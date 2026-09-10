@@ -21,6 +21,10 @@ TEST_DATA = [
     "We kiezen eerst optie A.| Daarna bespreken we de details.",
     "De vergadering begint om 14.| Vandaag bespreken we de details.",
     "Mev. Jansen spreekt met dhr. Bakker.| Mevr. De Vries komt later langs.",
+    "Jan d.d. 10-03-2020 tekende het contract.| Piet deed dat niet.",
+    "Zie m.b.t. 2024 het jaarverslag.| Alles staat erin.",
+    "zgn. Eind 18 wordt vervangen.| Niemand weet het.",
+    "De totale omzet bedroeg 5 mln. euro.| Dat is veel.",
 
     # Structural headings
     "Hoofdstuk 1. Het begin.| Het was donker en stil in de kamer.| Niets bewoog.",
