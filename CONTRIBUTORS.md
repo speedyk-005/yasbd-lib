@@ -31,5 +31,6 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@terminalchai](https://github.com/terminalchai)** | Burmese and Thai reporting words fix |
 | **[@XEDAB](https://github.com/XEDAB)** | Replaced manual adjacent boundary iteration with `itertools.pairwise` |
 | **[@YuEfSaEDU](https://github.com/YuEfSaEDU)** | Afrikaans/Dutch title `Mev.` abbreviation fix |
+| **[@krsnak](https://github.com/krsnak)** | Swahili `Na.` and `Tsh.` reference abbreviation boundary fix |
 
 Interested in contributing? See the [**Contributing Guide**](CONTRIBUTING.md) to get started!
