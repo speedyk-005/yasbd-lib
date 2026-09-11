@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Cyrillic page and apartment abbreviations** ([#308](https://github.com/speedyk-005/yasbd-lib/pull/308)): Added `стор` and `кв` to Russian `REFERENCE_ABBRVS` (inherited by Ukrainian) so `стор. 12` and `кв. 45` no longer split sentences.
 - **Inline example abbreviations** ([#291](https://github.com/speedyk-005/yasbd-lib/pull/291)): Keep Hindi, Lithuanian, Malayalam, and Russian equivalents of "for example" from ending sentences.
 - **Afrikaans/Dutch title `Mev.`** ([#297](https://github.com/speedyk-005/yasbd-lib/pull/297)): Added the missing `mev` honorific to `TITLE_ABBRVS` in `nl.py`, which Afrikaans inherits, preventing false sentence splits after `Mev. Jansen` (e.g., `Mev. Jansen praat.` no longer splits after `Mev.`).
 - **Telephone and fax abbreviations** ([#284](https://github.com/speedyk-005/yasbd-lib/pull/284)): Treat `tel.` and `fax.` as shared reference abbreviations before contact numbers across language profiles.
