@@ -75,9 +75,13 @@ class ArRules(Rules):
     # fmt: on
     @classmethod
     def _compile_regex_dynamically(cls):
-        """Override base regex compilation to handle ellipsis protection."""
+        """Override base regex compilation to handle ellipsis and numerical sections."""
         super()._compile_regex_dynamically()
-        cls.MID_SENTENCE_FINDER_LST.append(
-            # Never split after ellipsis (ASCII, Unicode, full-width)
-            re.compile(rf"{cls.DOTS_PATTERN}{{3,}}|\u2026")
-        )
+
+        cls.MID_SENTENCE_FINDER_LST.extend([
+            # Never split after hierarchical section numbers.
+            re.compile(r"\d+(?:٫\d+)+\."),
+
+            # Never split after ellipsis (ASCII, Unicode, full-width).
+            re.compile(rf"{cls.DOTS_PATTERN}{{3,}}|\u2026"),
+        ])
