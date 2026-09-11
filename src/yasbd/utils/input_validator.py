@@ -32,28 +32,32 @@ def _trunc_repr(value):  # pragma: no cover
 
 def _validate_type(value, expected_type, name):
     """Validate a value against an expected type."""
-    if expected_type is None or expected_type is type(None):
+    # Origin first: `isinstance(hint, type)` is version-flaky for generics
+    # (e.g. `type[X]` passes it on 3.10), so never let them reach that gate.
+    origin = typing.get_origin(expected_type)
+    if origin is UnionType or origin is typing.Union:
+        valid = False
+        for option in typing.get_args(expected_type):
+            try:
+                _validate_type(value, option, name)
+                valid = True
+                break
+            except InvalidInputError:
+                continue
+    elif origin is type:
+        args = typing.get_args(expected_type)
+        valid = isinstance(value, type) and (not args or issubclass(value, args[0]))
+    elif origin is not None:
+        valid = isinstance(value, origin)
+    elif expected_type is None or expected_type is type(None):
         valid = value is None
     elif isinstance(expected_type, type):
         valid = isinstance(value, expected_type)
     else:
-        origin = typing.get_origin(expected_type)
-        if origin is UnionType or origin is typing.Union:
-            valid = False
-            for option in typing.get_args(expected_type):
-                try:
-                    _validate_type(value, option, name)
-                    valid = True
-                    break
-                except InvalidInputError:
-                    continue
-        elif origin is type:
-            args = typing.get_args(expected_type)
-            valid = isinstance(value, type) and (not args or issubclass(value, args[0]))
-        elif origin is not None:
-            valid = isinstance(value, origin)
-        else:
+        try:
             valid = isinstance(value, expected_type)
+        except TypeError:
+            valid = True
 
     if valid:
         return value
