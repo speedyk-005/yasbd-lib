@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **Swahili address and currency abbreviations** ([#310](https://github.com/speedyk-005/yasbd-lib/pull/310)): Added `na` and `tsh` to Swahili `REFERENCE_ABBRVS` so `Na.` (Namba) and `Tsh.` (Tanzanian shilling) do not trigger false sentence splits before numbers and currency amounts.
-- **Persian hierarchical section numbers** ([#315](https://github.com/speedyk-005/yasbd-lib/pull/315)): Prevent splits after hierarchical numbers like `1٫2.` via mid-sentence regex.
+- **Persian and Arabic hierarchical section numbers** ([#315](https://github.com/speedyk-005/yasbd-lib/pull/315)): Prevent splits after hierarchical numbers like `1٫2.` via mid-sentence regex.
 
 ---
 
