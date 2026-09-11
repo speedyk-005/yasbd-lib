@@ -37,7 +37,6 @@ dependencies = [
   "ftfy>=6.2.0,<7.0",
   "retrie>=0.3.0,<0.4",
   "radicli>=0.0.26,<0.0.27",
-  "beartype>=0.22,<0.23",
 ]
 
 [project.optional-dependencies]

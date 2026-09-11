@@ -15,7 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **Remove loguru dependency** ([#317](https://github.com/speedyk-005/yasbd-lib/pull/317)): Replace loguru with a custom stdlib logger in `utils/logger.py`.
+- **Remove dependencies**:
+  - loguru ([#317](https://github.com/speedyk-005/yasbd-lib/pull/317)): Replace loguru with a custom stdlib logger in `utils/logger.py`.
+  - beartype ([#318](https://github.com/speedyk-005/yasbd-lib/pull/318)): Replace beartype with a partial stdlib validator in `utils/input_validator.py`.
 
 ---
 
