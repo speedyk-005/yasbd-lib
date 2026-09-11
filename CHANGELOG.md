@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),  
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- **Burmese double-comma boundaries** ([#286](https://github.com/speedyk-005/yasbd-lib/pull/286)): Recognize `၊` as a sentence-ending punctuation mark while preserving single-comma continuations.
+- **Swahili address and currency abbreviations** ([#310](https://github.com/speedyk-005/yasbd-lib/pull/310)): Added `na` and `tsh` to Swahili `REFERENCE_ABBRVS` so `Na.` (Namba) and `Tsh.` (Tanzanian shilling) do not trigger false sentence splits before numbers and currency amounts.
+
+---
+
 ## [0.16.3] - 2026-09-09
 
 ### Fixed

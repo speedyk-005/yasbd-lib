@@ -14,6 +14,7 @@ TEST_DATA = [
     "Mj. wa Kamati alitoa taarifa.| Kamati ilikubali.",
     "Dkt. Mwangi atawasili kesho.| Ana mkutano saa tatu.",
     "Mwl. Hassan anafundisha Kiswahili.| Wanafunzi wanamwapenda.",
+    "Anaishi Mtaa wa Uhuru Na. 15.| Rafiki yake anaishi Na. 17.| Bei ni Tsh. 10,000.| Hiyo ni ghali sana.",
 
     # Structural headings
     "Sura ya 1. Utangulizi.| Ilikuwa usiku wa giza.",
