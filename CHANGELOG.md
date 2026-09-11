@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Swahili address and currency abbreviations** ([#310](https://github.com/speedyk-005/yasbd-lib/pull/310)): Added `na` and `tsh` to Swahili `REFERENCE_ABBRVS` so `Na.` (Namba) and `Tsh.` (Tanzanian shilling) do not trigger false sentence splits before numbers and currency amounts.
 - **Persian and Arabic hierarchical section numbers** ([#315](https://github.com/speedyk-005/yasbd-lib/pull/315)): Prevent splits after hierarchical numbers like `1٫2.` via mid-sentence regex.
 
+### Changed
+
+- **Remove loguru dependency** ([#317](https://github.com/speedyk-005/yasbd-lib/pull/317)): Replace loguru with a custom stdlib logger in `utils/logger.py`.
+
 ---
 
 ## [0.16.3] - 2026-09-09
