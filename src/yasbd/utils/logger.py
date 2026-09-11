@@ -18,7 +18,9 @@ def log_info(verbose: bool, message: str, *args, **kwargs) -> None:
         **kwargs: Keyword arguments passed to logger.info().
 
     Example:
-        >>> log_info(True, "hello {}", "world")
+        >>> log_info(True, "hello {}", "world")  # doctest: +ELLIPSIS
+        \033...-... - hello world
+
         >>> log_info(False, "This will not be logged")
     """
     if not verbose:
