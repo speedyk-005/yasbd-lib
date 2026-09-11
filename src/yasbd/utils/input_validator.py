@@ -35,10 +35,7 @@ def _validate_type(value, expected_type, name):
     if expected_type is None or expected_type is type(None):
         valid = value is None
     elif isinstance(expected_type, type):
-        if isinstance(value, type):
-            valid = issubclass(value, expected_type)
-        else:
-            valid = isinstance(value, expected_type)
+        valid = isinstance(value, expected_type)
     else:
         origin = typing.get_origin(expected_type)
         if origin is UnionType or origin is typing.Union:
@@ -50,6 +47,9 @@ def _validate_type(value, expected_type, name):
                     break
                 except InvalidInputError:
                     continue
+        elif origin is type:
+            args = typing.get_args(expected_type)
+            valid = isinstance(value, type) and (not args or issubclass(value, args[0]))
         elif origin is not None:
             valid = isinstance(value, origin)
         else:
