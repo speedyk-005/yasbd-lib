@@ -177,6 +177,7 @@ def _output(items, destination: Optional[str], *, label: str):
     [3] 'There.'
     >>> import tempfile, os
     >>> tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
+    >>> tmp.close()
     >>> _output(["A.", "B.", "C."], tmp.name, label="test")
     >>> os.path.getsize(tmp.name) > 0
     True

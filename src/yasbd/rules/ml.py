@@ -8,7 +8,12 @@ class MlRules(Rules):
 
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
-        "ഡോ", "പ്രൊ", "അഡ്വ", "എംഎൽഎ", "എംപി",
+        "ഡോ", "പ്രൊഫ", "അഡ്വ", "എംഎൽഎ", "എംപി",
+    }
+
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {
+        "അധ്യായം", "വിഭാഗം", "ഉപവിഭാഗം", "ഖണ്ഡം", "പരിച്ഛേദം",
+        "അനുബന്ധം", "ഭാഗം", "അദ്ധ്യായം", "ശീർഷകം", "ഉപഖണ്ഡം",
     }
 
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
