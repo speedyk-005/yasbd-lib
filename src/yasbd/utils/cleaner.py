@@ -158,7 +158,7 @@ DEFAULT_CLEANING_PIPELINE = {
 
 
 class StreamCleaner(StreamCleanerStub):
-    """Normalize line endings, clean noisy text by applying ``ftfy``, HTML sanitization,
+    """Normalize line endings, clean noisy text by applying mojibake/HTML fixes,
     and various regex cleanup rules across paragraphs.
 
     Examples:

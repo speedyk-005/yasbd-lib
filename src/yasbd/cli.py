@@ -309,7 +309,7 @@ def clean(
 ):
     """Clean and normalize noisy text paragraphs.
 
-    Applies ftfy mojibake fixing, OCR cleanup, HTML tag stripping,
+    Applies mojibake fixes, OCR cleanup, HTML tag stripping,
     slash normalization, and whitespace normalization.
     Use --skip to omit specific steps (comma-separated).
     Use --extra-step to run external shell commands as extra cleaning steps.
@@ -321,7 +321,7 @@ def clean(
         if extra_step:
             extra_steps = [_create_external_cleaner(cmd) for cmd in extra_step]
 
-        # lazy import to avoid pulling in ftfy et al. for other commands
+        # lazy import to avoid pulling in the cleaner et al. for other commands
         from yasbd.utils.cleaner import StreamCleaner
 
         _output(

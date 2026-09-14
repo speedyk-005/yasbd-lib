@@ -441,7 +441,7 @@ Available built-in steps:
 | Step | What it does |
 |------|-------------|
 | `normalize_newlines` | Normalizes Windows (`\r\n`) and Mac (`\r`) line endings to Unix (`\n`) |
-| `fix_mojibake` | Fixes Unicode mojibake via ftfy |
+| `fix_mojibake` | Fixes common UTF-8 mojibake (cp1252/latin-1 misreads) and unescapes HTML entities |
 | `fix_ocr_text` | Repairs OCR artifacts, rejoins hyphenated words, removes page markers |
 | `unwrap_htmls` | Removes most HTML markup while preserving visible text. `<b>`, `<i>`, and `<u>` tags are preserved |
 | `normalize_spaces` | Collapses multiple spaces into one |
