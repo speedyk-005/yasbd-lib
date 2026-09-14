@@ -1,8 +1,9 @@
+import contextlib
+import html
 import re
 from collections.abc import Callable, Collection, Iterator
 from io import TextIOBase
 
-import ftfy
 import regex as re2  # For complex patterns
 
 from yasbd.exceptions import CleanStepError, InvalidInputError
@@ -104,9 +105,20 @@ NEWLINE_FOLLOWED_BY_PERIOD_FINDER = re.compile(r"\n(?=\.(?=\s))")
 NO_SPACE_BETWEEN_SENTENCES_FINDER = re.compile(r"(?<=\w\.)(?=[A-Z][a-z])")
 
 
-def normalize_newlines(text: str) -> str:
-    """Normalize Windows (\r\n) and Classic Mac (\r) line endings to Unix (\n)."""
-    return LINE_ENDING_FINDER.sub("\n", text)
+def _clean_mojibake(text: str) -> str:
+    """Clean mojibake (e.g., "CafÃ©" -> "Café") and unescape HTML entities."""
+    if not text:
+        return text
+
+    # Fix common UTF-8 misinterpreted as cp1252/latin1
+    with contextlib.suppress(UnicodeEncodeError, UnicodeDecodeError):
+        text = text.encode("cp1252").decode("utf-8")
+
+    # e.g., &nbsp; -> \xa0, &amp; -> &
+    text = html.unescape(text)
+
+    # Normalize non-breaking spaces left by &nbsp; into standard spaces
+    return text.replace("\xa0", " ")
 
 
 def _clean_ocr_text(text: str) -> str:
@@ -121,22 +133,27 @@ def _clean_ocr_text(text: str) -> str:
     return PAGE_FINDER.sub("", cleaned_text)
 
 
-def unwrap_htmls(text: str) -> str:
+def _unwrap_htmls(text: str) -> str:
     """Strip HTML tags only when the text actually contains angle brackets."""
     return text if "<" not in text else HTML_TAGS_FINDER.sub("", text)
 
 
-def normalize_spaces(text: str) -> str:
+def _normalize_newlines(text: str) -> str:
+    """Normalize Windows (\r\n) and Classic Mac (\r) line endings to Unix (\n)."""
+    return LINE_ENDING_FINDER.sub("\n", text)
+
+
+def _normalize_spaces(text: str) -> str:
     """Collapse repeated spaces when present; skip the regex otherwise."""
     return text if " " not in text else MULTIPLE_SPACES_FINDER.sub(" ", text)
 
 
 DEFAULT_CLEANING_PIPELINE = {
-    "normalize_newlines": normalize_newlines,
-    "fix_mojibake": ftfy.fix_text,
+    "normalize_newlines": _normalize_newlines,
+    "fix_mojibake": _clean_mojibake,
     "fix_ocr_text": _clean_ocr_text,
-    "unwrap_htmls": unwrap_htmls,
-    "normalize_spaces": normalize_spaces,
+    "unwrap_htmls": _unwrap_htmls,
+    "normalize_spaces": _normalize_spaces,
 }
 
 
