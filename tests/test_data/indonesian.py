@@ -10,6 +10,10 @@ TEST_DATA = [
     "Ir. Soekarno dan Drs. Moh. Hatta memproklamasikan kemerdekaan.",
     "Baca hlm. 55 untuk detailnya.| Itu penting.",
     "Beli apel, jeruk, mangga, dll.| Jangan lupa kembali.",
+    "Rapat dimulai pk. 14.30 dan berakhir sore.",
+    "Dia lahir tgl. 15 Mei di Surabaya.",
+    "PT. Telkom dan CV. Karya turut hadir.",
+    "PT. Telkom hadir.| Ini kalimat baru.",
 
     # Structural headings
     "Bab 1 membahas pendahuluan.| Bab 2 membahas metode.",
