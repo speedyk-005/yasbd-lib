@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Burmese double-comma boundaries** ([#286](https://github.com/speedyk-005/yasbd-lib/pull/286)): Recognize `၊` as a sentence-ending punctuation mark while preserving single-comma continuations.
 - **Swahili address and currency abbreviations** ([#310](https://github.com/speedyk-005/yasbd-lib/pull/310)): Added `na` and `tsh` to Swahili `REFERENCE_ABBRVS` so `Na.` (Namba) and `Tsh.` (Tanzanian shilling) do not trigger false sentence splits before numbers and currency amounts.
 - **Persian and Arabic hierarchical section numbers** ([#315](https://github.com/speedyk-005/yasbd-lib/pull/315)): Prevent splits after hierarchical numbers like `1٫2.` via mid-sentence regex.
+- **Indonesian `pk.`, `tgl.`, `PT.`, `CV.` abbreviations** ([#326](https://github.com/speedyk-005/yasbd-lib/pull/326)): Added `pk` and `tgl` to Indonesian reference abbreviations (always followed by time/date) and `pt`/`cv` to corporate entity abbreviations (always followed by a company name), so these no longer split sentences.
 
 ### Changed
 
