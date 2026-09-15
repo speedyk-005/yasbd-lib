@@ -8,6 +8,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@1cbyc](https://github.com/1cbyc)** | Coordinate direction abbreviation fix |
 | **[@AshSgDe29071999](https://github.com/AshSgDe29071999)** | Combined same-module imports in `__init__.py`; named cleaning-pipeline helpers for testability |
 | **[@be-student](https://github.com/be-student)** | Burmese double-comma boundaries; shared numeric-context tel/fax and Portuguese aprox abbreviation fixes |
+| **[@Chirudeva-Reddy](https://github.com/Chirudeva-Reddy)** | Burmese section markers, ၏ connector context, and discourse particle boundaries |
 | **[@cnaples79](https://github.com/cnaples79)** | Missing comma in set literals fix |
 | **[@ColumbusLabs](https://github.com/ColumbusLabs)** | Preserve word boundaries across StreamCleaner line breaks |
 | **[@ddelrio1986](https://github.com/ddelrio1986)** | Spelling and grammar fixes in docs |

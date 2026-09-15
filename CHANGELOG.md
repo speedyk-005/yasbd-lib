@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Burmese false boundaries and section markers** ([#329](https://github.com/speedyk-005/yasbd-lib/pull/329)): Contextually handle Burmese `၏` sentence terminators and possessives, prevent mid-word splitting on discourse particles like `လား`, and support Burmese section markers (`အခန်း`, `အပိုင်း`, etc.).
 - **Cyrillic page and apartment abbreviations** ([#308](https://github.com/speedyk-005/yasbd-lib/pull/308)): Added `стор` and `кв` to Russian `REFERENCE_ABBRVS` (inherited by Ukrainian) so `стор. 12` and `кв. 45` no longer split sentences.
 - **German and Dutch unit/reference abbreviations** ([#301](https://github.com/speedyk-005/yasbd-lib/issues/301)): Added `Mio` and `Mrd` to German `INLINE_ONLY_ABBRVS`, and Dutch `mln`, `m.b.t`, `zgn` to `INLINE_ONLY_ABBRVS` and `d.d` to `REFERENCE_ABBRVS` to prevent false sentence splits.
 - **Burmese double-comma boundaries** ([#286](https://github.com/speedyk-005/yasbd-lib/pull/286)): Recognize `၊` as a sentence-ending punctuation mark while preserving single-comma continuations.

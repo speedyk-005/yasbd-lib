@@ -11,12 +11,15 @@ class MyRules(Rules):
     # Burmese uses the section mark '။' as the primary terminator.
     # Periods are dropped from the terminator set
     # since they typically denote digits or abbreviations.
-    TERMINATORS = (Rules.TERMINATORS - {"."}) | {"။", "၏"}
+    TERMINATORS = (Rules.TERMINATORS - {"."}) | {"။"}
 
     TITLE_ABBRVS = set()
     DOTTED_GEOPOL_ABBRVS = set()
     REFERENCE_ABBRVS = set()
-    SECTION_MARKERS = set()
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {
+        "အခန်း", "အပိုင်း", "အခွဲ", "ခေါင်းစဉ်", "နိဒါန်း",
+        "နိဂုံး", "နောက်ဆက်တွဲ",
+    }
     DATE_ABBRVS = set()
 
     COMMON_SENT_STARTERS = {
@@ -78,15 +81,37 @@ class MyRules(Rules):
         super()._compile_regex_dynamically()
 
         cls.FINAL_PARTICLES_FINDER = re.compile(
-            rf"{build_optimized_pattern(cls.DISCOURSE_FINAL_PARTICLES)}(?!\s*[.?!;:။၏၊])"
+            rf"{build_optimized_pattern(cls.DISCOURSE_FINAL_PARTICLES)}(?!\s*[.?!;:။၏၊])(?=\s+|$)"
         )
         cls.DOUBLE_COMMA_FINDER = re.compile("၊၊")
+
+        verb_endings = {"မယ်", "မည်", "သည်", "တယ်", "ပြီး", "ခဲ့", "ပြီ"}
+        cls.YE_SENTENCE_ENDER_FINDER = re.compile(
+            rf"(?:{build_optimized_pattern(verb_endings)}၏|၏(?=\s+{build_optimized_pattern(cls.COMMON_SENT_STARTERS)}))(?=\s+|$)"
+        )
+
+        cls.MID_SENTENCE_FINDER_LST.append(
+            re.compile(
+                rf"""
+                (?:
+                    ^\s*\#{{1,6}}\s*|
+                    (?:^|\s)(?:{build_optimized_pattern(cls.SECTION_MARKERS)})\s+
+                )
+                (?:[\dIVXLCDM\u1040-\u1049]+[.．။]){{1,3}}
+                """,
+                re.M | re.X,
+            )
+        )
 
     def post_process_boundaries(
         self, sentence_boundaries: set[int], text: str
     ) -> None:
         sentence_boundaries.update(
             m.end()
-            for finder in (self.FINAL_PARTICLES_FINDER, self.DOUBLE_COMMA_FINDER)
+            for finder in (
+                self.FINAL_PARTICLES_FINDER,
+                self.DOUBLE_COMMA_FINDER,
+                self.YE_SENTENCE_ENDER_FINDER,
+            )
             for m in finder.finditer(text)
         )
