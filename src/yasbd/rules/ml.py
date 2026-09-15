@@ -8,7 +8,7 @@ class MlRules(Rules):
 
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
-        "ഡോ", "പ്രൊ", "അഡ്വ", "എംഎൽഎ", "എംപി",
+        "ഡോ", "പ്രൊ", "പ്രൊഫ", "അഡ്വ", "എംഎൽഎ", "എംപി",
     }
 
     DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
@@ -27,6 +27,11 @@ class MlRules(Rules):
     REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {
         "പൃ", "സമ്പാ", "അധ്യാ", "വിഭാ", "പരി",
         "പു.കു", "വി.കാ",
+    }
+
+    SECTION_MARKERS = Rules.SECTION_MARKERS | {
+        "അധ്യായം", "വിഭാഗം", "ഉപവിഭാഗം", "ഖണ്ഡം", "പരിച്ഛേദം",
+        "അനുബന്ധം", "ഭാഗം", "അദ്ധ്യായം", "ശീർഷകം", "ഉപഖണ്ഡം",
     }
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | {
