@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Malayalam title abbreviation and section markers** ([#327](https://github.com/speedyk-005/yasbd-lib/pull/327)): Added the `പ്രൊഫ` (professor) title abbreviation and a `SECTION_MARKERS` set (`അധ്യായം`, `വിഭാഗം`, etc.) so Malayalam headings like `വിഭാഗം 2.1.` stay whole.
 - **Indonesian `pk.`, `tgl.`, `PT.`, `CV.` abbreviations** ([#326](https://github.com/speedyk-005/yasbd-lib/pull/326)): Added `pk` and `tgl` to Indonesian reference abbreviations (always followed by time/date) and `pt`/`cv` to corporate entity abbreviations (always followed by a company name), so these no longer split sentences.
 - **Lithuanian number-first section markers** ([#330](https://github.com/speedyk-005/yasbd-lib/pull/330)): Prevent sentence splits after markers such as `1 Skyrius.`, `2.1 Skyrius.`, and `2.1.4 Poskyris.`.
-- **Marathi and Bengali section markers** ([#319](https://github.com/speedyk-005/yasbd-lib/issues/319)): Added language-specific `SECTION_MARKERS` sets (`अध्याय`, `विभाग`, etc.; `অধ্যায়`, `বিভাগ`, etc.) so headings like `विभाग २.१.` and `বিভাগ ২.১.` stay whole.
+- **Marathi and Bengali section markers** ([#331](https://github.com/speedyk-005/yasbd-lib/pull/331)): Added language-specific `SECTION_MARKERS` sets (`अध्याय`, `विभाग`, etc.; `অধ্যায়`, `বিভাগ`, etc.) so headings like `विभाग २.१.` and `বিভাগ ২.১.` stay whole.
 
 ### Changed
 
