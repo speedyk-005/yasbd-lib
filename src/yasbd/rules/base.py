@@ -310,10 +310,10 @@ class Rules:
                 """, re2.X
             ),
             re.compile(rf"""
-                (?:(?i:
+                (?i:
                     \b{build_optimized_pattern(cls.CORP_ENTITY_ABBRVS)}\.|
                     {build_optimized_pattern(cls.NAMES_WITH_EXCLAMATION)}[! ！‼]
-                ))
+                )
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
                """, re.X
             ),
