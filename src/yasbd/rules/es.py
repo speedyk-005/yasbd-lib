@@ -1,4 +1,4 @@
-import regex as re
+import re
 
 from yasbd.rules.base import Rules
 from yasbd.utils.trie import build_optimized_pattern
@@ -15,8 +15,7 @@ class EsRules(Rules):
         "mag", "lcdo",
 
         # Military / Religious
-        "cap", "cmdte", "tte", "subtte",
-        "hno", "hnos", "pbro",
+        "cap", "cmdte", "tte", "subtte", "hno", "hnos", "pbro",
 
         # Noble / Royal
         "s.m", "ss.mm", "s.a.r", "ss.aa.rr", "s.a.s", "s.s", "s.a",
