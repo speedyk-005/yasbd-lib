@@ -161,16 +161,11 @@ class Rules:
 
     # https://regex101.com/r/tI9Cmg/5
     DOT_LIKE_PATTERN = r"[.．။।॥·•∙⋅]"
-    VERTICAL_LIST_START_FINDER = re2.compile(rf"""
-        (?<=^\s*
-            (?:
-                (?:
-                    \p{{L}}\p{{N}}{{0,2}}|
-                    \p{{N}}{{1,4}}
-                )
-                (?:{DOT_LIKE_PATTERN}|\))
-            ){{1,3}}
-        )
+    VERTICAL_LIST_START_FINDER = re.compile(rf"""
+        ^\s*(?:
+            (?:[^\W\s]\d{{0,2}}|\d{{1,4}})
+            (?:{DOT_LIKE_PATTERN}|\))
+        ){{1,3}}
         (?=\s)
         """, re.X | re.M
     )
