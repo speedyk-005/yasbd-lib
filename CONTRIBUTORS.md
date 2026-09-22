@@ -27,6 +27,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@Nagulanvelu](https://github.com/Nagulanvelu)** | Lithuanian number-first section markers fix |
 | **[@NataliaPerez08](https://github.com/NataliaPerez08)** | Deduplicate offsets before sorting in `BoundaryDetector._run_hook()` to keep boundaries unique |
 | **[@nightcityblade](https://github.com/nightcityblade)** | Inline example abbreviation fixes for Hindi, Lithuanian, Malayalam, and Russian |
+| **[@raffaelemancuso](https://github.com/raffaelemancuso)** | Latvian, Hungarian, Croatian, Finnish and Slovenian language packs |
 | **[@Rajesh270712](https://github.com/Rajesh270712)** | Base + English rule contributions |
 | **[@revanthajoe](https://github.com/revanthajoe)** | ASR/Transcript Segmentation Example |
 | **[@sanmaxdev](https://github.com/sanmaxdev)** | Language tag normalization helper |

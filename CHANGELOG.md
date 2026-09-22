@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),  
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Latvian, Hungarian, Croatian, Finnish and Slovenian language packs** ([#335](https://github.com/speedyk-005/yasbd-lib/pull/335)): `BoundaryDetector(lang=...)` no longer raises `UnsupportedLanguageError` for `lv`, `hu`, `hr`, `fi` and `sl`. Each pack covers title, reference and inline-only abbreviations, section markers and calendar abbreviations, with test data per language.
+
+---
+
 ## [1.0.0] - 2026-21-09
 
 ### Fixed
