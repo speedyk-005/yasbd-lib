@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2026-09-21
 
+### Changed
+
+- **Replace lookbehinds with lookaheads in `CANDIDATE_BOUNDARY_FINDER`** ([#333](https://github.com/speedyk-005/yasbd-lib/pull/333)): Converted zero-width lookbehind assertions to consuming matches with a trailing cluster guard. Produces identical boundary offsets while speeding up sentences detection ~2.7× (~64% faster on 41.6K chars).
+
 ### Fixed
 
 - **Amharic quotative sentence splits** ([#332](https://github.com/speedyk-005/yasbd-lib/pull/332)): Add support for Amharic reporting words and converb forms, and handle optional whitespace before quotative particles in Amharic quotative constructions to prevent premature sentence splitting.
