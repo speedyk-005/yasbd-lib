@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.1] - Unreleased
 
+### Changed
+
+- **Replace lookbehinds with lookaheads in `CANDIDATE_BOUNDARY_FINDER`** ([#340](https://github.com/speedyk-005/yasbd-lib/pull/340)): Converted zero-width lookbehind assertions to consuming matches with a trailing cluster guard. Produces identical boundary offsets while speeding up sentences detection ~2.7× (~64% faster on 41.6K chars).
 ### Fixed
 
 - **HTML closing/opening tags no longer suppress sentence splits** ([#339](https://github.com/speedyk-005/yasbd-lib/pull/339)): A terminator immediately followed by an HTML closing or opening tag (e.g., `<b>Run!</b>`) blocked the sentence boundary; it now splits after the tag as expected.
@@ -31,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Remove loguru dependency** ([#317](https://github.com/speedyk-005/yasbd-lib/pull/317)): Replace loguru with a custom stdlib logger in `utils/logger.py`.
 - **Drop `ftfy` from the cleaner** ([#325](https://github.com/speedyk-005/yasbd-lib/pull/325)): Replace `ftfy.fix_text` with a lightweight `_clean_mojibake` step (cp1252/latin-1 misreads, HTML entity unescaping, non-breaking-space normalization), speeding up `StreamCleaner` while keeping the same defaults. Now the cleaner is 7–60× faster.
+- **Optimize the vertical list start finder and abbreviation matching** ([#333](https://github.com/speedyk-005/yasbd-lib/pull/333)): Rewrote `VERTICAL_LIST_START_FINDER`'s lookbehind as a plain anchored pattern (~3.7× faster, 16 µs vs 59 µs per call), collapsed the `CORP_ENTITY_ABBRVS` alternation into a single group, and switched Spanish (`es.py`) from the `regex` module to stdlib `re` since its patterns are all ASCII. Benchmark numbers refreshed to match current runs.
 
 ---
 
