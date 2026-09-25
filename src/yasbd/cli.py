@@ -177,10 +177,12 @@ def _output(items, destination: Optional[str], *, label: str):
     [3] 'There.'
     >>> import tempfile, os
     >>> tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
+    >>> tmp.close()  # Windows refuses to unlink a file with an open handle
     >>> _output(["A.", "B.", "C."], tmp.name, label="test")
     >>> os.path.getsize(tmp.name) > 0
     True
-    >>> open(tmp.name).read()
+    >>> with open(tmp.name, encoding="utf-8") as fh:
+    ...     fh.read()
     '{"no": 1, "text": "A."}\\n{"no": 2, "text": "B."}\\n{"no": 3, "text": "C."}\\n'
     >>> os.unlink(tmp.name)
     """
