@@ -205,6 +205,10 @@ def test_rule_cache_lru(en_detector):
         # Ordinary word + period should not be treated as vertical list marker
         "Note.| The file is ready.",
 
+        # Basic html tags
+        "<b>Run!</b>| He yelled with all his strenght.",
+        "that is so <sub>cool</sub>.| Did you try it?",
+
         # Multi-digit vertical list items
         "12. The first item.\n|13. The second item.",
         "    A12. The first item.\n|    B13. The second item.",

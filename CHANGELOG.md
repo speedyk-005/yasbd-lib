@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Replace lookbehinds with lookaheads in `CANDIDATE_BOUNDARY_FINDER`** ([#340](https://github.com/speedyk-005/yasbd-lib/pull/340)): Converted zero-width lookbehind assertions to consuming matches with a trailing cluster guard. Produces identical boundary offsets while speeding up sentences detection ~2.7× (~64% faster on 41.6K chars).
+### Fixed
+
+- **HTML closing/opening tags no longer suppress sentence splits** ([#339](https://github.com/speedyk-005/yasbd-lib/pull/339)): A terminator immediately followed by an HTML closing or opening tag (e.g., `<b>Run!</b>`) blocked the sentence boundary; it now splits after the tag as expected.
 
 ## [1.0.0] - 2026-09-21
 

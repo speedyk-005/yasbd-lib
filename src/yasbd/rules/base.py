@@ -211,7 +211,7 @@ class Rules:
     @classmethod
     def _compile_regex_dynamically(cls):
         """Compile language-specific regex patterns."""
-        cls.TERMINATORS_PATTERN = f"[{''.join(cls.TERMINATORS)}]"
+        cls.TERMINATORS_PATTERN = rf"[{''.join(cls.TERMINATORS)}](?:</?\w{{0,6}}>)?"
         cls.DOTS_PATTERN = r"[.．]"
         cls.TITLE_ABBRVS_PATTERN = build_optimized_pattern(cls.TITLE_ABBRVS)
         cls.DOTTED_GEOPOL_ABBRVS_PATTERN = build_optimized_pattern(cls.DOTTED_GEOPOL_ABBRVS)
