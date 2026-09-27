@@ -34,6 +34,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@sonalisrisivani](https://github.com/sonalisrisivani)** | Unicode newline-inside-sentence detection fix |
 | **[@speedyk-005](https://github.com/speedyk-005)** | Maintainer & Creator |
 | **[@terminalchai](https://github.com/terminalchai)** | Burmese and Thai reporting words fix |
+| **[@unfinished-summer](https://github.com/unfinished-summer)** | Chinese keyword sentence extraction example |
 | **[@XEDAB](https://github.com/XEDAB)** | Replaced manual adjacent boundary iteration with `itertools.pairwise` |
 | **[@YuEfSaEDU](https://github.com/YuEfSaEDU)** | Afrikaans/Dutch title `Mev.` abbreviation fix; Marathi and Bengali section markers |
 
