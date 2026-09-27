@@ -51,7 +51,7 @@ dev = [
 bench = [
   "pysbd",
   "sentencex",
-  "sentsplit",  # depends on deprecated pkg_resources — needs setuptools<81
+  "sentsplit; sys_platform != 'win32'",  # depends on deprecated pkg_resources — needs setuptools<81
   "nupunkt; python_version >= '3.11'",
   "blingfire",
   "sentence-splitter",
