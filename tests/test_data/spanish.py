@@ -24,6 +24,8 @@ TEST_DATA = [
     "La reunión es el lun. 15 de enero.",
     "Nació el 5 de abr. de 1990.",
     "El presidente de los EE.UU. visitó Europa.",
+    "Se le pidió a los niños que leyeran los párrf. 5 y 6 del art. 4 de la constitución de los EE. UU..",
+    "Las FF. AA. publicaron el informe.| El Congreso lo revisó.",
     "Las FF.AA. emitieron un comunicado oficial.",
     "El departamento de RR.HH. aprobó las vacaciones.",
     "La reunión es el lun. 15 de enero.",

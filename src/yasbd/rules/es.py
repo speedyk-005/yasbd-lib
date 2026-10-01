@@ -24,7 +24,7 @@ class EsRules(Rules):
 
     REFERENCE_ABBRVS = (Rules.REFERENCE_ABBRVS - {"no", "nos", "para"}) | {
         "pág", "núm", "nro", "dir", "t", "trad", "asoc", "aprox",
-        "cf", "incl", "cía", "s",
+        "cf", "incl", "cía", "s", "párrf", "párr",
     }
 
     SECTION_MARKERS = Rules.SECTION_MARKERS | {
@@ -36,10 +36,6 @@ class EsRules(Rules):
         "ej", "p.ej", "vid", "cll", "cra", "diag", "transv", "mz", "mza", "lt",
         "urb", "asent", "dpto", "prov", "mnpio", "conj", "edif", "ofic", "km",
         "av", "avd", "c", "pso", "ctra", "pl", "blvr",
-    }
-
-    DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
-        "EE.UU", "FF.AA", "RR.HH", "CC.AA", "EE", "UU", "FF", "RR", "HH", "AA",
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
@@ -98,4 +94,12 @@ class EsRules(Rules):
                 \b(?i:{build_optimized_pattern({"ud", "uds", "vd", "vds"})})\.
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
             """, re.X)
+        )
+        # Dotted pairs with optional whitespace (EE. UU., EE.UU., FF. AA.).
+        # Single-token overrides such as EE/UU treated the first dot as a boundary.
+        # See https://github.com/speedyk-005/yasbd-lib/issues/352
+        # End the match on the first dot so a following sentence can still split
+        # after the second token ("EE. UU. El Congreso" vs "EE. UU.").
+        cls.MID_SENTENCE_FINDER_LST.append(
+            re.compile(r"\b[A-Z]{2}\.(?=\s*[A-Z]{1,2}\.)")
         )
