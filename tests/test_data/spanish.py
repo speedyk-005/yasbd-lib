@@ -25,7 +25,7 @@ TEST_DATA = [
     "El tren para.| 5 pasajeros bajan.",
     "La reunión es el lun. 15 de enero.",
     "Nació el 5 de abr. de 1990.",
-    "El presidente de los EE.UU. visitó Europa.",
+    "El presidente de los EE. UU. visitó Europa.",
     "Las FF.AA. emitieron un comunicado oficial.",
     "El departamento de RR.HH. aprobó las vacaciones.",
     "La reunión es el lun. 15 de enero.",
