@@ -37,15 +37,11 @@ class QuerySummary:
 
     def index(self, text: str) -> None:
         """Segment and index a document."""
-        self._sentences = list(
-            self._detector.segment(text)
-        )
+        self._sentences = list(self._detector.segment(text))
 
         tokens = bm25s.tokenize(
             self._sentences,
-            stopwords=self._lang
-            if self._lang in self.BM25_LANGS
-            else None,
+            stopwords=self._lang if self._lang in self.BM25_LANGS else None,
         )
 
         self._retriever = bm25s.BM25()
@@ -55,9 +51,7 @@ class QuerySummary:
         """Extract sentences relevant to a query."""
         query_tokens = bm25s.tokenize(
             query,
-            stopwords=self._lang
-            if self._lang in self.BM25_LANGS
-            else None,
+            stopwords=self._lang if self._lang in self.BM25_LANGS else None,
         )
 
         results, _ = self._retriever.retrieve(
@@ -65,10 +59,7 @@ class QuerySummary:
             k=min(k, len(self._sentences)),
         )
 
-        return " ".join(
-            self._sentences[index]
-            for index in results[0]
-        )
+        return " ".join(self._sentences[index] for index in results[0])
 
 
 if __name__ == "__main__":
