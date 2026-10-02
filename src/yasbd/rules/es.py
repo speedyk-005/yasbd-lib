@@ -95,7 +95,7 @@ class EsRules(Rules):
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
             """, re.X),
 
-            # Dotted Geopolitical pairs with optional whitespace (EE. UU., EE.UU., FF. AA.)
-            # Only Protect first pair to still allow split e.g, EE. UU. El Congreso
+            # Dotted geographic pairs with optional whitespace (EE. UU., EE.UU., FF. AA.)
+            # Only protect the first pair so a following sentence still splits, e.g., EE. UU. El Congreso
             re.compile(r"\b[A-Z]{2}\.(?=\s*[A-Z]{1,2}\.)")
         ])
