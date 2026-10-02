@@ -38,10 +38,6 @@ class EsRules(Rules):
         "av", "avd", "c", "pso", "ctra", "pl", "blvr",
     }
 
-    DOTTED_GEOPOL_ABBRVS = Rules.DOTTED_GEOPOL_ABBRVS | {
-        "EE.UU", "FF.AA", "RR.HH", "CC.AA", "EE", "UU", "FF", "RR", "HH", "AA",
-    }
-
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
         "ene", "abr", "may", "ago", "dic", "lun" , "mar" ,"mié", "miér",
         "jue", "vie", "sáb", "dom",
@@ -93,9 +89,13 @@ class EsRules(Rules):
         # Ud./Uds./Vd./Vds. heuristic
         # Don't split if the next word is NOT a common starter (assumes it's a proper name).
         # Resolves the ambiguity "Ud. Marco" vs "Ud. Mañana".
-        cls.MID_SENTENCE_FINDER_LST.append(
+        cls.MID_SENTENCE_FINDER_LST.extend([
             re.compile(rf"""
                 \b(?i:{build_optimized_pattern({"ud", "uds", "vd", "vds"})})\.
                 (?!\s+(?:{cls.COMMON_STARTERS_PATTERN})\b)
-            """, re.X)
-        )
+            """, re.X),
+
+            # Dotted Geopolitical pairs with optional whitespace (EE. UU., EE.UU., FF. AA.)
+            # Only Protect first pair to still allow split e.g, EE. UU. El Congreso
+            re.compile(r"\b[A-Z]{2}\.(?=\s*[A-Z]{1,2}\.)")
+        ])
