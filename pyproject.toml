@@ -66,17 +66,16 @@ dev = [
 ]
 
 bench = [
-  "pysbd",
-  "sentencex",
-  "sentsplit; sys_platform != 'win32'",  # depends on deprecated pkg_resources — needs setuptools<81
-  "nupunkt; python_version >= '3.11'",
-  "blingfire",
-  "sentence-splitter",
-  "spacy",
+  "pysbd>=0.3.4,<0.4",
+  "sentencex>=1.0.32,<2.0",
+  "sentsplit>=1.0.8,<2.0; sys_platform != 'win32'",  # depends on deprecated pkg_resources — needs setuptools<81
+  "nupunkt>=0.8.0,<0.9; python_version >= '3.11'",
+  "blingfire>=0.1.8,<0.2",
+  "sentence-splitter>=1.4,<2.0",
+  "spacy>=3.8.16,<4.0",
   "setuptools<81",
-  "matplotlib",
-  "rich",
-  "radicli",
+  "matplotlib>=3.10.9,<4.0",  # 3.11+ requires Python >= 3.11, project supports 3.10
+  "rich>=15.0.0,<16.0",
 ]
 
 [project.urls]

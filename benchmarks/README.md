@@ -4,16 +4,18 @@ _Last updated: 2026-09-25_
 
 So you want to know how yasbd stacks up against the competition? Fair enough. Here are the contenders:
 
-| Library | About | Source |
-|---|---|---|
-| pysbd | Rule-based, 23 langs, EMNLP 2020 paper. The incumbent yasbd was built to fix. | [GitHub](https://github.com/nipunsadvilkar/pySBD) / [pypi](https://pypi.org/project/pysbd/) |
-| sentencex | Rust core + Python bindings, ~300 langs. Opinionated: prefer no split over wrong split. | [GitHub](https://github.com/wikimedia/sentencex) / [pypi](https://pypi.org/project/sentencex/) |
-| sentsplit | CRF model + regex hybrid, 12 langs. Trainable custom models. Heavier. | [GitHub](https://github.com/zaemyung/sentsplit) / [pypi](https://pypi.org/project/sentsplit/) |
-| nupunkt | Zero deps, legal-text optimized. Claims 91.1% precision at 10M chars/sec. ~12 langs. | [GitHub](https://github.com/alea-institute/nupunkt) / [pypi](https://pypi.org/project/nupunkt/) |
-| blingfire | Microsoft C++ FSM + Python bindings. Language agnostic. | [GitHub](https://github.com/microsoft/BlingFire) / [pypi](https://pypi.org/project/blingfire/) |
-| sentence-splitter | Heuristic algorithm from Europarl (Koehn/Schroeder). Archived 2025. | [GitHub](https://github.com/mediacloud/sentence-splitter) / [pypi](https://pypi.org/project/sentence-splitter/) |
-| spaCy-sentencizer | Rule-based pipeline component, 75+ langs. No dependency parser needed. | [GitHub](https://github.com/explosion/spaCy/blob/master/spacy/pipeline/sentencizer.pyx) / [pypi](https://pypi.org/project/spacy/) |
-| yasbd | Pure Python, 39 langs. Pointer-based SBD with pysbd adapter. | *(this repo)* |
+| Library | Version | About | Source |
+|---|---|---|---|
+| pysbd | 0.3.4 | Rule-based, 23 langs, EMNLP 2020 paper. The incumbent yasbd was built to fix. | [GitHub](https://github.com/nipunsadvilkar/pySBD) / [pypi](https://pypi.org/project/pysbd/) |
+| sentencex | 1.0.32 | Rust core + Python bindings, ~300 langs. Opinionated: prefer no split over wrong split. | [GitHub](https://github.com/wikimedia/sentencex) / [pypi](https://pypi.org/project/sentencex/) |
+| sentsplit | 1.0.8 | CRF model + regex hybrid, 12 langs. Trainable custom models. Heavier. | [GitHub](https://github.com/zaemyung/sentsplit) / [pypi](https://pypi.org/project/sentsplit/) |
+| nupunkt | 0.8.0 | Zero deps, legal-text optimized. Claims 91.1% precision at 10M chars/sec. ~12 langs. | [GitHub](https://github.com/alea-institute/nupunkt) / [pypi](https://pypi.org/project/nupunkt/) |
+| blingfire | 0.1.8 | Microsoft C++ FSM + Python bindings. Language agnostic. | [GitHub](https://github.com/microsoft/BlingFire) / [pypi](https://pypi.org/project/blingfire/) |
+| sentence-splitter | 1.4 | Heuristic algorithm from Europarl (Koehn/Schroeder). Archived 2025. | [GitHub](https://github.com/mediacloud/sentence-splitter) / [pypi](https://pypi.org/project/sentence-splitter/) |
+| spaCy-sentencizer | 3.8.16 | Rule-based pipeline component, 75+ langs. No dependency parser needed. | [GitHub](https://github.com/explosion/spaCy/blob/master/spacy/pipeline/sentencizer.pyx) / [pypi](https://pypi.org/project/spacy/) |
+| yasbd | 1.0.1 | Pure Python, 39 langs. Pointer-based SBD with pysbd adapter. | *(this repo)* |
+
+Versions are the ones these numbers were measured against and are pinned in the `bench` extra of `pyproject.toml`.
 
 Not every library supports every language. We picked multiple languages that stress different weaknesses.
 

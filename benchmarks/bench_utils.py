@@ -2,15 +2,15 @@
 
 from __future__ import annotations
 
+import logging
 import timeit
 import warnings
 from typing import Any, TypeVar
 
-from loguru import logger as _loguru
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-_loguru.disable("sentsplit")
+logging.getLogger("sentsplit").setLevel(logging.CRITICAL)
 console = Console()
 
 warnings.filterwarnings("ignore", category=UserWarning, module="sentsplit")

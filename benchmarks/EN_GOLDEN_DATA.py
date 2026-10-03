@@ -249,6 +249,14 @@ GOLDEN_EN_RULES_TEST_CASES = [
         ["Q. What is his name?", "A. His name is Alfred E. Sloan."],
     ),
     ("The meeting is at 9 a.m. Monday", ["The meeting is at 9 a.m. Monday"]),
+    (
+        "The meeting is at 2 p.m. Martin called.",
+        ["The meeting is at 2 p.m.", "Martin called."],
+    ),
+    (
+        "Trying to get back to Com. & Adm. through the most direct path in the dark.",
+        ["Trying to get back to Com. & Adm. through the most direct path in the dark."],
+    ),
 
     # Academic citations
     (
@@ -260,8 +268,8 @@ GOLDEN_EN_RULES_TEST_CASES = [
         ["See fig. 2 in vol. 3, ch. 4, pp. 18-22."],
     ),
     (
-        "Smith et al. (2020) found significant results. The study was replicated.",
-        ["Smith et al. (2020) found significant results.", "The study was replicated."],
+        "Smith et al. (2020) found significant results: 11.5% improvement vs. V-TSMixer.",
+        ["Smith et al. (2020) found significant results: 11.5% improvement vs. V-TSMixer."],
     ),
     (
         "As shown in previous work (Smith, 2020; Jones, 2021), the trend continues.",
@@ -285,6 +293,20 @@ GOLDEN_EN_RULES_TEST_CASES = [
     (
         "Smith (2020) argued that [...] the trend was significant. Jones (2021) disagreed.",
         ["Smith (2020) argued that [...] the trend was significant.", "Jones (2021) disagreed."],
+    ),
+    (
+        "...noise levels, etc. (Woo et al., 2024), and more.",
+        ["...noise levels, etc. (Woo et al., 2024), and more."],
+    ),
+
+    # Scientific units
+    (
+        "Each tick denotes an increase of 100 meV. Each data point follows.",
+        ["Each tick denotes an increase of 100 meV.", "Each data point follows."],
+    ),
+    (
+        "The frequency was 20 MHz. The receiver locked.",
+        ["The frequency was 20 MHz.", "The receiver locked."],
     ),
 
     # Contiguous terminators
@@ -390,6 +412,16 @@ GOLDEN_EN_RULES_TEST_CASES = [
         ],
     ),
 
+    # Not a list (fix for #52)
+    (
+        "I really want letter A. I know that I asked you for the B. I changed my mind.",
+        ["I really want letter A.", "I know that I asked you for the B.", "I changed my mind."],
+    ),
+    (
+        "You are going to the store, and so am I. We can go together.",
+        ["You are going to the store, and so am I.", "We can go together."],
+    ),
+
     # Mixed language
     (
         "我喜欢AI。 It is useful",
@@ -402,5 +434,19 @@ GOLDEN_EN_RULES_TEST_CASES = [
     (
         "那个会议在下午两点。 Please don't be late!",
         ["那个会议在下午两点。", "Please don't be late!"],
+    ),
+
+    # Others
+    (
+        "<b>Run!</b> He yelled with all his strenght.",
+        ["<b>Run!</b>", "He yelled with all his strenght."],
+    ),
+    (
+        "### 1. The Regex Breakdown\n### 2. Metric Interpretation",
+        ["### 1. The Regex Breakdown", "### 2. Metric Interpretation"],
+    ),
+    (
+        "I don't know why he mentioned that ref. It was clearly fake.",
+        ["I don't know why he mentioned that ref.", "It was clearly fake."],
     ),
 ]
