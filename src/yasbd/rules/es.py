@@ -10,9 +10,8 @@ class EsRules(Rules):
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Social / Professional
-        "sr", "sra", "srta", "d", "dña", "dra", "lic", "gral",
-        "pdte", "profe", "profa", "arq", "abg", "cnel",
-        "mag", "lcdo",
+        "sr", "sra", "srta", "d", "dña", "dra", "lic", "gral", "pdte",
+        "profe", "profa", "arq", "abg", "cnel", "mag", "lcdo",
 
         # Military / Religious
         "cap", "cmdte", "tte", "subtte", "hno", "hnos", "pbro",
@@ -22,20 +21,21 @@ class EsRules(Rules):
         "ss.aa", "s.e", "v.e", "s.à.s.r", "aa", "mm", "rr", "ss",
     }
 
+    # Case-sensitive pattern matching would cover the supress ones
     REFERENCE_ABBRVS = (Rules.REFERENCE_ABBRVS - {"no", "nos", "para"}) | {
         "pág", "núm", "nro", "dir", "t", "trad", "asoc", "aprox",
         "cf", "incl", "cía", "s", "párrf", "párr",
     }
 
     SECTION_MARKERS = Rules.SECTION_MARKERS | {
-        "Artículo", "Anexo", "Capítulo", "Sección", "Subsección", "Unidad",
-        "Módulo", "División",
+        "Artículo", "Anexo", "Capítulo", "Sección", "Subsección",
+        "Unidad", "Módulo", "División",
     }
 
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS - {"ave"} | {
-        "ej", "p.ej", "vid", "cll", "cra", "diag", "transv", "mz", "mza", "lt",
-        "urb", "asent", "dpto", "prov", "mnpio", "conj", "edif", "ofic",
-        "av", "avd", "pso", "ctra", "pl", "blvr",
+        "ej", "p.ej", "vid", "cll", "cra", "diag", "transv", "mz", "mza",
+        "lt", "urb", "asent", "dpto", "prov", "mnpio", "conj", "edif",
+        "ofic", "av", "avd", "pso", "ctra", "pl", "blvr",
     }
 
     DATE_ABBRVS = Rules.DATE_ABBRVS | {
@@ -82,7 +82,7 @@ class EsRules(Rules):
     # fmt: on
     @classmethod
     def _compile_regex_dynamically(cls):
-        """Override base regex compilation to fix pronouns abbrvs behavior."""
+        """Override base regex compilation to fix pronouns/ref abbrvs behavior."""
         super()._compile_regex_dynamically()
 
 
@@ -97,5 +97,8 @@ class EsRules(Rules):
 
             # Dotted geographic pairs with optional whitespace (EE. UU., EE.UU., FF. AA.)
             # Only protect the first pair so a following sentence still splits.
-            re.compile(r"\b[A-Z]{2}\.(?=\s*[A-Z]{1,2}\.)")
+            re.compile(r"\b[A-Z]{2}\.(?=\s*[A-Z]{1,2}\.)"),
+
+            # In Spanish/Portuguese, these reference abbreviationsare are case-sensitve.
+            re.compile(r"(?:Nos?|Para)\.(?=\s*(\d+|\w))")
         ])

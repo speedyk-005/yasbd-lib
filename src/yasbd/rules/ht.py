@@ -5,7 +5,7 @@ from yasbd.rules.base import Rules
 class HtRules(Rules):
 
 
-    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {"sek"} - {"ex", "exs", "tab"}
+    REFERENCE_ABBRVS = Rules.REFERENCE_ABBRVS | {"sek"} - {"ex"}
     DATE_ABBRVS = Rules.DATE_ABBRVS | {"okt", "fev", "des"}
 
     SECTION_MARKERS = Rules.SECTION_MARKERS | {

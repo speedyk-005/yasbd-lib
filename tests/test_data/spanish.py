@@ -24,6 +24,7 @@ TEST_DATA = [
     "Lea p. ej. el capítulo 5.",
     "Ayer le dije que no.| 5 personas llegaron después.",
     "Lo dejo entre nos.| 3 personas lo saben.",
+    "El corredor No. 103 llegó 4 grados.",
     "El tren para.| 5 pasajeros bajan.",
     "La reunión es el lun. 15 de enero.",
     "Nació el 5 de abr. de 1990.",

@@ -70,10 +70,11 @@ class EnRules(Rules):
         "Supreme Court",
 
         # Government bodies and agencies
-        "Government", "Persons", "Department", "Agency", "Customs",
-        "Embassy", "Consulate", "Administration", "Commission",
-        "Authority", "Bureau", "Office", "Service", "Committee",
-        "Board", "Council", "Institute",
+        "Administration", "Agency", "Authority", "Board",
+        "Bureau", "Commission", "Committee", "Consulate",
+        "Council", "Customs", "Department", "Embassy",
+        "Government", "Institute", "Office", "Persons",
+        "Service",
     }
 
     DATE_WORDS = {

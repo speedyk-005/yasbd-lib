@@ -7,26 +7,27 @@ class PtRules(Rules):
 
     TITLE_ABBRVS = Rules.TITLE_ABBRVS | {
         # Social / Professional
-        "sr", "sra", "srª", "sras", "srta", "d", "dr", "dra", "drª", "drs", "dras",
-        "prof", "profa", "profª", "arq", "eng", "enga", "engª", "adv", "lic", "bel",
-        "gen", "cel", "cap", "ten", "subten", "cmdte", "cmdt", "me", "ma", "reit",
+        "sr", "sra", "srª", "sras", "srta", "d", "dr", "dra", "drª",
+        "drs", "dras", "prof", "profa", "profª", "arq", "eng", "enga",
+        "engª", "adv", "lic", "bel", "gen", "cel", "cap", "ten", "subten",
+        "cmdte", "cmdt", "me", "ma", "reit",
 
         # Religious / Formal Honours
         "pe", "dom", "rev", "ir", "irmaos", "exmo", "exma", "exmª",
 
         # Noble / Royal / Formal Pronouns
-        "s.m", "s.m.s", "s.a.r", "s.a.s", "s.s", "s.a", "s.e", "v.e", "v.ex.a",
-        "s.ex.a", "v.exª", "s.exª", "v.s.a", "v.sª",
+        "s.m", "s.m.s", "s.a.r", "s.a.s", "s.s", "s.a", "s.e", "v.e",
+        "v.ex.a", "s.ex.a", "v.exª", "s.exª", "v.s.a", "v.sª",
     }
 
-    REFERENCE_ABBRVS = (Rules.REFERENCE_ABBRVS - {"no", "nos", "para"}) | {
-        "pág", "pag", "págs", "pags", "núm", "num", "nro", "dir", "t", "tel", "trad",
-        "incl", "cia", "vol", "ed", "puj", "aprox",
+    REFERENCE_ABBRVS = (Rules.REFERENCE_ABBRVS - {"para"}) | {
+        "pág", "pag", "págs", "pags", "núm", "num", "nro", "dir", "t",
+        "tel", "trad", "incl", "cia", "vol", "ed", "puj", "aprox",
     }
 
     SECTION_MARKERS = Rules.SECTION_MARKERS | {
-        "Artigo", "Anexo", "Capítulo", "Secção", "Seção", "Subsecção", "Subseção",
-        "Unidade", "Módulo", "Divisão",
+        "Artigo", "Anexo", "Capítulo", "Secção", "Seção", "Subsecção",
+        "Subseção", "Unidade", "Módulo", "Divisão",
     }
 
     INLINE_ONLY_ABBRVS = (Rules.INLINE_ONLY_ABBRVS - {"ave"}) | {
