@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Reference abbreviations before roman-numeral-like words** ([#364](https://github.com/speedyk-005/yasbd-lib/pull/364)): Restricted the roman-numeral lookahead after reference abbreviations to 1–5 characters with a word boundary, so `ref.` followed by words such as `It` no longer suppresses a real sentence split while `ref. IV` and `ref. XIV` still match.
 - **Spanish decimal unit boundaries** ([#360](https://github.com/speedyk-005/yasbd-lib/pull/360)): Treat sentence-final periods after decimal `°C.` and `km.` measurements as boundaries instead of suppressing them as inline-only abbreviations.
 - **Spanish whitespace-separated dotted abbreviations** ([#359](https://github.com/speedyk-005/yasbd-lib/pull/359)): Removed the Spanish `DOTTED_GEOPOL_ABBRVS` override and added a mid-sentence pattern so pairs like `EE. UU.` and `FF. AA.` no longer split after the first dot.
 - **Spanish abbreviations párrf. and párr.** ([#355](https://github.com/speedyk-005/yasbd-lib/pull/355)): Added párrf and párr to Spanish reference abbreviations to prevent false sentence boundaries.
