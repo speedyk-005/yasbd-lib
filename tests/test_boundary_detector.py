@@ -58,6 +58,31 @@ def test_segment_different_input(en_detector):
     assert result_stream == ["Hello world.", "How are you?", "I'm fine."]
 
 
+@pytest.mark.parametrize(
+    "text,expected",
+    [
+        (
+            "The model estimates the c.d.f. F. The results are discussed w.r.t. V-TSMixer.",
+            ["The model estimates the c.d.f. F.", "The results are discussed w.r.t. V-TSMixer."],
+        ),
+        (
+            "We discuss the c.d.f. Results follow.",
+            ["We discuss the c.d.f.", "Results follow."],
+        ),
+        (
+            "Discuss this w.r.t. the model. Results follow.",
+            ["Discuss this w.r.t. the model.", "Results follow."],
+        ),
+        (
+            "Estimate the C.D.F. [1]. Compare W.R.T. the model.",
+            ["Estimate the C.D.F. [1].", "Compare W.R.T. the model."],
+        ),
+    ],
+)
+def test_scientific_dotted_abbreviations(text, expected, en_detector):
+    assert list(en_detector.segment(text)) == expected
+
+
 @pytest.mark.parametrize("lang,test_data", ALL_TEST_DATA.items())
 def test_segment_multiple_langs(subtests, lang, test_data):
     """test that each language's test data passes."""
