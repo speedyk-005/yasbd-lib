@@ -1,6 +1,6 @@
 # Benchmarks
 
-_Last updated: 2026-09-25_
+_Last updated: 2026-10-03_
 
 So you want to know how yasbd stacks up against the competition? Fair enough. Here are the contenders:
 
@@ -28,7 +28,7 @@ The format is simple: throw edge cases at each library. Does it split where it s
 
 ## EN Golden benchmark
 
-Aggregate score across all 92 English edge cases in [`EN_GOLDEN_DATA.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/EN_GOLDEN_DATA.py) via [`run_golden.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/run_golden.py). Expanded from pysbd's original 48 to 92 cases: we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, academic citations, and more.
+Aggregate score across all 102 English edge cases in [`EN_GOLDEN_DATA.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/EN_GOLDEN_DATA.py) via [`run_golden.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/run_golden.py). Expanded from pysbd's original 48 to 102 cases: we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, academic citations, and more.
 
 The **Passed** column is a strict sentence-string equality check. Alongside it, we report boundary-level **Precision**, **Recall**, and **F1** computed by [`scorer.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/scorer.py).
 
@@ -39,22 +39,22 @@ The **Passed** column is a strict sentence-string equality check. Alongside it, 
 1. **Word-level binary arrays.** Every sentence is split into words. The final word of each sentence is marked `1` (a sentence boundary); all other words are marked `0`.
 2. **Alignment.** If the model dropped or added words, the two arrays differ in length. The shorter array is right-justified with `0` padding so both arrays share the final word's boundary marker.
 3. **Confusion counts.** Each aligned word position is a True Positive (`1`/`1`), False Positive (`0`/`1`), or False Negative (`1`/`0`).
-4. **Averages.** TP/FP/FN are summed across all 92 cases, then Precision = TP ÷ (TP+FP), Recall = TP ÷ (TP+FN), and F1 = the harmonic mean of the two.
+4. **Averages.** TP/FP/FN are summed across all 102 cases, then Precision = TP ÷ (TP+FP), Recall = TP ÷ (TP+FN), and F1 = the harmonic mean of the two.
 
 All three are bounded `[0, 1]`; they fall back to `0.0` when no useful boundary signal exists (e.g. an empty gold).
 
 | Library | Passed | Precision | Recall | F1 |
 |---|---|---|---|---|
-| **yasbd** | 91/92 (98.9%) | 100.0% | 99.3% | 99.7% |
-| pysbd | 77/92 (83.7%) | 90.5% | 97.3% | 93.8% |
-| sentencex | 77/92 (83.7%) | 89.7% | 94.6% | 92.1% |
-| blingfire | 75/92 (81.5%) | 86.7% | 93.2% | 89.8% |
-| sentsplit | 61/92 (66.3%) | 89.9% | 85.0% | 87.4% |
-| sentence-splitter | 60/92 (65.2%) | 80.1% | 90.5% | 85.0% |
-| nupunkt | 59/92 (64.1%) | 77.9% | 91.2% | 84.0% |
-| spacy-sentencizer | 51/92 (55.4%) | 75.7% | 89.1% | 81.9% |
+| **yasbd** | 101/102 (99.0%) | 100.0% | 99.4% | 99.7% |
+| pysbd | 84/102 (82.4%) | 90.3% | 95.8% | 92.9% |
+| sentencex | 82/102 (80.4%) | 87.9% | 92.7% | 90.3% |
+| blingfire | 82/102 (80.4%) | 86.9% | 92.1% | 89.4% |
+| nupunkt | 77/102 (75.5%) | 88.6% | 89.7% | 89.2% |
+| sentsplit | 68/102 (66.7%) | 90.4% | 85.5% | 87.9% |
+| sentence-splitter | 66/102 (64.7%) | 80.8% | 89.1% | 84.7% |
+| spacy-sentencizer | 53/102 (52.0%) | 75.1% | 86.1% | 80.2% |
 
-yasbd achieves 91/92 (98.9%). The only failing case is the `Ave.` abbreviation followed by a capitalized new sentence — a known limitation of rule-based abbreviation suppression. 
+yasbd achieves 101/102 (99.0%) with zero false positives. The only failing case is the `Ave.` abbreviation followed by a capitalized new sentence; which is a known limitation of rule-based abbreviation suppression. 
 
 ## Book benchmarks
 
