@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Valid reference abbreviations removed by language rules** ([#366](https://github.com/speedyk-005/yasbd-lib/pull/366)): Spanish keeps `no`, `nos` and `para` excluded from the case-insensitive reference set and instead matches capitalized `No.`, `Nos.` and `Para.` through a case-sensitive mid-sentence pattern, so `El corredor No. 103` stays whole while the lowercase common words still end sentences. Haitian Creole excludes only `ex`.
 - **Multilingual equivalents of `etc.`** ([#361](https://github.com/speedyk-005/yasbd-lib/pull/361)): Keep `etc.` and its common equivalents in thirteen language profiles within the sentence before parenthetical and reference continuations.
 - **Reference abbreviations before roman-numeral-like words** ([#364](https://github.com/speedyk-005/yasbd-lib/pull/364)): Restricted the roman-numeral lookahead after reference abbreviations to 1–5 characters with a word boundary, so `ref.` followed by words such as `It` no longer suppresses a real sentence split while `ref. IV` and `ref. XIV` still match.
 - **Spanish decimal unit boundaries** ([#360](https://github.com/speedyk-005/yasbd-lib/pull/360)): Treat sentence-final periods after decimal `°C.` and `km.` measurements as boundaries instead of suppressing them as inline-only abbreviations.
