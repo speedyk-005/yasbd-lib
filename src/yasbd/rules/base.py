@@ -290,7 +290,7 @@ class Rules:
             # References abbrv + number/letter/bracket (e.g., p. 55, app. A, et al. [2004])
             re2.compile(rf"""
                 \b(?i:{build_optimized_pattern(cls.REFERENCE_ABBRVS)}){cls.DOTS_PATTERN}
-                (?=\s+(?:\(|\[|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]+))
+                (?=\s+(?:\(|\[|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]{{1,5}}\b))
                 """, re2.X
             ),
 
