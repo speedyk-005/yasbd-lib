@@ -27,6 +27,10 @@ class EsRules(Rules):
         "cf", "incl", "cía", "s", "párrf", "párr",
     }
 
+    CORP_ENTITY_ABBRVS = Rules.CORP_ENTITY_ABBRVS | {
+        "asoc", "cía",
+    }
+
     SECTION_MARKERS = Rules.SECTION_MARKERS | {
         "Artículo", "Anexo", "Capítulo", "Sección", "Subsección",
         "Unidad", "Módulo", "División",

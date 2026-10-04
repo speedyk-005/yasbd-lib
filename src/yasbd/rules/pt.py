@@ -25,6 +25,10 @@ class PtRules(Rules):
         "tel", "trad", "incl", "cia", "vol", "ed", "puj", "aprox",
     }
 
+    CORP_ENTITY_ABBRVS = Rules.CORP_ENTITY_ABBRVS | {
+        "asoc", "cia",
+    }
+
     SECTION_MARKERS = Rules.SECTION_MARKERS | {
         "Artigo", "Anexo", "Capítulo", "Secção", "Seção", "Subsecção",
         "Subseção", "Unidade", "Módulo", "Divisão",
