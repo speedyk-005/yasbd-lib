@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.2] - Unreleased
 
+### Changed
+
+- **Faster candidate boundary finder** ([#368](https://github.com/speedyk-005/yasbd-lib/pull/368)): Reworked the `CANDIDATE_BOUNDARY_FINDER` pattern. Candidate matching runs ~40% faster on a 70KB English sample (66ms down to 39ms per run).
+
 ### Fixed
 
 - **Corporate entity abbreviations before capitalized names** ([#367](https://github.com/speedyk-005/yasbd-lib/pull/367)): Spanish and Portuguese keep `Asoc.` and `Cía.`/`Cia.` whole before capitalized organization names through `CORP_ENTITY_ABBRVS`, so `la Asoc. Internacional de Comercio` stays one sentence while `Asoc. Mañana` still splits before a common sentence starter.
