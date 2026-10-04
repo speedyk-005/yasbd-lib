@@ -14,6 +14,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@ColumbusLabs](https://github.com/ColumbusLabs)** | Preserve word boundaries across StreamCleaner line breaks |
 | **[@ddelrio1986](https://github.com/ddelrio1986)** | Spelling and grammar fixes in docs |
 | **[@DYNOSuprovo](https://github.com/DYNOSuprovo)** | Swahili address + currency and German/Dutch unit abbreviations fix; Amharic quotative construction improvements; sentence modification example |
+| **[@GreedyC](https://github.com/GreedyC)** | Scientific dotted abbreviation fix |
 | **[@HarshRajSinghania](https://github.com/HarshRajSinghania)** | Russian/Ukrainian `стор.` and `кв.` reference abbreviations |
 | **[@HeaTTap](https://github.com/HeaTTap)** | Line ending normalization in default cleaning pipeline; removed destructive slash normalization from StreamCleaner |
 | **[@hkJerryLeung](https://github.com/hkJerryLeung)** | French `est` abbreviation fix |
@@ -32,6 +33,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@raffaelemancuso](https://github.com/raffaelemancuso)** | Windows file handle leak fix in `_output` doctest |
 | **[@Rajesh270712](https://github.com/Rajesh270712)** | Base + English rule contributions |
 | **[@revanthajoe](https://github.com/revanthajoe)** | ASR/Transcript Segmentation Example |
+| **[@sairex53](https://github.com/sairex53)** | Directory-to-JSONL dataset example for UTF-8 text collections |
 | **[@sanmaxdev](https://github.com/sanmaxdev)** | Language tag normalization helper |
 | **[@sonalisrisivani](https://github.com/sonalisrisivani)** | Unicode newline-inside-sentence detection fix |
 | **[@speedyk-005](https://github.com/speedyk-005)** | Maintainer & Creator |

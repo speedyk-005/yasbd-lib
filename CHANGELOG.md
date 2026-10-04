@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Spanish whitespace-separated dotted abbreviations** ([#359](https://github.com/speedyk-005/yasbd-lib/pull/359)): Removed the Spanish `DOTTED_GEOPOL_ABBRVS` override and added a mid-sentence pattern so pairs like `EE. UU.` and `FF. AA.` no longer split after the first dot.
 - **Spanish abbreviations párrf. and párr.** ([#355](https://github.com/speedyk-005/yasbd-lib/pull/355)): Added párrf and párr to Spanish reference abbreviations to prevent false sentence boundaries.
 - **Backtick-delimited quote sentence boundaries** ([#348](https://github.com/speedyk-005/yasbd-lib/pull/348)): Detect sentence boundaries after single/double backtick-delimited and doubled-apostrophe quoted text while preserving ordinary contractions.
+- **Scientific dotted abbreviations** ([#358](https://github.com/speedyk-005/yasbd-lib/pull/358)): Preserve `c.d.f.` before mathematical references and `w.r.t.` before sentence-internal text, including uppercase variants.
 
 ## [1.0.1] - 2026-09-26
 

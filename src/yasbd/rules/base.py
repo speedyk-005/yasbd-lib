@@ -92,7 +92,7 @@ class Rules:
         "no", "nos", "n°", "n.º", "qv", "reg", "regs",
 
         # Scientific / Technical
-        "approx", "deg", "diam", "eq", "eqn", "eqs",
+        "approx", "c.d.f", "deg", "diam", "eq", "eqn", "eqs",
         "est", "ex", "exs", "lat", "long", "max", "min",
 
         # Commerce / Measurements
@@ -121,7 +121,7 @@ class Rules:
     INLINE_ONLY_ABBRVS = {
         # Bridge/connectors
         "a.k.a", "ca", "cf", "e.g", "eg", "i.c", "i.e", "i.q",
-        "ibid", "ie", "sc", "v", "viz", "vs",
+        "ibid", "ie", "sc", "v", "viz", "vs", "w.r.t",
 
         # Notes & postscript markers
         "n.b", "p.s", "p.p.s", "sci", "scill", "s.vloc",
