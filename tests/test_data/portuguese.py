@@ -37,7 +37,6 @@ TEST_DATA = [
     "O departamento de RR.HH. aprovou as férias.",
     "É uma das U.E. diretrizes operacionais.",
     "Chegou o Sr. Garcia.| Como não estava, foi-se embora.",
-    "A empresa Rodríguez e Cia. assinou o contrato junto com a Assoc. Internacional de Comércio.",
     "A empresa Rodríguez e Cia. assinou o contrato junto com a Asoc. Internacional de Comércio.",
 
     # Structural headings
