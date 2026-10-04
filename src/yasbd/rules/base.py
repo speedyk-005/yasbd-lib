@@ -243,28 +243,26 @@ class Rules:
             """, re2.X,
         )
 
-        # https://regex101.com/r/VMzYsx/10
+        # https://regex101.com/r/VMzYsx/12
         cls.CANDIDATE_BOUNDARY_FINDER = re2.compile(
             rf"""
-            (?:
-                # Newline not followed by another newline
-                \n(?!\n)|
+            # Newline not followed by another newline
+            \n(?!\n)|
 
+            (?:
                 # Split if left token is a unicase letter (Always)
                 \p{{Lo}}\s*{cls.TERMINATORS_PATTERN}|
 
-                # Split after any terminators followed by a a newline,
-                # common sentence starter, Space+Upper or unicase letter
-                {cls.TERMINATORS_PATTERN}(?!\s*\p{{Emoji_Presentation}})
-                (?=
-                    \s*[\n\p{{Lo}}]|
-                    \s+(?:[^\p{{Ll}}&]|
-                    \s+(?<!\.\.)(?i:{cls.COMMON_STARTERS_PATTERN})\b)
-                )|
-
                 # Emoji after terminator + uppercase, or emoji + common starter
                 {cls.TERMINATORS_PATTERN}\s*\p{{Emoji_Presentation}}+|
-                \s+\p{{Emoji_Presentation}}(?=\s*(?:{cls.COMMON_STARTERS_PATTERN})\b)|
+
+                # Split after any terminators followed by a newline,
+                # common sentence starter, Space+Upper or unicase letter
+                {cls.TERMINATORS_PATTERN}
+                (?=
+                    \s*[\n\p{{Lo}}]|
+                    \s+(?:[^\p{{Ll}}&\p{{Emoji_Presentation}}])
+                )|
 
                 # Split at transition between Latin letters separate by alien
                 [\p{{LU}}\p{{Ll}}][。！？।](?=[\p{{Lu}}])
