@@ -32,6 +32,8 @@ TEST_DATA = [
     "Las FF.AA. emitieron un comunicado oficial.",
     "El departamento de RR.HH. aprobó las vacaciones.",
     "La reunión es el lun. 15 de enero.",
+    "La empresa Rodríguez y Cía. firmó el contrato junto con la Asoc. Internacional de Comercio.",
+    "Trabaja en la Asoc.| Mañana tiene una reunión.",
 
     # structural headings
     "Capítulo 1. El Comienzo.| Estaba oscuro afuera. | Nada se movía.",
