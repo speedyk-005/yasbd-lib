@@ -64,29 +64,29 @@ Real-world performance on full-length books via [`bench_books.py`](https://githu
 
 | Library | Cold (ms) | Warm (ms) | Sentences |
 |---|---|---|---|
-| blingfire | 13.9 | 9.7 | 676 |
-| nupunkt | 42.7 | 47.3 | 1606 |
-| pysbd | 1334.7 | 1248.7 | 3378 |
-| sentence-splitter | 332.1 | 329.3 | 3960 |
-| sentencex | 4.1 | 3.8 | 2014 |
-| sentsplit | 3161.6 | 1542.0 | 4170 |
-| spacy-sentencizer | 648.6 | 476.8 | 1622 |
-| yasbd | 631.4 | 493.1 | 1621 |
+| blingfire | 14.3 | 9.5 | 676 |
+| nupunkt | 40.8 | 8.0 | 1362 |
+| pysbd | 1153.7 | 1396.8 | 3378 |
+| sentence-splitter | 303.7 | 311.6 | 3960 |
+| sentencex | 5.9 | 2.9 | 2014 |
+| sentsplit | 1789.7 | 1698.2 | 4170 |
+| spacy-sentencizer | 690.7 | 379.3 | 1622 |
+| yasbd | 374.6 | 356.9 | 1453 |
 
 ### Adventures of Sherlock Holmes (593,911 chars)
 
 | Library | Cold (ms) | Warm (ms) | Sentences |
 |---|---|---|---|
-| blingfire | 43.2 | 42.9 | 5185 |
-| nupunkt | 275.5 | 240.7 | 5110 |
-| pysbd | 15965.6 | 16559.8 | 14501 |
-| sentence-splitter | 10496.1 | 10476.4 | 16269 |
-| sentencex | 11.9 | 11.2 | 7142 |
-| sentsplit | 8804.4 | 7263.9 | 15961 |
-| spacy-sentencizer | 1687.1 | 1563.1 | 6900 |
-| yasbd | 1590.9 | 1752.8 | 5980 |
+| blingfire | 47.4 | 46.3 | 5185 |
+| nupunkt | 178.1 | 43.8 | 6605 |
+| pysbd | 15194.2 | 15634.5 | 14501 |
+| sentence-splitter | 9784.6 | 9508.9 | 16269 |
+| sentencex | 21.7 | 16.3 | 7142 |
+| sentsplit | 7904.6 | 7081.8 | 15961 |
+| spacy-sentencizer | 1580.4 | 2126.1 | 6900 |
+| yasbd | 1452.2 | 1454.8 | 5981 |
 
-> **Runtime:** ~4 min 30 sec on a single machine (8 segmenters × 2 books).
+> **Runtime:** ~4 min 15 sec on a single machine (8 segmenters × 2 books).
 
 <p align="center">
   <img src="bench.png" alt="SBD Benchmark Performance" width="800"/>
