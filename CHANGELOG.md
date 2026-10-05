@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.2] - Unreleased
 
+### Changed
+
+- **Faster candidate boundary finder** ([#368](https://github.com/speedyk-005/yasbd-lib/pull/368)): Reworked the `CANDIDATE_BOUNDARY_FINDER` pattern. Candidate matching runs ~40% faster on a 70KB English sample (66ms down to 39ms per run).
+
 ### Fixed
 
+- **Corporate entity abbreviations before capitalized names** ([#367](https://github.com/speedyk-005/yasbd-lib/pull/367)): Spanish and Portuguese keep `Asoc.` and `Cía.`/`Cia.` whole before capitalized organization names through `CORP_ENTITY_ABBRVS`, so `la Asoc. Internacional de Comercio` stays one sentence while `Asoc. Mañana` still splits before a common sentence starter.
 - **Valid reference abbreviations removed by language rules** ([#366](https://github.com/speedyk-005/yasbd-lib/pull/366)): Spanish keeps `no`, `nos` and `para` excluded from the case-insensitive reference set and instead matches capitalized `No.`, `Nos.` and `Para.` through a case-sensitive mid-sentence pattern, so `El corredor No. 103` stays whole while the lowercase common words still end sentences. Haitian Creole excludes only `ex`.
 - **Multilingual equivalents of `etc.`** ([#361](https://github.com/speedyk-005/yasbd-lib/pull/361)): Keep `etc.` and its common equivalents in thirteen language profiles within the sentence before parenthetical and reference continuations.
 - **Reference abbreviations before roman-numeral-like words** ([#364](https://github.com/speedyk-005/yasbd-lib/pull/364)): Restricted the roman-numeral lookahead after reference abbreviations to 1–5 characters with a word boundary, so `ref.` followed by words such as `It` no longer suppresses a real sentence split while `ref. IV` and `ref. XIV` still match.
@@ -16,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Spanish whitespace-separated dotted abbreviations** ([#359](https://github.com/speedyk-005/yasbd-lib/pull/359)): Removed the Spanish `DOTTED_GEOPOL_ABBRVS` override and added a mid-sentence pattern so pairs like `EE. UU.` and `FF. AA.` no longer split after the first dot.
 - **Spanish abbreviations párrf. and párr.** ([#355](https://github.com/speedyk-005/yasbd-lib/pull/355)): Added párrf and párr to Spanish reference abbreviations to prevent false sentence boundaries.
 - **Backtick-delimited quote sentence boundaries** ([#348](https://github.com/speedyk-005/yasbd-lib/pull/348)): Detect sentence boundaries after single/double backtick-delimited and doubled-apostrophe quoted text while preserving ordinary contractions.
+- **Scientific dotted abbreviations** ([#358](https://github.com/speedyk-005/yasbd-lib/pull/358)): Preserve `c.d.f.` before mathematical references and `w.r.t.` before sentence-internal text, including uppercase variants.
 
 ## [1.0.1] - 2026-09-26
 
