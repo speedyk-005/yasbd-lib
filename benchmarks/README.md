@@ -1,19 +1,21 @@
 # Benchmarks
 
-_Last updated: 2026-09-25_
+_Last updated: 2026-10-04_
 
 So you want to know how yasbd stacks up against the competition? Fair enough. Here are the contenders:
 
-| Library | About | Source |
-|---|---|---|
-| pysbd | Rule-based, 23 langs, EMNLP 2020 paper. The incumbent yasbd was built to fix. | [GitHub](https://github.com/nipunsadvilkar/pySBD) / [pypi](https://pypi.org/project/pysbd/) |
-| sentencex | Rust core + Python bindings, ~300 langs. Opinionated: prefer no split over wrong split. | [GitHub](https://github.com/wikimedia/sentencex) / [pypi](https://pypi.org/project/sentencex/) |
-| sentsplit | CRF model + regex hybrid, 12 langs. Trainable custom models. Heavier. | [GitHub](https://github.com/zaemyung/sentsplit) / [pypi](https://pypi.org/project/sentsplit/) |
-| nupunkt | Zero deps, legal-text optimized. Claims 91.1% precision at 10M chars/sec. ~12 langs. | [GitHub](https://github.com/alea-institute/nupunkt) / [pypi](https://pypi.org/project/nupunkt/) |
-| blingfire | Microsoft C++ FSM + Python bindings. Language agnostic. | [GitHub](https://github.com/microsoft/BlingFire) / [pypi](https://pypi.org/project/blingfire/) |
-| sentence-splitter | Heuristic algorithm from Europarl (Koehn/Schroeder). Archived 2025. | [GitHub](https://github.com/mediacloud/sentence-splitter) / [pypi](https://pypi.org/project/sentence-splitter/) |
-| spaCy-sentencizer | Rule-based pipeline component, 75+ langs. No dependency parser needed. | [GitHub](https://github.com/explosion/spaCy/blob/master/spacy/pipeline/sentencizer.pyx) / [pypi](https://pypi.org/project/spacy/) |
-| yasbd | Pure Python, 39 langs. Pointer-based SBD with pysbd adapter. | *(this repo)* |
+| Library | Version | About | Source |
+|---|---|---|---|
+| pysbd | 0.3.4 | Rule-based, 23 langs, EMNLP 2020 paper. The incumbent yasbd was built to fix. | [GitHub](https://github.com/nipunsadvilkar/pySBD) / [pypi](https://pypi.org/project/pysbd/) |
+| sentencex | 1.0.32 | Rust core + Python bindings, ~300 langs. Opinionated: prefer no split over wrong split. | [GitHub](https://github.com/wikimedia/sentencex) / [pypi](https://pypi.org/project/sentencex/) |
+| sentsplit | 1.0.8 | CRF model + regex hybrid, 12 langs. Trainable custom models. Heavier. | [GitHub](https://github.com/zaemyung/sentsplit) / [pypi](https://pypi.org/project/sentsplit/) |
+| nupunkt | 0.8.0 | Zero deps, legal-text optimized. Claims 91.1% precision at 10M chars/sec. ~12 langs. | [GitHub](https://github.com/alea-institute/nupunkt) / [pypi](https://pypi.org/project/nupunkt/) |
+| blingfire | 0.1.8 | Microsoft C++ FSM + Python bindings. Language agnostic. | [GitHub](https://github.com/microsoft/BlingFire) / [pypi](https://pypi.org/project/blingfire/) |
+| sentence-splitter | 1.4 | Heuristic algorithm from Europarl (Koehn/Schroeder). Archived 2025. | [GitHub](https://github.com/mediacloud/sentence-splitter) / [pypi](https://pypi.org/project/sentence-splitter/) |
+| spaCy-sentencizer | 3.8.16 | Rule-based pipeline component, 75+ langs. No dependency parser needed. | [GitHub](https://github.com/explosion/spaCy/blob/master/spacy/pipeline/sentencizer.pyx) / [pypi](https://pypi.org/project/spacy/) |
+| yasbd | 1.0.1 | Pure Python, 39 langs. Pointer-based SBD with pysbd adapter. | *(this repo)* |
+
+Versions are the ones these numbers were measured against and are pinned in the `bench` extra of `pyproject.toml`.
 
 Not every library supports every language. We picked multiple languages that stress different weaknesses.
 
@@ -26,7 +28,7 @@ The format is simple: throw edge cases at each library. Does it split where it s
 
 ## EN Golden benchmark
 
-Aggregate score across all 92 English edge cases in [`EN_GOLDEN_DATA.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/EN_GOLDEN_DATA.py) via [`run_golden.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/run_golden.py). Expanded from pysbd's original 48 to 92 cases: we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, academic citations, and more.
+Aggregate score across all 102 English edge cases in [`EN_GOLDEN_DATA.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/EN_GOLDEN_DATA.py) via [`run_golden.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/run_golden.py). Expanded from pysbd's original 48 to 102 cases: we removed biased/wrong expectations (like splitting mid-ellipsis or bad punctuation in dialog) and added cases for abbreviation chains, contiguous terminators, exclamation-safe words, academic citations, and more.
 
 The **Passed** column is a strict sentence-string equality check. Alongside it, we report boundary-level **Precision**, **Recall**, and **F1** computed by [`scorer.py`](https://github.com/speedyk-005/yasbd-lib/blob/main/benchmarks/scorer.py).
 
@@ -37,22 +39,22 @@ The **Passed** column is a strict sentence-string equality check. Alongside it, 
 1. **Word-level binary arrays.** Every sentence is split into words. The final word of each sentence is marked `1` (a sentence boundary); all other words are marked `0`.
 2. **Alignment.** If the model dropped or added words, the two arrays differ in length. The shorter array is right-justified with `0` padding so both arrays share the final word's boundary marker.
 3. **Confusion counts.** Each aligned word position is a True Positive (`1`/`1`), False Positive (`0`/`1`), or False Negative (`1`/`0`).
-4. **Averages.** TP/FP/FN are summed across all 92 cases, then Precision = TP ÷ (TP+FP), Recall = TP ÷ (TP+FN), and F1 = the harmonic mean of the two.
+4. **Averages.** TP/FP/FN are summed across all 102 cases, then Precision = TP ÷ (TP+FP), Recall = TP ÷ (TP+FN), and F1 = the harmonic mean of the two.
 
 All three are bounded `[0, 1]`; they fall back to `0.0` when no useful boundary signal exists (e.g. an empty gold).
 
 | Library | Passed | Precision | Recall | F1 |
 |---|---|---|---|---|
-| **yasbd** | 91/92 (98.9%) | 100.0% | 99.3% | 99.7% |
-| pysbd | 77/92 (83.7%) | 90.5% | 97.3% | 93.8% |
-| sentencex | 77/92 (83.7%) | 89.7% | 94.6% | 92.1% |
-| blingfire | 75/92 (81.5%) | 86.7% | 93.2% | 89.8% |
-| sentsplit | 61/92 (66.3%) | 89.9% | 85.0% | 87.4% |
-| sentence-splitter | 60/92 (65.2%) | 80.1% | 90.5% | 85.0% |
-| nupunkt | 59/92 (64.1%) | 77.9% | 91.2% | 84.0% |
-| spacy-sentencizer | 51/92 (55.4%) | 75.7% | 89.1% | 81.9% |
+| **yasbd** | 101/102 (99.0%) | 100.0% | 99.4% | 99.7% |
+| pysbd | 84/102 (82.4%) | 90.3% | 95.8% | 92.9% |
+| sentencex | 82/102 (80.4%) | 87.9% | 92.7% | 90.3% |
+| blingfire | 82/102 (80.4%) | 86.9% | 92.1% | 89.4% |
+| nupunkt | 77/102 (75.5%) | 88.6% | 89.7% | 89.2% |
+| sentsplit | 68/102 (66.7%) | 90.4% | 85.5% | 87.9% |
+| sentence-splitter | 66/102 (64.7%) | 80.8% | 89.1% | 84.7% |
+| spacy-sentencizer | 53/102 (52.0%) | 75.1% | 86.1% | 80.2% |
 
-yasbd achieves 91/92 (98.9%). The only failing case is the `Ave.` abbreviation followed by a capitalized new sentence — a known limitation of rule-based abbreviation suppression. 
+yasbd achieves 101/102 (99.0%) with zero false positives. The only failing case is the `Ave.` abbreviation followed by a capitalized new sentence; which is a known limitation of rule-based abbreviation suppression. 
 
 ## Book benchmarks
 
@@ -62,29 +64,29 @@ Real-world performance on full-length books via [`bench_books.py`](https://githu
 
 | Library | Cold (ms) | Warm (ms) | Sentences |
 |---|---|---|---|
-| blingfire | 13.9 | 9.7 | 676 |
-| nupunkt | 42.7 | 47.3 | 1606 |
-| pysbd | 1334.7 | 1248.7 | 3378 |
-| sentence-splitter | 332.1 | 329.3 | 3960 |
-| sentencex | 4.1 | 3.8 | 2014 |
-| sentsplit | 3161.6 | 1542.0 | 4170 |
-| spacy-sentencizer | 648.6 | 476.8 | 1622 |
-| yasbd | 631.4 | 493.1 | 1621 |
+| blingfire | 11.0 | 9.5 | 676 |
+| nupunkt | 19.8 | 9.0 | 1362 |
+| pysbd | 1146.0 | 1180.3 | 3378 |
+| sentence-splitter | 468.3 | 470.4 | 3960 |
+| sentencex | 5.0 | 4.6 | 2014 |
+| sentsplit | 2415.0 | 2326.5 | 4170 |
+| spacy-sentencizer | 645.2 | 366.3 | 1622 |
+| yasbd | 386.1 | 340.2 | 1453 |
 
 ### Adventures of Sherlock Holmes (593,911 chars)
 
 | Library | Cold (ms) | Warm (ms) | Sentences |
 |---|---|---|---|
-| blingfire | 43.2 | 42.9 | 5185 |
-| nupunkt | 275.5 | 240.7 | 5110 |
-| pysbd | 15965.6 | 16559.8 | 14501 |
-| sentence-splitter | 10496.1 | 10476.4 | 16269 |
-| sentencex | 11.9 | 11.2 | 7142 |
-| sentsplit | 8804.4 | 7263.9 | 15961 |
-| spacy-sentencizer | 1687.1 | 1563.1 | 6900 |
-| yasbd | 1590.9 | 1752.8 | 5980 |
+| blingfire | 47.6 | 43.9 | 5185 |
+| nupunkt | 49.5 | 50.2 | 6605 |
+| pysbd | 15452.3 | 15736.6 | 14501 |
+| sentence-splitter | 9475.5 | 9264.6 | 16269 |
+| sentencex | 20.1 | 20.7 | 7142 |
+| sentsplit | 9940.8 | 9197.0 | 15961 |
+| spacy-sentencizer | 1670.4 | 1194.1 | 6900 |
+| yasbd | 1857.2 | 1454.5 | 5981 |
 
-> **Runtime:** ~4 min 30 sec on a single machine (8 segmenters × 2 books).
+> **Runtime:** ~4 min 15 sec on a single machine (8 segmenters × 2 books).
 
 <p align="center">
   <img src="bench.png" alt="SBD Benchmark Performance" width="800"/>
@@ -180,6 +182,8 @@ Dear Professor Johnson, I am writing to formally request an extension on the upc
 Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.
 My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.
 
+The overall architecture is illustrated in Fig. 3. The proposed method consists of three stages: preprocessing, representation learning, and classification. Sec. 4.1 describes the preprocessing procedure in detail. In particular, the input is normalized according to Eq. (2), where x represents the original value and μ and σ denote the mean and standard deviation, respectively.
+
 You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.
 
 As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."
@@ -187,7 +191,8 @@ However, critics argue that "the methodology employed was fundamentally flawed" 
 
 The witness testified: "He said — and I quote — 'I will not comply.' Then he turned around and left. I couldn't believe it."
 
-Copyright © 2024 Example Corp. All rights reserved.
+> The contact information is listed as tel. 555-0199 and fax 555-0188.
+> Copyright © 2024 Example Corp. All rights reserved.
 ```
 
 <details>
@@ -198,127 +203,180 @@ Copyright © 2024 Example Corp. All rights reserved.
     1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
     2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
     3: 'My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.'
-    4: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
-    5: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
-    6: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
-    7: 'The witness testified: "He said — and I quote — \'I will not comply.\' Then he turned around and left. I couldn\'t believe it."'
-    8: 'Copyright © 2024 Example Corp. All rights reserved.'
+    4: 'The overall architecture is illustrated in Fig. 3.'
+    5: 'The proposed method consists of three stages: preprocessing, representation learning, and classification.'
+    6: 'Sec. 4.1 describes the preprocessing procedure in detail.'
+    7: 'In particular, the input is normalized according to Eq. (2), where x represents the original value and μ and σ denote the mean and standard deviation, respectively.'
+    8: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
+    9: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
+   10: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
+   11: 'The witness testified: "He said — and I quote — \'I will not comply.\' Then he turned around and left. I couldn\'t believe it."'
+   12: '> The contact information is listed as tel. 555-0199 and fax 555-0188.'
+   13: '> Copyright © 2024 Example Corp. All rights reserved.'
 
   pysbd [en]:
     1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.\n'
     2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.\n'
     3: 'My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.\n\n'
-    4: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?'
-    5: 'ref=dept&v=2.0#contact.\n\n'
-    6: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."\n'
-    7: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).\n\n'
-    8: 'The witness testified: "He said — and I quote — \'I will not comply.\' Then he turned around and left. I couldn\'t believe it."\n\n'
-    9: 'Copyright © 2024 Example Corp. '
-   10: 'All rights reserved.'
+    4: 'The overall architecture is illustrated in Fig. 3. '
+    5: 'The proposed method consists of three stages: preprocessing, representation learning, and classification. '
+    6: 'Sec. 4.1 describes the preprocessing procedure in detail. '
+    7: 'In particular, the input is normalized according to Eq. '
+    8: '(2), where x represents the original value and μ and σ denote the mean and standard deviation, respectively.\n\n'
+    9: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?'
+   10: 'ref=dept&v=2.0#contact.\n\n'
+   11: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."\n'
+   12: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).\n\n'
+   13: 'The witness testified: "He said — and I quote — \'I will not comply.\' Then he turned around and left. I couldn\'t believe it."\n\n'
+   14: '> The contact information is listed as tel. '
+   15: '555-0199 and fax 555-0188.\n'
+   16: '> Copyright © 2024 Example Corp. '
+   17: 'All rights reserved.'
 
   sentencex [en]:
     1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.\n'
     2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.\n'
     3: 'My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.'
     4: '\n\n'
-    5: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
-    6: '\n\n'
-    7: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."\n'
-    8: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
-    9: '\n\n'
-   10: 'The witness testified: "He said — and I quote — \'I will not comply.\' Then he turned around and left. I couldn\'t believe it."'
-   11: '\n\n'
-   12: 'Copyright © 2024 Example Corp. '
-   13: 'All rights reserved.'
+    5: 'The overall architecture is illustrated in Fig. 3. '
+    6: 'The proposed method consists of three stages: preprocessing, representation learning, and classification. '
+    7: 'Sec. 4.1 describes the preprocessing procedure in detail. '
+    8: 'In particular, the input is normalized according to Eq. '
+    9: '(2), where x represents the original value and μ and σ denote the mean and standard deviation, respectively.'
+   10: '\n\n'
+   11: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
+   12: '\n\n'
+   13: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."\n'
+   14: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
+   15: '\n\n'
+   16: 'The witness testified: "He said — and I quote — \'I will not comply.\' Then he turned around and left. I couldn\'t believe it."'
+   17: '\n\n'
+   18: '> The contact information is listed as tel. '
+   19: '555-0199 and fax 555-0188.\n'
+   20: '> Copyright © 2024 Example Corp. '
+   21: 'All rights reserved.'
 
   sentsplit [en]:
     1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.\n'
     2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.\n'
     3: 'My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.\n'
     4: '\n'
-    5: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.\n'
-    6: '\n'
-    7: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019;'
-    8: ' cf. Brown, 2018)."\n'
-    9: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).\n'
-   10: '\n'
-   11: 'The witness testified: "He said — and I quote — \'I will not comply.\''
-   12: ' Then he turned around and left.'
-   13: ' I couldn\'t believe it."\n'
-   14: '\n'
-   15: 'Copyright © 2024 Example Corp.'
-   16: ' All rights reserved.'
+    5: 'The overall architecture is illustrated in Fig.'
+    6: ' 3. The proposed method consists of three stages: preprocessing, representation learning, and classification.'
+    7: ' Sec. 4.1 describes the preprocessing procedure in detail.'
+    8: ' In particular, the input is normalized according to Eq. (2), where x represents the original value and μ and σ denote the mean and standard deviation, respectively.\n'
+    9: '\n'
+   10: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.\n'
+   11: '\n'
+   12: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019;'
+   13: ' cf. Brown, 2018)."\n'
+   14: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).\n'
+   15: '\n'
+   16: 'The witness testified: "He said — and I quote — \'I will not comply.\''
+   17: ' Then he turned around and left.'
+   18: ' I couldn\'t believe it."\n'
+   19: '\n'
+   20: '> The contact information is listed as tel. 555-0199 and fax 555-0188.\n'
+   21: '> Copyright © 2024 Example Corp.'
+   22: ' All rights reserved.'
 
   nupunkt [en]:
     1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
     2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
     3: 'My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.'
-    4: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
-    5: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
-    6: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
-    7: 'The witness testified: "He said — and I quote — \'I will not comply.\''
-    8: 'Then he turned around and left.'
-    9: 'I couldn\'t believe it."'
-   10: 'Copyright © 2024 Example Corp.'
-   11: 'All rights reserved.'
+    4: 'The overall architecture is illustrated in Fig. 3.'
+    5: 'The proposed method consists of three stages: preprocessing, representation learning, and classification.'
+    6: 'Sec. 4.1 describes the preprocessing procedure in detail.'
+    7: 'In particular, the input is normalized according to Eq. (2), where x represents the original value and μ and σ denote the mean and standard deviation, respectively.'
+    8: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
+    9: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
+   10: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
+   11: 'The witness testified: "He said — and I quote — \'I will not comply.\''
+   12: 'Then he turned around and left.'
+   13: 'I couldn\'t believe it."'
+   14: '> The contact information is listed as tel. 555-0199 and fax 555-0188.'
+   15: '> Copyright © 2024 Example Corp.'
+   16: 'All rights reserved.'
 
   blingfire [en]:
     1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
     2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
     3: 'My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.'
-    4: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
-    5: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
-    6: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
-    7: 'The witness testified: "He said — and I quote — \'I will not comply.\''
-    8: 'Then he turned around and left.'
-    9: 'I couldn\'t believe it."'
-   10: 'Copyright © 2024 Example Corp.'
-   11: 'All rights reserved.'
+    4: 'The overall architecture is illustrated in Fig. 3.'
+    5: 'The proposed method consists of three stages: preprocessing, representation learning, and classification.'
+    6: 'Sec. 4.1 describes the preprocessing procedure in detail.'
+    7: 'In particular, the input is normalized according to Eq. (2), where x represents the original value and μ and σ denote the mean and standard deviation, respectively.'
+    8: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
+    9: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
+   10: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
+   11: 'The witness testified: "He said — and I quote — \'I will not comply.\''
+   12: 'Then he turned around and left.'
+   13: 'I couldn\'t believe it."'
+   14: '> The contact information is listed as tel. 555-0199 and fax 555-0188. > Copyright © 2024 Example Corp.'
+   15: 'All rights reserved.'
 
   sentence-splitter [en]:
     1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
     2: 'Pursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
     3: 'My advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.'
     4: ''
-    5: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
-    6: ''
-    7: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
-    8: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
-    9: ''
-   10: 'The witness testified: "He said — and I quote — \'I will not comply.\''
-   11: 'Then he turned around and left.'
-   12: 'I couldn\'t believe it."'
+    5: 'The overall architecture is illustrated in Fig. 3.'
+    6: 'The proposed method consists of three stages: preprocessing, representation learning, and classification.'
+    7: 'Sec.'
+    8: '4.1 describes the preprocessing procedure in detail.'
+    9: 'In particular, the input is normalized according to Eq.'
+   10: '(2), where x represents the original value and μ and σ denote the mean and standard deviation, respectively.'
+   11: ''
+   12: 'You can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
    13: ''
-   14: 'Copyright © 2024 Example Corp. All rights reserved.'
+   14: 'As Smith et al. (2021, pp. 128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf. Brown, 2018)."'
+   15: 'However, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig. 7).'
+   16: ''
+   17: 'The witness testified: "He said — and I quote — \'I will not comply.\''
+   18: 'Then he turned around and left.'
+   19: 'I couldn\'t believe it."'
+   20: ''
+   21: '> The contact information is listed as tel.'
+   22: '555-0199 and fax 555-0188.'
+   23: '> Copyright © 2024 Example Corp. All rights reserved.'
 
   spacy-sentencizer [en]:
     1: 'Dear Professor Johnson, I am writing to formally request an extension on the upcoming dissertation deadline.'
     2: '\nPursuant to Section 4.3(a)(ii) of the university handbook (see https://policies.example.edu/handbook.pdf), students are entitled to a 48-hour grace period under extenuating circumstances.'
     3: '\nMy advisor, Dr. Patel A. (M.D., Ph.D.), can corroborate my claim if needed.'
-    4: '\n\nYou can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
-    5: '\n\nAs Smith et al. ('
-    6: '2021, pp.'
-    7: '128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf.'
-    8: 'Brown, 2018)."'
-    9: '\nHowever, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig.'
-   10: '7).'
-   11: '\n\nThe witness testified: "He said — and I quote — \'I will not comply.\''
-   12: 'Then he turned around and left.'
-   13: 'I couldn\'t believe it."'
-   14: '\n\nCopyright © 2024 Example Corp. All rights reserved.'
+    4: '\n\nThe overall architecture is illustrated in Fig.'
+    5: '3.'
+    6: 'The proposed method consists of three stages: preprocessing, representation learning, and classification.'
+    7: 'Sec.'
+    8: '4.1 describes the preprocessing procedure in detail.'
+    9: 'In particular, the input is normalized according to Eq. ('
+   10: '2), where x represents the original value and μ and σ denote the mean and standard deviation, respectively.'
+   11: '\n\nYou can reach me at j.doe42@university.example.edu or visit my profile page at https://www.example.com/~jdoe/about?ref=dept&v=2.0#contact.'
+   12: '\n\nAs Smith et al. ('
+   13: '2021, pp.'
+   14: '128–129) noted: "The implications of this discovery are far-reaching (see also Jones & Lee, 2019; cf.'
+   15: 'Brown, 2018)."'
+   16: '\nHowever, critics argue that "the methodology employed was fundamentally flawed" — a claim the authors vehemently deny (see Appendix A, Fig.'
+   17: '7).'
+   18: '\n\nThe witness testified: "He said — and I quote — \'I will not comply.\''
+   19: 'Then he turned around and left.'
+   20: 'I couldn\'t believe it."'
+   21: '\n\n> The contact information is listed as tel.'
+   22: '555-0199 and fax 555-0188.'
+   23: '\n> Copyright © 2024 Example Corp. All rights reserved.'
 ```
 </details>
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **8** | 3.67 | **Best overall.** Correct boundaries. Dialog stays as 1 sentence. URL intact. |
-| **2** | **pysbd** | 10 | 10.14 | **Correct sentence count.** Breaks URL at `?` — a real accuracy miss. |
-| **3** | **nupunkt** | 11 | 0.94 | **Same output as blingfire.** |
-| **4** | **blingfire** | 11 | 0.12 | **Fast.** Dialog splits into 3 pieces. URL intact. |
-| **5** | **sentencex** | 13 | 0.05 | **Fast but phantom sentences.** Counts empty paragraph breaks as sentences. |
-| **6** | **spacy-sentencizer** | 14 | 3.21 | **Splits on `pp.`, `Fig.`, `cf.`, `2018).`** No abbreviation awareness. |
-| **7** | **sentence-splitter** | 14 | 6.25 | **Phantom sentences from empty lines.** |
-| **8** | **sentsplit** | 16 | 12.32 | **Worst.** Phantom sentences, splits inside citations, dialog fragmented into 4 pieces. |
+| **1** | **yasbd** | **13** | 4.70 | **Best overall.** Keeps `Fig. 3`, `Sec. 4.1`, `Eq. (2)`, URL/query, citations, and quoted testimony intact. |
+| **2** | **pysbd** | 17 | 13.36 | Keeps `Fig.`/`Sec.`/citations, but splits `Eq. (2)` and breaks the URL query and contact line. |
+| **3** | **nupunkt** | 16 | 0.21 | Clean abbreviations/URL/citations; splits quoted testimony into 3 and also splits the copyright notice. |
+| **4** | **blingfire** | 15 | 0.16 | **Fast.** Splits quoted testimony into 3; merges the two blockquote lines oddly, but URL intact. |
+| **5** | **sentencex** | 21 | 0.07 | **Fastest but phantom sentences.** Emits blank paragraph fragments; splits `Eq.` and `tel.`. |
+| **6** | **spacy-sentencizer** | 23 | 5.62 | **Splits abbreviations and citations:** `Fig.`, `Sec.`, `Eq.`, `Smith et al.`, `pp.`, `cf.`, `tel.` |
+| **7** | **sentence-splitter** | 23 | 4.70 | **Empty-line fragments; splits `Sec.`, `Eq.`, and `tel.`** |
+| **8** | **sentsplit** | 22 | 26.10 | **Slowest here.** Splits `Fig.`, `cf.`, quoted testimony, and newlines. |
 
 ### Newline continuation
 
@@ -327,16 +385,16 @@ Sentences that wrap across lines should not be split. This tests whether the lib
 ```txt
 This is a sentence that wraps
 to a second line but should not be split into two.
-Dr. Smith went to Washington
+Smith went to Washington
 and met with the president. The URL https://example.com/path/to/page
 has a long path. She said "I am not going
 to let this happen" and walked out.
-The results (see Fig. 3 for details)
+The results (see figure 3 for details)
 showed a significant improvement.
 Pursuant to Section 4.3(a)(ii) of the handbook,
 students are entitled to a 48-hour grace period.
 The conference on the history of America,
-incl. the events of the s. XIX, was retransmitted.
+including the events of the nineteenth century, was retransmitted.
 ```
 
 <details>
@@ -345,116 +403,109 @@ incl. the events of the s. XIX, was retransmitted.
 ```txt
   yasbd [en]:
     1: 'This is a sentence that wraps\nto a second line but should not be split into two.'
-    2: 'Dr. Smith went to Washington\nand met with the president.'
+    2: 'Smith went to Washington\nand met with the president.'
     3: 'The URL https://example.com/path/to/page\nhas a long path.'
     4: 'She said "I am not going\nto let this happen" and walked out.'
-    5: 'The results (see Fig. 3 for details)\nshowed a significant improvement.'
+    5: 'The results (see figure 3 for details)\nshowed a significant improvement.'
     6: 'Pursuant to Section 4.3(a)(ii) of the handbook,\nstudents are entitled to a 48-hour grace period.'
-    7: 'The conference on the history of America,\nincl. the events of the s. XIX, was retransmitted.'
+    7: 'The conference on the history of America,\nincluding the events of the nineteenth century, was retransmitted.'
 
   pysbd [en]:
     1: 'This is a sentence that wraps\n'
     2: 'to a second line but should not be split into two.\n'
-    3: 'Dr. Smith went to Washington\n'
+    3: 'Smith went to Washington\n'
     4: 'and met with the president. '
     5: 'The URL https://example.com/path/to/page\n'
     6: 'has a long path. '
     7: 'She said "I am not going\n'
     8: 'to let this happen" and walked out.\n'
-    9: 'The results (see Fig. 3 for details)\n'
+    9: 'The results (see figure 3 for details)\n'
    10: 'showed a significant improvement.\n'
    11: 'Pursuant to Section 4.3(a)(ii) of the handbook,\n'
    12: 'students are entitled to a 48-hour grace period.\n'
    13: 'The conference on the history of America,\n'
-   14: 'incl. '
-   15: 'the events of the s. '
-   16: 'XIX, was retransmitted.'
+   14: 'including the events of the nineteenth century, was retransmitted.'
 
   sentencex [en]:
     1: 'This is a sentence that wraps\nto a second line but should not be split into two.\n'
-    2: 'Dr. Smith went to Washington\nand met with the president. '
+    2: 'Smith went to Washington\nand met with the president. '
     3: 'The URL https://example.com/path/to/page\nhas a long path. '
     4: 'She said "I am not going\nto let this happen" and walked out.\n'
-    5: 'The results (see Fig. 3 for details)\nshowed a significant improvement.\n'
+    5: 'The results (see figure 3 for details)\nshowed a significant improvement.\n'
     6: 'Pursuant to Section 4.3(a)(ii) of the handbook,\nstudents are entitled to a 48-hour grace period.\n'
-    7: 'The conference on the history of America,\nincl. '
-    8: 'the events of the s. XIX, was retransmitted.'
+    7: 'The conference on the history of America,\nincluding the events of the nineteenth century, was retransmitted.'
 
   sentsplit [en]:
     1: 'This is a sentence that wraps\n'
     2: 'to a second line but should not be split into two.\n'
-    3: 'Dr. Smith went to Washington\n'
+    3: 'Smith went to Washington\n'
     4: 'and met with the president.'
     5: ' The URL https://example.com/path/to/page\n'
     6: 'has a long path.'
     7: ' She said "I am not going\n'
     8: 'to let this happen" and walked out.\n'
-    9: 'The results (see Fig.'
-   10: ' 3 for details)\n'
-   11: 'showed a significant improvement.\n'
-   12: 'Pursuant to Section 4.3(a)(ii) of the handbook,\n'
-   13: 'students are entitled to a 48-hour grace period.\n'
-   14: 'The conference on the history of America,\n'
-   15: 'incl. the events of the s. XIX, was retransmitted.'
+    9: 'The results (see figure 3 for details)\n'
+   10: 'showed a significant improvement.\n'
+   11: 'Pursuant to Section 4.3(a)(ii) of the handbook,\n'
+   12: 'students are entitled to a 48-hour grace period.\n'
+   13: 'The conference on the history of America,\n'
+   14: 'including the events of the nineteenth century, was retransmitted.'
 
   nupunkt [en]:
     1: 'This is a sentence that wraps\nto a second line but should not be split into two.'
-    2: 'Dr. Smith went to Washington\nand met with the president.'
+    2: 'Smith went to Washington\nand met with the president.'
     3: 'The URL https://example.com/path/to/page\nhas a long path.'
     4: 'She said "I am not going\nto let this happen" and walked out.'
-    5: 'The results (see Fig. 3 for details)\nshowed a significant improvement.'
+    5: 'The results (see figure 3 for details)\nshowed a significant improvement.'
     6: 'Pursuant to Section 4.3(a)(ii) of the handbook,\nstudents are entitled to a 48-hour grace period.'
-    7: 'The conference on the history of America,\nincl. the events of the s. XIX, was retransmitted.'
+    7: 'The conference on the history of America,\nincluding the events of the nineteenth century, was retransmitted.'
 
   blingfire [en]:
-    1: 'This is a sentence that wraps to a second line but should not be split into two. Dr. Smith went to Washington and met with the president.'
-    2: 'The URL https://example.com/path/to/page has a long path.'
-    3: 'She said "I am not going to let this happen" and walked out.'
-    4: 'The results (see Fig. 3 for details) showed a significant improvement.'
-    5: 'Pursuant to Section 4.3(a)(ii) of the handbook, students are entitled to a 48-hour grace period.'
-    6: 'The conference on the history of America, incl. the events of the s.'
-    7: 'XIX, was retransmitted.'
+    1: 'This is a sentence that wraps to a second line but should not be split into two.'
+    2: 'Smith went to Washington and met with the president.'
+    3: 'The URL https://example.com/path/to/page has a long path.'
+    4: 'She said "I am not going to let this happen" and walked out.'
+    5: 'The results (see figure 3 for details) showed a significant improvement.'
+    6: 'Pursuant to Section 4.3(a)(ii) of the handbook, students are entitled to a 48-hour grace period.'
+    7: 'The conference on the history of America, including the events of the nineteenth century, was retransmitted.'
 
   sentence-splitter [en]:
     1: 'This is a sentence that wraps'
     2: 'to a second line but should not be split into two.'
-    3: 'Dr. Smith went to Washington'
+    3: 'Smith went to Washington'
     4: 'and met with the president.'
     5: 'The URL https://example.com/path/to/page'
     6: 'has a long path.'
     7: 'She said "I am not going'
     8: 'to let this happen" and walked out.'
-    9: 'The results (see Fig. 3 for details)'
+    9: 'The results (see figure 3 for details)'
    10: 'showed a significant improvement.'
    11: 'Pursuant to Section 4.3(a)(ii) of the handbook,'
    12: 'students are entitled to a 48-hour grace period.'
    13: 'The conference on the history of America,'
-   14: 'incl. the events of the s.'
-   15: 'XIX, was retransmitted.'
+   14: 'including the events of the nineteenth century, was retransmitted.'
 
   spacy-sentencizer [en]:
     1: 'This is a sentence that wraps\nto a second line but should not be split into two.'
-    2: '\nDr. Smith went to Washington\nand met with the president.'
+    2: '\nSmith went to Washington\nand met with the president.'
     3: 'The URL https://example.com/path/to/page\nhas a long path.'
     4: 'She said "I am not going\nto let this happen" and walked out.'
-    5: '\nThe results (see Fig.'
-    6: '3 for details)\nshowed a significant improvement.'
-    7: '\nPursuant to Section 4.3(a)(ii) of the handbook,\nstudents are entitled to a 48-hour grace period.'
-    8: '\nThe conference on the history of America,\nincl.'
-    9: 'the events of the s. XIX, was retransmitted.'
+    5: '\nThe results (see figure 3 for details)\nshowed a significant improvement.'
+    6: '\nPursuant to Section 4.3(a)(ii) of the handbook,\nstudents are entitled to a 48-hour grace period.'
+    7: '\nThe conference on the history of America,\nincluding the events of the nineteenth century, was retransmitted.'
 ```
 </details>
 
 | Rank | Library | Sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **7** | 1.65 | **Perfect.** Joins all newlines, preserves `s. XIX` intact. |
-| **2** | **nupunkt** | **7** | 0.64 | **Same accuracy as yasbd.** |
-| **3** | **sentencex** | 8 | 0.01 | **Fast but flawed.** Splits `incl.` from the sentence. One extra boundary. |
-| **4** | **blingfire** | 7 | 0.23 | **Fast but flawed.** Merges first two sentences. Splits `s.` + `XIX`. |
-| **5** | **spacy-sentencizer** | 9 | 1.85 | **Splits on `Fig.`, `incl.`, `s.`** No abbreviation awareness. |
-| **6** | **pysbd** | **16** | 5.48 | **Splits on every `\n`.** Text wrapping completely breaks it. |
-| **7** | **sentsplit** | **15** | 8.56 | **Splits on every `\n`**, plus splits `Fig.` from `3 for details)`. |
-| **8** | **sentence-splitter** | **15** | 2.05 | **Splits on every `\n`.** Same count as sentsplit but cleaner output. |
+| **1** | **yasbd** | **7** | 1.55 | **Perfect.** Joins all wrapped lines; clean boundaries. |
+| **2** | **nupunkt** | **7** | 0.08 | **Same accuracy as yasbd.** |
+| **3** | **sentencex** | 7 | 0.03 | **Correct boundaries, but keeps trailing newlines/spaces.** |
+| **4** | **blingfire** | 7 | 0.07 | **Clean sentences; normalizes newlines to spaces.** |
+| **5** | **spacy-sentencizer** | 7 | 1.73 | **Correct count, but attaches leading newlines to following sentences.** |
+| **6** | **pysbd** | **14** | 3.65 | **Splits on every `\n`.** Text wrapping completely breaks it. |
+| **7** | **sentsplit** | **14** | 9.48 | **Splits on every `\n`.** |
+| **8** | **sentence-splitter** | **14** | 1.33 | **Splits on every `\n`.** |
 
 ### Emoji boundaries
 
@@ -528,14 +579,14 @@ Hello world. 😊 How are you? Nice work! 👍 Next step. Done. 🎉 Amazing res
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 6 | 0.33 | **Emoji stays attached.** Period + emoji kept as one unit before the next sentence starts. Clean output. |
-| **2** | **pysbd** | 6 | 0.74 | **Detaches each emoji.** Same count, but `😊 How are you?` reads like the emoji is leading. |
+| **1** | **yasbd** | 6 | 0.82 | **Emoji stays attached.** Period + emoji kept as one unit before the next sentence starts. Clean output. |
+| **2** | **pysbd** | 6 | 0.93 | **Detaches each emoji.** Same count, but `😊 How are you?` reads like the emoji is leading. |
 | **3** | **sentencex** | 6 | 0.01 | **Same detachment as pysbd.** Fast but wrong grouping. |
-| **4** | **nupunkt** | 6 | 0.26 | **Also detaches emojis.** Same fragmentation. |
-| **5** | **spacy-sentencizer** | 6 | 0.13 | **Detaches emojis.** Same output as nupunkt. |
-| **6** | **sentsplit** | 5 | 2.28 | **Merges last two sentences.** `Done. 🎉 Amazing result.` glued together. Leading whitespace everywhere. |
-| **7** | **sentence-splitter** | 3 | 0.37 | **Under-splits.** Collapses everything into 3 chunks, but at least keeps emojis with their sentences. |
-| **8** | **blingfire** | 2 | 0.14 | **Total failure.** Joins entire first half into one sentence. FSM has no concept of emoji. |
+| **4** | **nupunkt** | 6 | 0.07 | **Also detaches emojis.** Same fragmentation. |
+| **5** | **spacy-sentencizer** | 6 | 0.12 | **Detaches emojis.** Same output as nupunkt. |
+| **6** | **sentsplit** | 5 | 1.56 | **Merges last two sentences.** `Done. 🎉 Amazing result.` glued together. Leading whitespace everywhere. |
+| **7** | **sentence-splitter** | 3 | 0.40 | **Under-splits.** Collapses everything into 3 chunks, but at least keeps emojis with their sentences. |
+| **8** | **blingfire** | 2 | 0.02 | **Total failure.** Joins entire first half into one sentence. FSM has no concept of emoji. |
 
 ---
 
@@ -561,9 +612,9 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
 ```txt
   yasbd [en]:
     1: 'Hey!!! how r u doing??? i\'m good... just finished work cool!!! wanna grab dinner later?? sure!!! where should we meet??? maybe 7pm???'
-    2: 'lol. OK.... sure?? fine. nah. idk. maybe. bruh. what even is this. broh !!'
-    3: 'that is so sad 😭'
-    4: 'I tougja we were friends.'
+    2: 'lol.'
+    3: 'OK.... sure?? fine. nah. idk. maybe. bruh. what even is this. broh !!'
+    4: 'that is so sad 😭 I tougja we were friends.'
     5: 'nah idk man. maybe it works... maybe not lol. i checked the logs at 3.14 a.m. and everything looked fine?? then the server just died.'
     6: 'bruh. no warning no crash dump nothing. wait... did you even restart it or just stare at the terminal again.'
     7: 'ngl the cpu hit 99.9% for like 20 mins straigja. btw i found the backup at jatps://test.example.org/logs/v2.1/index.jaml.'
@@ -672,29 +723,28 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
    13: 'maybe.'
    14: 'bruh.'
    15: 'what even is this.'
-   16: 'broh !'
-   17: '!'
-   18: 'that is so sad 😭 I tougja we were friends.'
-   19: 'nah idk man.'
-   20: 'maybe it works... maybe not lol.'
-   21: 'i checked the logs at 3.14 a.m. and everything looked fine??'
-   22: 'then the server just died.'
-   23: 'bruh.'
-   24: 'no warning no crash dump nothing.'
-   25: 'wait... did you even restart it or just stare at the terminal again.'
-   26: 'ngl the cpu hit 99.9% for like 20 mins straigja.'
-   27: 'btw i found the backup at jatps://test.example.org/logs/v2.1/index.jaml.'
-   28: 'dont touch it pls. also dr. kim said the patch from frn. 12 wasnt stable.'
-   29: 'kinda obvious now tbh.'
-   30: 'the db kept throwing ref. errors after sec. 4 loaded.'
-   31: 'weird thing is user no. 7 was still connected at 2 a.m. somehow.'
-   32: 'lmao this whole system feels haunted.'
-   33: 'ok so i reran the job... still broken.'
-   34: 'nice.'
-   35: 'absolutely elite engineering rigja there.'
-   36: 'maybe rollback??'
-   37: 'maybe pray??'
-   38: 'idk anymore 😭'
+   16: 'broh !!'
+   17: 'that is so sad 😭 I tougja we were friends.'
+   18: 'nah idk man.'
+   19: 'maybe it works... maybe not lol.'
+   20: 'i checked the logs at 3.14 a.m. and everything looked fine??'
+   21: 'then the server just died.'
+   22: 'bruh.'
+   23: 'no warning no crash dump nothing.'
+   24: 'wait... did you even restart it or just stare at the terminal again.'
+   25: 'ngl the cpu hit 99.9% for like 20 mins straigja.'
+   26: 'btw i found the backup at jatps://test.example.org/logs/v2.1/index.jaml.'
+   27: 'dont touch it pls. also dr. kim said the patch from frn. 12 wasnt stable.'
+   28: 'kinda obvious now tbh.'
+   29: 'the db kept throwing ref. errors after sec. 4 loaded.'
+   30: 'weird thing is user no. 7 was still connected at 2 a.m. somehow.'
+   31: 'lmao this whole system feels haunted.'
+   32: 'ok so i reran the job... still broken.'
+   33: 'nice.'
+   34: 'absolutely elite engineering rigja there.'
+   35: 'maybe rollback??'
+   36: 'maybe pray??'
+   37: 'idk anymore 😭'
 
   blingfire [en]:
     1: "Hey!!! how r u doing??? i'm good... just finished work cool!!! wanna grab dinner later?? sure!!! where should we meet??? maybe 7pm??? lol. OK.... sure?? fine. nah. idk. maybe. bruh. what even is this. broh !!  that is so sad 😭 I tougja we were friends. nah idk man. maybe it works... maybe not lol. i checked the logs at 3.14 a.m. and everything looked fine?? then the server just died. bruh. no warning no crash dump nothing. wait... did you even restart it or just stare at the terminal again. ngl the cpu hit 99.9% for like 20 mins straigja. btw i found the backup at jatps://test.example.org/logs/v2.1/index.jaml. dont touch it pls. also dr. kim said the patch from frn. 12 wasnt stable. kinda obvious now tbh. the db kept throwing ref. errors after sec. 4 loaded. weird thing is user no. 7 was still connected at 2 a.m. somehow. lmao this whole system feels haunted. ok so i reran the job... still broken. nice. absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anymore 😭"
@@ -762,13 +812,13 @@ absolutely elite engineering rigja there. maybe rollback?? maybe pray?? idk anym
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 12 | 3.51 | **Top pick.** Cleanly segments the rapid-fire casual messages. Crucially, it doesn't get tricked by lowercase abbreviations (`dr.`, `a.m.`, `ref.`) or decimal versions (`v2.1`). |
-| **2** | **nupunkt** | 38 | 1.53 | **Highly Accurate, but Speed Liability.** Splitting logic handles chat syntax beautifully. Gets slightly over-aggressive on double exclamation marks (`broh !`, `!`). |
-| **3** | **pysbd** | 33 | 6.71 | **Best Speed/Accuracy Balance.** Robust handling of lowercase single-word sentences. Groups the initial rapid-fire block into one giant sentence. |
+| **1** | **yasbd** | 11 | 4.14 | **Top pick.** Cleanly segments the rapid-fire casual messages. Crucially, it doesn't get tricked by lowercase abbreviations (`dr.`, `a.m.`, `ref.`) or decimal versions (`v2.1`). |
+| **2** | **nupunkt** | 37 | 0.37 | **Highly accurate, but splits aggressively.** Handles chat syntax and abbreviations well; nearly one sentence per fragment. |
+| **3** | **pysbd** | 33 | 9.86 | **Best Speed/Accuracy Balance.** Robust handling of lowercase single-word sentences. Groups the initial rapid-fire block into one giant sentence. |
 | **4** | **sentencex** | 27 | 0.04 | **Fast but clunky.** Groups the initial rapid-fire messages into a single block. Acts inconsistently. |
-| **5** | **sentsplit** | 18 | 15.41 | **Broken Syntax.** Aggressive token-matching struggles with multiple punctuation marks, creating fragmented artifacts. |
-| **6** | **sentence-splitter** | 12 | 3.53 | **Blind to chat.** Completely misses conversational sentence boundaries. Breaks in the middle of `sec. 4` and `frn. 12`. |
-| **7** | **spacy-sentencizer** | 43 | 3.33 | **Worst.** Splits on every `.` in abbreviations: `dr.`, `frn.`, `ref.`, `sec.`, `no.`, `a.m.`. 43 phantom sentences. |
+| **5** | **sentsplit** | 18 | 17.01 | **Broken Syntax.** Aggressive token-matching struggles with multiple punctuation marks, creating fragmented artifacts. |
+| **6** | **sentence-splitter** | 12 | 4.57 | **Blind to chat.** Completely misses conversational sentence boundaries. Breaks in the middle of `sec. 4` and `frn. 12`. |
+| **7** | **spacy-sentencizer** | 43 | 4.43 | **Worst.** Splits on every `.` in abbreviations: `dr.`, `frn.`, `ref.`, `sec.`, `no.`, `a.m.`. 43 phantom sentences. |
 | **8** | **blingfire** | 1 | 0.12 | **Total Failure.** Treated the entire chat and log dump as **one single sentence**. |
 
 ### French
@@ -884,14 +934,14 @@ L'historien étudiait les événements survenus en 52 av.-j.-c. puis ceux de 476
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **4** | 0.97 | **Best in class.** All compound abbreviations preserved intact. Clean output, no trailing whitespace. |
-| **2** | **blingfire** | **4** | 0.07 | **Perfect output, fastest.** 14× faster than yasbd. |
-| **3** | **sentence-splitter** | **4** | 1.30 | **Perfect but slow.** Identical splits to yasbd. |
-| **4** | **sentsplit** | **4** | 5.72 | **Correct count, sloppy output.** Leading whitespace on sentences 2 and 4. |
-| **5** | **spacy-sentencizer** | 9 | 1.25 | **Splits on `d.-h.`, `av.-j.-c.`, `s.-d.`, `s.-l.`** Shreds French compound abbreviations. |
-| **6** | **nupunkt** | 11 | 0.51 | **Shreds `c.-à-d.` and `m.-à-j.`** but oddly preserves `av.-j.-c.` intact. Inconsistent. |
-| **7** | **pysbd** | **23** | 2.96 | **Catastrophic.** Shreds every compound abbreviation. French support is fundamentally broken. |
-| **8** | **sentencex** | **21** | 0.03 | **Same destruction as pysbd.** Fast but useless for French. |
+| **1** | **yasbd** | **4** | 1.20 | **Best in class.** All compound abbreviations preserved intact. Clean output, no trailing whitespace. |
+| **2** | **blingfire** | **4** | 0.06 | **Perfect output, fastest.** 14× faster than yasbd. |
+| **3** | **sentence-splitter** | **4** | 1.64 | **Perfect but slow.** Identical splits to yasbd. |
+| **4** | **sentsplit** | **4** | 8.91 | **Correct count, sloppy output.** Leading whitespace on sentences 2 and 4. |
+| **5** | **spacy-sentencizer** | 9 | 2.04 | **Splits on `d.-h.`, `av.-j.-c.`, `s.-d.`, `s.-l.`** Shreds French compound abbreviations. |
+| **6** | **nupunkt** | 11 | 0.13 | **Shreds `c.-à-d.` and `m.-à-j.`** but oddly preserves `av.-j.-c.` intact. Inconsistent. |
+| **7** | **pysbd** | **23** | 4.06 | **Catastrophic.** Shreds every compound abbreviation. French support is fundamentally broken. |
+| **8** | **sentencex** | **21** | 0.02 | **Same destruction as pysbd.** Fast but useless for French. |
 
 ### Japanese
 
@@ -962,17 +1012,17 @@ Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting a
    23: '」締切は3月25日（水）午後5時です。'
    24: 'それ以降の提出は受け付けられません。'
    25: '彼は「また明日」と言って、笑顔で手を振った。'
-   26: 'そして、雨の中を走って帰っていった。 '
+   26: 'そして、雨の中を走って帰っていった。'
 
   sentencex [ja]:
     1: '今日はいい天気ですね。'
     2: '明日から雨が降るそうです。'
-    3: '外出するなら傘を持って行ったほうがいいでしょう。'
+    3: '外出するなら傘を持って行ったほうがいいでしょう。\n'
     4: '「すみません、駅はどちらですか？」'
     5: 'と観光客が聞いた。'
     6: '私は「この道をまっすぐ行って、二つ目の信号を右に曲がってください」と答えた。\n'
     7: '田中さんは「来週の会議は午後2時からです。遅れないでください」と言いました。'
-    8: '日本の首都は東京です。'
+    8: '日本の首都は東京です。\n'
     9: 'しかし、政治の中心は永田町です。'
    10: '経済の中心は日本橋や丸の内にあります。 '
    11: 'これはペンですか？'
@@ -998,10 +1048,9 @@ Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting a
     4: 'しかし、政治の中心は永田町です。経済の中心は日本橋や丸の内にあります。 これはペンですか？いいえ、それは鉛筆です。あれは何ですか？あれはスマートフォンです。\n'
     5: '富士山は3776メートルです。日本で一番高い山です。毎年たくさんの登山者が訪れます。約束手形、為替手形、小切手などは商業手形と呼ばれます。これらの取り扱いには注意が必要です。\n'
     6: '「例えば、このような場合どうすればいいのですか？」「まずは落ち着いて、上司に相談してください。」締切は3月25日（水）午後5時です。それ以降の提出は受け付けられません。彼は「また明日」と言って、笑顔で手を振った。そして、雨の中を走って帰っていった。'
-   23: 'そして、雨の中を走って帰っていった。'
 
   nupunkt [ja]:
-    1: '今日はいい天気ですね。明日から雨が降るそうです。外出するなら傘を持って行ったほうがいいでしょう。「すみません、駅はどちらですか？」と観光客が聞いた。私は「この道をまっすぐ行って、二つ目の信号を右に曲がってください」と答えた。\n田中さんは「来週の会議は午後2時からです。遅れないでください」と言いました。日本の首都は東京です。しかし、政治の中心は永田町です。経済の中心は日本橋や丸の内にあります。 これはペンですか？いいえ、それは鉛筆です。あれは何ですか？あれはスマートフォンです。\n富士山は3776メートルです。日本で一番高い山です。毎年たくさんの登山者が訪れます。約束手形、為替手形、小切手などは商業手形と呼ばれます。これらの取り扱いには注意が必要です。\n「例えば、このような場合どうすればいいのですか？」「まずは落ち着いて、上司に相談してください。」締切は3月25日（水）午後5時です。それ以降の提出は受け付けられません。彼は「また明日」と言って、笑顔で手を振った。そして、雨の中を走って帰っていった。'
+    1: '今日はいい天気ですね。明日から雨が降るそうです。外出するなら傘を持って行ったほうがいいでしょう。\n「すみません、駅はどちらですか？」と観光客が聞いた。私は「この道をまっすぐ行って、二つ目の信号を右に曲がってください」と答えた。\n田中さんは「来週の会議は午後2時からです。遅れないでください」と言いました。日本の首都は東京です。\nしかし、政治の中心は永田町です。経済の中心は日本橋や丸の内にあります。 これはペンですか？いいえ、それは鉛筆です。あれは何ですか？あれはスマートフォンです。\n富士山は3776メートルです。日本で一番高い山です。毎年たくさんの登山者が訪れます。約束手形、為替手形、小切手などは商業手形と呼ばれます。これらの取り扱いには注意が必要です。\n「例えば、このような場合どうすればいいのですか？」「まずは落ち着いて、上司に相談してください。」締切は3月25日（水）午後5時です。それ以降の提出は受け付けられません。彼は「また明日」と言って、笑顔で手を振った。そして、雨の中を走って帰っていった。'
 
   blingfire [ja]:
     1: '今日はいい天気ですね。'
@@ -1052,14 +1101,14 @@ Japanese SBD relies on 。 and ？ terminators, with 」 closing quotes acting a
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | 24 | 1.03 | **Flawless Output.** The absolute gold standard for Japanese. Perfectly respects quotation boundaries, keeps trailing particles intact, separates back-to-back dialog neatly. |
+| **1** | **yasbd** | 24 | 1.17 | **Flawless Output.** The absolute gold standard for Japanese. Perfectly respects quotation boundaries, keeps trailing particles intact, separates back-to-back dialog neatly. |
 | **2** | **sentencex** | 25 | 0.08 | **Blazing Fast, Sub-minor Flaw.** Gets almost everything right. Only error is a tiny over-segmentation on Sentence 4/5. |
-| **3** | **blingfire** | 26 | 0.12 | **Brittle RegEx behavior.** Blind to Japanese quotation grammar. Chops mid-quote multiple times. Fast but wrong. |
-| **4** | **pysbd** | **26** | 2.73 | **Worst of the quote-aware libraries.** Same count as blingfire but 23× slower. Splits inside quotes. |
-| **5** | **spacy-sentencizer** | 7 | 1.41 | **No CJK punctuation support.** Ignores `。` and `？` entirely. Only splits on newlines. Returns entire paragraphs as single sentences. |
-| **6** | **sentence-splitter** | 6 | 0.18 | **Splits by paragraph only.** Cannot handle CJK punctuation at all. |
-| **7** | **sentsplit** | 6 | 6.06 | **Splits by paragraph only.** Same as sentence-splitter but 34× slower. |
-| **8** | **nupunkt** | 1 | 0.01 | **Total Failure.** No support for CJK punctuation. Returns the entire text as one sentence. |
+| **3** | **blingfire** | 26 | 0.11 | **Brittle RegEx behavior.** Blind to Japanese quotation grammar. Chops mid-quote multiple times. Fast but wrong. |
+| **4** | **pysbd** | **26** | 2.94 | **Worst of the quote-aware libraries.** Same count as blingfire but 23× slower. Splits inside quotes. |
+| **5** | **spacy-sentencizer** | 7 | 1.91 | **No CJK punctuation support.** Ignores `。` and `？` entirely. Only splits on newlines. Returns entire paragraphs as single sentences. |
+| **6** | **sentence-splitter** | 6 | 0.40 | **Splits by paragraph only.** Cannot handle CJK punctuation at all. |
+| **7** | **sentsplit** | 6 | 7.60 | **Splits by paragraph only.** Same as sentence-splitter but 34× slower. |
+| **8** | **nupunkt** | 1 | 0.02 | **Total Failure.** No support for CJK punctuation. Returns the entire text as one sentence. |
 
 ### Polish
 
@@ -1104,71 +1153,64 @@ To był test. A może nie? Zobaczymy :-)
    18: 'Zobaczymy :-)'
 
   pysbd [pl]:
-    1: 'Dr.'
-    2: 'Kowalski przyjechał do Warszawy ok.'
-    3: 'godz.'
-    4: '17.30.'
-    5: 'Spotkał tam prof.'
-    6: 'Nowaka i inż.'
-    7: 'Wiśniewskiego.'
-    8: '„To już koniec?'
-    9: '” zapytał.'
-   10: '„Nie... jeszcze nie!'
-   11: '”'
-   12: 'Następnego dnia, tj.'
-   13: '15.03.2026 r.'
-   14: ', odwiedzili ul.'
-   15: 'Marszałkowską 10.'
-   16: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.'
-   17: 'Pan J. K. powiedział: „Spotkajmy się o 8.00 rano.'
-   18: '” Nikt jednak nie przyszedł.'
-   19: 'Dziwne, prawda?'
-   20: 'W raporcie napisano m.in.'
-   21: ', że:'
-   22: '- sprzedaż wzrosła o 3,7%;'
-   23: '- koszty spadły;'
-   24: '- zysk netto wyniósł 1,25 mln zł.'
-   25: '„Naprawdę?!'
-   26: '” wykrzyknęła Anna.'
-   27: '„Tak!!'
-   28: '!” odpowiedział Marek... i wyszedł.'
-   29: 'To był test.'
-   30: 'A może nie?'
-   31: 'Zobaczymy :-)'
+    1: 'Dr. Kowalski przyjechał do Warszawy ok. godz. '
+    2: '17.30. '
+    3: 'Spotkał tam prof. Nowaka i inż. '
+    4: 'Wiśniewskiego. '
+    5: '„To już koniec?'
+    6: '” zapytał. '
+    7: '„Nie... jeszcze nie!'
+    8: '”\n'
+    9: 'Następnego dnia, tj. '
+   10: '15.03.2026 r.'
+   11: ', odwiedzili ul. '
+   12: 'Marszałkowską 10. '
+   13: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.\n'
+   14: 'Pan J. K. powiedział: „Spotkajmy się o 8.00 rano.'
+   15: '” Nikt jednak nie przyszedł. '
+   16: 'Dziwne, prawda?\n\n'
+   17: 'W raporcie napisano m.in.'
+   18: ', że:\n'
+   19: '- sprzedaż wzrosła o 3,7%;\n'
+   20: '- koszty spadły;\n'
+   21: '- zysk netto wyniósł 1,25 mln zł.\n\n'
+   22: '„Naprawdę?!'
+   23: '” wykrzyknęła Anna. '
+   24: '„Tak!!'
+   25: '!” odpowiedział Marek... i wyszedł.\n'
+   26: 'To był test. '
+   27: 'A może nie? '
+   28: 'Zobaczymy :-)'
 
   sentencex [pl]:
-    1: 'Dr.'
-    2: 'Kowalski przyjechał do Warszawy ok.'
-    3: 'godz.'
-    4: '17.30.'
-    5: 'Spotkał tam prof.'
-    6: 'Nowaka i inż.'
-    7: 'Wiśniewskiego.'
-    8: '„To już koniec?'
-    9: '” zapytał.'
-   10: '„Nie...'
-   11: 'jeszcze nie!'
-   12: '”\nNastępnego dnia, tj.'
-   13: '15.03.2026 r.'
-   14: ', odwiedzili ul. Marszałkowską 10.'
-   15: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.'
-   16: 'Pan J.'
-   17: 'K.'
-   18: 'powiedział: „Spotkajmy się o 8.00 rano.'
-   19: '” Nikt jednak nie przyszedł.'
-   20: 'Dziwne, prawda?'
-   21: ''
-   22: 'W raporcie napisano m.in.'
-   23: ', że:\n- sprzedaż wzrosła o 3,7%;\n- koszty spadły;\n- zysk netto wyniósł 1,25 mln zł.'
-   24: ''
-   25: '„Naprawdę?!'
-   26: '” wykrzyknęła Anna.'
-   27: '„Tak!!!'
-   28: '” odpowiedział Marek...'
-   29: 'i wyszedł.'
-   30: 'To był test.'
-   31: 'A może nie?'
-   32: 'Zobaczymy :-)'
+    1: 'Dr. '
+    2: 'Kowalski przyjechał do Warszawy ok. '
+    3: 'godz. '
+    4: '17.30. '
+    5: 'Spotkał tam prof. Nowaka i inż. '
+    6: 'Wiśniewskiego. '
+    7: '„To już koniec?” '
+    8: 'zapytał. '
+    9: '„Nie... jeszcze nie!”\n'
+   10: 'Następnego dnia, tj. '
+   11: '15.03.2026 r., odwiedzili ul. Marszałkowską 10. '
+   12: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.\n'
+   13: 'Pan J. K. powiedział: „Spotkajmy się o 8.00 rano.” '
+   14: 'Nikt jednak nie przyszedł. '
+   15: 'Dziwne, prawda?'
+   16: '\n\n'
+   17: 'W raporcie napisano m.in., że:\n'
+   18: '- sprzedaż wzrosła o 3,7%;\n'
+   19: '- koszty spadły;\n'
+   20: '- zysk netto wyniósł 1,25 mln zł.'
+   21: '\n\n'
+   22: '„Naprawdę?!” '
+   23: 'wykrzyknęła Anna. '
+   24: '„Tak!!!” '
+   25: 'odpowiedział Marek... i wyszedł.\n'
+   26: 'To był test. '
+   27: 'A może nie? '
+   28: 'Zobaczymy :-)'
 
   nupunkt [pl]:
     1: 'Dr. Kowalski przyjechał do Warszawy ok. godz.'
@@ -1176,47 +1218,45 @@ To był test. A może nie? Zobaczymy :-)
     3: 'Spotkał tam prof. Nowaka i inż.'
     4: 'Wiśniewskiego.'
     5: '„To już koniec?” zapytał.'
-    6: '„Nie... jeszcze nie!”\nNastępnego dnia, tj.'
-    7: '15.03.2026 r., odwiedzili ul.'
-    8: 'Marszałkowską 10.'
-    9: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.'
-   10: 'Pan J. K. powiedział: „Spotkajmy się o 8.00 rano.” Nikt jednak nie przyszedł.'
-   11: 'Dziwne, prawda?'
-   12: 'W raporcie napisano m.in., że:\n- sprzedaż wzrosła o 3,7%;\n- koszty spadły;\n- zysk netto wyniósł 1,25 mln zł.'
-   13: '„Naprawdę?'
-   14: '!” wykrzyknęła Anna.'
-   15: '„Tak!!'
-   16: '!” odpowiedział Marek... i wyszedł.'
+    6: '„Nie... jeszcze nie!”'
+    7: 'Następnego dnia, tj.'
+    8: '15.03.2026 r., odwiedzili ul.'
+    9: 'Marszałkowską 10.'
+   10: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.'
+   11: 'Pan J. K. powiedział: „Spotkajmy się o 8.00 rano.”'
+   12: 'Nikt jednak nie przyszedł.'
+   13: 'Dziwne, prawda?'
+   14: 'W raporcie napisano m.in., że:\n- sprzedaż wzrosła o 3,7%;\n- koszty spadły;\n- zysk netto wyniósł 1,25 mln zł.'
+   15: '„Naprawdę?!” wykrzyknęła Anna.'
+   16: '„Tak!!!” odpowiedział Marek... i wyszedł.'
    17: 'To był test.'
    18: 'A może nie?'
    19: 'Zobaczymy :-)'
 
   sentsplit [pl]:
-    1: ''
-    2: 'Dr. Kowalski przyjechał do Warszawy ok. godz. 17.30.'
-    3: 'Spotkał tam prof.'
-    4: 'Nowaka i inż.'
-    5: 'Wiśniewskiego.'
-    6: '„To już koniec?” zapytał.'
-    7: '„Nie... jeszcze nie!”'
-    8: 'Następnego dnia, tj. 15.03.'
-    9: '2026 r., odwiedzili ul.'
-   10: 'Marszałkowską 10.'
-   11: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.'
-   12: 'Pan J. K. powiedział: „Spotkajmy się o 8.00 rano.”'
-   13: 'Nikt jednak nie przyszedł.'
-   14: 'Dziwne, prawda?'
-   15: ''
-   16: 'W raporcie napisano m.in., że:'
-   17: '- sprzedaż wzrosła o 3,7%;'
-   18: '- koszty spadły;'
-   19: '- zysk netto wyniósł 1,25 mln zł.'
-   20: ''
-   21: '„Naprawdę?!” wykrzyknęła Anna.'
-   22: '„Tak!!!” odpowiedział Marek... i wyszedł.'
-   23: 'To był test.'
-   24: 'A może nie?'
-   25: 'Zobaczymy :-)'
+    1: 'Dr. Kowalski przyjechał do Warszawy ok. godz.'
+    2: ' 17.30. Spotkał tam prof.'
+    3: ' Nowaka i inż.'
+    4: ' Wiśniewskiego.'
+    5: ' „To już koniec?” zapytał.'
+    6: ' „Nie... jeszcze nie!”\n'
+    7: 'Następnego dnia, tj. 15.03.2026 r., odwiedzili ul.'
+    8: ' Marszałkowską 10.'
+    9: ' Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.\n'
+   10: 'Pan J. K. powiedział: „Spotkajmy się o 8.00 rano.”'
+   11: ' Nikt jednak nie przyszedł.'
+   12: ' Dziwne, prawda?\n'
+   13: '\n'
+   14: 'W raporcie napisano m.in., że:\n'
+   15: '- sprzedaż wzrosła o 3,7%;\n'
+   16: '- koszty spadły;\n'
+   17: '- zysk netto wyniósł 1,25 mln zł.\n'
+   18: '\n'
+   19: '„Naprawdę?!” wykrzyknęła Anna.'
+   20: ' „Tak!!!” odpowiedział Marek... i wyszedł.\n'
+   21: 'To był test.'
+   22: ' A może nie?'
+   23: ' Zobaczymy :-)'
 
   spacy-sentencizer [pl]:
     1: 'Dr. Kowalski przyjechał do Warszawy ok.'
@@ -1225,21 +1265,21 @@ To był test. A może nie? Zobaczymy :-)
     4: 'Spotkał tam prof.'
     5: 'Nowaka i inż.'
     6: 'Wiśniewskiego. „'
-    7: 'To już koniec?"'
+    7: 'To już koniec?”'
     8: 'zapytał. „'
-    9: 'Nie... jeszcze nie!"'
+    9: 'Nie... jeszcze nie!”'
    10: '\nNastępnego dnia, tj.'
    11: '15.03.2026 r., odwiedzili ul.'
    12: 'Marszałkowską 10.'
    13: 'Firma zapłaciła 12,5 mln zł za projekt, choć pierwotnie planowano tylko 9 mln.'
-   14: '\nPan J. K. powiedział: „Spotkajmy się o 8.00 rano."'
+   14: '\nPan J. K. powiedział: „Spotkajmy się o 8.00 rano.”'
    15: 'Nikt jednak nie przyszedł.'
    16: 'Dziwne, prawda?'
    17: '\n\nW raporcie napisano m.in.,'
    18: 'że:\n- sprzedaż wzrosła o 3,7%;\n- koszty spadły;\n- zysk netto wyniósł 1,25 mln zł.'
-   19: '\n\n„Naprawdę?!"'
+   19: '\n\n„Naprawdę?!”'
    20: 'wykrzyknęła Anna. „'
-   21: 'Tak!!!"'
+   21: 'Tak!!!”'
    22: 'odpowiedział Marek... i wyszedł.'
    23: '\nTo był test.'
    24: 'A może nie?'
@@ -1247,14 +1287,14 @@ To był test. A może nie? Zobaczymy :-)
 ```
 </details>
 
-| **1** | **yasbd** | 18 | 1.90 | **Flawless.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Merges last paragraph into one clean block. |
-| **2** | **blingfire** | 17 | 0.09 | Fast but splits `inż.` from surname, fragments quotes into `„To już koniec?"` / `zapytał.` / `„Nie...` pieces. |
-| **3** | **nupunkt** | 19 | 1.33 | Splits `godz.` / `ul.` from values, fragments quotes. Fast but over-aggressive. |
-| **4** | **pysbd** | 28 | 4.22 | **Shatters text.** Splits at every period: `Dr.`, `godz.`, `prof.`, `inż.`, `tj.`, `ul.`, `m.in.` Also fragments quotes. |
-| **5** | **sentsplit** | 23 | 7.83 | Splits `prof.` / `inż.` from surnames, `tj.` dates. 4× slower than yasbd. |
-| **6** | **sentence-splitter** | 22 | 1.83 | Splits `prof.` / `inż.` from surnames, `tj.` / `ul.` from values. Empty strings from newlines. |
-| **7** | **spacy-sentencizer** | 25 | 2.49 | **Shreds everything.** Splits on `Dr.`, `godz.`, `prof.`, `inż.`, `ul.`, `tj.`, `r.`, `m.in.`. Fragments `„` quotes into separate pieces. |
-| **8** | **sentencex** | 28 | 0.04 | **Worst accuracy.** Same fragmentation as pysbd plus splits ellipsis and initial `J. K.`. |
+| **1** | **yasbd** | 18 | 2.51 | **Flawless.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Merges last paragraph into one clean block. |
+| **2** | **blingfire** | 17 | 0.08 | Fast but splits `inż.` from surname and `ul.` from street; merges the report list into one line. |
+| **3** | **nupunkt** | 19 | 0.68 | Splits `godz.`/`tj.`/`ul.` from values; quotes intact. Fast but over-aggressive. |
+| **4** | **pysbd** | 28 | 4.93 | **Shatters text.** Splits at every period: `Dr.`, `godz.`, `prof.`, `inż.`, `tj.`, `ul.`, `m.in.` Also fragments quotes. |
+| **5** | **sentsplit** | 23 | 9.16 | Splits `prof.` / `inż.` from surnames, `tj.` dates. 4× slower than yasbd. |
+| **6** | **sentence-splitter** | 22 | 1.89 | Splits `prof.` / `inż.` from surnames, `tj.` / `ul.` from values. Empty strings from newlines. |
+| **7** | **spacy-sentencizer** | 25 | 2.77 | **Shreds everything.** Splits on `Dr.`, `godz.`, `prof.`, `inż.`, `ul.`, `tj.`, `r.`, `m.in.`. Fragments `„` quotes into separate pieces. |
+| **8** | **sentencex** | 28 | 0.04 | **Worst accuracy.** Same fragmentation as pysbd plus splits initial `J. K.`. |
 
 </details>
 
@@ -1296,7 +1336,7 @@ La conferencia sobre la historia de América, incl. los eventos ocurridos en el 
    12: 'La conferencia sobre la historia de América, incl. '
    13: 'los eventos ocurridos en el s. '
    14: 'XIX, fue retransmitida en línea. '
-   15: 'El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte. '
+   15: 'El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte.'
 
   sentencex [es]:
     1: 'El informe, p. ej., fue revisado por el Dr. Gómez antes de su publicación oficial.\n'
@@ -1307,7 +1347,7 @@ La conferencia sobre la historia de América, incl. los eventos ocurridos en el 
     6: 'Internacional de Comercio. '
     7: 'El documento indicaba "confidencial", es decir, solo podía ser leído por el personal autorizado.\n'
     8: 'La conferencia sobre la historia de América, incl. los eventos ocurridos en el s. XIX, fue retransmitida en línea. '
-    9: 'El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte. '
+    9: 'El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte.'
 
   sentsplit [es]:
     1: 'El informe, p. ej., fue revisado por el Dr. Gómez antes de su publicación oficial.\n'
@@ -1318,7 +1358,7 @@ La conferencia sobre la historia de América, incl. los eventos ocurridos en el 
     6: ' Internacional de Comercio.'
     7: ' El documento indicaba "confidencial", es decir, solo podía ser leído por el personal autorizado.\n'
     8: 'La conferencia sobre la historia de América, incl. los eventos ocurridos en el s. XIX, fue retransmitida en línea.'
-    9: ' El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte. '
+    9: ' El técnico añadió una nota: «La act. del sistema debe realizarse manualmente» antes de cerrar el reporte.'
 
   nupunkt [es]:
     1: 'El informe, p. ej., fue revisado por el Dr. Gómez antes de su publicación oficial.'
@@ -1371,14 +1411,14 @@ La conferencia sobre la historia de América, incl. los eventos ocurridos en el 
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **6** | 1.50 | **Top scorer.** All abbreviations and guillemets preserved intact. |
-| **2** | **nupunkt** | 7 | 0.83 | **Almost perfect.** Handles all abbreviations correctly but splits inside the guillemet quote: `«La act.` + `del sistema...»`. One extra sentence. |
-| **3** | **sentencex** | 9 | 0.02 | **Splits `Cía.` and `Asoc.`** Trailing `\n` and whitespace. |
-| **4** | **blingfire** | 9 | 0.07 | **Splits `Srta.`, `Lic.`, `Asoc.`, `s.`** before the next word. |
-| **5** | **sentsplit** | 9 | 7.10 | **Correct count but sloppy.** Leading whitespace, same split points as sentencex. |
-| **6** | **sentence-splitter** | 10 | 1.77 | **Splits `Srta.` and `Lic.`** into separate fragments. Same `Cía.`/`Asoc.` issue. |
-| **7** | **spacy-sentencizer** | 13 | 1.94 | **No abbreviation awareness.** Splits `p. ej.`, `Srta.`, `Lic.`, `Cía.`, `Asoc.`, `incl.`, `s.`, `«La act.`. Fragments guillemet quotes. |
-| **8** | **pysbd** | **15** | 3.94 | **Shreds `p. ej.`** into `p.` + `ej.`, plus splits `Cía.`, `Asoc.`, `s.` |
+| **1** | **yasbd** | **6** | 2.58 | **Top scorer.** All abbreviations and guillemets preserved intact. |
+| **2** | **nupunkt** | 7 | 0.35 | **Almost perfect.** Handles all abbreviations correctly but splits inside the guillemet quote: `«La act.` + `del sistema...»`. One extra sentence. |
+| **3** | **sentencex** | 9 | 0.27 | **Splits `Cía.` and `Asoc.`** Trailing `\n` and whitespace. |
+| **4** | **blingfire** | 9 | 0.29 | **Splits `Srta.`, `Lic.`, `Asoc.`, `s.`** before the next word. |
+| **5** | **sentsplit** | 9 | 13.95 | **Correct count but sloppy.** Leading whitespace, same split points as sentencex. |
+| **6** | **sentence-splitter** | 10 | 1.83 | **Splits `Srta.` and `Lic.`** into separate fragments. Same `Cía.`/`Asoc.` issue. |
+| **7** | **spacy-sentencizer** | 13 | 3.90 | **No abbreviation awareness.** Splits `p. ej.`, `Srta.`, `Lic.`, `Cía.`, `Asoc.`, `incl.`, `s.`, `«La act.`. Fragments guillemet quotes. |
+| **8** | **pysbd** | **15** | 10.03 | **Shreds `p. ej.`** into `p.` + `ej.`, plus splits `Cía.`, `Asoc.`, `s.` |
 
 ### Greek
 
@@ -1419,52 +1459,49 @@ Greek uses `;` as a question mark (ερωτηματικό) and `·` (άνω τε
 
   pysbd [el]:
     1: 'Ο Νίκος ξύπνησε στις 7:30 π.'
-    2: 'μ.'
-    3: 'και κοίταξε το κινητό του.'
-    4: 'Είχε τρία αναπάντητα μηνύματα από τη Μαρία.'
-    5: '«Θα έρθεις σήμερα;'
-    6: '» τον ρώτησε.'
-    7: 'Εκείνος δίστασε... Ήταν κουρασμένος, αλλά δεν ήθελε να ακυρώσει.'
-    8: 'Στις 10:15 π.'
-    9: 'μ.'
-   10: 'συναντήθηκαν στο κέντρο της πόλης.'
-   11: 'Ο κ.'
-   12: 'Παπαδόπουλος τους χαιρέτησε και είπε: «Μην αργήσετε στη συνάντηση των 11:00».'
-   13: 'Όλοι γέλασαν.'
-   14: 'Γιατί;'
-   15: 'Κανείς δεν ήξερε ακριβώς!'
-   16: 'Η θερμοκρασία ήταν 32,5 βαθμοί Κελσίου.'
-   17: "Παρ' όλα αυτά, η Ελένη αποφάσισε να περπατήσει περίπου 2,5 χλμ."
-   18: 'μέχρι το μουσείο.'
-   19: '«Καλή ιδέα;'
-   20: '» αναρωτήθηκε.'
-   21: 'Ίσως.'
-   22: 'Ίσως όχι.'
-   23: 'Το βράδυ κατέγραψε στο ημερολόγιό της: «Σήμερα ήταν παράξενη μέρα. Κουραστική. Όμορφη. Αξέχαστη.» Και μετά αποκοιμήθηκε.'
+    2: 'μ. '
+    3: 'και κοίταξε το κινητό του. '
+    4: 'Είχε τρία αναπάντητα μηνύματα από τη Μαρία. '
+    5: '«Θα έρθεις σήμερα;» τον ρώτησε. '
+    6: 'Εκείνος δίστασε... Ήταν κουρασμένος, αλλά δεν ήθελε να ακυρώσει.\n\n'
+    7: 'Στις 10:15 π.'
+    8: 'μ. '
+    9: 'συναντήθηκαν στο κέντρο της πόλης. '
+   10: 'Ο κ. '
+   11: 'Παπαδόπουλος τους χαιρέτησε και είπε: «Μην αργήσετε στη συνάντηση των 11:00». '
+   12: 'Όλοι γέλασαν. '
+   13: 'Γιατί; Κανείς δεν ήξερε ακριβώς!\n\n'
+   14: 'Η θερμοκρασία ήταν 32,5 βαθμοί Κελσίου. '
+   15: "Παρ' όλα αυτά, η Ελένη αποφάσισε να περπατήσει περίπου 2,5 χλμ. "
+   16: 'μέχρι το μουσείο. '
+   17: '«Καλή ιδέα;» αναρωτήθηκε. '
+   18: 'Ίσως. '
+   19: 'Ίσως όχι.\n\n'
+   20: 'Το βράδυ κατέγραψε στο ημερολόγιό της: «Σήμερα ήταν παράξενη μέρα. Κουραστική. Όμορφη. Αξέχαστη.» Και μετά αποκοιμήθηκε.'
 
   sentencex [el]:
-    1: 'Ο Νίκος ξύπνησε στις 7:30 π.μ. και κοίταξε το κινητό του.'
-    2: 'Είχε τρία αναπάντητα μηνύματα από τη Μαρία.'
-    3: '«Θα έρθεις σήμερα;»'
-    4: 'τον ρώτησε.'
-    5: 'Εκείνος δίστασε...'
+    1: 'Ο Νίκος ξύπνησε στις 7:30 π.μ. και κοίταξε το κινητό του. '
+    2: 'Είχε τρία αναπάντητα μηνύματα από τη Μαρία. '
+    3: '«Θα έρθεις σήμερα;» '
+    4: 'τον ρώτησε. '
+    5: 'Εκείνος δίστασε... '
     6: 'Ήταν κουρασμένος, αλλά δεν ήθελε να ακυρώσει.'
-    7: ''
-    8: 'Στις 10:15 π.μ. συναντήθηκαν στο κέντρο της πόλης.'
-    9: 'Ο κ. Παπαδόπουλος τους χαιρέτησε και είπε: «Μην αργήσετε στη συνάντηση των 11:00».'
-   10: 'Όλοι γέλασαν.'
-   11: 'Γιατί;'
+    7: '\n\n'
+    8: 'Στις 10:15 π.μ. συναντήθηκαν στο κέντρο της πόλης. '
+    9: 'Ο κ. Παπαδόπουλος τους χαιρέτησε και είπε: «Μην αργήσετε στη συνάντηση των 11:00». '
+   10: 'Όλοι γέλασαν. '
+   11: 'Γιατί; '
    12: 'Κανείς δεν ήξερε ακριβώς!'
-   13: ''
-   14: 'Η θερμοκρασία ήταν 32,5 βαθμοί Κελσίου.'
-   15: "Παρ' όλα αυτά, η Ελένη αποφάσισε να περπατήσει περίπου 2,5 χλμ."
-   16: 'μέχρι το μουσείο.'
-   17: '«Καλή ιδέα;»'
-   18: 'αναρωτήθηκε.'
-   19: 'Ίσως.'
+   13: '\n\n'
+   14: 'Η θερμοκρασία ήταν 32,5 βαθμοί Κελσίου. '
+   15: "Παρ' όλα αυτά, η Ελένη αποφάσισε να περπατήσει περίπου 2,5 χλμ. "
+   16: 'μέχρι το μουσείο. '
+   17: '«Καλή ιδέα;» '
+   18: 'αναρωτήθηκε. '
+   19: 'Ίσως. '
    20: 'Ίσως όχι.'
-   21: ''
-   22: 'Το βράδυ κατέγραψε στο ημερολόγιό της: «Σήμερα ήταν παράξενη μέρα. Κουραστική. Όμορφη. Αξέχαστη.»'
+   21: '\n\n'
+   22: 'Το βράδυ κατέγραψε στο ημερολόγιό της: «Σήμερα ήταν παράξενη μέρα. Κουραστική. Όμορφη. Αξέχαστη.» '
    23: 'Και μετά αποκοιμήθηκε.'
 
   nupunkt [el]:
@@ -1488,7 +1525,8 @@ Greek uses `;` as a question mark (ερωτηματικό) and `·` (άνω τε
    18: 'Το βράδυ κατέγραψε στο ημερολόγιό της: «Σήμερα ήταν παράξενη μέρα.'
    19: 'Κουραστική.'
    20: 'Όμορφη.'
-   21: 'Αξέχαστη.» Και μετά αποκοιμήθηκε.'
+   21: 'Αξέχαστη.»'
+   22: 'Και μετά αποκοιμήθηκε.'
 
   spacy-sentencizer [el]:
     1: 'Ο Νίκος ξύπνησε στις 7:30 π.μ.'
@@ -1518,14 +1556,14 @@ Greek uses `;` as a question mark (ερωτηματικό) and `·` (άνω τε
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **17** | 2.30 | **Gold standard.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Single-word sentences split correctly. |
+| **1** | **yasbd** | **17** | 2.59 | **Gold standard.** All abbreviations, quotes, ellipsis, and decimal commas preserved. Single-word sentences split correctly. |
 | **2** | **blingfire** | 20 | 0.10 | Handles most abbreviations but splits `Ο κ.` and fragments quoted blocks. |
-| **3** | **pysbd** | 20 | 3.22 | **Splits `π.μ.`** into `π.` + `μ.`, fragments `«...»` quotes, splits `κ.` |
-| **4** | **sentsplit** | 20 | 10.90 | Preserves abbreviations but fragments quoted blocks and produces empty strings. |
-| **5** | **nupunkt** | 21 | 1.41 | Splits `π.μ.` and `χλμ.`, fragments quoted block at end. |
-| **6** | **spacy-sentencizer** | 22 | 0.46 | **Splits `π.μ.`**, `«...»` quotes, and `Ο κ.`. Fragments all quoted segments. |
+| **3** | **pysbd** | 20 | 3.43 | **Splits `π.μ.`** into `π.` + `μ.`, splits `κ.` Quotes intact. |
+| **4** | **sentsplit** | 20 | 11.88 | Preserves abbreviations but fragments quoted blocks and produces empty strings. |
+| **5** | **nupunkt** | 22 | 0.22 | Splits `π.μ.` and `χλμ.`, fragments quoted block at end. |
+| **6** | **spacy-sentencizer** | 22 | 0.45 | **Splits `π.μ.`**, `«...»` quotes, and `Ο κ.`. Fragments all quoted segments. |
 | **7** | **sentencex** | 23 | 0.05 | **Phantom empty sentences.** Splits quotes from attribution verbs, splits `χλμ.` |
-| **8** | **sentence-splitter** | 23 | 3.28 | Splits `Ο κ.`, fragments quotes, produces empty strings. |
+| **8** | **sentence-splitter** | 23 | 1.98 | Splits `Ο κ.`, fragments quotes, produces empty strings. |
 
 
 ---
@@ -1583,26 +1621,25 @@ The meeting is at 2 p.m. Mwen pral vini.
     4: 'Kisa ou ap fè? '
     5: 'Mwen ap li yon liv.\n'
     6: 'Gade fig. 2 pou rezilta yo. '
-    7: 'Li nan p. '
-    8: '55 nan liv la. '
-    9: 'Li empòtan.\n'
-   10: 'Li te fèt nan mwa janv. '
-   11: 'Li te vini an fevriye. '
-   12: 'St. '
-   13: 'Michel se yon kote bèl. '
-   14: 'Li toupre vil la.\n'
-   15: 'Li te di (Mwen prale demen.) pandan l ap pale. '
-   16: 'Li te mande: Èske ou vini? '
-   17: 'Mwen repon wi.\n'
-   18: '"Sa a se bèl." li di. '
-   19: 'M pa konnen ki sa l ap pale de. '
-   20: 'Kilè l ap sispann?\n'
-   21: 'Pwojè a te prèske fini... men nou jwenn yon pwoblèm. '
-   22: 'Jan te rele byen fò.\n'
-   23: 'Mwen renmen Python. '
-   24: 'It is useful for data science. '
-   25: 'The meeting is at 2 p.m. '
-   26: 'Mwen pral vini.'
+    7: 'Li nan p. 55 nan liv la. '
+    8: 'Li empòtan.\n'
+    9: 'Li te fèt nan mwa janv. '
+   10: 'Li te vini an fevriye. '
+   11: 'St. '
+   12: 'Michel se yon kote bèl.\n'
+   13: 'Li toupre vil la. '
+   14: 'Li te di (Mwen prale demen.) pandan l ap pale.\n'
+   15: 'Li te mande: Èske ou vini? '
+   16: 'Mwen repon wi. '
+   17: '"Sa a se bèl." li di.\n'
+   18: 'M pa konnen ki sa l ap pale de. '
+   19: 'Kilè l ap sispann?\n'
+   20: 'Pwojè a te prèske fini... men nou jwenn yon pwoblèm. '
+   21: 'Jan te rele byen fò.\n'
+   22: 'Mwen renmen Python. '
+   23: 'It is useful for data science.\n'
+   24: 'The meeting is at 2 p.m. '
+   25: 'Mwen pral vini.'
 
   pysbd [ht]:
     1: 'Alo mond. '
@@ -1723,19 +1760,17 @@ The meeting is at 2 p.m. Mwen pral vini.
     8: 'Li te fèt nan mwa janv.'
     9: 'Li te vini an fevriye.'
    10: 'St. Michel se yon kote bèl.'
-   11: 'Li toupre vil la.\nLi te di (Mwen prale demen.)'
-   12: 'pandan l ap pale.'
-   13: 'Li te mande: Èske ou vini?'
-   14: 'Mwen repon wi.'
-   15: '"Sa a se bèl."'
-   16: 'li di.'
-   17: 'M pa konnen ki sa l ap pale de.'
-   18: 'Kilè l ap sispann?'
-   19: 'Pwojè a te prèske fini... men nou jwenn yon pwoblèm.'
-   20: 'Jan te rele byen fò.'
-   21: 'Mwen renmen Python.'
-   22: 'It is useful for data science.'
-   23: 'The meeting is at 2 p.m. Mwen pral vini.'
+   11: 'Li toupre vil la. Li te di (Mwen prale demen.) pandan l ap pale.'
+   12: 'Li te mande: Èske ou vini?'
+   13: 'Mwen repon wi.'
+   14: '"Sa a se bèl." li di.'
+   15: 'M pa konnen ki sa l ap pale de.'
+   16: 'Kilè l ap sispann?'
+   17: 'Pwojè a te prèske fini... men nou jwenn yon pwoblèm.'
+   18: 'Jan te rele byen fò.'
+   19: 'Mwen renmen Python.'
+   20: 'It is useful for data science.'
+   21: 'The meeting is at 2 p.m. Mwen pral vini.'
 
   blingfire [ht]:
     1: 'Alo mond.'
@@ -1768,29 +1803,14 @@ The meeting is at 2 p.m. Mwen pral vini.
 
 | Rank | Library | N sents | Warm Time (ms) | The Verdict |
 | --- | --- | --- | --- | --- |
-| **1** | **yasbd** | **24** | 2.38 | **Cleanest output.** All abbreviations preserved. Parenthesized sentence kept intact. Ellipsis preserved. |
-| **2** | **pysbd** | 24 | 4.28 | **Good accuracy.** Handles abbreviations well but trailing `\n` on some sentences. |
-| **3** | **nupunkt** | 23 | 1.66 | **Merged two sentences.** `Li nan p. 55 nan liv la. Li empòtan.` merged into one. Split `"Sa a se bèl."` from `li di.`, breaking the quote attribution. |
-| **4** | **sentsplit** | 25 | 7.09 | **Splits `fig.`** into `Gade fig.` + `2 pou rezilta yo.` Leading whitespace on most sentences. |
-| **5** | **blingfire** | 25 | 0.08 | **Splits `St.`** into `St.` + `Michel se...`. Also splits `"Sa a se bèl."` from `li di.` |
-| **6** | **sentence-splitter** | 25 | 2.05 | **Splits `p.`** into `Li nan p.` + `55 nan liv la.`. Otherwise clean. |
-| **7** | **spacy-sentencizer** | 26 | 1.84 | **Splits `fig.`, `p.`**, `(Mwen prale demen.)`, `"Sa a se bèl."`, and `p.m.`. Fragments quotes from attribution. |
-| **8** | **sentencex** | 25 | 0.03 | **Splits `p.`** into `Li nan p.` + `55 nan liv la.`. Splits `St.` too. Trailing `\n` fragments everywhere. |
-
----
-
-### Additional accuracy test
-
-  - [Amharic — yasbd vs pysbd vs sentencex vs nupunkt](https://github.com/speedyk-005/yasbd-lib/pull/91#issue-4653240174)
-  - [Arabic — yasbd vs pysbd vs sentencex](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4634485157)
-  - [Chinese — yasbd vs pysbd vs sentencex vs sentsplit](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4637433142)
-  - [Hindi — yasbd vs pysbd vs sentencex vs nupunkt vs indicnlp](https://github.com/speedyk-005/yasbd-lib/pull/109#issue-4719976898)
-  - [Portuguese — yasbd vs pysbd vs sentencex](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4639723570)
-  - [Russian — yasbd vs razdel](https://github.com/speedyk-005/yasbd-lib/issues/30#issuecomment-4632783363)
-  - [Thai — yasbd vs Sentencex vs nupunkt vs PyThaiNLP](https://github.com/speedyk-005/yasbd-lib/pull/100#issue-4676465427)
-  - [Vietnamese — yasbd vs sentencex vs nupunkt](https://github.com/speedyk-005/yasbd-lib/pull/131#issue-4779574782)
-  - [Indonesian — yasbd vs sentencex vs nupunkt](https://github.com/speedyk-005/yasbd-lib/pull/137#issue-4788758204)
-  - [Kazakh — yasbd vs sentencex vs nupunkt vs pysbd](https://github.com/speedyk-005/yasbd-lib/pull/171#issue-4895200602)
+| **1** | **yasbd** | **24** | 1.56 | **Cleanest output.** All abbreviations preserved. Parenthesized sentence kept intact. Ellipsis preserved. |
+| **2** | **pysbd** | 24 | 5.62 | **Good accuracy.** Handles abbreviations well but trailing `\n` on some sentences. |
+| **3** | **nupunkt** | 21 | 0.28 | **Merges aggressively.** Joins `p. 55`+`empòtan`, `toupre`+parenthetical, and final `p.m.`+`Mwen`; quotes intact. |
+| **4** | **sentsplit** | 25 | 13.55 | **Splits `fig.`** into `Gade fig.` + `2 pou rezilta yo.` Leading whitespace on most sentences. |
+| **5** | **blingfire** | 25 | 0.09 | **Splits `St.`** into `St.` + `Michel se...`. Also splits `"Sa a se bèl."` from `li di.` |
+| **6** | **sentence-splitter** | 25 | 2.83 | **Splits `p.`** into `Li nan p.` + `55 nan liv la.`. Otherwise clean. |
+| **7** | **spacy-sentencizer** | 26 | 2.25 | **Splits `fig.`, `p.`**, `(Mwen prale demen.)`, `"Sa a se bèl."`, and `p.m.`. Fragments quotes from attribution. |
+| **8** | **sentencex** | 25 | 0.04 | **Splits `St.`** into `St.` + `Michel...`. Trailing `\n` fragments. |
 
 ## Conclusion
 

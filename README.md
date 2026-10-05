@@ -187,11 +187,11 @@ Tested against 7 competitors (pysbd, sentencex, sentsplit, nupunkt, blingfire, s
 
 **TL;DR:** yasbd ranked #1 in accuracy across almost every test, while staying competitive on speed as pure Python. blingfire is faster but brittle. pysbd and sentencex shred French abbreviations.
 
-On our [golden benchmark](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks#en-golden-benchmark) (92 English edge cases — expanded from pysbd's original 48 with fixes and additions): yasbd scores **98.9%**, pysbd **83.7%**, spaCy-sentencizer **55.4%**, etc. Against same boundary-level metrics, yasbd leads in **Precision 100.0%** / **Recall 99.3%** / **F1 99.7%**, with pysbd next at F1 **93.8%**.
+On our [golden benchmark](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks#en-golden-benchmark) (102 English edge cases, expanded from pysbd's original 48 with fixes and additions): yasbd scores **99.0%**, pysbd **82.4%**, spaCy-sentencizer **52.0%**, etc. Against same boundary-level metrics, yasbd leads in **Precision 100.0%** / **Recall 99.4%** / **F1 99.7%**, with pysbd next at F1 **92.9%**.
 
 Full results, terminal output, boundary-level (Precision/Recall/F1) metrics, and a performance graph can be found in **[benchmarks/](https://github.com/speedyk-005/yasbd-lib/tree/main/benchmarks)**
 
-**SPOILER**: Yasbd aced 'em all in accuracy while offering balanced speed. On _Adventures of Sherlock Holmes_ (594k chars), yasbd is ~9.5× faster than pysbd (1.8s vs 16.6s warm) with far fewer false splits.
+**SPOILER**: Yasbd aced 'em all in accuracy while offering balanced speed. On _Adventures of Sherlock Holmes_ (594k chars), yasbd is ~10.8× faster than pysbd (1.5s vs 15.7s warm) with far fewer false splits.
 
 <img src="https://raw.githubusercontent.com/speedyk-005/yasbd-lib/main/benchmarks/bench.png" alt="SBD Benchmark Performance" width="800"/>
 
