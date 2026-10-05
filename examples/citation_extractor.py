@@ -90,14 +90,21 @@ class Doc:
 
 if __name__ == "__main__":
     paper = (
+        "Sentence segmentation is a solved problem for clean newswire text. "
+        "The real difficulty starts with noisy, real-world documents full of "
+        "abbreviations, lists, and quoted speech. "
         "As Smith et al. (2021, pp. 128-129) noted: "
         '"The implications of this discovery are far-reaching '
         '(see also Jones & Lee, 2019; cf. Brown, 2018)." '
         "However, critics disagree (Miller, 2020). "
+        "Most rule-based systems handle the easy cases and fail quietly on "
+        "the rest, which makes evaluation difficult. "
         "The proof is shown in eq. (7) and ex. IV. "
         "Further details appear on p. 55 of the supplement. "
+        "We reran every baseline twice to rule out setup errors. "
         "No citations here, just background. "
-        "Earlier work [2004] already hinted at this result."
+        "Earlier work [2004] already hinted at this result, "
+        "but nobody followed up at the time."
     )
     doc = Doc(paper, meta={"page": 2})
     print(f"text: {doc.text[:40]}... (meta {doc.meta})")
