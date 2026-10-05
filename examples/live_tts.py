@@ -1,6 +1,8 @@
 """
 Generates and plays Edge TTS audio sentence-by-sentence with parallel generation.
 
+It can be paired with examples/incremental_segmentation.py to directly produce sentences.
+
 Prerequisites:
     pip install miniaudio, edge_tts, aiofiles
 """
@@ -8,6 +10,7 @@ Prerequisites:
 import asyncio
 import tempfile
 import time
+from collections.abc import Iterable
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -81,15 +84,18 @@ class LiveTTS:
 
         device.close()
 
-    def play_live(self, text: str) -> None:
+    def play_live(self, text_or_gen: str | Iterable[str]) -> None:
         """
         Generate and play text live (sentence-by-sentence).
 
         Args:
-            text: Raw text to synthesize and play
+            text_or_gen: Raw or Iterable of text to synthesize and play
         """
-        splitter = BoundaryDetector(lang=self.voice.split("-")[0])
-        chunks = splitter.segment(text)
+        if isinstance(text_or_gen, str):
+            splitter = BoundaryDetector(lang=self.voice.split("-")[0])
+            chunks = splitter.segment(text_or_gen)
+        else:
+            chunks = text_or_gen
 
         with ThreadPoolExecutor(max_workers=self.n_jobs) as executor:
             for audio_file in executor.map(self._generate_tts_sync, chunks):
@@ -102,14 +108,14 @@ class LiveTTS:
 if __name__ == "__main__":
     import textwrap
 
-    text = textwrap.dedent("""
-        Got it. I updated my memory:
-        PLASMA is no longer an active project for you.
-        Ruff is your preferred Python tooling instead of Black, Pylint, and Flake8.
-        You mainly use PocketPal and MNN Chat for AI/local model usage.
-        Layla AI Lite is no longer considered one of your main tools.
-        I'll use these preferences going forward.
-    """)
+    text = [
+        "Got it. I updated my memory:",
+        "PLASMA is no longer an active project for you.",
+        "Ruff is your preferred Python tooling instead of Black, Pylint, and Flake8.",
+        "You mainly use PocketPal and MNN Chat for AI/local model usage.",
+        "Layla AI Lite is no longer considered one of your main tools.",
+        "I'll use these preferences going forward.",
+    ]
 
     client = LiveTTS(voice="en-US-AriaNeural", n_jobs=3)
     print(text)
