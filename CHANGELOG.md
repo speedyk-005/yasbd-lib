@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Manual input validation replaces beartype** ([#371](https://github.com/speedyk-005/yasbd-lib/pull/371)): Dropped the `beartype` dependency. Argument checks now go through a small `validate_inputs` helper (shallow `isinstance` pairs with caller-named errors). Same behavior, negligible overhead (~1.5µs per call).
 
+### Fixed
+
+- **Expanded org proper nouns** ([#373](https://github.com/speedyk-005/yasbd-lib/pull/373)): Extended the English org-noun set (now `DEMOGRAPHIC_AND_ORG_NOUNS`, with `ORG_PROPER_NOUNS` kept as alias) with military branches, legislative and judicial institutions, mints and services, plus vital-events terms, so geopolitical abbreviations stay glued to a wider range of organization names.
+
 ## [1.0.2] - 2026-10-05
 
 ### Changed

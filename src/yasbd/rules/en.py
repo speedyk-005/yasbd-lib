@@ -60,21 +60,27 @@ class EnRules(Rules):
     }
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | STREET_ABBRVS
 
-    ORG_PROPER_NOUNS = {
-        # Military institutions
-        "Army", "Navy", "Air Force", "Pentagon",
+    # Compatibility alias
+    ORG_PROPER_NOUNS = DEMOGRAPHIC_AND_ORG_NOUNS = {
+        # Vital Events (Categorical/Dataset terms)
+        "Birth", "Death", "Marriage", "Divorce",
 
-        # Political / legislative institutions
-        "Cabinet", "Commons", "Congress",
-        "House of Representatives", "Parliament", "Senate",
-        "Supreme Court",
+        # Military institutions & branches
+        "Army", "Navy", "Air Force", "Marine", "Space Force",
+        "Coast Guard", "Cyber Command", "Pentagon",
 
-        # Government bodies and agencies
-        "Administration", "Agency", "Authority", "Board",
-        "Bureau", "Commission", "Committee", "Consulate",
-        "Council", "Customs", "Department", "Embassy",
-        "Government", "Institute", "Office", "Persons",
-        "Service",
+        # Political, legislative & judicial institutions
+        "Cabinet", "Commons", "Congress", "Constitution", "House",
+        "Parliament", "Senate", "Supreme Court", "Reports", "Code",
+
+        # Specific government bodies, mints, & services
+        "Census", "Customs", "Mint", "Postal Service", "Treasury",
+
+        # Generic government bodies and agencies
+        "Government", "Persons", "Department", "Agency",
+        "Embassy", "Consulate", "Administration", "Commission",
+        "Authority", "Bureau", "Office", "Service", "Committee",
+        "Board", "Council", "Institute",
     }
 
     DATE_WORDS = {
@@ -101,7 +107,7 @@ class EnRules(Rules):
             # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
             re.compile(rf"""
                 \b(?i:{cls.DOTTED_GEOPOL_ABBRVS_PATTERN})\.
-                (?=\s+(?:{build_optimized_pattern(cls.ORG_PROPER_NOUNS)}))
+                (?=\s+(?:{build_optimized_pattern(cls.DEMOGRAPHIC_AND_ORG_NOUNS)}))
                 """, re.X
             ),
 
