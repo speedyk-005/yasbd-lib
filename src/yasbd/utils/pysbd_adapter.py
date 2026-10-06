@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 from yasbd import BoundaryDetector
 from yasbd.utils.cleaner import StreamCleaner
-from yasbd.utils.input_validator import validate_input
+from yasbd.utils.input_validator import validate_inputs
 
 
 class TextSpan:
@@ -36,7 +36,6 @@ class TextSpan:
 
 
 class Segmenter:
-    @validate_input
     def __init__(
         self,
         language: str = "en",  # Match pysbd default
@@ -79,6 +78,7 @@ class Segmenter:
 
     @language.setter
     def language(self, value: str):
+        validate_inputs([(value, (str,))])
         self._detector.lang = value
         self.language_module.ISO_CODE = value
 
@@ -122,12 +122,13 @@ class Segmenter:
         sents = list(self._detector.segment(text, preserve_whitespace=True))
         return self._convert_leading_space_to_trails(sents)
 
-    @validate_input
     def sentences_with_char_spans(self, sentences: list[str]) -> list[TextSpan]:
         """Map sentences to their char offsets using cumulative lengths.
 
         Pysbd compatibility method
         """
+        validate_inputs([(sentences, (list,))])
+
         pos = 0
         result = []
         for sent in sentences:
@@ -135,7 +136,6 @@ class Segmenter:
             pos += len(sent)
         return result
 
-    @validate_input
     def segment(self, text: str) -> list[str | TextSpan]:
         """Segments *text* into sentences.
 
@@ -146,6 +146,8 @@ class Segmenter:
             A list of sentences (strings) by default, or a list of TextSpan
             objects if ``char_span`` was set to ``True``.
         """
+        validate_inputs([(text, (str,))])
+
         # Pysbd stored the original text in object
         # Keep a preview for compatibility for libs depending on it
         self.original_text = f"{text[:500]}..." if len(text) > 500 else text

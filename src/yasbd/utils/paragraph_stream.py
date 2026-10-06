@@ -2,7 +2,6 @@ from collections.abc import Iterator
 from io import StringIO, TextIOBase
 
 from yasbd.utils.cleaner_stub import StreamCleanerStub
-from yasbd.utils.input_validator import validate_input
 
 
 class ParagraphStream:
@@ -21,7 +20,6 @@ class ParagraphStream:
         ['Hello\\n', 'World']
     """
 
-    @validate_input
     def __init__(
         self,
         source: str | TextIOBase | StreamCleanerStub,
