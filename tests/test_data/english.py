@@ -44,6 +44,7 @@ TEST_DATA = [
     "I live in the E.U.| How about you?",
     "He serves in the U.S. Army.",
     "The U.S. government passed a new law.",
+    "The U.S. Births data was just released.",
 
     # structural headings (fix for #36)
     "Chapter 1. The Beginning.| It was dark and quiet in the room. | Nothing moved.",

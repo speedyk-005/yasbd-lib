@@ -60,7 +60,11 @@ class EnRules(Rules):
     }
     INLINE_ONLY_ABBRVS = Rules.INLINE_ONLY_ABBRVS | STREET_ABBRVS
 
-    ORG_PROPER_NOUNS = {
+    # Compatibility alias
+    ORG_PROPER_NOUNS = DEMOGRAPHIC_AND_ORG_NOUNS = {
+        # Vital Events (Categorical/Dataset terms)
+        "Birth", "Death", "Marriage", "Divorce",
+
         # Military institutions
         "Army", "Navy", "Air Force", "Pentagon",
 
@@ -70,11 +74,10 @@ class EnRules(Rules):
         "Supreme Court",
 
         # Government bodies and agencies
-        "Administration", "Agency", "Authority", "Board",
-        "Bureau", "Commission", "Committee", "Consulate",
-        "Council", "Customs", "Department", "Embassy",
-        "Government", "Institute", "Office", "Persons",
-        "Service",
+        "Government", "Department", "Agency", "Customs",
+        "Embassy", "Consulate", "Administration", "Commission",
+        "Authority", "Bureau", "Office", "Service", "Committee",
+        "Board", "Council", "Institute",
     }
 
     DATE_WORDS = {
@@ -101,7 +104,7 @@ class EnRules(Rules):
             # Geopolitical abbrv is followed by a common org noun (e.g., U.S.A Army)
             re.compile(rf"""
                 \b(?i:{cls.DOTTED_GEOPOL_ABBRVS_PATTERN})\.
-                (?=\s+(?:{build_optimized_pattern(cls.ORG_PROPER_NOUNS)}))
+                (?=\s+(?:{build_optimized_pattern(cls.DEMOGRAPHIC_AND_ORG_NOUNS)}))
                 """, re.X
             ),
 
