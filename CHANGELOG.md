@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),  
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **Manual input validation replaces beartype** ([#371](https://github.com/speedyk-005/yasbd-lib/pull/371)): Dropped the `beartype` dependency. Argument checks now go through a small `validate_inputs` helper (shallow `isinstance` pairs with caller-named errors). Same behavior, negligible overhead (~1.5µs per call).
+
 ## [1.0.2] - 2026-10-05
 
 ### Changed
