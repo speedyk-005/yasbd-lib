@@ -31,6 +31,19 @@ def chunk_text(text: str, lang: str, max_sentences: int, overlap_percent: int | 
         A list of chunk strings. Each chunk is its sentences joined back
         together without added separators, so the original surrounding
         whitespace is preserved as-is.
+
+    Examples:
+        Integer and fractional percentages both produce whole-sentence overlap:
+
+        >>> text = "Alpha. Beta. Gamma. Delta."
+        >>> chunk_text(text, "en", max_sentences=2, overlap_percent=50)
+        ['Alpha. Beta.', ' Beta. Gamma.', ' Gamma. Delta.']
+        >>> chunk_text(text, "en", max_sentences=2, overlap_percent=50.5)
+        ['Alpha. Beta.', ' Beta. Gamma.', ' Gamma. Delta.']
+        >>> chunk_text(text, "en", max_sentences=2, overlap_percent=0.5)
+        ['Alpha. Beta.', ' Gamma. Delta.']
+        >>> chunk_text("", "en", max_sentences=2, overlap_percent=50.5)
+        []
     """
     if not text:
         return []
@@ -39,7 +52,7 @@ def chunk_text(text: str, lang: str, max_sentences: int, overlap_percent: int | 
     sentences = list(_detector.segment(text, preserve_whitespace=True))
 
     # Each sentence is a unit so we can apply a fixed size windows with overlap
-    overlap_num = (max_sentences * overlap_percent) // 100
+    overlap_num = int((max_sentences * overlap_percent) // 100)
     stride = max(1, max_sentences - overlap_num)
 
     chunks = [sentences[:max_sentences]]  # First chunk from start

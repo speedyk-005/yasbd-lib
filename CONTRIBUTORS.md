@@ -27,6 +27,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@MasRama](https://github.com/MasRama)** | Double boundary for `.\n` fix |
 | **[@Mayankshrey438](https://github.com/Mayankshrey438)** | Armenian language support & flattened list heuristic |
 | **[@MohammedAnasNathani](https://github.com/MohammedAnasNathani)** | Documentation for built-in language freeze |
+| **[@moneymaker26754-crypto](https://github.com/moneymaker26754-crypto)** | Fractional overlap fix and doctests for the RAG text chunking example |
 | **[@Nagulanvelu](https://github.com/Nagulanvelu)** | Lithuanian number-first section markers fix |
 | **[@NataliaPerez08](https://github.com/NataliaPerez08)** | Deduplicate offsets before sorting in `BoundaryDetector._run_hook()` to keep boundaries unique |
 | **[@nightcityblade](https://github.com/nightcityblade)** | Inline example abbreviation fixes for Hindi, Lithuanian, Malayalam, and Russian |
