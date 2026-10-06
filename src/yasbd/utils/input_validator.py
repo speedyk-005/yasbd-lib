@@ -1,5 +1,5 @@
-import inspect
 import reprlib
+import sys
 
 from yasbd.exceptions import InvalidInputError
 
@@ -37,7 +37,7 @@ def validate_inputs(items: list[tuple[object, tuple[type, ...]]]) -> None:
         ...
         yasbd.exceptions.InvalidInputError: ...
     """
-    title = inspect.currentframe().f_back.f_code.co_name
+    title = sys._getframe(1).f_code.co_name  # noqa: SLF001
 
     errors = []
     for ind, (value, allowed) in enumerate(items, start=1):
