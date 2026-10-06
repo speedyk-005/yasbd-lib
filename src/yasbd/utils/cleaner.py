@@ -8,7 +8,7 @@ import regex as re2  # For complex patterns
 
 from yasbd.exceptions import CleanStepError, InvalidInputError
 from yasbd.utils.cleaner_stub import StreamCleanerStub
-from yasbd.utils.input_validator import validate_input
+from yasbd.utils.input_validator import validate_inputs
 from yasbd.utils.logger import log_info
 from yasbd.utils.paragraph_stream import ParagraphStream
 from yasbd.utils.trie import build_optimized_pattern
@@ -193,7 +193,6 @@ class StreamCleaner(StreamCleanerStub):
         Details: division by zero
     """
 
-    @validate_input
     def __init__(
         self,
         source: str | TextIOBase,
@@ -217,8 +216,18 @@ class StreamCleaner(StreamCleanerStub):
                 Each function must accept and return ``str``.
             verbose: Enable verbose logging.
         """
+        validate_inputs(
+            [
+                (source, (str, TextIOBase)),
+                (steps_to_skip, (list, tuple, set, frozenset, type(None))),
+                (extra_steps, (list, tuple, set, frozenset, type(None))),
+                (verbose, (bool,)),
+            ],
+        )
+
         if isinstance(source, (str, TextIOBase)):
             source = ParagraphStream(source, skip_empty_lines=True)
+
         self._source = iter(source)
         self.steps_to_skip = set(steps_to_skip or ())
         self.verbose = verbose

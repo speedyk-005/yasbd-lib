@@ -1,7 +1,7 @@
 from importlib.metadata import PackageNotFoundError, version
 
 from yasbd.exceptions import InvalidInputError
-from yasbd.utils.input_validator import validate_input
+from yasbd.utils.input_validator import validate_inputs
 
 try:  # pragma
     langcodes_ver = version("langcodes")
@@ -21,7 +21,6 @@ except PackageNotFoundError:  # pragma: no cover
     ) from None
 
 
-@validate_input
 def normalize_lang(lang_code: str) -> str:
     """Normalize a language tag to an ISO-639-1 language code.
 
@@ -63,6 +62,9 @@ def normalize_lang(lang_code: str) -> str:
         InvalidInputError: If the tag cannot be parsed or does not resolve to a
             two-letter ISO-639-1 language code.
     """
+    if not isinstance(lang_code, str):
+        validate_inputs([(lang_code, (str,))])
+
     if not lang_code.strip():
         return ""
 

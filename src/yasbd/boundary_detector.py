@@ -7,7 +7,7 @@ from typing import TypedDict
 from yasbd.exceptions import HookError, InvalidInputError
 from yasbd.rules import get_supported_langs, load_external_lang_packs, load_rule
 from yasbd.utils.cleaner_stub import StreamCleanerStub
-from yasbd.utils.input_validator import validate_input
+from yasbd.utils.input_validator import validate_inputs
 from yasbd.utils.language_classifier import classify_language
 from yasbd.utils.logger import log_info
 from yasbd.utils.paragraph_stream import ParagraphStream
@@ -44,7 +44,6 @@ _MAX_CACHED_RULES = 5
 
 
 class BoundaryDetector:
-    @validate_input
     def __init__(
         self,
         lang: str | None = None,
@@ -74,6 +73,16 @@ class BoundaryDetector:
                 in-place mutation is recommended.
             verbose: Enable verbose logging.
         """
+        validate_inputs(
+            [
+                (lang, (str, type(None))),
+                (external_lang_packs, (list, type(None))),
+                (preserve_quote_and_paren, (bool,)),
+                (hook, (Callable, type(None))),
+                (verbose, (bool,)),
+            ],
+        )
+
         self.preserve_quote_and_paren = preserve_quote_and_paren
         self.verbose = verbose
         self.hook = hook
@@ -214,7 +223,6 @@ class BoundaryDetector:
                 boundaries = self._run_hook(para, boundaries, index)
             yield from pairwise(boundaries)
 
-    @validate_input
     def detect(
         self,
         source: str | TextIOBase | StreamCleanerStub,
@@ -239,6 +247,9 @@ class BoundaryDetector:
         Yields:
             Integer boundary offsets or ``ParagraphEOF`` sentinels.
         """
+        validate_inputs(
+            [(source, (str, TextIOBase, StreamCleanerStub)), (relative, (bool,))],
+        )
         log_info(
             self.verbose,
             "Called with type={}, relative={}",
@@ -280,7 +291,6 @@ class BoundaryDetector:
             if not relative:
                 offset += len(para)
 
-    @validate_input
     def segment(
         self,
         source: str | TextIOBase | StreamCleanerStub,
@@ -298,6 +308,9 @@ class BoundaryDetector:
         Yields:
             Individual sentences as strings.
         """
+        validate_inputs(
+            [(source, (str, TextIOBase, StreamCleanerStub)), (preserve_whitespace, (bool,))],
+        )
         log_info(self.verbose, "Called with preserve_whitespace={}", preserve_whitespace)
 
         para_iter = (
