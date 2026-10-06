@@ -65,16 +65,19 @@ class EnRules(Rules):
         # Vital Events (Categorical/Dataset terms)
         "Birth", "Death", "Marriage", "Divorce",
 
-        # Military institutions
-        "Army", "Navy", "Air Force", "Pentagon",
+        # Military institutions & branches
+        "Army", "Navy", "Air Force", "Marine", "Space Force",
+        "Coast Guard", "Cyber Command", "Pentagon",
 
-        # Political / legislative institutions
-        "Cabinet", "Commons", "Congress",
-        "House of Representatives", "Parliament", "Senate",
-        "Supreme Court",
+        # Political, legislative & judicial institutions
+        "Cabinet", "Commons", "Congress", "Constitution", "House",
+        "Parliament", "Senate", "Supreme Court", "Reports", "Code",
 
-        # Government bodies and agencies
-        "Government", "Department", "Agency", "Customs",
+        # Specific government bodies, mints, & services
+        "Census", "Customs", "Mint", "Postal Service", "Treasury",
+
+        # Generic government bodies and agencies
+        "Government", "Persons", "Department", "Agency",
         "Embassy", "Consulate", "Administration", "Commission",
         "Authority", "Bureau", "Office", "Service", "Committee",
         "Board", "Council", "Institute",
