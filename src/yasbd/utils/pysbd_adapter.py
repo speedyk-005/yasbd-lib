@@ -78,7 +78,7 @@ class Segmenter:
 
     @language.setter
     def language(self, value: str):
-        validate_inputs([(language, (str,))])
+        validate_inputs([(value, (str,))])
         self._detector.lang = value
         self.language_module.ISO_CODE = value
 

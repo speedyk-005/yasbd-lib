@@ -4,7 +4,9 @@ import sys
 from yasbd.exceptions import InvalidInputError
 
 
-def _format_err_msg(ind: int, value: object, expecting_list: list[str]) -> str:
+def _format_err_msg(
+    ind: int, value: object, expecting_list: list[str]
+) -> str:  # pragma: no cover
     """Format one validation failure entry with truncated input display."""
     if len(expecting_list) == 1:
         expecting = expecting_list[0]
