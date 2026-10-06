@@ -62,8 +62,7 @@ def normalize_lang(lang_code: str) -> str:
         InvalidInputError: If the tag cannot be parsed or does not resolve to a
             two-letter ISO-639-1 language code.
     """
-    if not isinstance(lang_code, str):
-        validate_inputs([(lang_code, (str,))])
+    validate_inputs([(lang_code, (str,))])
 
     if not lang_code.strip():
         return ""
