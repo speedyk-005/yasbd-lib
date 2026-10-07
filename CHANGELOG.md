@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Dotted versus abbreviation** ([#377](https://github.com/speedyk-005/yasbd-lib/pull/377)): Keep `v.s.` within comparisons such as `Decoder-only v.s. Encoder-only` instead of splitting at the abbreviation.
 - **Expanded org proper nouns** ([#373](https://github.com/speedyk-005/yasbd-lib/pull/373)): Extended the English org-noun set (now `DEMOGRAPHIC_AND_ORG_NOUNS`, with `ORG_PROPER_NOUNS` kept as alias) with military branches, legislative and judicial institutions, mints and services, plus vital-events terms, so geopolitical abbreviations stay glued to a wider range of organization names.
 
 ## [1.0.2] - 2026-10-05

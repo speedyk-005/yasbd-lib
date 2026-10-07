@@ -121,7 +121,7 @@ class Rules:
     INLINE_ONLY_ABBRVS = {
         # Bridge/connectors
         "a.k.a", "ca", "cf", "e.g", "eg", "i.c", "i.e", "i.q",
-        "ibid", "ie", "sc", "v", "viz", "vs", "w.r.t",
+        "ibid", "ie", "sc", "v", "v.s", "viz", "vs", "w.r.t",
 
         # Notes & postscript markers
         "n.b", "p.s", "p.p.s", "sci", "scill", "s.vloc",

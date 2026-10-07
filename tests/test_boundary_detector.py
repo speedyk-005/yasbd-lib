@@ -240,6 +240,8 @@ def test_rule_cache_lru(en_detector):
         # Scientific dotted abbreviations (fix for #357)
         "The model estimates the c.d.f. F.| The results are discussed w.r.t. V-TSMixer.",
 
+        "Decoder-only v.s. Encoder-only.| Next sentence.",
+
         # reference abbrv + roman-numeral-like next word splits correctly (fix for #362)
         "I don't know why he mentioned that ref.| It was clearly fake.",
     ],
