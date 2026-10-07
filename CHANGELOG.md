@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- **Sentence-aligned subtitles** ([#379](https://github.com/speedyk-005/yasbd-lib/pull/379)): Add a runnable SRT example that joins sentences across subtitle cues while retaining their source time ranges.
+
 ### Changed
 
 - **Manual input validation replaces beartype** ([#371](https://github.com/speedyk-005/yasbd-lib/pull/371)): Dropped the `beartype` dependency. Argument checks now go through a small `validate_inputs` helper (shallow `isinstance` pairs with caller-named errors). Same behavior, negligible overhead (~1.5µs per call).

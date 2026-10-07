@@ -38,6 +38,33 @@ to proceed.
 """
 
 
+def _flatten_cues(source: str) -> tuple[str, list[tuple[int, int, srt.Subtitle]]]:
+    """Join normalized cue text and retain each cue's character range."""
+    pieces = []
+    ranges = []
+    offset = 0
+    for cue in srt.parse(source):
+        content = " ".join(cue.content.split())
+        if not content:
+            continue
+        pieces.append(content)
+        ranges.append((offset, offset + len(content), cue))
+        offset += len(content) + 1
+    return " ".join(pieces), ranges
+
+
+def _covering_cues(
+    ranges: list[tuple[int, int, srt.Subtitle]], cursor: int, left: int, right: int
+) -> tuple[list[srt.Subtitle], int]:
+    """Find covering cues, retaining the final cue for a shared next sentence."""
+    while ranges[cursor][1] <= left:
+        cursor += 1
+    last = cursor
+    while last + 1 < len(ranges) and ranges[last + 1][0] < right:
+        last += 1
+    return [item[2] for item in ranges[cursor : last + 1]], last
+
+
 def sentence_cues(source: str, lang: str = "en") -> list[srt.Subtitle]:
     """Return sentence-sized cues with the time envelope of their source cues.
 
@@ -55,21 +82,10 @@ def sentence_cues(source: str, lang: str = "en") -> list[srt.Subtitle]:
     >>> sentence_cues("")
     []
     """
-    pieces = []
-    ranges = []
-    offset = 0
-    for cue in srt.parse(source):
-        content = " ".join(cue.content.split())
-        if not content:
-            continue
-        pieces.append(content)
-        ranges.append((offset, offset + len(content), cue))
-        offset += len(content) + 1
-
+    text, ranges = _flatten_cues(source)
     if not ranges:
         return []
 
-    text = " ".join(pieces)
     detector = BoundaryDetector(lang=lang)
     result = []
     cursor = 0
@@ -80,12 +96,7 @@ def sentence_cues(source: str, lang: str = "en") -> list[srt.Subtitle]:
         if left >= right:
             continue
 
-        while ranges[cursor][1] <= left:
-            cursor += 1
-        last = cursor
-        while last + 1 < len(ranges) and ranges[last + 1][0] < right:
-            last += 1
-        covered = [item[2] for item in ranges[cursor : last + 1]]
+        covered, cursor = _covering_cues(ranges, cursor, left, right)
         result.append(
             srt.Subtitle(
                 index=len(result) + 1,
@@ -94,7 +105,6 @@ def sentence_cues(source: str, lang: str = "en") -> list[srt.Subtitle]:
                 content=text[left:right],
             )
         )
-        cursor = last
 
     return result
 
