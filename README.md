@@ -624,13 +624,15 @@ Want to build a lang pack? Start with the [language template](https://github.com
 
 ## <a name="integrations-and-ecosystem"></a><img src="https://raw.githubusercontent.com/speedyk-005/yasbd-lib/main/assets/header_icons/header_icon_5.gif" width="5%"> Integrations & Ecosystem
 
-See [**INTEGRATIONS.md**](INTEGRATIONS.md) for the full list.
+See [**INTEGRATIONS.md**](https://github.com/speedyk-005/yasbd-lib/blob/main/INTEGRATIONS.md) for the full list.
+
+The list only shows projects we've stumbled across. If yasbd does real work in yours, put it on the list so others can find it [#374](https://github.com/speedyk-005/yasbd-lib/issues/374).
 
 ---
 
 ## <a name="contributors"></a><img src="https://raw.githubusercontent.com/speedyk-005/yasbd-lib/main/assets/header_icons/header_icon_6.png" alt="Handshake" width="4%" /> Contributors
 
-See [**CONTRIBUTORS.md**](CONTRIBUTORS.md) for the full list.
+See [**CONTRIBUTORS.md**](https://github.com/speedyk-005/yasbd-lib/blob/main/CONTRIBUTORS.md) for the full list.
 
 Interested in contributing? See the [**Contributing Guide**](https://github.com/speedyk-005/yasbd-lib/blob/main/CONTRIBUTING.md) to get started!
 
