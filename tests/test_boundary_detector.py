@@ -58,6 +58,14 @@ def test_segment_different_input(en_detector):
     assert result_stream == ["Hello world.", "How are you?", "I'm fine."]
 
 
+@pytest.mark.parametrize("abbreviation", ["vs.", "v.s.", "V.S."])
+@pytest.mark.parametrize("suffix", ["", ". Next sentence."])
+def test_segment_versus_abbreviation(en_detector, abbreviation, suffix):
+    comparison = f"Decoder-only {abbreviation} Encoder-only"
+    expected = [comparison] if not suffix else [f"{comparison}.", "Next sentence."]
+    assert list(en_detector.segment(comparison + suffix)) == expected
+
+
 @pytest.mark.parametrize("lang,test_data", ALL_TEST_DATA.items())
 def test_segment_multiple_langs(subtests, lang, test_data):
     """test that each language's test data passes."""
