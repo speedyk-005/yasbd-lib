@@ -334,7 +334,7 @@ class Rules:
             )
         ]
 
-        # https://regex101.com/r/EGkRU8/7
+        # https://regex101.com/r/EGkRU8/8
         _quotative_pattern = build_optimized_pattern(
             cls.POST_QUOTATIVE_PARTICLES | cls.REPORTING_WORDS
         )
@@ -342,10 +342,10 @@ class Rules:
             rf"""
             (?<=
                 {cls.TERMINATORS_PATTERN}   # A terminator
-                (?:``?|''|'\s|"|\s*[»‘”“\p{{Pf}}\p{{Pe}}])       # Closing quotes/parens
+                (?:``?|''|'\s|"|\s*[»‘”“\p{{Pf}}\p{{Pe}}]){{1,2}}       # Closing quotes/parens
             )
             (?!  # NOT followed by any continuation markers, punctuation, or space+lowercase
-                \s*[\p{{Po}}\p{{Ll}}\p{{Pe}}]|
+                \s*[\p{{Po}}\p{{Ll}}\p{{Pe}}\p{{Ps}}]|
                 \s*(?:{_quotative_pattern})
             )
             """,

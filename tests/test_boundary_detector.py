@@ -242,6 +242,12 @@ def test_rule_cache_lru(en_detector):
 
         "Decoder-only v.s. Encoder-only.| Next sentence.",
 
+        # Adjacent parentheticals and nested closing delimiters (fix for #375)
+        "Anomaly Transformer (A.T.) (Xu et al., 2022), MEMTO (Song et al., 2024).| Next sentence.",
+        'He wrote, ("Really?")| I answered "Are you serious?".',
+        'He wrote, ("Really?") then answered "Yes.".',
+        'He wrote, ("Really?") (I answered later.)| Next sentence.',
+
         # reference abbrv + roman-numeral-like next word splits correctly (fix for #362)
         "I don't know why he mentioned that ref.| It was clearly fake.",
     ],
