@@ -150,6 +150,7 @@ All public interface controls must be documented using Google-style docstrings. 
 
 A few rules keep the review queue running smoothly:
 
+- **Limit submission velocity:** A maximum of **5 pull requests per contributor per day** is allowed to prevent review queue exhaustion.
 - Keep no more than two pull requests open at once. If you are at the limit, merge one before opening the next. A pile of unmerged branches only gums up the queue and drags out reviews.
 - A PR that has been reviewed and then sits unfixed for weeks may be closed or superseded. Review comments are a request for action, not a suggestion. If you cannot get back to it promptly, say so, and we will decide whether to close it or hand it to someone else.
 - If multiple pull requests address the same issue, we evaluate them based on code quality and test coverage. If the implementations are structurally identical, we merge the earliest submission.
