@@ -58,6 +58,75 @@ def test_segment_different_input(en_detector):
     assert result_stream == ["Hello world.", "How are you?", "I'm fine."]
 
 
+@pytest.mark.parametrize("source_type", [str, io.StringIO])
+@pytest.mark.parametrize("options", [{}, {"detect_horiz_lists": True}, {"detect_horiz_lists": False}])
+@pytest.mark.parametrize(
+    "lang,text,sentences",
+    [
+        (
+            "en", "Items: 1. apples 2. bananas",
+            (["Items:", "1. apples", "2. bananas"], ["Items: 1. apples 2. bananas"]),
+        ),
+        (
+            "en", "1. apples 2. bananas",
+            (["1. apples", "2. bananas"], ["1. apples 2. bananas"]),
+        ),
+        (
+            "en", "Choose: a. apples b. bananas",
+            (["Choose:", "a. apples", "b. bananas"], ["Choose: a. apples b. bananas"]),
+        ),
+        (
+            "ru", "Докладчики: д. т. н. Иванов, д. м. н. Петров выступили вместе.",
+            (
+                ["Докладчики:", "д. т. н. Иванов,", "д. м. н. Петров выступили вместе."],
+                ["Докладчики: д. т. н. Иванов, д. м. н. Петров выступили вместе."],
+            ),
+        ),
+        (
+            "en", "12. The first item.\n13. The second item.",
+            (["12. The first item.", "13. The second item."], ["12. The first item.", "13. The second item."]),
+        ),
+        (
+            "en", "Hello world. Goodbye world.",
+            (["Hello world.", "Goodbye world."], ["Hello world.", "Goodbye world."]),
+        ),
+    ],
+)
+def test_horizontal_list_option(source_type, options, lang, text, sentences):
+    """The option controls flattened lists without changing vertical or ordinary text."""
+    detector = BoundaryDetector(lang=lang, **options)
+    list_sentences, plain_sentences = sentences
+    expected = list_sentences if options.get("detect_horiz_lists", True) else plain_sentences
+    assert list(detector.segment(source_type(text))) == expected
+
+    offsets = list(detector.detect(source_type(text)))
+    starts = [0, *offsets[:-1]]
+    assert [text[start:end].strip() for start, end in zip(starts, offsets, strict=True)] == expected
+
+
+@pytest.mark.parametrize("invalid_option", [None, 0, 1, "false"])
+def test_horizontal_list_option_validation(invalid_option):
+    with pytest.raises(InvalidInputError, match="bool"):
+        BoundaryDetector(lang="en", detect_horiz_lists=invalid_option)
+
+
+def test_horizontal_list_option_cached_rules(monkeypatch):
+    """Changing language or one detector's setting does not affect another detector."""
+    text = "Items: 1. apples 2. bananas"
+    detector = BoundaryDetector(lang="en", detect_horiz_lists=False)
+    default_detector = BoundaryDetector(lang="en")
+    monkeypatch.setattr("yasbd.boundary_detector.classify_language", lambda _text: ("en", 1.0))
+    for lang in ["en", "fr", "auto", "en"]:
+        detector.lang = lang
+        assert list(detector.segment(text)) == [text]
+        assert list(default_detector.segment(text)) == ["Items:", "1. apples", "2. bananas"]
+
+    detector.detect_horiz_lists = True
+    assert list(detector.segment(text)) == ["Items:", "1. apples", "2. bananas"]
+    detector.detect_horiz_lists = False
+    assert list(detector.segment(text)) == [text]
+
+
 @pytest.mark.parametrize("lang,test_data", ALL_TEST_DATA.items())
 def test_segment_multiple_langs(subtests, lang, test_data):
     """test that each language's test data passes."""

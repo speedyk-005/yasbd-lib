@@ -137,11 +137,11 @@ class BoundaryDetector()
 #### \_\_init\_\_
 
 ```python
-@validate_input
 def __init__(lang: str | None = None,
              *,
              external_lang_packs: list[str] | None = None,
              preserve_quote_and_paren: bool = True,
+             detect_horiz_lists: bool = True,
              hook: Callable[[HookContext], None] | None = None,
              verbose: bool = False)
 ```
@@ -159,6 +159,9 @@ Initialize the boundary detector.
   and stored in a private registry that only this detector uses.
 - `preserve_quote_and_paren` - Do not split on terminators inside
   quoted or parenthesised text.
+- `detect_horiz_lists` - Detect flattened horizontal lists. Disable
+  when abbreviation-heavy text resembles list markers.
+  Vertical-list detection remains enabled.
 - `hook` - Optional per-paragraph post-processing callback. Receives
   a dict with ``text``, ``lang``, ``boundaries`` and
   ``paragraph_index`` keys; mutate ``boundaries`` in place to
@@ -524,7 +527,10 @@ place; do not touch any other engine state.
 #### apply
 
 ```python
-def apply(text: str, preserve_quote_and_paren: bool) -> list[int]
+def apply(text: str,
+          preserve_quote_and_paren: bool,
+          *,
+          detect_horiz_lists: bool = True) -> list[int]
 ```
 
 Detect sentence boundaries in *text*.
@@ -539,6 +545,8 @@ quote/paren spans, list markers).
 - `text` - A string to find sentence boundaries in.
 - `preserve_quote_and_paren` - If ``True``, suppress boundaries
   inside quote and parenthesis spans.
+- `detect_horiz_lists` - If ``True``, detect flattened horizontal
+  lists. Vertical-list detection is always enabled.
   
 
 **Returns**:

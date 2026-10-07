@@ -38,7 +38,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@sanmaxdev](https://github.com/sanmaxdev)** | Language tag normalization helper |
 | **[@sonalisrisivani](https://github.com/sonalisrisivani)** | Unicode newline-inside-sentence detection fix |
 | **[@speedyk-005](https://github.com/speedyk-005)** | Maintainer & Creator |
-| **[@sricharanreddycheruku](https://github.com/sricharanreddycheruku)** | Abbreviation (v.s.) and adjacent parenthetical fixes; subtitle sentence alignment and deduplication examples |
+| **[@sricharanreddycheruku](https://github.com/sricharanreddycheruku)** | Abbreviation (v.s.) and adjacent parenthetical fixes; subtitle sentence alignment and deduplication examples; configurable horizontal-list detection |
 | **[@terminalchai](https://github.com/terminalchai)** | Burmese and Thai reporting words fix |
 | **[@unfinished-summer](https://github.com/unfinished-summer)** | Chinese keyword sentence extraction example; Windows uv lock fix |
 | **[@XEDAB](https://github.com/XEDAB)** | Replaced manual adjacent boundary iteration with `itertools.pairwise` |

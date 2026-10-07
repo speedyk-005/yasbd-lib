@@ -383,9 +383,13 @@ class Rules:
             for m in self.TOC_LEADER_FINDER.finditer(text):
                 sentence_boundaries.difference_update(range(*m.span()))
 
-    def _adjust_list_boundaries(self, sentence_boundaries: set[int], text: str) -> None:
+    def _adjust_list_boundaries(
+        self, sentence_boundaries: set[int], text: str, *, detect_horiz_lists: bool = True
+    ) -> None:
         """Remove and re-align boundaries around list markers."""
-        horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(text))
+        horiz_matches = (
+            list(self.HORIZONTAL_LIST_FINDER.finditer(text)) if detect_horiz_lists else []
+        )
 
         # Quick contextual heuristic
         is_flattened_list = (
@@ -431,6 +435,8 @@ class Rules:
         self,
         text: str,
         preserve_quote_and_paren: bool,
+        *,
+        detect_horiz_lists: bool = True,
     ) -> list[int]:
         """Detect sentence boundaries in *text*.
 
@@ -443,6 +449,8 @@ class Rules:
             text: A string to find sentence boundaries in.
             preserve_quote_and_paren: If ``True``, suppress boundaries
                inside quote and parenthesis spans.
+            detect_horiz_lists: If ``True``, detect flattened horizontal
+                lists. Vertical-list detection is always enabled.
 
         Returns:
             Sorted list of character offsets at which sentences end.
@@ -456,7 +464,9 @@ class Rules:
         }
 
         # -- Remove false alarms --
-        self._adjust_list_boundaries(sentence_boundaries, text)
+        self._adjust_list_boundaries(
+            sentence_boundaries, text, detect_horiz_lists=detect_horiz_lists
+        )
         sentence_boundaries.difference_update(
             m.end() for pat in self.MID_SENTENCE_FINDER_LST
             for m in pat.finditer(text)

@@ -96,14 +96,20 @@ def test_returns_empty_dict_for_empty_input():
     assert registry == {}
 
 
-def test_boundary_detector_with_external_lang_packs():
+@pytest.mark.parametrize("detect_horiz_lists", [True, False])
+def test_boundary_detector_with_external_lang_packs(detect_horiz_lists):
     """Test that BoundaryDetector loads external packs via external_lang_packs param."""
 
     class FakeRules(Rules):
         pass
 
     _make_fake_lang_pack("_test_lang_pack_bd", profiles=[FakeRules])
-    detector = BoundaryDetector(lang="fake", external_lang_packs=["_test_lang_pack_bd"])
+    detector = BoundaryDetector(
+        lang="fake", external_lang_packs=["_test_lang_pack_bd"], detect_horiz_lists=detect_horiz_lists
+    )
     assert detector.lang == "fake"
     rule = detector._get_rule("fake")
     assert isinstance(rule, FakeRules), "BoundaryDetector did not load external pack"
+    text = "Items: 1. apples 2. bananas"
+    expected = ["Items:", "1. apples", "2. bananas"] if detect_horiz_lists else [text]
+    assert list(detector.segment(text)) == expected

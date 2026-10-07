@@ -44,12 +44,13 @@ _MAX_CACHED_RULES = 5
 
 
 class BoundaryDetector:
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         lang: str | None = None,
         *,
         external_lang_packs: list[str] | None = None,
         preserve_quote_and_paren: bool = True,
+        detect_horiz_lists: bool = True,
         hook: Callable[[HookContext], None] | None = None,
         verbose: bool = False,
     ):
@@ -65,6 +66,9 @@ class BoundaryDetector:
                 and stored in a private registry that only this detector uses.
             preserve_quote_and_paren: Do not split on terminators inside
                 quoted or parenthesised text.
+            detect_horiz_lists: Detect flattened horizontal lists. Disable
+                when abbreviation-heavy text resembles list markers.
+                Vertical-list detection remains enabled.
             hook: Optional per-paragraph post-processing callback. Receives
                 a dict with ``text``, ``lang``, ``boundaries`` and
                 ``paragraph_index`` keys; mutate ``boundaries`` in place to
@@ -78,12 +82,14 @@ class BoundaryDetector:
                 (lang, (str, type(None))),
                 (external_lang_packs, (list, type(None))),
                 (preserve_quote_and_paren, (bool,)),
+                (detect_horiz_lists, (bool,)),
                 (hook, (Callable, type(None))),
                 (verbose, (bool,)),
             ],
         )
 
         self.preserve_quote_and_paren = preserve_quote_and_paren
+        self.detect_horiz_lists = detect_horiz_lists
         self.verbose = verbose
         self.hook = hook
         self._rule_cache: OrderedDict[str, object] = OrderedDict()
@@ -219,7 +225,11 @@ class BoundaryDetector:
             if not para or para.isspace():
                 boundaries = [0, len(para)]
             else:
-                boundaries = rule.apply(para, self.preserve_quote_and_paren)
+                boundaries = rule.apply(
+                    para,
+                    self.preserve_quote_and_paren,
+                    detect_horiz_lists=self.detect_horiz_lists,
+                )
                 boundaries = self._run_hook(para, boundaries, index)
             yield from pairwise(boundaries)
 
@@ -282,7 +292,11 @@ class BoundaryDetector:
             is_first_para = False
 
             stripped = para.rstrip()
-            boundaries = rule.apply(stripped, self.preserve_quote_and_paren)
+            boundaries = rule.apply(
+                stripped,
+                self.preserve_quote_and_paren,
+                detect_horiz_lists=self.detect_horiz_lists,
+            )
             boundaries = self._run_hook(stripped, boundaries, index)
 
             for pos in boundaries[1:]:

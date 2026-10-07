@@ -263,6 +263,10 @@ detector = BoundaryDetector(
     # [https://en.wikipedia.org/wiki/Block_quotation](https://en.wikipedia.org/wiki/Block_quotation)
     preserve_quote_and_paren=True,
 
+    # Detect flattened horizontal lists. Defaults to `True`.
+    # Set to `False` when abbreviation-heavy text resembles list markers.
+    detect_horiz_lists=True,
+
     # hook: Optional per-paragraph post-processing callback.
     # Receives a dict with ``text``, ``lang``, ``boundaries`` and``paragraph_index`` keys;
     # mutate ``boundaries`` in place to add or remove sentence boundaries.
@@ -275,6 +279,9 @@ detector = BoundaryDetector(
 ```
 
 If you want to know more about Lang Packs check the [Lang packs](#-lang-packs) section.
+
+Set `detect_horiz_lists=False` to disable horizontal-list detection in both
+`segment()` and `detect()`. Vertical-list handling remains enabled.
 
 > [!TIP]
 > **Language tag normalization:**
