@@ -16,7 +16,7 @@
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 ![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=flat&logo=reddit&logoColor=white)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/speedyk-005/yasbd-lib)
+[![DeepWiki](https://raw.githubusercontent.com/speedyk-005/yasbd-lib/main/assets/deepwiki_badge.svg)](https://deepwiki.com/speedyk-005/yasbd-lib)
 
 > If you like this project, a star ⭐️ would mean a lot :)
 
