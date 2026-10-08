@@ -347,6 +347,21 @@ print(res)
 # [25, 48, ParagraphEOF, 27]
 ```
 
+Need `(start, end)` spans instead of bare offsets? Fair enough! Pair each boundary with the previous one, starting from 0:
+
+```python
+from itertools import chain, pairwise
+
+text = "Hello world. How are you? I am fine."
+offsets = list(detector.detect(text))  # [12, 25, 36]
+
+for start, end in pairwise(chain((0,), offsets)):
+    print((start, end), repr(text[start:end].strip()))
+# (0, 12) 'Hello world.'
+# (12, 25) 'How are you?'
+# (25, 36) 'I am fine.'
+```
+
 #### Segmentation
 
 If you do not want to manage boundary offsets yourself (and who would?), [`segment()`](https://github.com/speedyk-005/yasbd-lib/blob/main/API_REFERENCES.md#yasbd.boundary_detector.BoundaryDetector.segment) slices text for you.
