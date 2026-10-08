@@ -1,3 +1,4 @@
+# ruff: noqa: E501, W291, W293 - demo text block keeps long lines and spacing intact
 """Extract quoted speech with its author from English text.
 
 Segments a text with yasbd (which keeps quoted testimony intact instead
@@ -13,11 +14,54 @@ from yasbd import BoundaryDetector
 
 _detector = BoundaryDetector(lang="en")
 
-_VERBS = (
-    r"said|says|say|noted|notes|added|replied|asked|shouted|"
-    r"whispered|explained|continued|agreed|announced|told|recalled|"
-    r"pondered|saying|thought|declared"
-)
+# Base reporting verbs; inflected forms are generated below.
+_BASE_VERBS = [
+    "say",
+    "reply",
+    "note",
+    "add",
+    "ask",
+    "shout",
+    "whisper",
+    "explain",
+    "continue",
+    "agree",
+    "announce",
+    "tell",
+    "recall",
+    "ponder",
+    "think",
+    "declare",
+]
+
+_IRREGULAR = {
+    "say": ("said", "says"),
+    "tell": ("told", "tells"),
+    "think": ("thought", "thinks"),
+}
+
+
+def _verb_variants(verb: str) -> tuple[str, str, str]:
+    """Return ``(past, present-3rd-singular, "would + base")`` for *verb*.
+
+    Examples:
+        >>> _verb_variants("say")
+        ('said', 'says', 'would say')
+        >>> _verb_variants("reply")
+        ('replied', 'replies', 'would reply')
+    """
+    if verb in _IRREGULAR:
+        past, third = _IRREGULAR[verb]
+    elif verb.endswith("y") and verb[-2] not in "aeiou":
+        past, third = verb[:-1] + "ied", verb[:-1] + "ies"
+    elif verb.endswith("e"):
+        past, third = verb + "d", verb + "s"
+    else:
+        past, third = verb + "ed", verb + "s"
+    return past, third, f"would {verb}"
+
+
+_VERBS = "|".join(form for base in _BASE_VERBS for form in dict.fromkeys(_verb_variants(base)))
 _TITLE = r"(?:Dr|Mr|Mrs|Ms|Prof)\.\s+"
 _PRONOUN = r"he|she|they|we|I|you|it"
 _NAME = rf"(?:{_TITLE})?(?:[A-Z][a-z]+(?:\s+[A-Z][a-z]+){{0,2}}|{_PRONOUN})"
@@ -26,11 +70,15 @@ _QUOTE = r'"[^"]+"'
 _VERB = rf"(?:\w+ly\s+)?(?:{_VERBS})"
 
 # AUTHOR said "..." (e.g. Dr. Patel said "We agreed.")
-_LEAD_PATTERN = re.compile(rf"(?P<author>{_NAME})\s+(?:{_VERB})\s*,?\s*(?P<quote>{_QUOTE})")
+LEAD_QUOTE_PATTERN = re.compile(
+    rf"(?P<author>{_NAME})\s+(?:{_VERB})\s*,?\s*(?P<quote>{_QUOTE})"
+)
 # "..." said AUTHOR (e.g. "We agreed," said Dr. Patel.)
-_TRAIL_PATTERN = re.compile(rf"(?P<quote>{_QUOTE})\s*,?\s*(?:{_VERB})\s+(?P<author>{_NAME})")
+TRAIL_QUOTE_PATTERN = re.compile(
+    rf"(?P<quote>{_QUOTE})\s*,?\s*(?:{_VERB})\s+(?P<author>{_NAME})"
+)
 # "..." AUTHOR said (e.g. "That money saved lives," Fauci noted.)
-_TRAIL_AV_PATTERN = re.compile(
+TRAIL_AV_QUOTE_PATTERN = re.compile(
     rf"(?P<quote>{_QUOTE})\s*,?\s*(?P<author>{_NAME})\s+(?:{_VERB})"
 )
 
@@ -53,7 +101,7 @@ def extract_quotes(text: str, lang: str = "en") -> list[tuple[str, str]]:
     _detector.lang = lang
     hits = []
     for sentence in _detector.segment(text):
-        for pattern in (_LEAD_PATTERN, _TRAIL_PATTERN, _TRAIL_AV_PATTERN):
+        for pattern in (LEAD_QUOTE_PATTERN, TRAIL_QUOTE_PATTERN, TRAIL_AV_QUOTE_PATTERN):
             hits.extend(
                 (match.group("author"), match.group("quote"))
                 for match in pattern.finditer(sentence)
