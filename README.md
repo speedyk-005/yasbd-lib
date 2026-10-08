@@ -109,7 +109,7 @@ Yasbd shines in real-world text processing scenarios where robust sentence bound
 - **📦 CLI Text Processing**: Pipe documents into the command line for one-off batch segmentation.
 
 > [!TIP]
-> Want it in action? Browse [`examples/`](examples/).
+> Want it in action? Browse [`examples/`](examples/). The example code is [MIT Licensed](examples/LICENSE-MIT) so you can freely copy snippets into your own projects.
 
 ---
 
