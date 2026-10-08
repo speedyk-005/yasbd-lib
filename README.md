@@ -110,6 +110,7 @@ Yasbd shines in real-world text processing scenarios where robust sentence bound
 
 > [!TIP]
 > Want it in action? Browse [`examples/`](examples/).
+> For document change tracking, try the [sentence revision comparison](examples/sentence_revision_diff.py).
 
 ---
 
