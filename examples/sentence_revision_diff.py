@@ -18,7 +18,9 @@ Output is JSON with the operation and before/after sentence groups. Each
 sentence has its unmodified text and start/end Python character indices in
 its respective revision (exclusive end, not byte offsets). Files are read
 without translating line endings, so source slices retain their original
-layout. Adjacent edits may share one change group. This is an exact sentence
+layout. File paths must resolve within the current working directory;
+run from a directory containing both revisions. Adjacent edits may share
+one change group. This is an exact sentence
 comparison, not a semantic comparison or a detector of moved paragraphs.
 Both revisions and their sentence lists are held in memory.
 """
@@ -146,15 +148,36 @@ def compare_revisions(
 
 
 def _read_text(path: Path) -> str:
-    with path.open(encoding="utf-8", newline="") as source:
+    r"""Read a revision only if its resolved path stays in the working directory.
+
+    >>> from tempfile import TemporaryDirectory
+    >>> with TemporaryDirectory(dir=Path.cwd()) as temporary:
+    ...     revision = Path(temporary) / "revision.txt"
+    ...     _ = revision.write_bytes("Café.\r\nDone.".encode("utf-8"))
+    ...     _read_text(revision)
+    'Café.\r\nDone.'
+    >>> _read_text(Path.cwd().parent / "outside.txt")
+    Traceback (most recent call last):
+        ...
+    ValueError: Revision paths must stay within the current working directory
+    """
+    base_dir = Path.cwd().resolve()
+    target_path = path.resolve()
+    if not target_path.is_relative_to(base_dir):
+        raise ValueError("Revision paths must stay within the current working directory")
+    with target_path.open(encoding="utf-8", newline="") as source:
         return source.read()
 
 
 def main() -> None:
     """Compare two supplied files or print the built-in support-policy example."""
     parser = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
-    parser.add_argument("before", nargs="?", type=Path, help="Original UTF-8 revision")
-    parser.add_argument("after", nargs="?", type=Path, help="Updated UTF-8 revision")
+    parser.add_argument(
+        "before", nargs="?", type=Path, help="Original UTF-8 revision within cwd"
+    )
+    parser.add_argument(
+        "after", nargs="?", type=Path, help="Updated UTF-8 revision within cwd"
+    )
     parser.add_argument("--lang", default="en", help="YASBD language code (default: en)")
     args = parser.parse_args()
     if (args.before is None) != (args.after is None):
@@ -169,7 +192,10 @@ def main() -> None:
             "Contact the support desk. Weekend support is available."
         )
     else:
-        before, after = _read_text(args.before), _read_text(args.after)
+        try:
+            before, after = _read_text(args.before), _read_text(args.after)
+        except (OSError, ValueError) as exc:
+            parser.error(str(exc))
 
     changes = compare_revisions(before, after, BoundaryDetector(lang=args.lang))
     print(json.dumps([asdict(change) for change in changes], ensure_ascii=False, indent=2))
