@@ -109,8 +109,7 @@ Yasbd shines in real-world text processing scenarios where robust sentence bound
 - **📦 CLI Text Processing**: Pipe documents into the command line for one-off batch segmentation.
 
 > [!TIP]
-> Want it in action? Browse [`examples/`](examples/).
-> For document change tracking, try the [sentence revision comparison](examples/sentence_revision_diff.py).
+> Want it in action? Browse [`examples/`](examples/). The example code is [MIT Licensed](examples/LICENSE-MIT) so you can freely copy snippets into your own projects.
 
 ---
 
@@ -346,6 +345,21 @@ res = list(
 )
 print(res)
 # [25, 48, ParagraphEOF, 27]
+```
+
+Need `(start, end)` spans instead of bare offsets? Fair enough! Pair each boundary with the previous one, starting from 0:
+
+```python
+from itertools import chain, pairwise
+
+text = "Hello world. How are you? I am fine."
+offsets = list(detector.detect(text))  # [12, 25, 36]
+
+for start, end in pairwise(chain((0,), offsets)):
+    print((start, end), repr(text[start:end].strip()))
+# (0, 12) 'Hello world.'
+# (12, 25) 'How are you?'
+# (25, 36) 'I am fine.'
 ```
 
 #### Segmentation
