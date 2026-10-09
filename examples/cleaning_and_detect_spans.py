@@ -15,9 +15,22 @@ _detector = BoundaryDetector(lang="en")
 _ENDING_ARTIFACTS_FINDER = re.compile(r"[\s\p{Po}\p{Pe}\p{Pf}\"'`]+")
 
 
+def _is_span_char(ch: str) -> bool:
+    """Keep ASCII alphanumerics (plus ``#``); drop everything else.
+
+    Accented and mojibake characters are ignored on both sides so that
+    cleaning steps rewriting them (cafÃ© -> café) still align.
+    """
+    return ch.isascii() and (ch.isalnum() or ch == "#")
+
+
 class DeterministicSpanFinder:
     """
     Find a substring span within full text, ignoring non-alphanumeric characters.
+
+    Only ASCII alphanumerics take part in normalized matching: accented
+    and mojibake characters are dropped on both sides, so cleaning steps
+    that rewrite them (cafÃ© -> café) cannot break alignment.
 
     This is a deterministic alternative to regex-based span finding, providing
     ~2x performance improvement by avoiding backtracking and complex pattern matching.
@@ -43,7 +56,7 @@ class DeterministicSpanFinder:
         chars = []
 
         for i, ch in enumerate(text):
-            if ch.isalnum() or ch == "#":
+            if _is_span_char(ch):
                 chars.append(ch)
                 index_map[curr_idx] = i
                 curr_idx += 1
@@ -72,7 +85,7 @@ class DeterministicSpanFinder:
             self._last_end = end
             return start, end
 
-        cleaned_text = "".join(ch for ch in text if ch.isalnum() or ch == "#")
+        cleaned_text = "".join(ch for ch in text if _is_span_char(ch))
 
         pos = self.cleaned_full_text.find(cleaned_text)
         if pos != -1 and cleaned_text:
@@ -123,6 +136,9 @@ def clean_and_detect_sent_spans(text: str) -> list[tuple[int, int]]:
 
 
 if __name__ == "__main__":
-    raw = "Hello <b>world</b>. How are you? I am fine."
+    raw = (
+        "Visit our café today. An hyphe-\nnated word here. "
+        "  Extra   spaces everywhere. <script>x()</script>Done."
+    )
     for span in clean_and_detect_sent_spans(raw):
         print(span, repr(raw[span[0] : span[1]]))
