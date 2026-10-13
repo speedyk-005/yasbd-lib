@@ -58,6 +58,17 @@ def test_segment_different_input(en_detector):
     assert result_stream == ["Hello world.", "How are you?", "I'm fine."]
 
 
+def test_segment_symmetric_quotes_sv():
+    """test that symmetric closing quotes (”...”) form a quoted span, so the sentence doesn't split inside it."""
+    detector = BoundaryDetector(lang="sv")
+    text = "Han sade: ”Jag kommer imorgon.” Sedan gick han."
+
+    assert list(detector.segment(text)) == [
+        "Han sade: ”Jag kommer imorgon.”",
+        "Sedan gick han.",
+    ]
+
+
 @pytest.mark.parametrize("lang,test_data", ALL_TEST_DATA.items())
 def test_segment_multiple_langs(subtests, lang, test_data):
     """test that each language's test data passes."""

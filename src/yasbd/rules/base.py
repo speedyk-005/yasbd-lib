@@ -181,7 +181,7 @@ class Rules:
         # Quoted text with quotations or dashes
         "(?:[^"]*)"|''[^']*''|(?<=\s)'(?:[^']*)'|
         ``.+?(?:``|'')|`[^`]*`|
-        [\p{Pi}»‚„].+?[\p{Pf}«‘“]|
+        [\p{Pi}»‚„”].+?[\p{Pf}«‘“]|
         —[^—]*[,.!?]\s*—|
 
         # Parenthesized text
