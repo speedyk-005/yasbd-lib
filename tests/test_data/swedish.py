@@ -26,6 +26,7 @@ TEST_DATA = [
     '"Är det okej?", frågade hon.',
     'Så stannade han.| "Vänta", sa han.',
     'Han sa: "Första meningen. Andra meningen."| Sedan var han klar.',
+    "Han sade: ”Jag kommer imorgon.”| Sedan gick han.",
 
     # Ellipsis
     "Projektet var nästan klart... eller så trodde vi.",

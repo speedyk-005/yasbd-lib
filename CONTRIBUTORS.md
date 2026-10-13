@@ -22,6 +22,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@hkJerryLeung](https://github.com/hkJerryLeung)** | French `est` abbreviation fix |
 | **[@hongquan](https://github.com/hongquan)** | `py.typed` marker for PEP 561 compliance |
 | **[@Jah-yee](https://github.com/Jah-yee)** | Reference abbreviation bracketed citation fix |
+| **[@jay23606](https://github.com/jay23606)** | Symmetric right double quote (`”`) opener fix for Swedish quoted speech |
 | **[@JheanLL](https://github.com/JheanLL)** | Trie prototype design & Spanish rule contributions |
 | **[@JosephM961](https://github.com/JosephM961)** | Documentation additions and typo fixes |
 | **[@k-anushka14](https://github.com/k-anushka14)** | Removed unused timeout parameter from external cleaner; merged Pronouns & Demonstratives header into Pronouns |
