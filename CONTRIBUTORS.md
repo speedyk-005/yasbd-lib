@@ -12,7 +12,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@blackmore-technology-group](https://github.com/blackmore-technology-group)** | Backtick and doubled-apostrophe sentence-boundary detection |
 | **[@Chirudeva-Reddy](https://github.com/Chirudeva-Reddy)** | Burmese section markers, ၏ connector context, and discourse particle boundaries |
 | **[@cnaples79](https://github.com/cnaples79)** | Missing comma in set literals fix |
-| **[@CMGeorges](https://github.com/CMGeorges)** | Protect dataset-example source files from output-path collisions |
+| **[@CMGeorges](https://github.com/CMGeorges)** | Protect dataset-example source files from output-path collisions; validate overlap percentage and window size in the RAG chunking example |
 | **[@ColumbusLabs](https://github.com/ColumbusLabs)** | Preserve word boundaries across StreamCleaner line breaks |
 | **[@ddelrio1986](https://github.com/ddelrio1986)** | Spelling and grammar fixes in docs |
 | **[@DYNOSuprovo](https://github.com/DYNOSuprovo)** | Swahili address + currency and German/Dutch unit abbreviations fix; Amharic quotative construction improvements; sentence modification example |
