@@ -41,6 +41,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@revanthajoe](https://github.com/revanthajoe)** | ASR/Transcript Segmentation Example |
 | **[@sairex53](https://github.com/sairex53)** | Directory-to-JSONL dataset example for UTF-8 text collections |
 | **[@sanmaxdev](https://github.com/sanmaxdev)** | Language tag normalization helper |
+| **[@SergeyShk](https://github.com/SergeyShk)** | Russian list-closing abbreviations (`и т. д.`, `и т. п.`) before a new sentence |
 | **[@sonalisrisivani](https://github.com/sonalisrisivani)** | Unicode newline-inside-sentence detection fix |
 | **[@speedyk-005](https://github.com/speedyk-005)** | Maintainer & Creator |
 | **[@sricharanreddycheruku](https://github.com/sricharanreddycheruku)** | Abbreviation (v.s.) and adjacent parenthetical fixes; subtitle sentence alignment, deduplication and revision comparison examples |
