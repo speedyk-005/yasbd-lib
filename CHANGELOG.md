@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Windows CLI crash on redirected output** ([#395](https://github.com/speedyk-005/yasbd-lib/pull/395)): The CLI no longer raises `UnicodeEncodeError` on Windows (Python ≤ 3.14) when output is redirected or piped. `main()` now reconfigures stdout and stderr to UTF-8 before printing.
 - **Symmetric right double quotes as quote openers** ([#399](https://github.com/speedyk-005/yasbd-lib/pull/399)): `”` now opens a quoted span, so Swedish and Finnish `”...”` quotes no longer split a sentence that ends inside them.
+- **Russian list-closing abbreviations before a new sentence** ([#401](https://github.com/speedyk-005/yasbd-lib/pull/401)): `и т. д.` and `и т. п.` now end a sentence when the next word is capitalized, so `Купил хлеб, молоко и т. д. Потом пошёл домой.` splits in two, while initials such as `А. С. Пушкин` stay mid-sentence.
 
 ## [1.0.3] - 2026-10-10
 
