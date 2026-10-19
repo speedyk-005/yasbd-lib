@@ -1,4 +1,4 @@
-import re
+import regex as re
 
 from yasbd.rules.base import Rules
 
@@ -97,11 +97,11 @@ class RuRules(Rules):
     @classmethod
     def _compile_regex_dynamically(cls):
         super()._compile_regex_dynamically()
-        cls.MID_SENTENCE_FINDER_LST.extend([
-            # Second initial (e.g., А. С. Пушкин)
-            re.compile(r"(?<=\.)\s*[А-ЯЁ]\."),
-            # Last letter of an abbreviation unless a capitalized word follows (e.g., т. п. —)
-            re.compile(r"(?<=\.)\s*[а-яё]\.(?!\s+[А-ЯЁ])"),
-            # First letter of a dotted chain (e.g., А. С., т. д.)
-            re.compile(r"[а-яё]\.(?=\s+.\.)", re.I),
-        ])
+        # "и т. д." and "и т. п." end a sentence before a capitalized word
+        _exc_pat = r"и\s*т\.\s*[дп]\."
+        cls.MID_SENTENCE_FINDER_LST.append(
+            re.compile(
+                rf"(?<=\.)\s*[а-яё]\.(?!(?<={_exc_pat})\s+(?-i:\p{{Lu}}))|[а-яё]\.(?=\s+.\.)",
+                re.I,
+            )
+        )
