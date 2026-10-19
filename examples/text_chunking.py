@@ -8,6 +8,7 @@ sentences, with optional overlap to carry context across chunks.
 from yasbd import BoundaryDetector
 
 _detector = BoundaryDetector("en")
+_MAX_OVERLAP_PERCENT = 80
 
 
 def chunk_text(text: str, lang: str, max_sentences: int, overlap_percent: int | float):
@@ -22,29 +23,41 @@ def chunk_text(text: str, lang: str, max_sentences: int, overlap_percent: int | 
     Args:
         text: The raw document text to chunk.
         lang: ISO language code passed to the boundary detector.
-        max_sentences: Number of sentences per chunk.
+        max_sentences: Positive number of sentences per chunk.
         overlap_percent: Percentage of the window size to carry over
-            between consecutive chunks. Clamped so the stride never drops
-            below one sentence.
+            between consecutive chunks, from 0 to 80 inclusive. Fractional
+            percentages are rounded down to a whole number of sentences.
 
     Returns:
         A list of chunk strings. Each chunk is its sentences joined back
         together without added separators, so the original surrounding
         whitespace is preserved as-is.
 
-    Examples:
-        Integer and fractional percentages both produce whole-sentence overlap:
+    Raises:
+        ValueError: If max_sentences is not positive or overlap_percent is
+            outside the inclusive range 0 to 80.
 
-        >>> text = "Alpha. Beta. Gamma. Delta."
-        >>> chunk_text(text, "en", max_sentences=2, overlap_percent=50)
+    Examples:
+        A fractional percentage keeps whole-sentence overlap:
+
+        >>> chunk_text("Alpha. Beta. Gamma. Delta.", "en", 2, 50.5)
         ['Alpha. Beta.', ' Beta. Gamma.', ' Gamma. Delta.']
-        >>> chunk_text(text, "en", max_sentences=2, overlap_percent=50.5)
-        ['Alpha. Beta.', ' Beta. Gamma.', ' Gamma. Delta.']
-        >>> chunk_text(text, "en", max_sentences=2, overlap_percent=0.5)
-        ['Alpha. Beta.', ' Gamma. Delta.']
-        >>> chunk_text("", "en", max_sentences=2, overlap_percent=50.5)
-        []
+
+        Invalid percentages and window sizes are rejected:
+
+        >>> chunk_text("Alpha.", "en", 2, 100)
+        Traceback (most recent call last):
+            ...
+        ValueError: overlap_percent must be between 0 and 80 inclusive
+        >>> chunk_text("", "en", 0, 0)
+        Traceback (most recent call last):
+            ...
+        ValueError: max_sentences must be positive
     """
+    if max_sentences <= 0:
+        raise ValueError("max_sentences must be positive")
+    if not 0 <= overlap_percent <= _MAX_OVERLAP_PERCENT:
+        raise ValueError("overlap_percent must be between 0 and 80 inclusive")
     if not text:
         return []
 

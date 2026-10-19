@@ -12,7 +12,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@blackmore-technology-group](https://github.com/blackmore-technology-group)** | Backtick and doubled-apostrophe sentence-boundary detection |
 | **[@Chirudeva-Reddy](https://github.com/Chirudeva-Reddy)** | Burmese section markers, ၏ connector context, and discourse particle boundaries |
 | **[@cnaples79](https://github.com/cnaples79)** | Missing comma in set literals fix |
-| **[@CMGeorges](https://github.com/CMGeorges)** | Protect dataset-example source files from output-path collisions |
+| **[@CMGeorges](https://github.com/CMGeorges)** | Protect dataset-example source files from output-path collisions; validate overlap percentage and window size in the RAG chunking example |
 | **[@ColumbusLabs](https://github.com/ColumbusLabs)** | Preserve word boundaries across StreamCleaner line breaks |
 | **[@ddelrio1986](https://github.com/ddelrio1986)** | Spelling and grammar fixes in docs |
 | **[@DYNOSuprovo](https://github.com/DYNOSuprovo)** | Swahili address + currency and German/Dutch unit abbreviations fix; Amharic quotative construction improvements; sentence modification example |
@@ -41,6 +41,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@revanthajoe](https://github.com/revanthajoe)** | ASR/Transcript Segmentation Example |
 | **[@sairex53](https://github.com/sairex53)** | Directory-to-JSONL dataset example for UTF-8 text collections |
 | **[@sanmaxdev](https://github.com/sanmaxdev)** | Language tag normalization helper |
+| **[@SergeyShk](https://github.com/SergeyShk)** | Russian list-closing abbreviations (`и т. д.`, `и т. п.`) before a new sentence |
 | **[@sonalisrisivani](https://github.com/sonalisrisivani)** | Unicode newline-inside-sentence detection fix |
 | **[@speedyk-005](https://github.com/speedyk-005)** | Maintainer & Creator |
 | **[@sricharanreddycheruku](https://github.com/sricharanreddycheruku)** | Abbreviation (v.s.) and adjacent parenthetical fixes; subtitle sentence alignment, deduplication and revision comparison examples |
