@@ -1,5 +1,7 @@
 # Table of Contents
 
+* [yasbd](#yasbd)
+  * [register\_spacy\_component](#yasbd.register_spacy_component)
 * [yasbd.boundary\_detector](#yasbd.boundary_detector)
   * [HookContext](#yasbd.boundary_detector.HookContext)
   * [BoundaryDetector](#yasbd.boundary_detector.BoundaryDetector)
@@ -20,8 +22,10 @@
   * [LangPackError](#yasbd.exceptions.LangPackError)
   * [CleanStepError](#yasbd.exceptions.CleanStepError)
   * [HookError](#yasbd.exceptions.HookError)
-* [yasbd](#yasbd)
-  * [register\_spacy\_component](#yasbd.register_spacy_component)
+* [yasbd.rules](#yasbd.rules)
+  * [load\_external\_lang\_packs](#yasbd.rules.load_external_lang_packs)
+  * [get\_supported\_langs](#yasbd.rules.get_supported_langs)
+  * [load\_rule](#yasbd.rules.load_rule)
 * [yasbd.rules.af](#yasbd.rules.af)
 * [yasbd.rules.am](#yasbd.rules.am)
 * [yasbd.rules.ar](#yasbd.rules.ar)
@@ -45,10 +49,6 @@
 * [yasbd.rules.ht](#yasbd.rules.ht)
 * [yasbd.rules.hy](#yasbd.rules.hy)
 * [yasbd.rules.id](#yasbd.rules.id)
-* [yasbd.rules](#yasbd.rules)
-  * [load\_external\_lang\_packs](#yasbd.rules.load_external_lang_packs)
-  * [get\_supported\_langs](#yasbd.rules.get_supported_langs)
-  * [load\_rule](#yasbd.rules.load_rule)
 * [yasbd.rules.it](#yasbd.rules.it)
 * [yasbd.rules.ja](#yasbd.rules.ja)
 * [yasbd.rules.kk](#yasbd.rules.kk)
@@ -71,12 +71,12 @@
 * [yasbd.rules.ur](#yasbd.rules.ur)
 * [yasbd.rules.vi](#yasbd.rules.vi)
 * [yasbd.rules.zh](#yasbd.rules.zh)
+* [yasbd.utils](#yasbd.utils)
 * [yasbd.utils.cleaner](#yasbd.utils.cleaner)
   * [StreamCleaner](#yasbd.utils.cleaner.StreamCleaner)
     * [\_\_init\_\_](#yasbd.utils.cleaner.StreamCleaner.__init__)
-* [yasbd.utils](#yasbd.utils)
 * [yasbd.utils.input\_validator](#yasbd.utils.input_validator)
-  * [validate\_input](#yasbd.utils.input_validator.validate_input)
+  * [validate\_inputs](#yasbd.utils.input_validator.validate_inputs)
 * [yasbd.utils.lang\_code\_normalizer](#yasbd.utils.lang_code_normalizer)
   * [normalize\_lang](#yasbd.utils.lang_code_normalizer.normalize_lang)
 * [yasbd.utils.language\_classifier](#yasbd.utils.language_classifier)
@@ -100,6 +100,31 @@
   * [create\_yasbd](#yasbd.utils.spacy_component.create_yasbd)
 * [yasbd.utils.trie](#yasbd.utils.trie)
   * [build\_optimized\_pattern](#yasbd.utils.trie.build_optimized_pattern)
+
+<a id="yasbd"></a>
+
+# yasbd
+
+<a id="yasbd.register_spacy_component"></a>
+
+#### register\_spacy\_component
+
+```python
+def register_spacy_component()
+```
+
+Register the yasbd spaCy pipeline component on demand.
+
+Call this to add the ``yasbd`` component factory to spaCy's registry.
+Requires spaCy v3+ to be installed.
+
+Examples
+--------
+>>> import spacy
+>>> from yasbd import register_spacy_component
+>>> register_spacy_component()
+>>> nlp = spacy.blank("en")
+>>> nlp.add_pipe("yasbd", first=True, config={"lang": "en"})
 
 <a id="yasbd.boundary_detector"></a>
 
@@ -137,7 +162,6 @@ class BoundaryDetector()
 #### \_\_init\_\_
 
 ```python
-@validate_input
 def __init__(lang: str | None = None,
              *,
              external_lang_packs: list[str] | None = None,
@@ -183,7 +207,6 @@ ISO language code of the active rule set.
 #### detect
 
 ```python
-@validate_input
 def detect(source: str | TextIOBase | StreamCleanerStub,
            *,
            relative: bool = False) -> Generator[int, None, None]
@@ -217,7 +240,6 @@ Detect sentence boundaries in the source text.
 #### segment
 
 ```python
-@validate_input
 def segment(source: str | TextIOBase | StreamCleanerStub,
             *,
             preserve_whitespace: bool = False) -> Generator[str, None, None]
@@ -342,7 +364,7 @@ def clean(text: Optional[str] = None,
 
 Clean and normalize noisy text paragraphs.
 
-Applies ftfy mojibake fixing, OCR cleanup, HTML tag stripping,
+Applies mojibake fixes, OCR cleanup, HTML tag stripping,
 slash normalization, and whitespace normalization.
 Use --skip to omit specific steps (comma-separated).
 Use --extra-step to run external shell commands as extra cleaning steps.
@@ -432,30 +454,90 @@ class HookError(YasbdError, RuntimeError)
 
 Raised when a post-processing hook fails or leaves invalid boundaries.
 
-<a id="yasbd"></a>
+<a id="yasbd.rules"></a>
 
-# yasbd
+# yasbd.rules
 
-<a id="yasbd.register_spacy_component"></a>
+<a id="yasbd.rules.load_external_lang_packs"></a>
 
-#### register\_spacy\_component
+#### load\_external\_lang\_packs
 
 ```python
-def register_spacy_component()
+def load_external_lang_packs(names: list[str],
+                             *,
+                             verbose: bool = False) -> dict
 ```
 
-Register the yasbd spaCy pipeline component on demand.
+Import and validate external language pack modules.
 
-Call this to add the ``yasbd`` component factory to spaCy's registry.
-Requires spaCy v3+ to be installed.
+Each module must expose a ``PROFILES`` list of ``Rules`` subclasses.
 
-Examples
---------
->>> import spacy
->>> from yasbd import register_spacy_component
->>> register_spacy_component()
->>> nlp = spacy.blank("en")
->>> nlp.add_pipe("yasbd", first=True, config={"lang": "en"})
+Caution:
+This function imports arbitrary Python modules by name. Only load lang
+packs from sources you trust — an untrusted module can execute
+arbitrary code at import time.
+
+**Arguments**:
+
+- `names` - Module names resolvable from the Python path
+  (e.g. ``["yasbd_indic", "yasbd_legal"]``).
+- `verbose` - Enable verbose logging.
+  
+
+**Returns**:
+
+  Dict of ``{lang_code: (pack_name, Rules_class)}`` entries.
+  
+
+**Raises**:
+
+- `LangPackError` - If a language pack module cannot be imported.
+
+<a id="yasbd.rules.get_supported_langs"></a>
+
+#### get\_supported\_langs
+
+```python
+@cache
+def get_supported_langs() -> list[str]
+```
+
+Discover and cache supported language codes.
+
+Returns a sorted list of ``auto`` plus all language codes from
+the built-in rules directory and any registered language packs.
+
+<a id="yasbd.rules.load_rule"></a>
+
+#### load\_rule
+
+```python
+def load_rule(lang: str,
+              *,
+              ext_registry: dict,
+              verbose: bool = False) -> Rules
+```
+
+Import and instantiate the rule module for *lang*.
+
+Checks *ext_registry* first; falls back to the built-in rules directory.
+
+**Arguments**:
+
+- `lang` - Language code (e.g. ``"en"``, ``"fr"``).
+- `ext_registry` - Dict of ``{lang_code: (pack_name, Rules_class)}``
+  entries to check before built-in rules.
+- `verbose` - Enable verbose logging.
+  
+
+**Returns**:
+
+  The instantiated rule object.
+  
+
+**Raises**:
+
+- `UnsupportedLanguageError` - If no rule module exists for *lang*.
 
 <a id="yasbd.rules.af"></a>
 
@@ -601,91 +683,6 @@ quote/paren spans, list markers).
 
 # yasbd.rules.id
 
-<a id="yasbd.rules"></a>
-
-# yasbd.rules
-
-<a id="yasbd.rules.load_external_lang_packs"></a>
-
-#### load\_external\_lang\_packs
-
-```python
-def load_external_lang_packs(names: list[str],
-                             *,
-                             verbose: bool = False) -> dict
-```
-
-Import and validate external language pack modules.
-
-Each module must expose a ``PROFILES`` list of ``Rules`` subclasses.
-
-Caution:
-This function imports arbitrary Python modules by name. Only load lang
-packs from sources you trust — an untrusted module can execute
-arbitrary code at import time.
-
-**Arguments**:
-
-- `names` - Module names resolvable from the Python path
-  (e.g. ``["yasbd_indic", "yasbd_legal"]``).
-- `verbose` - Enable verbose logging.
-  
-
-**Returns**:
-
-  Dict of ``{lang_code: (pack_name, Rules_class)}`` entries.
-  
-
-**Raises**:
-
-- `LangPackError` - If a language pack module cannot be imported.
-
-<a id="yasbd.rules.get_supported_langs"></a>
-
-#### get\_supported\_langs
-
-```python
-@cache
-def get_supported_langs() -> list[str]
-```
-
-Discover and cache supported language codes.
-
-Returns a sorted list of ``auto`` plus all language codes from
-the built-in rules directory and any registered language packs.
-
-<a id="yasbd.rules.load_rule"></a>
-
-#### load\_rule
-
-```python
-def load_rule(lang: str,
-              *,
-              ext_registry: dict,
-              verbose: bool = False) -> Rules
-```
-
-Import and instantiate the rule module for *lang*.
-
-Checks *ext_registry* first; falls back to the built-in rules directory.
-
-**Arguments**:
-
-- `lang` - Language code (e.g. ``"en"``, ``"fr"``).
-- `ext_registry` - Dict of ``{lang_code: (pack_name, Rules_class)}``
-  entries to check before built-in rules.
-- `verbose` - Enable verbose logging.
-  
-
-**Returns**:
-
-  The instantiated rule object.
-  
-
-**Raises**:
-
-- `UnsupportedLanguageError` - If no rule module exists for *lang*.
-
 <a id="yasbd.rules.it"></a>
 
 # yasbd.rules.it
@@ -774,6 +771,10 @@ Checks *ext_registry* first; falls back to the built-in rules directory.
 
 # yasbd.rules.zh
 
+<a id="yasbd.utils"></a>
+
+# yasbd.utils
+
 <a id="yasbd.utils.cleaner"></a>
 
 # yasbd.utils.cleaner
@@ -786,7 +787,7 @@ Checks *ext_registry* first; falls back to the built-in rules directory.
 class StreamCleaner(StreamCleanerStub)
 ```
 
-Normalize line endings, clean noisy text by applying ``ftfy``, HTML sanitization,
+Normalize line endings, clean noisy text by applying mojibake/HTML fixes,
 and various regex cleanup rules across paragraphs.
 
 **Examples**:
@@ -826,7 +827,6 @@ and various regex cleanup rules across paragraphs.
 #### \_\_init\_\_
 
 ```python
-@validate_input
 def __init__(source: str | TextIOBase,
              steps_to_skip: Collection[str] | None = None,
              extra_steps: Collection[Callable[[str], str]] | None = None,
@@ -850,23 +850,32 @@ Implements the iterator protocol. Yields cleaned paragraph strings.
   Each function must accept and return ``str``.
 - `verbose` - Enable verbose logging.
 
-<a id="yasbd.utils"></a>
-
-# yasbd.utils
-
 <a id="yasbd.utils.input_validator"></a>
 
 # yasbd.utils.input\_validator
 
-<a id="yasbd.utils.input_validator.validate_input"></a>
+<a id="yasbd.utils.input_validator.validate_inputs"></a>
 
-#### validate\_input
+#### validate\_inputs
 
 ```python
-def validate_input(fn: F) -> F
+def validate_inputs(items: list[tuple[object, tuple[type, ...]]]) -> None
 ```
 
-Validate function arguments and return values using beartype.
+Shallow runtime type check over ``(value, allowed types)`` pairs.
+
+Each pair is checked with :func:`isinstance`; all mismatches are
+collected and raised together as one :class:`InvalidInputError`.
+Unlike beartype, this never inspects generics or nested structure —
+only the top-level type.
+
+**Example**:
+
+  >>> validate_inputs([("text", (str,)), ([1, 2], (list, tuple))])
+  >>> validate_inputs([(42, (str,))])
+  Traceback (most recent call last):
+  ...
+- `yasbd.exceptions.InvalidInputError` - ...
 
 <a id="yasbd.utils.lang_code_normalizer"></a>
 
@@ -877,7 +886,6 @@ Validate function arguments and return values using beartype.
 #### normalize\_lang
 
 ```python
-@validate_input
 def normalize_lang(lang_code: str) -> str
 ```
 
@@ -1045,7 +1053,6 @@ retaining state across calls and yielding reconstructed paragraph blocks.
 #### \_\_init\_\_
 
 ```python
-@validate_input
 def __init__(source: str | TextIOBase | StreamCleanerStub,
              *,
              skip_empty_lines: bool = False) -> None
@@ -1122,7 +1129,6 @@ class Segmenter()
 #### \_\_init\_\_
 
 ```python
-@validate_input
 def __init__(language: str = "en",
              clean: bool = False,
              doc_type: str | None = None,
@@ -1143,7 +1149,6 @@ Initializes the Segmenter.
 #### sentences\_with\_char\_spans
 
 ```python
-@validate_input
 def sentences_with_char_spans(sentences: list[str]) -> list[TextSpan]
 ```
 
@@ -1156,7 +1161,6 @@ Pysbd compatibility method
 #### segment
 
 ```python
-@validate_input
 def segment(text: str) -> list[str | TextSpan]
 ```
 
@@ -1224,7 +1228,8 @@ Create a spaCy component powered by yasbd.
 #### build\_optimized\_pattern
 
 ```python
-def build_optimized_pattern(options: set[str]) -> str
+def build_optimized_pattern(
+        options: set[str] | list[str] | tuple[str, ...]) -> str
 ```
 
 Build an optimised and escaped regex alternation pattern.
