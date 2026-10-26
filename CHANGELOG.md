@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Python 3.15 support**: Added official CI coverage and package metadata for Python 3.15.
+
 ### Fixed
 
 - **Bengali era marker sentence boundaries** ([#404](https://github.com/speedyk-005/yasbd-lib/pull/404)): Keep `খ্রি.`, `খ্রি.পূ.` and `খ্রিপূ.` within the sentence while preserving sentence boundaries after the danda (`।`).
