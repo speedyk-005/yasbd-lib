@@ -198,3 +198,30 @@ def test_post_processing_hook_validation_errors(invalid_boundaries, expected_mes
 
     with pytest.raises(HookError, match=re.escape(expected_message)):
         detector._run_hook("this is a test", [0, 14], 0)
+
+
+@pytest.mark.parametrize("quantity", ["300", "0.5", "-12", "2e3"])
+@pytest.mark.parametrize("unit", ["K", "V", "A"])
+@pytest.mark.parametrize("space", [" ", "  ", "\t", "\u00a0"])
+def test_sentence_boundary_after_numeric_unit(en_detector, quantity, unit, space):
+    first = f"The reading was {quantity}{space}{unit}."
+    assert list(en_detector.segment(first + " Selectivity was high.")) == [
+        first, "Selectivity was high."
+    ]
+
+
+@pytest.mark.parametrize(
+    "text,expected",
+    [
+        ("We consulted V. Stamenkovic about it. Selectivity was high.",
+         ["We consulted V. Stamenkovic about it.", "Selectivity was high."]),
+        ("We consulted J. K. Rowan about it. Selectivity was high.",
+         ["We consulted J. K. Rowan about it.", "Selectivity was high."]),
+        ("We compared 2 v. 3 alternatives. Selectivity was high.",
+         ["We compared 2 v. 3 alternatives.", "Selectivity was high."]),
+        ("The bearing was 45° N. Selectivity was high.",
+         ["The bearing was 45° N.", "Selectivity was high."]),
+    ],
+)
+def test_numeric_unit_rule_preserves_initials_and_coordinates(en_detector, text, expected):
+    assert list(en_detector.segment(text)) == expected

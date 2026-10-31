@@ -280,9 +280,11 @@ class Rules:
             # Title abbrv or initialisms (e.g., Dr. Paul)
             re.compile(rf"\b(?i:{cls.TITLE_ABBRVS_PATTERN}){cls.DOTS_PATTERN}"),
 
-            # Abbrv that NEVER ends a sentence
-            re.compile(
-               rf"\b(?i:{build_optimized_pattern(cls.INLINE_ONLY_ABBRVS)}){cls.DOTS_PATTERN}"
+            # Inline abbreviations, except uppercase units after a number (e.g., 0.5 V.).
+            # Keep re-style word boundaries, which exclude combining marks.
+            re2.compile(
+               rf"(?<![\p{{L}}\p{{N}}_])(?i:{build_optimized_pattern(cls.INLINE_ONLY_ABBRVS)}){cls.DOTS_PATTERN}"
+               rf"(?<!\d\.?\s+\p{{Lu}}{cls.DOTS_PATTERN})"
             ),
 
             # References abbrv + number/letter/bracket (e.g., p. 55, app. A, et al. [2004])
@@ -301,12 +303,12 @@ class Rules:
             re.compile(r"\.(?=[ºª])"),
 
             # Initialism/Acronyms/Exclamations words (e.g., Yahoo!, A.B. Holding)
-            # excluding coordinate directions or geopolitical ones not followed
+            # excluding numeric units, coordinate directions or geopolitical ones not followed
             # by a common starters
             re2.compile(rf"""
                 (?:
                     (?<=\.)\p{{Lu}}|
-                    (?<=\s)\p{{Lu}}(?<![\d°]\s+[NSWE])|
+                    (?<=\s)\p{{Lu}}(?<!\d\.?\s+\p{{Lu}})(?<!°\s+[NSWE])|
                     \b\p{{Lo}}
                 )\.
                 (?<!(?i:{cls.DOTTED_GEOPOL_ABBRVS_PATTERN}|[pa]\.m){cls.DOTS_PATTERN})
