@@ -198,3 +198,28 @@ def test_post_processing_hook_validation_errors(invalid_boundaries, expected_mes
 
     with pytest.raises(HookError, match=re.escape(expected_message)):
         detector._run_hook("this is a test", [0, 14], 0)
+
+
+@pytest.mark.parametrize("abbreviation", ["Fig", "Figs", "Eq"])
+@pytest.mark.parametrize("target", ["S3", "S16b", "S2", "A12c"])
+def test_reference_abbreviation_with_alphanumeric_target(en_detector, abbreviation, target):
+    first = f"As shown in {abbreviation}. {target}, all membranes passed."
+    assert list(en_detector.segment(first + " We then varied X.")) == [
+        first,
+        "We then varied X.",
+    ]
+
+
+@pytest.mark.parametrize("target", ["A", "12", "IV", "(S3)", "[S3]"])
+def test_reference_abbreviation_existing_targets(en_detector, target):
+    first = f"As shown in Fig. {target}, all membranes passed."
+    assert list(en_detector.segment(first + " We then varied X.")) == [
+        first,
+        "We then varied X.",
+    ]
+
+
+@pytest.mark.parametrize("following", ["Selectivity was high.", "S3module was tested."])
+def test_reference_abbreviation_before_new_sentence(en_detector, following):
+    first = "Refer to the Fig."
+    assert list(en_detector.segment(first + " " + following)) == [first, following]
