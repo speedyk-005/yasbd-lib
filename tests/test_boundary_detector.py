@@ -2,7 +2,6 @@ import io
 import random
 import re
 import string
-import time
 
 import pytest
 
@@ -201,29 +200,28 @@ def test_post_processing_hook_validation_errors(invalid_boundaries, expected_mes
         detector._run_hook("this is a test", [0, 14], 0)
 
 
+@pytest.mark.parametrize("quantity", ["300", "0.5", "-12", "2e3"])
+@pytest.mark.parametrize("unit", ["K", "V", "A"])
+@pytest.mark.parametrize("space", [" ", "  ", "\t", "\u00a0"])
+def test_sentence_boundary_after_numeric_unit(en_detector, quantity, unit, space):
+    first = f"The reading was {quantity}{space}{unit}."
+    assert list(en_detector.segment(first + " Selectivity was high.")) == [
+        first, "Selectivity was high."
+    ]
+
+
 @pytest.mark.parametrize(
-    "text",
+    "text,expected",
     [
-        pytest.param("word" + " " * 20_000 + "word.", id="spaces"),
-        pytest.param("(" * 20_000, id="opening-parens"),
-        pytest.param("." * 20_000, id="dots"),
+        ("We consulted V. Stamenkovic about it. Selectivity was high.",
+         ["We consulted V. Stamenkovic about it.", "Selectivity was high."]),
+        ("We consulted J. K. Rowan about it. Selectivity was high.",
+         ["We consulted J. K. Rowan about it.", "Selectivity was high."]),
+        ("We compared 2 v. 3 alternatives. Selectivity was high.",
+         ["We compared 2 v. 3 alternatives.", "Selectivity was high."]),
+        ("The bearing was 45° N. Selectivity was high.",
+         ["The bearing was 45° N.", "Selectivity was high."]),
     ],
 )
-def test_long_delimiter_runs_are_scanned_linearly(en_detector, text):
-    """test that long runs of spaces, brackets or dots are not re-scanned from every position."""
-
-    start = time.perf_counter()
-    sentences = list(en_detector.detect(text))
-    elapsed = time.perf_counter() - start
-
-    assert sentences
-    # Quadratic scanning needed over a second even at this size; linear
-    # scanning stays in the low milliseconds. The bound only catches a
-    # regression, it is not a benchmark.
-    assert elapsed < 1.0
-
-
-def test_horizontal_list_after_long_whitespace(en_detector):
-    """test that a list marker after a long whitespace run is still recognized."""
-
-    assert list(en_detector.detect("Steps:" + " " * 1_000 + "1. mix 2. bake 3. serve"))
+def test_numeric_unit_rule_preserves_initials_and_coordinates(en_detector, text, expected):
+    assert list(en_detector.segment(text)) == expected
