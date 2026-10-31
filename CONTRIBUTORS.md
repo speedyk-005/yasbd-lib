@@ -8,6 +8,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@AK-Lmn](https://github.com/AK-Lmn)** | Spanish `párrf.` and `párr.` reference abbreviations |
 | **[@AshSgDe29071999](https://github.com/AshSgDe29071999)** | Combined same-module imports in `__init__.py`; named cleaning-pipeline helpers for testability |
 | **[@be-student](https://github.com/be-student)** | Burmese double-comma boundaries; shared numeric-context tel/fax and Portuguese aprox abbreviation fixes |
+| **[@bfs2021](https://github.com/bfs2021)** | Linear-time scanning of long whitespace, bracket and dot runs in `BoundaryDetector` |
 | **[@brunnojob](https://github.com/brunnojob)** | Sentence-by-sentence reading-time example with configurable pace; structured paragraph and sentence index example; Bengali era abbreviation boundaries |
 | **[@blackmore-technology-group](https://github.com/blackmore-technology-group)** | Backtick and doubled-apostrophe sentence-boundary detection |
 | **[@Chirudeva-Reddy](https://github.com/Chirudeva-Reddy)** | Burmese section markers, ၏ connector context, and discourse particle boundaries |
