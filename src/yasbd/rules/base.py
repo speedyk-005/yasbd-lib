@@ -184,18 +184,15 @@ class Rules:
         [\p{Pi}»‚„”].+?[\p{Pf}«‘“]|
         —[^—]*[,.!?]\s*—|
 
-        # Parenthesized text. Start only at the first bracket of a run: an
-        # opening bracket preceded by another opening bracket starts inside
-        # the outer match, and retrying every position of a long run such as
-        # "((((" makes the scan quadratic.
+        # Parenthesized text. Start only at the first bracket of a run: inner
+        # brackets are sub-spans of the outer match, retrying is quadratic.
         (?<!\p{Ps})\p{Ps}[^\p{Pe}]*\p{Pe}
         """,
         re2.X,
     )
 
     # https://regex101.com/r/0P9f2V/3
-    # The leading dot must not be part of a longer dot run: retrying at every
-    # position of a "....." run makes the scan quadratic.
+    # The leading dot must not follow another dot, or the scan is quadratic.
     TOC_LEADER_FINDER = re.compile(r"(?<!\.).\s*\.[\s\.]{3,}\d")
 
     # https://regex101.com/r/ZOZlLb/3/substitution
@@ -229,8 +226,7 @@ class Rules:
             rf"""
             # Must preceded by string start or word boundary
             # while skipping initialisms. The whitespace run is only entered
-            # at its first character; otherwise every position inside a long
-            # run re-scans the rest of it, which is quadratic.
+            # at its first character, or the scan is quadratic.
             (?:^|(?<![A-Z](?:\.|\w+))(?<!\s)\s+)
             (?:[•◦]\s+)?   # Optional bullet point (e.g., • 9.)
             (?:
