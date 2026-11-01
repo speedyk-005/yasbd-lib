@@ -379,20 +379,29 @@ class Rules:
                 )
 
     def _remove_toc_spans(
-        self, sentence_boundaries: set[int], text: str
+        self,
+        sentence_boundaries: set[int],
+        text: str,
     ) -> None:
         """Remove boundaries inside TOC leader runs."""
         if "..." in text:
             for m in self.TOC_LEADER_FINDER.finditer(text):
                 sentence_boundaries.difference_update(range(*m.span()))
 
-    def _adjust_list_boundaries(self, sentence_boundaries: set[int], text: str) -> None:
-        """Remove and re-align boundaries around list markers."""
-        horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(text))
+    def _is_horizontal_list(
+        self,
+        text: str,
+        horiz_matches: list,
+        sentence_boundaries: set[int]
+    ) -> bool:
+        """Check if matches form a flattened list, rejecting dense prose."""
+        total_chars = len(text)
 
-        # Quick contextual heuristic
-        is_flattened_list = (
-            # A flattened list must contain at least two horizontal markers
+        # Reject abbreviation-heavy or over-fragmented prose
+        if total_chars >= 45 and (len(sentence_boundaries) / total_chars * 100) > 5:
+                return False
+
+        return (
             len(horiz_matches) >= 2
             and (
                 # List is introduced by a colon
@@ -409,7 +418,16 @@ class Rules:
             )
         )
 
-        if is_flattened_list:
+
+    def _adjust_list_boundaries(
+        self,
+        sentence_boundaries: set[int],
+        text: str,
+    ) -> None:
+        """Remove and re-align boundaries around list markers."""
+        horiz_matches = list(self.HORIZONTAL_LIST_FINDER.finditer(text))
+
+        if self._is_horizontal_list(text, horiz_matches, sentence_boundaries):
             sentence_boundaries.difference_update(m.end() for m in horiz_matches)
 
             # Shift boundaries back (1.\)| => |1.\), a. | => |a. ) to correctly
