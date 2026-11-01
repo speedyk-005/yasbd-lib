@@ -103,6 +103,10 @@ from yasbd import BoundaryDetector
         "As shown in Figs. S3, S16b and S2, all membranes passed.| We then varied X.",
         "Refer to Eq. S2 for details.| This equation was derived.",
         "The results (Eq. A12c) support this.| Next observation.",
+
+        # Abbreviations heavy (fix for #413)
+        "This is an heavy text!| Dr. or Mr. Bob, Prof. Greg of BUH.| Sr. or should I say Ph.D?",
+        "Authors: N. Ko, Y. B. Go, S. B. Choi, E. Choi, A. Yazaydin, B. Lee, C. Chen wrote it.",
     ],
 )
 def test_universal_regression(marked_text):
