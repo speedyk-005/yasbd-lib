@@ -98,6 +98,12 @@ from yasbd import BoundaryDetector
         # dotted vs (fix for #376)
         "Decoder-only v.s. Encoder-only.| Next sentence.",
 
+        # Numeric single-letter units (fix for #411)
+        "The reading was 300 K.| Selectivity was high.",
+        "The voltage was 0.5 V.| Measurements continued.",
+        "The current reached 2.5 A.| This exceeded expectations.",
+        "Energy increased by 15 J.| Further tests were needed.",
+
         # Reference abbreviations before alphanumeric supplementary targets (fix for #409)
         "As shown in Fig. S16b, all membranes passed.| We then varied X.",
         "As shown in Figs. S3, S16b and S2, all membranes passed.| We then varied X.",
