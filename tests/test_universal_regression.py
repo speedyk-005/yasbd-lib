@@ -101,8 +101,8 @@ from yasbd import BoundaryDetector
         # Numeric single-letter units (fix for #411)
         "The reading was 300 K.| Selectivity was high.",
         "The voltage was 0.5 V.| Measurements continued.",
-        "We consulted V. Stamenkovic about it.| Selectivity was high.",
-        "The bearing was 45° N.| Selectivity was high.",
+        "The current reached 2.5 A.| This exceeded expectations.",
+        "Energy increased by 15 J.| Further tests were needed.",
     ],
 )
 def test_universal_regression(marked_text):

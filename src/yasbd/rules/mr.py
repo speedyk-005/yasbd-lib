@@ -24,7 +24,7 @@ class MrRules(HiRules):
     }
 
     INLINE_ONLY_ABBRVS = HiRules.INLINE_ONLY_ABBRVS | {
-        "बनाम", "जि",
+        "बनाम", "इंजि",
     }
 
     COMMON_SENT_STARTERS = {
