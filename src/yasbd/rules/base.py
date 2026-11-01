@@ -184,14 +184,16 @@ class Rules:
         [\p{Pi}»‚„”].+?[\p{Pf}«‘“]|
         —[^—]*[,.!?]\s*—|
 
-        # Parenthesized text
-        \p{Ps}[^\p{Pe}]*\p{Pe}
+        # Parenthesized text. Start only at the first bracket of a run: inner
+        # brackets are sub-spans of the outer match, retrying is quadratic.
+        (?<!\p{Ps})\p{Ps}[^\p{Pe}]*\p{Pe}
         """,
         re2.X,
     )
 
     # https://regex101.com/r/0P9f2V/3
-    TOC_LEADER_FINDER = re.compile(r".\s*\.[\s\.]{3,}\d")
+    # The leading dot must not follow another dot, or the scan is quadratic.
+    TOC_LEADER_FINDER = re.compile(r"(?<!\.).\s*\.[\s\.]{3,}\d")
 
     # https://regex101.com/r/ZOZlLb/3/substitution
     NEWLINE_INSIDE_SENTENCE_FINDER = re2.compile(r"(?<=[,:;)\w\s])\n(?=(\p{Ll}|[(>]))")
@@ -223,8 +225,9 @@ class Rules:
         cls.HORIZONTAL_LIST_FINDER = re2.compile(
             rf"""
             # Must preceded by string start or word boundary
-            # while skipping initialisms
-            (?:^|(?<![A-Z](?:\.|\w+))\s+)
+            # while skipping initialisms. The whitespace run is only entered
+            # at its first character, or the scan is quadratic.
+            (?:^|(?<![A-Z](?:\.|\w+))(?<!\s)\s+)
             (?:[•◦]\s+)?   # Optional bullet point (e.g., • 9.)
             (?:
                 [-*+]|      #  Markdown style list
@@ -288,7 +291,7 @@ class Rules:
             # References abbrv + number/letter/bracket (e.g., p. 55, app. A, et al. [2004])
             re2.compile(rf"""
                 \b(?i:{build_optimized_pattern(cls.REFERENCE_ABBRVS)}){cls.DOTS_PATTERN}
-                (?=\s+(?:\(|\[|\p{{Lu}}\b|\p{{N}}|[IVXLCDM]{{1,5}}\b))
+                (?=\s+(?:\(|\[|\p{{Lu}}\b|\p{{Lu}}\p{{N}}+\p{{Ll}}?\b|\p{{N}}|[IVXLCDM]{{1,5}}\b))
                 """, re2.X
             ),
 
