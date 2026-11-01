@@ -9,7 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Marathi title abbreviations sentence boundaries** ([#422](https://github.com/speedyk-005/yasbd-lib/pull/422)): Added common Marathi honorifics/titles (`श्री`, `चि`, `कै`, `स्व`, `अॅड`, `संपा`, `ना`, `खा`, `आ`, `सर`, `इंजि`) to `TITLE_ABBRVS` so sentences no longer split after them (e.g. `श्री. राहुल गांधी`, `खा. शरard पवार`). Fixes #420.
+- **Reference abbreviations before alphanumeric supplementary targets** ([#418](https://github.com/speedyk-005/yasbd-lib/pull/418)): Keep `Fig.`/`Eq.` whole before alphanumeric targets like `S16b` or `S2`, so `Fig. S16b` and `Eq. S2` no longer split.
 - **Quadratic scan of long delimiter runs** ([#416](https://github.com/speedyk-005/yasbd-lib/pull/416)): `BoundaryDetector` now enters whitespace, opening-bracket and dot runs only at their first character, so pathological inputs such as 20,000 spaces, `((((…` or `…..…` are scanned linearly instead of stalling.
+- **Abbreviations heavy texg** ([#419](https://github.com/speedyk-005/yasbd-lib/pull/419)): Make horizontal list detection stronger by checking how dense the other boundaries are.
 
 ## [1.0.4] - 2026-10-26
 
