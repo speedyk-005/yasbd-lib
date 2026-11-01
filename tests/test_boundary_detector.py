@@ -2,6 +2,7 @@ import io
 import random
 import re
 import string
+import time
 
 import pytest
 
@@ -198,3 +199,31 @@ def test_post_processing_hook_validation_errors(invalid_boundaries, expected_mes
 
     with pytest.raises(HookError, match=re.escape(expected_message)):
         detector._run_hook("this is a test", [0, 14], 0)
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        pytest.param("word" + " " * 20_000 + "word.", id="spaces"),
+        pytest.param("(" * 20_000, id="opening-parens"),
+        pytest.param("." * 20_000, id="dots"),
+    ],
+)
+def test_long_delimiter_runs_are_scanned_linearly(en_detector, text):
+    """test that long runs of spaces, brackets or dots are not re-scanned from every position."""
+
+    start = time.perf_counter()
+    sentences = list(en_detector.detect(text))
+    elapsed = time.perf_counter() - start
+
+    assert sentences
+    # Quadratic scanning needed over a second even at this size; linear
+    # scanning stays in the low milliseconds. The bound only catches a
+    # regression, it is not a benchmark.
+    assert elapsed < 1.0
+
+
+def test_horizontal_list_after_long_whitespace(en_detector):
+    """test that a list marker after a long whitespace run is still recognized."""
+
+    assert list(en_detector.detect("Steps:" + " " * 1_000 + "1. mix 2. bake 3. serve"))

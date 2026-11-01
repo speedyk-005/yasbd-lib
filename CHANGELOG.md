@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),  
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- **Reference abbreviations before alphanumeric supplementary targets** ([#418](https://github.com/speedyk-005/yasbd-lib/pull/418)): Keep `Fig.`/`Eq.` whole before alphanumeric targets like `S16b` or `S2`, so `Fig. S16b` and `Eq. S2` no longer split.
+- **Quadratic scan of long delimiter runs** ([#416](https://github.com/speedyk-005/yasbd-lib/pull/416)): `BoundaryDetector` now enters whitespace, opening-bracket and dot runs only at their first character, so pathological inputs such as 20,000 spaces, `((((…` or `…..…` are scanned linearly instead of stalling.
+
 ## [1.0.4] - 2026-10-26
 
 ### Added

@@ -97,6 +97,12 @@ from yasbd import BoundaryDetector
 
         # dotted vs (fix for #376)
         "Decoder-only v.s. Encoder-only.| Next sentence.",
+
+        # Reference abbreviations before alphanumeric supplementary targets (fix for #409)
+        "As shown in Fig. S16b, all membranes passed.| We then varied X.",
+        "As shown in Figs. S3, S16b and S2, all membranes passed.| We then varied X.",
+        "Refer to Eq. S2 for details.| This equation was derived.",
+        "The results (Eq. A12c) support this.| Next observation.",
     ],
 )
 def test_universal_regression(marked_text):
