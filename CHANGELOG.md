@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Dependencies**: Loosened `radicli` pin from `>=0.0.26,<0.0.27` to `>=0.0.20,<0.0.30` to reduce resolver constraints.
+
 ### Fixed
 
 - **Marathi title abbreviations sentence boundaries** ([#422](https://github.com/speedyk-005/yasbd-lib/pull/422)): Added common Marathi honorifics/titles (`श्री`, `चि`, `कै`, `स्व`, `अॅड`, `संपा`, `ना`, `खा`, `आ`, `सर`, `इंजि`) to `TITLE_ABBRVS` so sentences no longer split after them (e.g. `श्री. राहुल गांधी`, `खा. शरard पवार`). Fixes #420.
