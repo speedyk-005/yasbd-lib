@@ -284,7 +284,6 @@ class Rules:
             re.compile(rf"\b(?i:{cls.TITLE_ABBRVS_PATTERN}){cls.DOTS_PATTERN}"),
 
             # Inline abbreviations, except uppercase units after a number (e.g., 0.5 V.).
-            # Keep re-style word boundaries, which exclude combining marks.
             re2.compile(
                rf"(?<![\p{{L}}\p{{N}}_])(?i:{build_optimized_pattern(cls.INLINE_ONLY_ABBRVS)}){cls.DOTS_PATTERN}"
                rf"(?<!\d\.?\s+\p{{Lu}}{cls.DOTS_PATTERN})"

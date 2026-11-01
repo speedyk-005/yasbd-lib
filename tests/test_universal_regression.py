@@ -97,6 +97,12 @@ from yasbd import BoundaryDetector
 
         # dotted vs (fix for #376)
         "Decoder-only v.s. Encoder-only.| Next sentence.",
+
+        # Numeric single-letter units (fix for #411)
+        "The reading was 300 K.| Selectivity was high.",
+        "The voltage was 0.5 V.| Measurements continued.",
+        "We consulted V. Stamenkovic about it.| Selectivity was high.",
+        "The bearing was 45° N.| Selectivity was high.",
     ],
 )
 def test_universal_regression(marked_text):
