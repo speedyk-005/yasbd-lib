@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+...
+
+## [1.0.5] - 2026-11-02
+
 ### Changed
 
 - **Dependencies** ([#423](https://github.com/speedyk-005/yasbd-lib/pull/423)): Loosened `radicli` pin from `>=0.0.26,<0.0.27` to `>=0.0.20,<0.0.30` to reduce resolver constraints.
