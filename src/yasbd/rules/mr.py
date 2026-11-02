@@ -6,7 +6,8 @@ class MrRules(HiRules):
 
 
     TITLE_ABBRVS = (HiRules.TITLE_ABBRVS - {"ले"}) | {
-        "सौ",
+        "सौ", "चि", "कै", "श्री", "स्व", "अॅड", "संपा", "ना",
+        "खा", "आ", "सर", "इंजि"
     }
 
     DOTTED_GEOPOL_ABBRVS = HiRules.DOTTED_GEOPOL_ABBRVS | {
