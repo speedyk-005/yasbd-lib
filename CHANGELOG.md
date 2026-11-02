@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Dependencies** ([#423](https://github.com/speedyk-005/yasbd-lib/pull/423)): Loosened `radicli` pin from `>=0.0.26,<0.0.27` to `>=0.0.20,<0.0.30` to reduce resolver constraints.
+
 ### Fixed
 
+- **Marathi title abbreviations sentence boundaries** ([#422](https://github.com/speedyk-005/yasbd-lib/pull/422)): Added common Marathi honorifics/titles (`श्री`, `चि`, `कै`, `स्व`, `अॅड`, `संपा`, `ना`, `खा`, `आ`, `सर`, `इंजि`) to `TITLE_ABBRVS` so sentences no longer split after them (e.g. `श्री. राहुल गांधी`, `खा. शरard पवार`). Fixes #420.
 - **Reference abbreviations before alphanumeric supplementary targets** ([#418](https://github.com/speedyk-005/yasbd-lib/pull/418)): Keep `Fig.`/`Eq.` whole before alphanumeric targets like `S16b` or `S2`, so `Fig. S16b` and `Eq. S2` no longer split.
 - **Quadratic scan of long delimiter runs** ([#416](https://github.com/speedyk-005/yasbd-lib/pull/416)): `BoundaryDetector` now enters whitespace, opening-bracket and dot runs only at their first character, so pathological inputs such as 20,000 spaces, `((((…` or `…..…` are scanned linearly instead of stalling.
+- **Abbreviations heavy texg** ([#419](https://github.com/speedyk-005/yasbd-lib/pull/419)): Make horizontal list detection stronger by checking how dense the other boundaries are.
 
 ## [1.0.4] - 2026-10-26
 
@@ -24,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Windows CLI crash on redirected output** ([#395](https://github.com/speedyk-005/yasbd-lib/pull/395)): The CLI no longer raises `UnicodeEncodeError` on Windows (Python ≤ 3.14) when output is redirected or piped. `main()` now reconfigures stdout and stderr to UTF-8 before printing.
 - **Symmetric right double quotes as quote openers** ([#399](https://github.com/speedyk-005/yasbd-lib/pull/399)): `”` now opens a quoted span, so Swedish and Finnish `”...”` quotes no longer split a sentence that ends inside them.
 - **Russian list-closing abbreviations before a new sentence** ([#401](https://github.com/speedyk-005/yasbd-lib/pull/401)): The Russian single-letter abbreviation pattern no longer keeps the last letter of `и т. д.` and `и т. п.` mid-sentence when a capitalized word follows, so `Купил хлеб, молоко и т. д. Потом пошёл домой.` splits in two, while `И т. д. и т. п. — это сокращения.` and initials such as `А. С. Пушкин` stay whole.
+- **Sentence boundaries after numeric single-letter units** ([#417](https://github.com/speedyk-005/yasbd-lib/pull/417)): Allow proper sentence splitting after uppercase single-letter units following numbers (e.g., `300 K.`, `0.5 V.`) while preserving initials like `V. Stamenkovic` and coordinate directions like `45° N.`
 
 ## [1.0.3] - 2026-10-10
 
