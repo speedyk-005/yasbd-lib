@@ -634,6 +634,7 @@ Want to build a lang pack? Start with the [language template](https://github.com
 | Package | Languages | Description |
 |---------|-----------|-------------|
 | [yasbd-eu-packs](https://github.com/brunnojob/yasbd-eu-packs) | `lv` , `hu`, `hr`, `fi`, `sl` | External Latvian, Hungarian, Croatian, Finnish and Slovenian language profiles |
+| [yasbd-ca](https://github.com/gon-zalo/yasbd-ca) | `ca` | External Catalan support for yasbd-lib |
 
 ---
 
