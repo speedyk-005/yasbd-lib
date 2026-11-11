@@ -31,6 +31,7 @@ A massive thank you to the open source community helping make `yasbd` more accur
 | **[@laozhej](https://github.com/laozhej)** | Reference abbreviations before alphanumeric supplementary targets fix (e.g, Fig. S16b); loosened inline-abbreviation and scientific unit boundary fixes. |
 | **[@MasRama](https://github.com/MasRama)** | Double boundary for `.\n` fix |
 | **[@Mayankshrey438](https://github.com/Mayankshrey438)** | Armenian language support & flattened list heuristic |
+| **[@Muhtasim-Munif-Fahim](https://github.com/Muhtasim-Munif-Fahim)** | Spanish `a. C.` / `d. C.` era abbreviation boundaries |
 | **[@MohammedAnasNathani](https://github.com/MohammedAnasNathani)** | Documentation for built-in language freeze |
 | **[@moneymaker26754-crypto](https://github.com/moneymaker26754-crypto)** | Fractional overlap fix and doctests for the RAG text chunking example |
 | **[@Nagulanvelu](https://github.com/Nagulanvelu)** | Lithuanian number-first section markers fix |
