@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **Spanish era abbreviations sentence boundaries** ([#426](https://github.com/speedyk-005/yasbd-lib/pull/426)): A lowercase `a.`/`d.` directly before `C.` (`a. C.`, `d. C.`, `a.C.`) is no longer read as a sentence end, so `500 a. C. Su población…` stays whole. Fixes #425.
+- **Spanish era abbreviations sentence boundaries** ([#426](https://github.com/speedyk-005/yasbd-lib/pull/426)): A lowercase `a.`/`d.` directly before `C.` (`a. C.`, `d. C.`, `a.C.`) is no longer read as a sentence end.
 
 ## [1.0.5] - 2026-11-02
 

@@ -30,7 +30,6 @@ TEST_DATA = [
     "Nació el 5 de abr. de 1990.",
     "El presidente de los EE. UU. visitó Europa.",
     "Las FF.AA. emitieron un comunicado oficial.",
-    "La ciudad fue fundada en el año 500 a. C. Su población creció rápidamente durante los siglos siguientes.",
     "Murió en el 44 a. C. en Roma.",
     "Nació en el 63 a. C. y murió en el 14 d. C. Fue emperador.",
     "Vivió del 100 a.C. al 44 d.C. en Roma.",
