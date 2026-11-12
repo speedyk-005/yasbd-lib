@@ -103,6 +103,9 @@ class EsRules(Rules):
             # Only protect the first pair so a following sentence still splits.
             re.compile(r"\b[A-Z]{2}\.(?=\s*[A-Z]{1,2}\.)"),
 
+            # Era abbreviations a. C. / d. C. (antes/después de Cristo), spaced or not.
+            re.compile(r"\b[ad]\.(?=\s*C\.)"),
+
             # In Spanish/Portuguese, these reference abbreviationsare are case-sensitve.
             re.compile(r"(?:Nos?|Para)\.(?=\s*(\d+|\w))")
         ])
